@@ -7,19 +7,7 @@
 ## 제출 영상
 
 - 주제: MySQL SQL 개요와 종류 — 가성비 학습 순위 TOP 5 (DQL · DML · DDL · TCL · DCL)
-- 영상 URL: https://www.youtube.com/shorts/TL1x_Wq0S4c
-
-## 영상 소개
-
-SQL을 처음 배울 때 무엇부터 공부하면 좋은지, 실무에서 쓰는 빈도를 기준으로 정리한 유튜브 쇼츠(2분 32초, 1080×1920)입니다.
-
-| 순위 | 분류 | 대표 명령어 | 핵심 포인트 |
-| --- | --- | --- | --- |
-| 1 | DQL | `SELECT` (+ `JOIN`, `GROUP BY`) | 실무 쿼리의 대부분은 조회 |
-| 2 | DML | `INSERT` · `UPDATE` · `DELETE` | `WHERE`를 빠뜨리면 테이블 전체가 바뀜 |
-| 3 | DDL | `CREATE` · `ALTER` · `DROP` | 잘못 쓰면 되돌리기 어려움 |
-| 4 | TCL | `COMMIT` · `ROLLBACK` | MySQL 기본값은 `autocommit = 1` |
-| 5 | DCL | `GRANT` · `REVOKE` | 주로 DBA·인프라 담당 업무 |
+- 영상 URL: https://www.youtube.com/watch?v=TL1x_Wq0S4c
 
 ## 제작 방식
 

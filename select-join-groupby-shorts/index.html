@@ -1,0 +1,229 @@
+<!doctype html>
+<html lang="ko" data-resolution="portrait">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=1080, height=1920" />
+<script src="https://cdn.jsdelivr.net/npm/gsap@3.14.2/dist/gsap.min.js"></script>
+<style>
+:root {
+  --ground: #0b1220; --panel: #131c2e; --ink: #f4f6fb; --mute: #9aa6bd;
+  --blue: #3fa7d6; --orange: #f29111; --red: #ff5d5d; --green: #7ee08a; --violet: #c3a6ff;
+  --font: "Pretendard", sans-serif;
+  --mono: "Menlo", "SF Mono", monospace;
+}
+@font-face { font-family: "Pretendard"; src: url("assets/fonts/PretendardVariable.woff2") format("woff2"); font-weight: 45 920; }
+* { margin: 0; padding: 0; box-sizing: border-box; }
+html, body { width: 1080px; height: 1920px; overflow: hidden; background: var(--ground); }
+#root { position: relative; width: 100%; height: 100%; font-family: var(--font); color: var(--ink); overflow: hidden;
+  background: radial-gradient(1200px 900px at 80% -10%, #16365a 0%, transparent 60%),
+              radial-gradient(900px 900px at -10% 110%, #3a2410 0%, transparent 55%), var(--ground); }
+.clip { position: absolute; inset: 0; }
+.brand { position: absolute; top: 110px; left: 70px; right: 70px; display: flex; justify-content: space-between; align-items: center;
+  font-size: 34px; font-weight: 700; color: var(--mute); letter-spacing: 0.02em; }
+.brand b { color: var(--blue); } .brand b em { color: var(--orange); font-style: normal; }
+.prog { display: flex; gap: 12px; }
+.prog i { display: block; width: 56px; height: 12px; border-radius: 6px; background: #26324a; }
+.scene { padding: 210px 70px 0; display: flex; flex-direction: column; gap: 26px; }
+.pill { align-self: flex-start; padding: 12px 26px; border-radius: 999px; background: #1d2a44; color: var(--blue);
+  font-size: 34px; font-weight: 700; }
+.hook { display: flex; flex-direction: column; gap: 50px; padding-top: 140px; }
+.big { font-size: 150px; line-height: 1.12; font-weight: 800; letter-spacing: -0.04em; }
+.big em { font-style: normal; color: var(--orange); }
+.sub { font-size: 64px; font-weight: 700; color: var(--mute); } .sub b { color: var(--ink); }
+.title { font-size: 80px; font-weight: 800; letter-spacing: -0.03em; line-height: 1.1; }
+.desc { font-size: 46px; color: var(--mute); font-weight: 600; margin-top: -8px; } .desc b { color: var(--orange); }
+.code { background: #0a0f1a; border: 2px solid #26324a; border-radius: 26px; padding: 30px 32px; font-family: var(--mono);
+  font-size: 42px; line-height: 1.5; color: #d9e1f2; white-space: pre; box-shadow: 0 30px 60px rgba(0,0,0,.35);
+  font-variant-ligatures: none; font-feature-settings: "liga" 0, "calt" 0; }
+.code .ln { margin: 0 -14px; padding: 0 14px; border-radius: 10px; }
+.code .ln.mk { background: rgba(242,145,17,.13); }
+.kw { color: var(--blue); font-weight: 700; } .st { color: var(--green); } .nu { color: var(--orange); } .cm { color: #6f7d98; }
+.chips { display: flex; flex-wrap: wrap; gap: 18px; }
+.chips span { padding: 16px 30px; background: var(--panel); border-radius: 18px; font-size: 42px; font-weight: 700; }
+.warn, .note { padding: 26px 36px; border-radius: 24px; font-size: 44px; font-weight: 700; line-height: 1.45; }
+.warn { background: rgba(255,93,93,.12); border-left: 10px solid var(--red); } .warn b { color: var(--red); }
+.note { background: rgba(63,167,214,.12); border-left: 10px solid var(--blue); } .note b { color: var(--orange); }
+.note small { font-size: 38px; color: var(--mute); font-weight: 600; font-family: var(--mono); }
+code { font-family: var(--mono); color: var(--orange); }
+.tbl { align-self: flex-start; }
+.tlabel { font-size: 34px; font-weight: 700; color: var(--mute); margin-bottom: 10px; }
+.tbl table { border-collapse: collapse; font-family: var(--mono); font-size: 40px; background: var(--panel); border-radius: 18px; overflow: hidden; }
+.tbl th { color: var(--blue); text-align: left; padding: 12px 32px; background: #1a2640; }
+.tbl th u { text-decoration: none; color: var(--orange); }
+.tbl td { padding: 10px 32px; border-top: 1px solid #26324a; }
+.tbl tr.k1 td { color: var(--orange); } .tbl tr.k2 td { color: var(--green); } .tbl tr.k3 td { color: var(--violet); }
+.tbl tr.out td { color: #5b6782; text-decoration: line-through; }
+.tbl td.nl { color: var(--red) !important; font-style: italic; font-weight: 700; background: rgba(255,93,93,.12); }
+.link { align-self: flex-start; font-family: var(--mono); font-size: 38px; color: var(--mute); padding: 6px 0 6px 26px;
+  border-left: 8px solid var(--orange); }
+.link b { color: var(--orange); }
+.arrow { font-family: var(--mono); font-size: 38px; color: var(--orange); font-weight: 700; }
+.vs { display: grid; grid-template-columns: 1fr 1fr; gap: 22px; }
+.card { background: var(--panel); border-radius: 26px; padding: 26px 32px; display: flex; flex-direction: column; gap: 6px; }
+.card b { font-family: var(--mono); font-size: 52px; color: var(--blue); }
+.vs .card span { font-size: 44px; font-weight: 800; } .vs .card em { font-style: normal; color: var(--orange); }
+.list { display: flex; flex-direction: column; gap: 16px; }
+.row { display: flex; align-items: center; gap: 30px; background: var(--panel); border-radius: 22px; padding: 14px 36px; font-size: 48px;
+  transform-origin: left center; }
+.row .no { font-size: 52px; font-weight: 900; color: var(--orange); width: 50px; }
+.row b { font-family: var(--mono); color: var(--blue); }
+.cta { margin-top: 20px; font-size: 54px; font-weight: 800; text-align: center; }
+.cap { top: auto; bottom: 260px; height: auto; display: flex; justify-content: center; padding: 0 60px; }
+.cap span { background: rgba(0,0,0,.78); color: #fff; font-size: 48px; font-weight: 700; line-height: 1.4; padding: 16px 30px;
+  border-radius: 18px; text-align: center; word-break: keep-all; }
+.bar { position: absolute; left: 0; bottom: 0; height: 10px; width: 1080px; background: var(--orange); transform-origin: left center; }
+</style>
+</head>
+<body>
+<div id="root" data-composition-id="main" data-start="0" data-duration="156.26" data-width="1080" data-height="1920">
+  <div class="brand"><b>SQL <em>SELECT</em> 정리</b><div class="prog"><i></i><i></i><i></i><i></i><i></i></div></div>
+  <section id="sc-hook" class="clip scene" data-start="0.000" data-duration="7.776" data-track-index="1"><div class="hook">
+   <div class="pill in">MySQL · DQL 핵심 정리</div>
+   <h1 class="big in"><em>SELECT</em><br/>JOIN<br/>GROUP BY</h1>
+   <div class="sub in">기본 문법부터 <b>3분 정리</b></div>
+ </div></section>
+<section id="sc-basic" class="clip scene" data-start="7.776" data-duration="14.61" data-track-index="1"><div class="pill in">STEP 1 · 기본 구조</div><h2 class="title in">SELECT … FROM</h2><p class="desc in">무엇을 · 어디서 가져올지</p><div class="code in"><div class="ln"><span class="kw">SELECT</span> name, price</div><div class="ln"><span class="kw">FROM</span> products;</div></div><div class="tbl in "><div class="tlabel">결과</div><table><tr><th>name</th><th>price</th></tr><tr class=""><td>SQL 입문서</td><td>18000</td></tr><tr class=""><td>볼펜</td><td>1500</td></tr><tr class=""><td>노트</td><td>3000</td></tr></table></div><div class="warn in">⚠ <code>SELECT *</code> 대신 <b>필요한 컬럼만</b></div></section>
+<section id="sc-where" class="clip scene" data-start="22.386" data-duration="13.314" data-track-index="1"><div class="pill in">STEP 2 · 조건</div><h2 class="title in">WHERE</h2><p class="desc in">원하는 <b>행</b>만 고르기</p><div class="code in"><div class="ln"><span class="kw">SELECT</span> name, price</div><div class="ln"><span class="kw">FROM</span> products</div><div class="ln mk"><span class="kw">WHERE</span> price &gt;= <span class="nu">10000</span></div><div class="ln mk">  <span class="kw">AND</span> category <span class="kw">IN</span> (<span class="st">&#x27;book&#x27;</span>, <span class="st">&#x27;pen&#x27;</span>)</div><div class="ln mk">  <span class="kw">AND</span> name <span class="kw">LIKE</span> <span class="st">&#x27;%SQL%&#x27;</span>;</div></div><div class="chips in"><span>= &gt; &lt;=</span><span>AND · OR</span><span>IN (…)</span><span>LIKE '%글자%'</span></div></section>
+<section id="sc-order" class="clip scene" data-start="35.700" data-duration="13.362" data-track-index="1"><div class="pill in">STEP 3 · 정렬</div><h2 class="title in">ORDER BY · LIMIT</h2><p class="desc in">정렬하고 <b>상위 N개</b>만</p><div class="code in"><div class="ln"><span class="kw">SELECT</span> name, price</div><div class="ln"><span class="kw">FROM</span> products</div><div class="ln mk"><span class="kw">ORDER</span> <span class="kw">BY</span> price <span class="kw">DESC</span></div><div class="ln mk"><span class="kw">LIMIT</span> <span class="nu">5</span>;</div></div><div class="chips in"><span>ASC 오름차순 (기본)</span><span>DESC 내림차순</span><span>LIMIT 개수</span></div></section>
+<section id="sc-join" class="clip scene" data-start="49.062" data-duration="13.698" data-track-index="1"><div class="pill in">STEP 4 · 연결</div><h2 class="title in">JOIN 이란?</h2><p class="desc in">공통 키로 <b>두 테이블을 연결</b></p><div class="tbl in "><div class="tlabel">users · 회원</div><table><tr><th><u>id</u></th><th>name</th></tr><tr class="k1"><td>1</td><td>kim</td></tr><tr class="k2"><td>2</td><td>lee</td></tr><tr class="k3"><td>3</td><td>park</td></tr></table></div><div class="link in">orders.<b>user_id</b> = users.<b>id</b></div><div class="tbl in "><div class="tlabel">orders · 주문</div><table><tr><th>id</th><th><u>user_id</u></th><th>amount</th></tr><tr class="k1"><td>1</td><td>1</td><td>12000</td></tr><tr class="k1"><td>2</td><td>1</td><td>8000</td></tr><tr class="k2"><td>3</td><td>2</td><td>5000</td></tr></table></div></section>
+<section id="sc-inner" class="clip scene" data-start="62.760" data-duration="16.026" data-track-index="1"><div class="pill in">STEP 4-1</div><h2 class="title in">INNER JOIN</h2><p class="desc in">양쪽 모두 <b>짝이 있는 행</b>만</p><div class="code in"><div class="ln"><span class="kw">SELECT</span> u.name, o.amount</div><div class="ln"><span class="kw">FROM</span> users <span class="kw">AS</span> u</div><div class="ln mk"><span class="kw">INNER</span> <span class="kw">JOIN</span> orders <span class="kw">AS</span> o</div><div class="ln mk">  <span class="kw">ON</span> o.user_id = u.id;</div></div><div class="tbl in "><div class="tlabel">결과 · park는 주문이 없어 제외</div><table><tr><th>name</th><th>amount</th></tr><tr class="k1"><td>kim</td><td>12000</td></tr><tr class="k1"><td>kim</td><td>8000</td></tr><tr class="k2"><td>lee</td><td>5000</td></tr><tr class="out"><td>park</td><td>—</td></tr></table></div><div class="note in"><code>AS</code>는 생략 가능 · <small>FROM users u</small></div></section>
+<section id="sc-left" class="clip scene" data-start="78.786" data-duration="9.066" data-track-index="1"><div class="pill in">STEP 4-2</div><h2 class="title in">LEFT JOIN</h2><p class="desc in">왼쪽 테이블은 <b>전부</b> 남김</p><div class="code in"><div class="ln"><span class="kw">SELECT</span> u.name, o.amount</div><div class="ln"><span class="kw">FROM</span> users <span class="kw">AS</span> u</div><div class="ln mk"><span class="kw">LEFT</span> <span class="kw">JOIN</span> orders <span class="kw">AS</span> o</div><div class="ln">  <span class="kw">ON</span> o.user_id = u.id;</div></div><div class="tbl in "><div class="tlabel">결과 · 짝이 없으면 NULL</div><table><tr><th>name</th><th>amount</th></tr><tr class="k1"><td>kim</td><td>12000</td></tr><tr class="k1"><td>kim</td><td>8000</td></tr><tr class="k2"><td>lee</td><td>5000</td></tr><tr class="k3"><td>park</td><td class="nl">NULL</td></tr></table></div></section>
+<section id="sc-left2" class="clip scene" data-start="87.852" data-duration="10.146" data-track-index="1"><div class="pill in">STEP 4-3</div><h2 class="title in">LEFT JOIN + IS NULL</h2><p class="desc in">주문하지 않은 <b>회원 찾기</b></p><div class="code in"><div class="ln"><span class="kw">SELECT</span> u.name</div><div class="ln"><span class="kw">FROM</span> users <span class="kw">AS</span> u</div><div class="ln"><span class="kw">LEFT</span> <span class="kw">JOIN</span> orders <span class="kw">AS</span> o</div><div class="ln">  <span class="kw">ON</span> o.user_id = u.id</div><div class="ln mk"><span class="kw">WHERE</span> o.id <span class="kw">IS</span> <span class="kw">NULL</span>;</div></div><div class="tbl in "><div class="tlabel">결과 · park만 남음</div><table><tr><th>name</th></tr><tr class="k3"><td>park</td></tr></table></div></section>
+<section id="sc-group" class="clip scene" data-start="97.998" data-duration="17.178" data-track-index="1"><div class="pill in">STEP 5 · 집계</div><h2 class="title in">GROUP BY</h2><p class="desc in">같은 값끼리 <b>묶어서 계산</b></p><div class="code in"><div class="ln"><span class="kw">SELECT</span> u.name,</div><div class="ln mk">  <span class="kw">COUNT</span>(*)      <span class="kw">AS</span> cnt,</div><div class="ln mk">  <span class="kw">SUM</span>(o.amount) <span class="kw">AS</span> total,</div><div class="ln mk">  <span class="kw">AVG</span>(o.amount) <span class="kw">AS</span> avg</div><div class="ln"><span class="kw">FROM</span> users <span class="kw">AS</span> u</div><div class="ln"><span class="kw">JOIN</span> orders <span class="kw">AS</span> o</div><div class="ln">  <span class="kw">ON</span> o.user_id = u.id</div><div class="ln mk"><span class="kw">GROUP</span> <span class="kw">BY</span> u.id, u.name;</div></div><div class="note in">집계 안 하는 컬럼은 <b>GROUP BY에 함께</b></div></section>
+<section id="sc-group2" class="clip scene" data-start="115.176" data-duration="9.714" data-track-index="1"><div class="pill in">STEP 5-1</div><h2 class="title in">묶이는 과정</h2><p class="desc in">kim의 주문 2건 → <b>1줄</b></p><div class="tbl in "><div class="tlabel">JOIN 결과 · 3행</div><table><tr><th>name</th><th>amount</th></tr><tr class="k1"><td>kim</td><td>12000</td></tr><tr class="k1"><td>kim</td><td>8000</td></tr><tr class="k2"><td>lee</td><td>5000</td></tr></table></div><div class="arrow in">▼ GROUP BY u.id, u.name</div><div class="tbl in "><div class="tlabel">집계 결과 · 2행</div><table><tr><th>name</th><th>cnt</th><th>total</th><th>avg</th></tr><tr class="k1"><td>kim</td><td>2</td><td>20000</td><td>10000</td></tr><tr class="k2"><td>lee</td><td>1</td><td>5000</td><td>5000</td></tr></table></div></section>
+<section id="sc-having" class="clip scene" data-start="124.890" data-duration="12.906" data-track-index="1"><div class="pill in">STEP 5-2</div><h2 class="title in">HAVING</h2><p class="desc in">묶은 <b>그룹</b>을 다시 거르기</p><div class="code in"><div class="ln"><span class="kw">SELECT</span> user_id, <span class="kw">COUNT</span>(*) <span class="kw">AS</span> cnt</div><div class="ln"><span class="kw">FROM</span> orders</div><div class="ln"><span class="kw">GROUP</span> <span class="kw">BY</span> user_id</div><div class="ln mk"><span class="kw">HAVING</span> <span class="kw">COUNT</span>(*) &gt;= <span class="nu">2</span>;</div></div><div class="tbl in "><div class="tlabel">결과 · kim(1)만 남음</div><table><tr><th>user_id</th><th>cnt</th></tr><tr class="k1"><td>1</td><td>2</td></tr></table></div><div class="vs"><div class="card in"><b>WHERE</b><span>묶기 <em>전</em> 행</span></div><div class="card in"><b>HAVING</b><span>묶은 <em>후</em> 그룹</span></div></div></section>
+<section id="sc-outro" class="clip scene" data-start="137.796" data-duration="18.464" data-track-index="1"><div class="pill in">정리</div><h2 class="title in">SQL 논리적 처리 순서</h2><div class="list in"><div class="row" id="ex1"><span class="no">1</span><b>FROM · JOIN</b></div><div class="row" id="ex2"><span class="no">2</span><b>WHERE</b></div><div class="row" id="ex3"><span class="no">3</span><b>GROUP BY</b></div><div class="row" id="ex4"><span class="no">4</span><b>HAVING</b></div><div class="row" id="ex5"><span class="no">5</span><b>SELECT</b></div><div class="row" id="ex6"><span class="no">6</span><b>ORDER BY</b></div><div class="row" id="ex7"><span class="no">7</span><b>LIMIT</b></div></div><div class="cta in">👍 구독 · 좋아요</div></section>
+  <div id="cap-hook-0" class="clip cap" data-start="0.300" data-duration="1.813" data-track-index="2"><span>데이터를 꺼내는 셀렉트,</span></div>
+<div id="cap-hook-1" class="clip cap" data-start="2.113" data-duration="2.545" data-track-index="2"><span>기본 문법부터 조인과 그룹 바이까지,</span></div>
+<div id="cap-hook-2" class="clip cap" data-start="4.658" data-duration="2.818" data-track-index="2"><span>3분 안에 한 번에 정리해 드립니다.</span></div>
+<div id="cap-basic-0" class="clip cap" data-start="7.926" data-duration="2.902" data-track-index="2"><span>셀렉트의 뼈대는 딱 두 줄입니다.</span></div>
+<div id="cap-basic-1" class="clip cap" data-start="10.828" data-duration="2.065" data-track-index="2"><span>셀렉트 뒤에는 가져올 컬럼을,</span></div>
+<div id="cap-basic-2" class="clip cap" data-start="12.893" data-duration="2.779" data-track-index="2"><span>프롬 뒤에는 테이블 이름을 씁니다.</span></div>
+<div id="cap-basic-3" class="clip cap" data-start="15.672" data-duration="2.556" data-track-index="2"><span>별표를 쓰면 모든 컬럼을 가져오지만,</span></div>
+<div id="cap-basic-4" class="clip cap" data-start="18.227" data-duration="1.596" data-track-index="2"><span>실무에서는 필요한 컬럼만</span></div>
+<div id="cap-basic-5" class="clip cap" data-start="19.823" data-duration="2.263" data-track-index="2"><span>적는 게 빠르고 안전해요.</span></div>
+<div id="cap-where-0" class="clip cap" data-start="22.536" data-duration="3.125" data-track-index="2"><span>원하는 행만 고르려면 웨어를 씁니다.</span></div>
+<div id="cap-where-1" class="clip cap" data-start="25.661" data-duration="2.154" data-track-index="2"><span>같다, 크다 같은 비교는 물론,</span></div>
+<div id="cap-where-2" class="clip cap" data-start="27.815" data-duration="2.031" data-track-index="2"><span>앤드와 오어로 조건을 묶고,</span></div>
+<div id="cap-where-3" class="clip cap" data-start="29.846" data-duration="1.585" data-track-index="2"><span>인으로 여러 값 중 하나를,</span></div>
+<div id="cap-where-4" class="clip cap" data-start="31.431" data-duration="1.641" data-track-index="2"><span>라이크로 특정 글자가 들어간</span></div>
+<div id="cap-where-5" class="clip cap" data-start="33.072" data-duration="2.328" data-track-index="2"><span>데이터를 찾을 수 있습니다.</span></div>
+<div id="cap-order-0" class="clip cap" data-start="35.850" data-duration="2.148" data-track-index="2"><span>결과를 정렬하려면 오더 바이.</span></div>
+<div id="cap-order-1" class="clip cap" data-start="37.998" data-duration="1.618" data-track-index="2"><span>기본은 오름차순이고,</span></div>
+<div id="cap-order-2" class="clip cap" data-start="39.617" data-duration="3.053" data-track-index="2"><span>디에스씨를 붙이면 내림차순입니다.</span></div>
+<div id="cap-order-3" class="clip cap" data-start="42.669" data-duration="1.529" data-track-index="2"><span>여기에 리밋을 더하면,</span></div>
+<div id="cap-order-4" class="clip cap" data-start="44.198" data-duration="1.730" data-track-index="2"><span>가격이 높은 상위 다섯 개처럼</span></div>
+<div id="cap-order-5" class="clip cap" data-start="45.928" data-duration="2.834" data-track-index="2"><span>원하는 개수만 잘라 볼 수 있어요.</span></div>
+<div id="cap-join-0" class="clip cap" data-start="49.212" data-duration="1.953" data-track-index="2"><span>이제 조인입니다.</span></div>
+<div id="cap-join-1" class="clip cap" data-start="51.165" data-duration="1.551" data-track-index="2"><span>회원은 유저 테이블에,</span></div>
+<div id="cap-join-2" class="clip cap" data-start="52.716" data-duration="1.507" data-track-index="2"><span>주문은 오더 테이블에 나눠</span></div>
+<div id="cap-join-3" class="clip cap" data-start="54.223" data-duration="2.188" data-track-index="2"><span>저장하는 게 보통인데요.</span></div>
+<div id="cap-join-4" class="clip cap" data-start="56.411" data-duration="1.629" data-track-index="2"><span>조인은 주문의 유저 아이디와</span></div>
+<div id="cap-join-5" class="clip cap" data-start="58.040" data-duration="1.462" data-track-index="2"><span>회원의 아이디처럼,</span></div>
+<div id="cap-join-6" class="clip cap" data-start="59.502" data-duration="2.958" data-track-index="2"><span>공통 키로 두 테이블을 이어 붙입니다.</span></div>
+<div id="cap-inner-0" class="clip cap" data-start="62.910" data-duration="2.422" data-track-index="2"><span>가장 기본은 이너 조인.</span></div>
+<div id="cap-inner-1" class="clip cap" data-start="65.332" data-duration="1.942" data-track-index="2"><span>온 뒤에 연결 조건을 적으면,</span></div>
+<div id="cap-inner-2" class="clip cap" data-start="67.274" data-duration="2.868" data-track-index="2"><span>양쪽에 모두 짝이 있는 행만 남습니다.</span></div>
+<div id="cap-inner-3" class="clip cap" data-start="70.142" data-duration="2.433" data-track-index="2"><span>주문이 없는 파크는 빠지죠.</span></div>
+<div id="cap-inner-4" class="clip cap" data-start="72.575" data-duration="1.674" data-track-index="2"><span>테이블 뒤에 에이에스로 별칭을</span></div>
+<div id="cap-inner-5" class="clip cap" data-start="74.249" data-duration="1.819" data-track-index="2"><span>붙이면 쿼리가 짧아지고,</span></div>
+<div id="cap-inner-6" class="clip cap" data-start="76.069" data-duration="2.418" data-track-index="2"><span>에이에스는 생략해도 됩니다.</span></div>
+<div id="cap-left-0" class="clip cap" data-start="78.936" data-duration="1.479" data-track-index="2"><span>왼쪽 테이블은 전부 보고</span></div>
+<div id="cap-left-1" class="clip cap" data-start="80.415" data-duration="2.260" data-track-index="2"><span>싶다면 레프트 조인.</span></div>
+<div id="cap-left-2" class="clip cap" data-start="82.675" data-duration="2.254" data-track-index="2"><span>주문이 없는 파크도 결과에 남고,</span></div>
+<div id="cap-left-3" class="clip cap" data-start="84.929" data-duration="2.623" data-track-index="2"><span>오른쪽 값은 널로 채워집니다.</span></div>
+<div id="cap-left2-0" class="clip cap" data-start="88.002" data-duration="1.512" data-track-index="2"><span>여기에 웨어 절로 주문</span></div>
+<div id="cap-left2-1" class="clip cap" data-start="89.514" data-duration="1.674" data-track-index="2"><span>아이디가 널인 행만 고르면,</span></div>
+<div id="cap-left2-2" class="clip cap" data-start="91.188" data-duration="1.384" data-track-index="2"><span>주문하지 않은 회원,</span></div>
+<div id="cap-left2-3" class="clip cap" data-start="92.572" data-duration="1.858" data-track-index="2"><span>파크만 남습니다.</span></div>
+<div id="cap-left2-4" class="clip cap" data-start="94.431" data-duration="3.267" data-track-index="2"><span>미구매 회원 찾기에 자주 쓰는 패턴이에요.</span></div>
+<div id="cap-group-0" class="clip cap" data-start="98.148" data-duration="3.627" data-track-index="2"><span>그룹 바이는 같은 값끼리 묶어서 집계합니다.</span></div>
+<div id="cap-group-1" class="clip cap" data-start="101.775" data-duration="2.310" data-track-index="2"><span>카운트로 개수를, 썸으로 합계를,</span></div>
+<div id="cap-group-2" class="clip cap" data-start="104.085" data-duration="2.422" data-track-index="2"><span>에이브이지로 평균을 구하죠.</span></div>
+<div id="cap-group-3" class="clip cap" data-start="106.507" data-duration="2.109" data-track-index="2"><span>집계하지 않는 컬럼은 기본적으로</span></div>
+<div id="cap-group-4" class="clip cap" data-start="108.617" data-duration="2.500" data-track-index="2"><span>그룹 바이에 함께 적습니다.</span></div>
+<div id="cap-group-5" class="clip cap" data-start="111.117" data-duration="1.395" data-track-index="2"><span>동명이인이 섞이지 않게</span></div>
+<div id="cap-group-6" class="clip cap" data-start="112.512" data-duration="2.364" data-track-index="2"><span>아이디도 같이 묶었어요.</span></div>
+<div id="cap-group2-0" class="clip cap" data-start="115.326" data-duration="4.012" data-track-index="2"><span>킴의 주문 두 건이 한 줄로 묶여서, 개수 2, 합계 2만,</span></div>
+<div id="cap-group2-1" class="clip cap" data-start="119.338" data-duration="1.981" data-track-index="2"><span>평균 1만이 됩니다.</span></div>
+<div id="cap-group2-2" class="clip cap" data-start="121.319" data-duration="3.271" data-track-index="2"><span>리의 주문은 한 건이라 그대로 한 줄이에요.</span></div>
+<div id="cap-having-0" class="clip cap" data-start="125.040" data-duration="3.460" data-track-index="2"><span>묶은 결과를 다시 거르려면 해빙을 씁니다.</span></div>
+<div id="cap-having-1" class="clip cap" data-start="128.500" data-duration="1.596" data-track-index="2"><span>웨어는 묶기 전의 행을,</span></div>
+<div id="cap-having-2" class="clip cap" data-start="130.096" data-duration="1.362" data-track-index="2"><span>해빙은 묶은 뒤의 그룹을</span></div>
+<div id="cap-having-3" class="clip cap" data-start="131.457" data-duration="2.065" data-track-index="2"><span>거른다는 게 차이예요.</span></div>
+<div id="cap-having-4" class="clip cap" data-start="133.522" data-duration="3.974" data-track-index="2"><span>주문이 두 건 이상인 회원만 고르면, 킴만 남습니다.</span></div>
+<div id="cap-outro-0" class="clip cap" data-start="137.946" data-duration="3.471" data-track-index="2"><span>마지막으로 SQL의 논리적 처리 순서.</span></div>
+<div id="cap-outro-1" class="clip cap" data-start="141.417" data-duration="4.308" data-track-index="2"><span>프롬과 조인, 웨어, 그룹 바이, 해빙, 셀렉트,</span></div>
+<div id="cap-outro-2" class="clip cap" data-start="145.725" data-duration="2.589" data-track-index="2"><span>오더 바이, 리밋 순입니다.</span></div>
+<div id="cap-outro-3" class="clip cap" data-start="148.314" data-duration="2.891" data-track-index="2"><span>이 순서만 알아도 에러 원인이 보여요.</span></div>
+<div id="cap-outro-4" class="clip cap" data-start="151.205" data-duration="3.853" data-track-index="2"><span>도움이 됐다면 구독과 좋아요 부탁드립니다!</span></div>
+  <div class="bar"></div>
+  <audio id="vo" src="assets/narration.mp3" data-start="0" data-duration="156.26" data-track-index="0"></audio>
+</div>
+<script>
+const tl = gsap.timeline({ paused: true });
+function enter(sel, t, dur) {
+  const items = document.querySelectorAll(sel + " .in");
+  const step = Math.min(0.9, (dur * 0.5) / Math.max(1, items.length));
+  items.forEach((el, i) => {
+    tl.fromTo(el, { opacity: 0, y: 50 }, { opacity: 1, y: 0, duration: 0.5, ease: "power3.out" }, Math.max(0, t - 0.1) + i * step);
+  });
+  document.querySelectorAll(sel + " .code .ln").forEach((el, i, all) => {
+    tl.fromTo(el, { opacity: 0, x: -30 }, { opacity: 1, x: 0, duration: 0.35, ease: "power2.out" }, t + 0.6 + i * Math.min(0.6, dur * 0.35 / all.length));
+  });
+}
+enter("#sc-hook", 0.3, 7.176);
+tl.set(".prog i", {backgroundColor: "#26324a"}, 0);
+enter("#sc-basic", 7.926, 14.16);
+tl.set(".prog i", {backgroundColor: "#26324a"}, 7.776);
+tl.set(".prog i:nth-child(1)", {backgroundColor: "#f29111"}, 7.776);
+enter("#sc-where", 22.536, 12.864);
+tl.set(".prog i", {backgroundColor: "#26324a"}, 22.386000000000003);
+tl.set(".prog i:nth-child(2)", {backgroundColor: "#f29111"}, 22.386000000000003);
+enter("#sc-order", 35.85, 12.912);
+tl.set(".prog i", {backgroundColor: "#26324a"}, 35.7);
+tl.set(".prog i:nth-child(3)", {backgroundColor: "#f29111"}, 35.7);
+enter("#sc-join", 49.212, 13.248);
+tl.set(".prog i", {backgroundColor: "#26324a"}, 49.062000000000005);
+tl.set(".prog i:nth-child(4)", {backgroundColor: "#f29111"}, 49.062000000000005);
+enter("#sc-inner", 62.91, 15.576);
+tl.set(".prog i", {backgroundColor: "#26324a"}, 62.76);
+tl.set(".prog i:nth-child(4)", {backgroundColor: "#f29111"}, 62.76);
+enter("#sc-left", 78.936, 8.616);
+tl.set(".prog i", {backgroundColor: "#26324a"}, 78.786);
+tl.set(".prog i:nth-child(4)", {backgroundColor: "#f29111"}, 78.786);
+enter("#sc-left2", 88.002, 9.696);
+tl.set(".prog i", {backgroundColor: "#26324a"}, 87.85199999999999);
+tl.set(".prog i:nth-child(4)", {backgroundColor: "#f29111"}, 87.85199999999999);
+enter("#sc-group", 98.148, 16.728);
+tl.set(".prog i", {backgroundColor: "#26324a"}, 97.99799999999999);
+tl.set(".prog i:nth-child(5)", {backgroundColor: "#f29111"}, 97.99799999999999);
+enter("#sc-group2", 115.326, 9.264);
+tl.set(".prog i", {backgroundColor: "#26324a"}, 115.17599999999999);
+tl.set(".prog i:nth-child(5)", {backgroundColor: "#f29111"}, 115.17599999999999);
+enter("#sc-having", 125.04, 12.456);
+tl.set(".prog i", {backgroundColor: "#26324a"}, 124.89);
+tl.set(".prog i:nth-child(5)", {backgroundColor: "#f29111"}, 124.89);
+enter("#sc-outro", 137.946, 17.112);
+tl.set(".prog i", {backgroundColor: "#26324a"}, 137.796);
+tl.to("#ex1", {backgroundColor: "#3a2a12", scale: 1.04, duration: 0.2}, 141.417);
+tl.to("#ex1", {backgroundColor: "#131c2e", scale: 1, duration: 0.2}, 142.667);
+tl.to("#ex2", {backgroundColor: "#3a2a12", scale: 1.04, duration: 0.2}, 142.667);
+tl.to("#ex2", {backgroundColor: "#131c2e", scale: 1, duration: 0.2}, 143.314);
+tl.to("#ex3", {backgroundColor: "#3a2a12", scale: 1.04, duration: 0.2}, 143.314);
+tl.to("#ex3", {backgroundColor: "#131c2e", scale: 1, duration: 0.2}, 144.162);
+tl.to("#ex4", {backgroundColor: "#3a2a12", scale: 1.04, duration: 0.2}, 144.162);
+tl.to("#ex4", {backgroundColor: "#131c2e", scale: 1, duration: 0.2}, 144.832);
+tl.to("#ex5", {backgroundColor: "#3a2a12", scale: 1.04, duration: 0.2}, 144.832);
+tl.to("#ex5", {backgroundColor: "#131c2e", scale: 1, duration: 0.2}, 145.725);
+tl.to("#ex6", {backgroundColor: "#3a2a12", scale: 1.04, duration: 0.2}, 145.725);
+tl.to("#ex6", {backgroundColor: "#131c2e", scale: 1, duration: 0.2}, 146.54);
+tl.to("#ex7", {backgroundColor: "#3a2a12", scale: 1.04, duration: 0.2}, 146.54);
+tl.to("#ex7", {backgroundColor: "#131c2e", scale: 1, duration: 0.3}, 146.852 + 0.6);
+tl.fromTo(".bar", { scaleX: 0 }, { scaleX: 1, duration: 156.26, ease: "none" }, 0);
+window.__timelines = window.__timelines || {};
+window.__timelines["main"] = tl;
+tl.seek(0);
+</script>
+</body>
+</html>

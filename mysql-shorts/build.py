@@ -103,6 +103,38 @@ def split_caption(text, limit=24):
             merged.append(x)
     return merged
 
+def norm(x):
+    return re.sub(r"[^\w]", "", x)
+
+def word_marks(s):
+    """(char offset in norm(script), time) per TTS word. Edge TTS sometimes glues a neighbour's
+    syllables onto a word ('바이. 기'), so each token of the word is tried near the cursor."""
+    ntext, cur, marks = norm(s["text"]), 0, []
+    for w in s["words"]:
+        for tok in filter(None, map(norm, re.split(r"[\s.,?!]+", w["text"]))):
+            pos = ntext.find(tok, cur, cur + len(tok) + 3)
+            if pos >= 0:
+                marks.append((pos, w["t"])); cur = pos + len(tok)
+                break
+    if cur < len(ntext) - 2:
+        raise ValueError(f"{s['id']}: TTS words cover only {cur}/{len(ntext)} chars of the script")
+    return marks
+
+def caption_chunks(s):
+    """Caption pieces timed to the TTS word boundaries: each piece starts on its first spoken
+    word and stays up until the next piece starts (the last one until the scene's audio ends)."""
+    marks, pos, pieces = word_marks(s), 0, []
+    for sentence in re.split(r"(?<=[.?!])\s+", s["text"].strip()):
+        for part in split_caption(sentence):
+            pieces.append((part, next(t for p, t in marks if p >= pos)))
+            pos += len(norm(part))
+    out = []
+    for k, (txt, a) in enumerate(pieces):
+        b = pieces[k + 1][1] if k + 1 < len(pieces) else s["dur"]
+        a = 0.0 if k == 0 else a
+        out.append((s["start"] + a, b - a, txt))
+    return out
+
 clips, caps, js = [], [], []
 for s in vo:
     st, du = s["start"], round(s["dur"] + GAP, 3)
@@ -117,18 +149,8 @@ for s in vo:
     js.append(f'tl.set(".prog i", {{backgroundColor: "#26324a"}}, {vis_start});')
     if rk:
         js.append(f'tl.set(".prog i:nth-child({rk})", {{backgroundColor: "#f29111"}}, {vis_start});')
-    subs, chunks = s["subs"], []
-    for j, sub in enumerate(subs):
-        a = st + sub["t"]
-        b = st + subs[j + 1]["t"] if j + 1 < len(subs) else st + s["dur"]
-        parts = split_caption(sub["text"])
-        n = sum(len(x) for x in parts)
-        for x in parts:
-            d = (b - a) * len(x) / n
-            chunks.append((a, d, x)); a += d
-    for j, (a, d, txt) in enumerate(chunks):
-        sub = {"text": txt}; b = a + d
-        caps.append(f'<div id="cap-{s["id"]}-{j}" class="clip cap" data-start="{a:.3f}" data-duration="{b - a:.3f}" data-track-index="2"><span>{html.escape(sub["text"])}</span></div>')
+    for j, (a, d, txt) in enumerate(caption_chunks(s)):
+        caps.append(f'<div id="cap-{s["id"]}-{j}" class="clip cap" data-start="{a:.3f}" data-duration="{d:.3f}" data-track-index="2"><span>{html.escape(txt)}</span></div>')
 
 progress_end = vo[-1]["start"] - 0.15
 page = f'''<!doctype html>

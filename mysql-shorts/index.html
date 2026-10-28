@@ -79,70 +79,70 @@ code { font-family: var(--mono); color: var(--orange); }
 <section id="sc-r4" class="clip scene" data-start="103.986" data-duration="20.346" data-track-index="1"><div class="rank in"><span class="no">4</span><span class="wi">위</span><span class="cat">TCL</span></div><h2 class="title in">COMMIT · ROLLBACK</h2><p class="desc in">전부 성공 or 전부 취소</p><div class="code in"><div class="ln"><span class="kw">START</span> <span class="kw">TRANSACTION</span>;</div><div class="ln"><span class="kw">UPDATE</span> acct <span class="kw">SET</span> bal = bal - <span class="nu">1000</span></div><div class="ln">  <span class="kw">WHERE</span> id = <span class="nu">1</span>;</div><div class="ln"><span class="kw">UPDATE</span> acct <span class="kw">SET</span> bal = bal + <span class="nu">1000</span></div><div class="ln">  <span class="kw">WHERE</span> id = <span class="nu">2</span>;</div><div class="ln"><span class="kw">COMMIT</span>;  <span class="cm">-- 실패 시 <span class="kw">ROLLBACK</span>;</span></div></div><div class="note in">MySQL 기본값 <code>autocommit = 1</code><br/><small>롤백하려면 트랜잭션부터 열기</small></div></section>
 <section id="sc-r5" class="clip scene" data-start="124.332" data-duration="13.914" data-track-index="1"><div class="rank in"><span class="no">5</span><span class="wi">위</span><span class="cat">DCL</span></div><h2 class="title in">GRANT · REVOKE</h2><p class="desc in">사용자 <b>권한</b> 관리</p><div class="code in"><div class="ln"><span class="kw">GRANT</span> <span class="kw">SELECT</span>, <span class="kw">INSERT</span> <span class="kw">ON</span> shop.*</div><div class="ln">  <span class="kw">TO</span> <span class="st">&#x27;dev&#x27;</span>@<span class="st">&#x27;%&#x27;</span>;</div><div class="ln"><span class="kw">REVOKE</span> <span class="kw">INSERT</span> <span class="kw">ON</span> shop.*</div><div class="ln">  <span class="kw">FROM</span> <span class="st">&#x27;dev&#x27;</span>@<span class="st">&#x27;%&#x27;</span>;</div></div><div class="chips in"><span>주로 DBA · 인프라 담당</span><span>개발자는 마지막에</span></div></section>
 <section id="sc-outro" class="clip scene" data-start="138.246" data-duration="14.144" data-track-index="1"><h2 class="title in">가성비 학습 순서</h2><div class="list"><div class="row in"><span class="no">1</span><b>DQL</b><span>SELECT</span></div><div class="row in"><span class="no">2</span><b>DML</b><span>INSERT·UPDATE·DELETE</span></div><div class="row in"><span class="no">3</span><b>DDL</b><span>CREATE·ALTER·DROP</span></div><div class="row in"><span class="no">4</span><b>TCL</b><span>COMMIT·ROLLBACK</span></div><div class="row in"><span class="no">5</span><b>DCL</b><span>GRANT·REVOKE</span></div></div><div class="cta in">오늘은 <b>SELECT</b>부터! 👍 구독 · 좋아요</div></section>
-  <div id="cap-hook-0" class="clip cap" data-start="0.400" data-duration="1.714" data-track-index="2"><span>마이에스큐엘 SQL,</span></div>
-<div id="cap-hook-1" class="clip cap" data-start="2.114" data-duration="0.975" data-track-index="2"><span>뭐부터 배워야 할까요?</span></div>
-<div id="cap-hook-2" class="clip cap" data-start="3.983" data-duration="1.942" data-track-index="2"><span>공부한 시간 대비 실무에서</span></div>
-<div id="cap-hook-3" class="clip cap" data-start="5.925" data-duration="0.936" data-track-index="2"><span>가장 많이 써먹는,</span></div>
-<div id="cap-hook-4" class="clip cap" data-start="6.861" data-duration="1.364" data-track-index="2"><span>가성비 순서로 딱 정리해 드립니다.</span></div>
-<div id="cap-intro-0" class="clip cap" data-start="10.498" data-duration="1.970" data-track-index="2"><span>SQL은 데이터베이스에게</span></div>
-<div id="cap-intro-1" class="clip cap" data-start="12.468" data-duration="0.985" data-track-index="2"><span>일을 시키는 언어입니다.</span></div>
-<div id="cap-intro-2" class="clip cap" data-start="14.438" data-duration="2.143" data-track-index="2"><span>크게 다섯 종류로 나뉘는데요,</span></div>
-<div id="cap-intro-3" class="clip cap" data-start="16.581" data-duration="0.973" data-track-index="2"><span>조회하는 DQL,</span></div>
-<div id="cap-intro-4" class="clip cap" data-start="17.554" data-duration="1.253" data-track-index="2"><span>데이터를 바꾸는 DML,</span></div>
-<div id="cap-intro-5" class="clip cap" data-start="18.807" data-duration="0.975" data-track-index="2"><span>구조를 만드는 DDL,</span></div>
-<div id="cap-intro-6" class="clip cap" data-start="19.783" data-duration="0.974" data-track-index="2"><span>트랜잭션을 다루는 TCL,</span></div>
-<div id="cap-intro-7" class="clip cap" data-start="20.756" data-duration="1.098" data-track-index="2"><span>그리고 권한을 다루는 DCL입니다.</span></div>
-<div id="cap-intro-8" class="clip cap" data-start="25.554" data-duration="1.608" data-track-index="2"><span>그런데 이 다섯 개,</span></div>
-<div id="cap-intro-9" class="clip cap" data-start="27.163" data-duration="1.386" data-track-index="2"><span>중요도가 전혀 같지 않습니다.</span></div>
-<div id="cap-r1-0" class="clip cap" data-start="30.052" data-duration="3.594" data-track-index="2"><span>가성비 1위, 셀렉트, DQL입니다.</span></div>
-<div id="cap-r1-1" class="clip cap" data-start="33.646" data-duration="3.002" data-track-index="2"><span>실무 쿼리의 대부분이 바로 조회예요.</span></div>
-<div id="cap-r1-2" class="clip cap" data-start="36.648" data-duration="1.730" data-track-index="2"><span>셀렉트로 컬럼을 고르고,</span></div>
-<div id="cap-r1-3" class="clip cap" data-start="38.379" data-duration="1.134" data-track-index="2"><span>프롬으로 테이블을,</span></div>
-<div id="cap-r1-4" class="clip cap" data-start="39.513" data-duration="1.106" data-track-index="2"><span>웨어로 조건을 걸고,</span></div>
-<div id="cap-r1-5" class="clip cap" data-start="40.619" data-duration="1.232" data-track-index="2"><span>오더 바이로 정렬하면 끝.</span></div>
-<div id="cap-r1-6" class="clip cap" data-start="41.850" data-duration="1.479" data-track-index="2"><span>이것만 알아도 데이터 확인, 리포트,</span></div>
-<div id="cap-r1-7" class="clip cap" data-start="43.330" data-duration="1.143" data-track-index="2"><span>장애 분석까지 바로 할 수 있습니다.</span></div>
-<div id="cap-r1b-0" class="clip cap" data-start="48.910" data-duration="2.137" data-track-index="2"><span>여기에 조인과 그룹 바이까지</span></div>
-<div id="cap-r1b-1" class="clip cap" data-start="51.047" data-duration="1.069" data-track-index="2"><span>익히면 진짜 무기가 됩니다.</span></div>
-<div id="cap-r1b-2" class="clip cap" data-start="53.185" data-duration="2.717" data-track-index="2"><span>조인은 여러 테이블을 키로 연결하고,</span></div>
-<div id="cap-r1b-3" class="clip cap" data-start="55.902" data-duration="1.461" data-track-index="2"><span>그룹 바이는 카운트나 썸으로 집계하죠.</span></div>
-<div id="cap-r1b-4" class="clip cap" data-start="58.754" data-duration="3.355" data-track-index="2"><span>일별 매출, 회원별 주문 수 같은 질문에 쿼리</span></div>
-<div id="cap-r1b-5" class="clip cap" data-start="62.109" data-duration="0.755" data-track-index="2"><span>한 줄로 답할 수 있습니다.</span></div>
-<div id="cap-r2-0" class="clip cap" data-start="64.672" data-duration="2.880" data-track-index="2"><span>2위, 데이터를 바꾸는 DML.</span></div>
-<div id="cap-r2-1" class="clip cap" data-start="67.552" data-duration="1.521" data-track-index="2"><span>인서트로 추가하고,</span></div>
-<div id="cap-r2-2" class="clip cap" data-start="69.073" data-duration="1.150" data-track-index="2"><span>업데이트로 수정하고,</span></div>
-<div id="cap-r2-3" class="clip cap" data-start="70.223" data-duration="0.755" data-track-index="2"><span>딜리트로 삭제합니다.</span></div>
-<div id="cap-r2-4" class="clip cap" data-start="72.418" data-duration="1.869" data-track-index="2"><span>딱 세 개라 금방 외우지만</span></div>
-<div id="cap-r2-5" class="clip cap" data-start="74.287" data-duration="0.935" data-track-index="2"><span>주의할 점이 하나 있어요.</span></div>
-<div id="cap-r2-6" class="clip cap" data-start="76.157" data-duration="2.794" data-track-index="2"><span>업데이트와 딜리트에 웨어를 빼먹으면,</span></div>
-<div id="cap-r2-7" class="clip cap" data-start="78.950" data-duration="0.715" data-track-index="2"><span>테이블 전체가 바뀝니다.</span></div>
-<div id="cap-r2-8" class="clip cap" data-start="80.766" data-duration="1.767" data-track-index="2"><span>실행 전에 같은 조건으로</span></div>
-<div id="cap-r2-9" class="clip cap" data-start="82.533" data-duration="1.880" data-track-index="2"><span>셀렉트부터 해 보는 습관, 꼭 들이세요.</span></div>
-<div id="cap-r3-0" class="clip cap" data-start="86.074" data-duration="2.902" data-track-index="2"><span>3위, 구조를 만드는 DDL.</span></div>
-<div id="cap-r3-1" class="clip cap" data-start="88.976" data-duration="2.669" data-track-index="2"><span>크리에이트 테이블로 테이블을 만들고,</span></div>
-<div id="cap-r3-2" class="clip cap" data-start="91.646" data-duration="1.401" data-track-index="2"><span>얼터로 컬럼을 추가하거나 바꾸고,</span></div>
-<div id="cap-r3-3" class="clip cap" data-start="93.047" data-duration="0.487" data-track-index="2"><span>드롭으로 지웁니다.</span></div>
-<div id="cap-r3-4" class="clip cap" data-start="95.382" data-duration="2.935" data-track-index="2"><span>인덱스를 만드는 것도 여기 속하죠.</span></div>
-<div id="cap-r3-5" class="clip cap" data-start="98.318" data-duration="1.278" data-track-index="2"><span>자주 쓰진 않지만,</span></div>
-<div id="cap-r3-6" class="clip cap" data-start="99.596" data-duration="1.363" data-track-index="2"><span>한 번 잘못 쓰면 되돌리기</span></div>
-<div id="cap-r3-7" class="clip cap" data-start="100.959" data-duration="1.169" data-track-index="2"><span>어려우니 원리는 꼭 알아 두세요.</span></div>
-<div id="cap-r4-0" class="clip cap" data-start="104.236" data-duration="3.204" data-track-index="2"><span>4위, 트랜잭션을 다루는 TCL.</span></div>
-<div id="cap-r4-1" class="clip cap" data-start="107.440" data-duration="3.906" data-track-index="2"><span>스타트 트랜잭션으로 시작해서, 성공하면 커밋,</span></div>
-<div id="cap-r4-2" class="clip cap" data-start="111.346" data-duration="0.303" data-track-index="2"><span>실패하면 롤백.</span></div>
-<div id="cap-r4-3" class="clip cap" data-start="112.596" data-duration="2.238" data-track-index="2"><span>계좌 이체처럼 여러 작업을 전부</span></div>
-<div id="cap-r4-4" class="clip cap" data-start="114.834" data-duration="1.634" data-track-index="2"><span>성공하거나 전부 취소해야 할 때 씁니다.</span></div>
-<div id="cap-r4-5" class="clip cap" data-start="117.730" data-duration="3.288" data-track-index="2"><span>참고로 마이에스큐엘은 기본이 오토 커밋이라,</span></div>
-<div id="cap-r4-6" class="clip cap" data-start="121.018" data-duration="1.442" data-track-index="2"><span>롤백하려면 트랜잭션을 먼저 열어야 해요.</span></div>
-<div id="cap-r5-0" class="clip cap" data-start="124.582" data-duration="2.969" data-track-index="2"><span>5위, 권한을 다루는 DCL.</span></div>
-<div id="cap-r5-1" class="clip cap" data-start="127.551" data-duration="1.852" data-track-index="2"><span>그랜트로 권한을 주고,</span></div>
-<div id="cap-r5-2" class="clip cap" data-start="129.403" data-duration="0.812" data-track-index="2"><span>리보크로 회수합니다.</span></div>
-<div id="cap-r5-3" class="clip cap" data-start="131.100" data-duration="1.780" data-track-index="2"><span>중요하지만 주로 DBA나</span></div>
-<div id="cap-r5-4" class="clip cap" data-start="132.880" data-duration="1.520" data-track-index="2"><span>인프라 담당이 하는 일이라,</span></div>
-<div id="cap-r5-5" class="clip cap" data-start="134.400" data-duration="1.560" data-track-index="2"><span>개발자라면 가장 나중에 봐도 충분합니다.</span></div>
-<div id="cap-outro-0" class="clip cap" data-start="138.496" data-duration="4.249" data-track-index="2"><span>정리하면, 셀렉트, DML, DDL, TCL,</span></div>
-<div id="cap-outro-1" class="clip cap" data-start="142.745" data-duration="0.486" data-track-index="2"><span>DCL 순서입니다.</span></div>
-<div id="cap-outro-2" class="clip cap" data-start="144.445" data-duration="2.846" data-track-index="2"><span>오늘은 셀렉트부터 시작해 보세요.</span></div>
-<div id="cap-outro-3" class="clip cap" data-start="147.291" data-duration="3.897" data-track-index="2"><span>도움이 됐다면 구독과 좋아요 부탁드립니다!</span></div>
+  <div id="cap-hook-0" class="clip cap" data-start="0.300" data-duration="1.601" data-track-index="2"><span>마이에스큐엘 SQL,</span></div>
+<div id="cap-hook-1" class="clip cap" data-start="1.901" data-duration="2.126" data-track-index="2"><span>뭐부터 배워야 할까요?</span></div>
+<div id="cap-hook-2" class="clip cap" data-start="4.028" data-duration="1.618" data-track-index="2"><span>공부한 시간 대비 실무에서</span></div>
+<div id="cap-hook-3" class="clip cap" data-start="5.646" data-duration="1.362" data-track-index="2"><span>가장 많이 써먹는,</span></div>
+<div id="cap-hook-4" class="clip cap" data-start="7.008" data-duration="2.940" data-track-index="2"><span>가성비 순서로 딱 정리해 드립니다.</span></div>
+<div id="cap-intro-0" class="clip cap" data-start="10.398" data-duration="1.858" data-track-index="2"><span>SQL은 데이터베이스에게</span></div>
+<div id="cap-intro-1" class="clip cap" data-start="12.256" data-duration="2.227" data-track-index="2"><span>일을 시키는 언어입니다.</span></div>
+<div id="cap-intro-2" class="clip cap" data-start="14.483" data-duration="2.031" data-track-index="2"><span>크게 다섯 종류로 나뉘는데요,</span></div>
+<div id="cap-intro-3" class="clip cap" data-start="16.514" data-duration="1.283" data-track-index="2"><span>조회하는 DQL,</span></div>
+<div id="cap-intro-4" class="clip cap" data-start="17.798" data-duration="1.607" data-track-index="2"><span>데이터를 바꾸는 DML,</span></div>
+<div id="cap-intro-5" class="clip cap" data-start="19.405" data-duration="1.440" data-track-index="2"><span>구조를 만드는 DDL,</span></div>
+<div id="cap-intro-6" class="clip cap" data-start="20.844" data-duration="1.875" data-track-index="2"><span>트랜잭션을 다루는 TCL,</span></div>
+<div id="cap-intro-7" class="clip cap" data-start="22.719" data-duration="2.879" data-track-index="2"><span>그리고 권한을 다루는 DCL입니다.</span></div>
+<div id="cap-intro-8" class="clip cap" data-start="25.599" data-duration="1.373" data-track-index="2"><span>그런데 이 다섯 개,</span></div>
+<div id="cap-intro-9" class="clip cap" data-start="26.972" data-duration="2.530" data-track-index="2"><span>중요도가 전혀 같지 않습니다.</span></div>
+<div id="cap-r1-0" class="clip cap" data-start="29.952" data-duration="3.739" data-track-index="2"><span>가성비 1위, 셀렉트, DQL입니다.</span></div>
+<div id="cap-r1-1" class="clip cap" data-start="33.691" data-duration="3.002" data-track-index="2"><span>실무 쿼리의 대부분이 바로 조회예요.</span></div>
+<div id="cap-r1-2" class="clip cap" data-start="36.693" data-duration="1.719" data-track-index="2"><span>셀렉트로 컬럼을 고르고,</span></div>
+<div id="cap-r1-3" class="clip cap" data-start="38.412" data-duration="1.261" data-track-index="2"><span>프롬으로 테이블을,</span></div>
+<div id="cap-r1-4" class="clip cap" data-start="39.673" data-duration="1.507" data-track-index="2"><span>웨어로 조건을 걸고,</span></div>
+<div id="cap-r1-5" class="clip cap" data-start="41.180" data-duration="1.663" data-track-index="2"><span>오더 바이로 정렬하면 끝.</span></div>
+<div id="cap-r1-6" class="clip cap" data-start="42.843" data-duration="2.578" data-track-index="2"><span>이것만 알아도 데이터 확인, 리포트,</span></div>
+<div id="cap-r1-7" class="clip cap" data-start="45.421" data-duration="2.939" data-track-index="2"><span>장애 분석까지 바로 할 수 있습니다.</span></div>
+<div id="cap-r1b-0" class="clip cap" data-start="48.810" data-duration="1.780" data-track-index="2"><span>여기에 조인과 그룹 바이까지</span></div>
+<div id="cap-r1b-1" class="clip cap" data-start="50.590" data-duration="2.640" data-track-index="2"><span>익히면 진짜 무기가 됩니다.</span></div>
+<div id="cap-r1b-2" class="clip cap" data-start="53.230" data-duration="2.433" data-track-index="2"><span>조인은 여러 테이블을 키로 연결하고,</span></div>
+<div id="cap-r1b-3" class="clip cap" data-start="55.663" data-duration="3.136" data-track-index="2"><span>그룹 바이는 카운트나 썸으로 집계하죠.</span></div>
+<div id="cap-r1b-4" class="clip cap" data-start="58.799" data-duration="3.013" data-track-index="2"><span>일별 매출, 회원별 주문 수 같은 질문에 쿼리</span></div>
+<div id="cap-r1b-5" class="clip cap" data-start="61.812" data-duration="2.310" data-track-index="2"><span>한 줄로 답할 수 있습니다.</span></div>
+<div id="cap-r2-0" class="clip cap" data-start="64.572" data-duration="3.025" data-track-index="2"><span>2위, 데이터를 바꾸는 DML.</span></div>
+<div id="cap-r2-1" class="clip cap" data-start="67.597" data-duration="1.339" data-track-index="2"><span>인서트로 추가하고,</span></div>
+<div id="cap-r2-2" class="clip cap" data-start="68.936" data-duration="1.417" data-track-index="2"><span>업데이트로 수정하고,</span></div>
+<div id="cap-r2-3" class="clip cap" data-start="70.353" data-duration="2.109" data-track-index="2"><span>딜리트로 삭제합니다.</span></div>
+<div id="cap-r2-4" class="clip cap" data-start="72.463" data-duration="1.484" data-track-index="2"><span>딱 세 개라 금방 외우지만</span></div>
+<div id="cap-r2-5" class="clip cap" data-start="73.947" data-duration="2.254" data-track-index="2"><span>주의할 점이 하나 있어요.</span></div>
+<div id="cap-r2-6" class="clip cap" data-start="76.201" data-duration="2.333" data-track-index="2"><span>업데이트와 딜리트에 웨어를 빼먹으면,</span></div>
+<div id="cap-r2-7" class="clip cap" data-start="78.534" data-duration="2.277" data-track-index="2"><span>테이블 전체가 바뀝니다.</span></div>
+<div id="cap-r2-8" class="clip cap" data-start="80.811" data-duration="1.373" data-track-index="2"><span>실행 전에 같은 조건으로</span></div>
+<div id="cap-r2-9" class="clip cap" data-start="82.184" data-duration="3.340" data-track-index="2"><span>셀렉트부터 해 보는 습관, 꼭 들이세요.</span></div>
+<div id="cap-r3-0" class="clip cap" data-start="85.974" data-duration="3.047" data-track-index="2"><span>3위, 구조를 만드는 DDL.</span></div>
+<div id="cap-r3-1" class="clip cap" data-start="89.021" data-duration="2.254" data-track-index="2"><span>크리에이트 테이블로 테이블을 만들고,</span></div>
+<div id="cap-r3-2" class="clip cap" data-start="91.275" data-duration="2.277" data-track-index="2"><span>얼터로 컬럼을 추가하거나 바꾸고,</span></div>
+<div id="cap-r3-3" class="clip cap" data-start="93.552" data-duration="1.875" data-track-index="2"><span>드롭으로 지웁니다.</span></div>
+<div id="cap-r3-4" class="clip cap" data-start="95.427" data-duration="2.935" data-track-index="2"><span>인덱스를 만드는 것도 여기 속하죠.</span></div>
+<div id="cap-r3-5" class="clip cap" data-start="98.362" data-duration="1.328" data-track-index="2"><span>자주 쓰진 않지만,</span></div>
+<div id="cap-r3-6" class="clip cap" data-start="99.691" data-duration="1.440" data-track-index="2"><span>한 번 잘못 쓰면 되돌리기</span></div>
+<div id="cap-r3-7" class="clip cap" data-start="101.130" data-duration="2.556" data-track-index="2"><span>어려우니 원리는 꼭 알아 두세요.</span></div>
+<div id="cap-r4-0" class="clip cap" data-start="104.136" data-duration="3.348" data-track-index="2"><span>4위, 트랜잭션을 다루는 TCL.</span></div>
+<div id="cap-r4-1" class="clip cap" data-start="107.484" data-duration="3.304" data-track-index="2"><span>스타트 트랜잭션으로 시작해서, 성공하면 커밋,</span></div>
+<div id="cap-r4-2" class="clip cap" data-start="110.788" data-duration="1.853" data-track-index="2"><span>실패하면 롤백.</span></div>
+<div id="cap-r4-3" class="clip cap" data-start="112.640" data-duration="1.830" data-track-index="2"><span>계좌 이체처럼 여러 작업을 전부</span></div>
+<div id="cap-r4-4" class="clip cap" data-start="114.471" data-duration="3.304" data-track-index="2"><span>성공하거나 전부 취소해야 할 때 씁니다.</span></div>
+<div id="cap-r4-5" class="clip cap" data-start="117.774" data-duration="2.924" data-track-index="2"><span>참고로 마이에스큐엘은 기본이 오토 커밋이라,</span></div>
+<div id="cap-r4-6" class="clip cap" data-start="120.698" data-duration="3.334" data-track-index="2"><span>롤백하려면 트랜잭션을 먼저 열어야 해요.</span></div>
+<div id="cap-r5-0" class="clip cap" data-start="124.482" data-duration="3.114" data-track-index="2"><span>5위, 권한을 다루는 DCL.</span></div>
+<div id="cap-r5-1" class="clip cap" data-start="127.596" data-duration="1.496" data-track-index="2"><span>그랜트로 권한을 주고,</span></div>
+<div id="cap-r5-2" class="clip cap" data-start="129.091" data-duration="2.054" data-track-index="2"><span>리보크로 회수합니다.</span></div>
+<div id="cap-r5-3" class="clip cap" data-start="131.145" data-duration="1.585" data-track-index="2"><span>중요하지만 주로 DBA나</span></div>
+<div id="cap-r5-4" class="clip cap" data-start="132.730" data-duration="1.674" data-track-index="2"><span>인프라 담당이 하는 일이라,</span></div>
+<div id="cap-r5-5" class="clip cap" data-start="134.404" data-duration="3.542" data-track-index="2"><span>개발자라면 가장 나중에 봐도 충분합니다.</span></div>
+<div id="cap-outro-0" class="clip cap" data-start="138.396" data-duration="4.157" data-track-index="2"><span>정리하면, 셀렉트, DML, DDL, TCL,</span></div>
+<div id="cap-outro-1" class="clip cap" data-start="142.553" data-duration="1.937" data-track-index="2"><span>DCL 순서입니다.</span></div>
+<div id="cap-outro-2" class="clip cap" data-start="144.490" data-duration="2.846" data-track-index="2"><span>오늘은 셀렉트부터 시작해 보세요.</span></div>
+<div id="cap-outro-3" class="clip cap" data-start="147.336" data-duration="3.852" data-track-index="2"><span>도움이 됐다면 구독과 좋아요 부탁드립니다!</span></div>
   <div class="bar"></div>
   <audio id="vo" src="assets/narration.mp3" data-start="0" data-duration="152.39" data-track-index="0"></audio>
 </div>

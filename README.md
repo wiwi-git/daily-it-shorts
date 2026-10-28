@@ -9,6 +9,9 @@
 - 주제: MySQL SQL 개요와 종류 — 가성비 학습 순위 TOP 5 (DQL · DML · DDL · TCL · DCL)
 - 영상 URL: https://www.youtube.com/watch?v=TL1x_Wq0S4c
 
+- 주제: DQL SELECT 기본 문법 · JOIN · GROUP BY (WHERE · ORDER BY · LIMIT · HAVING · 논리적 처리 순서)
+- 영상 URL: https://www.youtube.com/watch?v=fm1n7fj-ulI
+
 ## 영상 목록
 
 | 날짜 | 주제 | 길이 | 폴더 | 영상 |

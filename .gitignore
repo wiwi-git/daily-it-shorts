@@ -1,0 +1,22 @@
+# 렌더링된 영상 (유튜브에만 업로드, 저장소에는 올리지 않음)
+output/
+renders/
+*.mp4
+*.mov
+*.webm
+
+# 나레이션 음성 (gen_vo.py / build.py로 다시 생성)
+*.mp3
+*.wav
+*.m4a
+
+# HyperFrames 캐시·스냅샷
+.hyperframes/
+
+# Python / Node
+.venv/
+__pycache__/
+node_modules/
+
+# OS
+.DS_Store

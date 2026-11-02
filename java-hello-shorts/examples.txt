@@ -1,0 +1,108 @@
+// 영상에 나오는 예제 프로그램 (build.py가 생성 · 직접 고치지 말 것)
+// 각 예제를 파일 이름대로 저장한 뒤: javac Main.java && java Main
+
+// [1. 클래스] Main.java → 출력:
+//   Hello World
+public class Main {
+  public static void main(String[] args) {
+    System.out.println("Hello World");
+  }
+}
+
+// [1. 클래스] Hello.java → 컴파일 오류: class Main is public, should be declared in a file named Main.java
+public class Main {
+  public static void main(String[] args) {
+    System.out.println("Hello World");
+  }
+}
+
+// [프로그램의 기본 형태] Main.java → 출력:
+//   Hello World
+public class Main {
+  public static void main(String[] args) {
+    System.out.println("Hello World");
+  }
+}
+
+// [1-1. 메인 메서드] Main.java → 컴파일 오류: ';' expected
+public class Main {
+  public static void main(String[] args) {
+    System.out.println("Hi")
+  }
+}
+
+// [2. 문자열과 큰따옴표] Main.java → 출력:
+//   Hello World
+public class Main {
+  public static void main(String[] args) {
+    System.out.println("Hello World");
+  }
+}
+
+// [2. 문자열과 큰따옴표] Main.java → 컴파일 오류: unclosed character literal
+public class Main {
+  public static void main(String[] args) {
+    System.out.println('Hello');
+  }
+}
+
+// [2. 문자열과 큰따옴표] Main.java → 컴파일 오류: cannot find symbol
+public class Main {
+  public static void main(String[] args) {
+    System.out.println(Hello);
+  }
+}
+
+// [3. System.out.println] Main.java → 출력:
+//   Hello
+//   World
+public class Main {
+  public static void main(String[] args) {
+    System.out.println("Hello");
+    System.out.println("World");
+  }
+}
+
+// [3. System.out.println] Main.java → 컴파일 오류: package system does not exist
+public class Main {
+  public static void main(String[] args) {
+    system.out.println("Hi");
+  }
+}
+
+// [4. \n 줄바꿈] Main.java → 출력:
+//   Hi
+//   Java
+public class Main {
+  public static void main(String[] args) {
+    System.out.println("Hi\nJava");
+  }
+}
+
+// [4. \n 줄바꿈] Main.java → 출력:
+//   A	B "C"
+public class Main {
+  public static void main(String[] args) {
+    System.out.println("A\tB \"C\"");
+  }
+}
+
+// [5. print vs println] Main.java → 출력:
+//   ABC
+//   D
+public class Main {
+  public static void main(String[] args) {
+    System.out.print("A");
+    System.out.print("B");
+    System.out.println("C");
+    System.out.print("D");
+  }
+}
+
+// [5. print vs println] Main.java → 출력:
+//   Hi
+public class Main {
+  public static void main(String[] args) {
+    System.out.print("Hi\n");
+  }
+}

@@ -1,0 +1,201 @@
+<!doctype html>
+<html lang="ko" data-resolution="portrait">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=1080, height=1920" />
+<script src="https://cdn.jsdelivr.net/npm/gsap@3.14.2/dist/gsap.min.js"></script>
+<style>
+:root {
+  --ground: #0b1220; --panel: #131c2e; --ink: #f4f6fb; --mute: #9aa6bd;
+  --blue: #3fa7d6; --orange: #f29111; --red: #ff5d5d; --green: #7ee08a; --violet: #c3a6ff;
+  --font: "Pretendard", sans-serif;
+  --mono: "Menlo", "SF Mono", monospace;
+}
+@font-face { font-family: "Pretendard"; src: url("assets/fonts/PretendardVariable.woff2") format("woff2"); font-weight: 45 920; }
+* { margin: 0; padding: 0; box-sizing: border-box; }
+html, body { width: 1080px; height: 1920px; overflow: hidden; background: var(--ground); }
+#root { position: relative; width: 100%; height: 100%; font-variant-ligatures: none; font-family: var(--font); color: var(--ink); overflow: hidden;
+  background: radial-gradient(1200px 900px at 80% -10%, #16365a 0%, transparent 60%),
+              radial-gradient(900px 900px at -10% 110%, #3a2410 0%, transparent 55%), var(--ground); }
+.clip { position: absolute; inset: 0; }
+.brand { position: absolute; top: 110px; left: 70px; right: 70px; display: flex; justify-content: space-between; align-items: center;
+  font-size: 34px; font-weight: 700; color: var(--mute); letter-spacing: 0.02em; }
+.brand b { color: var(--blue); } .brand b em { color: var(--orange); font-style: normal; }
+.prog { display: flex; gap: 12px; }
+.prog i { display: block; width: 56px; height: 12px; border-radius: 6px; background: #26324a; }
+.scene { padding: 210px 70px 0; display: flex; flex-direction: column; gap: 26px; }
+.pill { align-self: flex-start; padding: 12px 26px; border-radius: 999px; background: #1d2a44; color: var(--blue);
+  font-size: 34px; font-weight: 700; }
+.hook { display: flex; flex-direction: column; gap: 50px; padding-top: 140px; }
+.big { font-size: 150px; line-height: 1.12; font-weight: 800; letter-spacing: -0.04em; }
+.big em { font-style: normal; color: var(--orange); }
+.sub { font-size: 64px; font-weight: 700; color: var(--mute); } .sub b { color: var(--ink); }
+.title { font-size: 80px; font-weight: 800; letter-spacing: -0.03em; line-height: 1.1; }
+.desc { font-size: 46px; color: var(--mute); font-weight: 600; margin-top: -8px; } .desc b { color: var(--orange); }
+.code { background: #0a0f1a; border: 2px solid #26324a; border-radius: 26px; padding: 30px 32px; font-family: var(--mono);
+  font-size: 42px; line-height: 1.5; color: #d9e1f2; white-space: pre; box-shadow: 0 30px 60px rgba(0,0,0,.35);
+  font-variant-ligatures: none; font-feature-settings: "liga" 0, "calt" 0; }
+.code .ln { margin: 0 -14px; padding: 0 14px; border-radius: 10px; }
+.code .ln.mk { background: rgba(242,145,17,.13); }
+.kw { color: var(--blue); font-weight: 700; } .st { color: var(--green); } .nu { color: var(--orange); } .cm { color: #6f7d98; }
+.chips { display: flex; flex-wrap: wrap; gap: 18px; }
+.chips span { padding: 16px 30px; background: var(--panel); border-radius: 18px; font-size: 42px; font-weight: 700; }
+.warn, .note { padding: 26px 36px; border-radius: 24px; font-size: 44px; font-weight: 700; line-height: 1.45; }
+.warn { background: rgba(255,93,93,.12); border-left: 10px solid var(--red); } .warn b { color: var(--red); }
+.note { background: rgba(63,167,214,.12); border-left: 10px solid var(--blue); } .note b { color: var(--orange); }
+.note small { font-size: 38px; color: var(--mute); font-weight: 600; font-family: var(--mono); }
+code { font-family: var(--mono); color: var(--orange); }
+.tbl { align-self: flex-start; }
+.tlabel { font-size: 34px; font-weight: 700; color: var(--mute); margin-bottom: 10px; }
+.tbl table { border-collapse: collapse; font-family: var(--mono); font-size: 40px; background: var(--panel); border-radius: 18px; overflow: hidden; }
+.tbl th { color: var(--blue); text-align: left; padding: 12px 32px; background: #1a2640; }
+.tbl th u { text-decoration: none; color: var(--orange); }
+.tbl td { padding: 10px 32px; border-top: 1px solid #26324a; }
+.tbl tr.k1 td { color: var(--orange); } .tbl tr.k2 td { color: var(--green); } .tbl tr.k3 td { color: var(--violet); }
+.tbl tr.out td { color: #5b6782; text-decoration: line-through; }
+.tbl td.nl { color: var(--red) !important; font-style: italic; font-weight: 700; background: rgba(255,93,93,.12); }
+.link { align-self: flex-start; font-family: var(--mono); font-size: 38px; color: var(--mute); padding: 6px 0 6px 26px;
+  border-left: 8px solid var(--orange); }
+.link b { color: var(--orange); }
+.arrow { font-family: var(--mono); font-size: 38px; color: var(--orange); font-weight: 700; }
+.vs { display: grid; grid-template-columns: 1fr 1fr; gap: 22px; }
+.card { background: var(--panel); border-radius: 26px; padding: 26px 32px; display: flex; flex-direction: column; gap: 6px; }
+.card b { font-family: var(--mono); font-size: 52px; color: var(--blue); }
+.vs .card span { font-size: 44px; font-weight: 800; } .vs .card .ok { color: var(--green); } .vs .card .ng { color: var(--red); }
+.res { display: flex; flex-wrap: wrap; align-items: center; gap: 14px; margin-top: -6px; }
+.res i { font-style: normal; font-size: 34px; color: var(--mute); font-weight: 700; }
+.res span { padding: 8px 22px; border-radius: 14px; background: var(--panel); font-size: 40px; font-weight: 700; }
+.res span.k1 { color: var(--orange); } .res span.k2 { color: var(--green); } .res span.k3 { color: var(--violet); }
+.res span.ok { color: var(--green); }
+.res span.bad { color: var(--red); background: rgba(255,93,93,.14); box-shadow: inset 0 0 0 3px var(--red); } .vs .card em { font-style: normal; color: var(--orange); }
+.list { display: flex; flex-direction: column; gap: 16px; }
+.row { display: flex; align-items: center; gap: 30px; background: var(--panel); border-radius: 22px; padding: 14px 36px; font-size: 48px;
+  transform-origin: left center; }
+.row .no { font-size: 52px; font-weight: 900; color: var(--orange); width: 50px; }
+.row b { font-family: var(--mono); color: var(--blue); }
+.cta { margin-top: 20px; font-size: 54px; font-weight: 800; text-align: center; }
+.cap { top: auto; bottom: 260px; height: auto; display: flex; justify-content: center; padding: 0 60px; }
+.cap span { background: rgba(0,0,0,.78); color: #fff; font-size: 48px; font-weight: 700; line-height: 1.4; padding: 16px 30px;
+  border-radius: 18px; text-align: center; word-break: keep-all; }
+.bar { position: absolute; left: 0; bottom: 0; height: 10px; width: 1080px; background: var(--orange); transform-origin: left center; }
+</style>
+</head>
+<body>
+<div id="root" data-composition-id="main" data-start="0" data-duration="112.5" data-width="1080" data-height="1920">
+  <div class="brand"><b>MySQL <em>권한</em> 정리</b><div class="prog"><i></i><i></i><i></i><i></i><i></i></div></div>
+  <section id="sc-hook" class="clip scene" data-start="0.000" data-duration="9.096" data-track-index="1"><div class="hook">
+   <div class="pill in">MySQL · 권한 핵심 정리</div>
+   <h1 class="big in"><em>GRANT</em><br/>REVOKE</h1>
+   <div class="sub in">필요한 만큼만 <b>허락하기</b></div>
+ </div></section>
+<section id="sc-intro" class="clip scene" data-start="9.096" data-duration="11.514" data-track-index="1"><div class="pill in">SQL 5위 · DCL</div><h2 class="title in">DCL</h2><p class="desc in">Data Control Language · <b>권한</b>을 제어</p><div class="tbl in "><div class="tlabel">권한 = 세 가지의 조합</div><table><tr><th>정하는 것</th><th>DCL에서</th></tr><tr class=""><td>누가</td><td>계정</td></tr><tr class=""><td>어디에</td><td>DB · 테이블</td></tr><tr class=""><td>무엇을</td><td>SELECT · INSERT …</td></tr></table></div><div class="note in">최소 권한 원칙<br/><small>꼭 필요한 권한만 주기</small></div></section>
+<section id="sc-user" class="clip scene" data-start="20.610" data-duration="15.474" data-track-index="1"><div class="pill in">STEP 1 · 계정</div><h2 class="title in">CREATE USER</h2><p class="desc in">계정 = <b>사용자 이름 @ 호스트</b></p><div class="code in"><div class="ln mk"><span class="kw">CREATE</span> <span class="kw">USER</span> <span class="st">&#x27;app&#x27;</span>@<span class="st">&#x27;localhost&#x27;</span></div><div class="ln">  <span class="kw">IDENTIFIED</span> <span class="kw">BY</span> <span class="st">&#x27;app_pw&#x27;</span>;</div></div><div class="res in"><i>만든 계정 →</i><span class="k1">app@localhost</span></div><div class="chips in"><span>'localhost' = 같은 서버에서 접속</span><span>'%' = 모든 호스트 · 꼭 필요할 때만</span></div></section>
+<section id="sc-grant" class="clip scene" data-start="36.084" data-duration="16.506" data-track-index="1"><div class="pill in">STEP 2 · GRANT</div><h2 class="title in">GRANT</h2><p class="desc in">무슨 권한을 · 어디에 · <b>누구에게</b></p><div class="code in"><div class="ln mk"><span class="kw">SHOW</span> <span class="kw">GRANTS</span></div><div class="ln mk">  FOR <span class="st">&#x27;app&#x27;</span>@<span class="st">&#x27;localhost&#x27;</span>;</div></div><div class="res in"><i>만든 직후 →</i><span class="">USAGE ON *.* (전역 권한 없음)</span></div><div class="code in"><div class="ln mk"><span class="kw">GRANT</span> <span class="kw">SELECT</span>, <span class="kw">INSERT</span> <span class="kw">ON</span> shop.*</div><div class="ln mk">  <span class="kw">TO</span> <span class="st">&#x27;app&#x27;</span>@<span class="st">&#x27;localhost&#x27;</span>;</div></div><div class="code in"><div class="ln"><span class="kw">SHOW</span> <span class="kw">GRANTS</span></div><div class="ln">  FOR <span class="st">&#x27;app&#x27;</span>@<span class="st">&#x27;localhost&#x27;</span>;</div></div><div class="res in"><i>GRANT 후 →</i><span class="">USAGE ON *.* (전역 권한 없음)</span><span class="ok">SELECT, INSERT ON shop.*</span></div></section>
+<section id="sc-scope" class="clip scene" data-start="52.590" data-duration="10.554" data-track-index="1"><div class="pill in">STEP 2-1</div><h2 class="title in">권한 범위</h2><p class="desc in">ON 뒤에 <b>어디까지</b></p><div class="tbl in "><div class="tlabel">범위가 좁을수록 안전</div><table><tr><th>ON</th><th>범위</th></tr><tr class=""><td>*.*</td><td>서버 전체</td></tr><tr class=""><td>shop.*</td><td>shop의 모든 테이블</td></tr><tr class=""><td>shop.products</td><td>테이블 하나만</td></tr></table></div></section>
+<section id="sc-deny" class="clip scene" data-start="63.144" data-duration="9.954" data-track-index="1"><div class="pill in">STEP 3 · 권한 없음</div><h2 class="title in">거절되는 작업</h2><p class="desc in">report = <b>SELECT만</b></p><div class="code in"><div class="ln"><span class="kw">CREATE</span> <span class="kw">USER</span> <span class="st">&#x27;report&#x27;</span>@<span class="st">&#x27;localhost&#x27;</span></div><div class="ln">  <span class="kw">IDENTIFIED</span> <span class="kw">BY</span> <span class="st">&#x27;report_pw&#x27;</span>;</div><div class="ln mk"><span class="kw">GRANT</span> <span class="kw">SELECT</span> <span class="kw">ON</span> shop.products</div><div class="ln mk">  <span class="kw">TO</span> <span class="st">&#x27;report&#x27;</span>@<span class="st">&#x27;localhost&#x27;</span>;</div></div><div class="tlabel in">report 계정으로 접속해서</div><div class="code in"><div class="ln mk"><span class="kw">DELETE</span> <span class="kw">FROM</span> products</div><div class="ln mk">  <span class="kw">WHERE</span> id = <span class="nu">2</span>;</div></div><div class="warn in">⚠ ERROR 1142<br/><small>DELETE command denied to user &#x27;report&#x27;@&#x27;localhost&#x27;</small></div></section>
+<section id="sc-revoke" class="clip scene" data-start="73.098" data-duration="10.674" data-track-index="1"><div class="pill in">STEP 4 · REVOKE</div><h2 class="title in">REVOKE</h2><p class="desc in">GRANT와 같은 모양 · <b>TO → FROM</b></p><div class="code in"><div class="ln mk"><span class="kw">REVOKE</span> <span class="kw">INSERT</span> <span class="kw">ON</span> shop.*</div><div class="ln mk">  <span class="kw">FROM</span> <span class="st">&#x27;app&#x27;</span>@<span class="st">&#x27;localhost&#x27;</span>;</div></div><div class="code in"><div class="ln"><span class="kw">SHOW</span> <span class="kw">GRANTS</span></div><div class="ln">  FOR <span class="st">&#x27;app&#x27;</span>@<span class="st">&#x27;localhost&#x27;</span>;</div></div><div class="res in"><i>REVOKE 후 →</i><span class="">USAGE ON *.* (전역 권한 없음)</span><span class="ok">SELECT ON shop.*</span></div><div class="chips in"><span>GRANT … TO</span><span>REVOKE … FROM</span></div></section>
+<section id="sc-drop" class="clip scene" data-start="83.772" data-duration="12.09" data-track-index="1"><div class="pill in">STEP 5 · 원칙</div><h2 class="title in">최소 권한</h2><p class="desc in">안 쓰는 계정은 <b>삭제</b></p><div class="code in"><div class="ln mk"><span class="kw">DROP</span> <span class="kw">USER</span> <span class="st">&#x27;report&#x27;</span>@<span class="st">&#x27;localhost&#x27;</span>;</div></div><div class="res in"><i>남은 계정 →</i><span class="k1">app@localhost</span></div><div class="note in">✓ 앱에는 root 대신 <b>전용 계정</b><br/>✓ 필요한 DB에 <b>필요한 권한만</b></div></section>
+<section id="sc-outro" class="clip scene" data-start="95.862" data-duration="16.638" data-track-index="1"><div class="pill in">정리</div><h2 class="title in">권한 핵심 6가지</h2><div class="list in"><div class="row" id="ex1"><span class="no">1</span><b>CREATE USER</b></div><div class="row" id="ex2"><span class="no">2</span><b>GRANT … TO</b></div><div class="row" id="ex3"><span class="no">3</span><b>SHOW GRANTS</b></div><div class="row" id="ex4"><span class="no">4</span><b>REVOKE … FROM</b></div><div class="row" id="ex5"><span class="no">5</span><b>DROP USER</b></div><div class="row" id="ex6"><span class="no">6</span><b>최소 권한 원칙</b></div></div><div class="cta in">👍 구독 · 좋아요</div></section>
+  <div id="cap-hook-0" class="clip cap" data-start="0.300" data-duration="3.426" data-track-index="2"><span>모든 개발자에게 루트 계정을 줘도 될까요?</span></div>
+<div id="cap-hook-1" class="clip cap" data-start="3.726" data-duration="2.835" data-track-index="2"><span>계정을 만들고, 권한을 주고 뺏는 DCL,</span></div>
+<div id="cap-hook-2" class="clip cap" data-start="6.561" data-duration="2.235" data-track-index="2"><span>한 번에 정리해 드립니다.</span></div>
+<div id="cap-intro-0" class="clip cap" data-start="9.246" data-duration="2.466" data-track-index="2"><span>DCL은 데이터 제어어.</span></div>
+<div id="cap-intro-1" class="clip cap" data-start="11.713" data-duration="1.763" data-track-index="2"><span>누가, 어떤 데이터에,</span></div>
+<div id="cap-intro-2" class="clip cap" data-start="13.476" data-duration="2.690" data-track-index="2"><span>무엇을 할 수 있는지를 정합니다.</span></div>
+<div id="cap-intro-3" class="clip cap" data-start="16.166" data-duration="1.574" data-track-index="2"><span>핵심은 꼭 필요한 권한만</span></div>
+<div id="cap-intro-4" class="clip cap" data-start="17.739" data-duration="2.571" data-track-index="2"><span>주는 최소 권한 원칙이에요.</span></div>
+<div id="cap-user-0" class="clip cap" data-start="20.760" data-duration="3.292" data-track-index="2"><span>먼저 크리에이트 유저로 계정을 만듭니다.</span></div>
+<div id="cap-user-1" class="clip cap" data-start="24.052" data-duration="2.121" data-track-index="2"><span>마이에스큐엘 계정은 사용자 이름과</span></div>
+<div id="cap-user-2" class="clip cap" data-start="26.173" data-duration="2.757" data-track-index="2"><span>접속 위치인 호스트가 한 쌍이에요.</span></div>
+<div id="cap-user-3" class="clip cap" data-start="28.930" data-duration="2.690" data-track-index="2"><span>로컬호스트는 같은 서버에서 접속할 때,</span></div>
+<div id="cap-user-4" class="clip cap" data-start="31.619" data-duration="2.009" data-track-index="2"><span>퍼센트는 모든 호스트와 매칭되니</span></div>
+<div id="cap-user-5" class="clip cap" data-start="33.628" data-duration="2.156" data-track-index="2"><span>꼭 필요할 때만 쓰세요.</span></div>
+<div id="cap-grant-0" class="clip cap" data-start="36.234" data-duration="3.091" data-track-index="2"><span>막 만든 계정은 아무 권한이 없어요.</span></div>
+<div id="cap-grant-1" class="clip cap" data-start="39.326" data-duration="2.232" data-track-index="2"><span>그랜트로 무슨 권한을, 어디에,</span></div>
+<div id="cap-grant-2" class="clip cap" data-start="41.558" data-duration="2.433" data-track-index="2"><span>누구에게 줄지 적습니다.</span></div>
+<div id="cap-grant-3" class="clip cap" data-start="43.991" data-duration="1.239" data-track-index="2"><span>쇼 그랜츠로 확인하면</span></div>
+<div id="cap-grant-4" class="clip cap" data-start="45.230" data-duration="2.567" data-track-index="2"><span>셀렉트와 인서트가 보이죠.</span></div>
+<div id="cap-grant-5" class="clip cap" data-start="47.797" data-duration="2.020" data-track-index="2"><span>맨 위의 유세이지는 서버 전체에</span></div>
+<div id="cap-grant-6" class="clip cap" data-start="49.817" data-duration="2.473" data-track-index="2"><span>대한 권한은 없다는 표시예요.</span></div>
+<div id="cap-scope-0" class="clip cap" data-start="52.740" data-duration="2.511" data-track-index="2"><span>온 뒤에는 범위를 적어요.</span></div>
+<div id="cap-scope-1" class="clip cap" data-start="55.251" data-duration="1.763" data-track-index="2"><span>별 점 별은 서버 전체,</span></div>
+<div id="cap-scope-2" class="clip cap" data-start="57.015" data-duration="2.734" data-track-index="2"><span>숍 점 별은 숍 데이터베이스의 모든 테이블,</span></div>
+<div id="cap-scope-3" class="clip cap" data-start="59.749" data-duration="3.095" data-track-index="2"><span>숍 점 프로덕츠는 테이블 하나만입니다.</span></div>
+<div id="cap-deny-0" class="clip cap" data-start="63.294" data-duration="2.349" data-track-index="2"><span>조회만 하는 리포트 계정에는 프로덕츠</span></div>
+<div id="cap-deny-1" class="clip cap" data-start="65.643" data-duration="2.472" data-track-index="2"><span>테이블의 셀렉트만 줘 볼게요.</span></div>
+<div id="cap-deny-2" class="clip cap" data-start="68.115" data-duration="1.920" data-track-index="2"><span>이 계정으로 딜리트를 실행하면,</span></div>
+<div id="cap-deny-3" class="clip cap" data-start="70.035" data-duration="2.763" data-track-index="2"><span>권한이 없다는 에러로 거절됩니다.</span></div>
+<div id="cap-revoke-0" class="clip cap" data-start="73.248" data-duration="2.824" data-track-index="2"><span>준 권한을 회수할 때는 리보크.</span></div>
+<div id="cap-revoke-1" class="clip cap" data-start="76.072" data-duration="1.250" data-track-index="2"><span>그랜트와 같은 모양에</span></div>
+<div id="cap-revoke-2" class="clip cap" data-start="77.322" data-duration="2.165" data-track-index="2"><span>투 대신 프롬을 씁니다.</span></div>
+<div id="cap-revoke-3" class="clip cap" data-start="79.487" data-duration="1.373" data-track-index="2"><span>인서트를 회수하면,</span></div>
+<div id="cap-revoke-4" class="clip cap" data-start="80.860" data-duration="2.612" data-track-index="2"><span>앱 계정에는 셀렉트만 남아요.</span></div>
+<div id="cap-drop-0" class="clip cap" data-start="83.922" data-duration="3.159" data-track-index="2"><span>안 쓰는 계정은 드롭 유저로 지우세요.</span></div>
+<div id="cap-drop-1" class="clip cap" data-start="87.081" data-duration="2.522" data-track-index="2"><span>그리고 앱에는 루트 대신 전용 계정을,</span></div>
+<div id="cap-drop-2" class="clip cap" data-start="89.603" data-duration="3.359" data-track-index="2"><span>권한은 필요한 데이터베이스에 필요한 만큼만.</span></div>
+<div id="cap-drop-3" class="clip cap" data-start="92.962" data-duration="2.600" data-track-index="2"><span>이게 최소 권한 원칙입니다.</span></div>
+<div id="cap-outro-0" class="clip cap" data-start="96.012" data-duration="3.108" data-track-index="2"><span>정리하면, 크리에이트 유저로 계정을 만들고,</span></div>
+<div id="cap-outro-1" class="clip cap" data-start="99.120" data-duration="1.496" data-track-index="2"><span>그랜트로 권한을 주고,</span></div>
+<div id="cap-outro-2" class="clip cap" data-start="100.616" data-duration="2.533" data-track-index="2"><span>쇼 그랜츠로 확인, 리보크로 회수,</span></div>
+<div id="cap-outro-3" class="clip cap" data-start="103.149" data-duration="1.914" data-track-index="2"><span>드롭 유저로 삭제.</span></div>
+<div id="cap-outro-4" class="clip cap" data-start="105.063" data-duration="2.400" data-track-index="2"><span>권한은 필요한 만큼만!</span></div>
+<div id="cap-outro-5" class="clip cap" data-start="107.463" data-duration="3.837" data-track-index="2"><span>도움이 됐다면 구독과 좋아요 부탁드립니다!</span></div>
+  <div class="bar"></div>
+  <audio id="vo" src="assets/narration.mp3" data-start="0" data-duration="112.5" data-track-index="0"></audio>
+</div>
+<script>
+const tl = gsap.timeline({ paused: true });
+function enter(sel, t, dur) {
+  const items = document.querySelectorAll(sel + " .in");
+  const step = Math.min(0.9, (dur * 0.5) / Math.max(1, items.length));
+  items.forEach((el, i) => {
+    const at = Math.max(0, t - 0.1) + i * step;
+    tl.fromTo(el, { opacity: 0, y: 50 }, { opacity: 1, y: 0, duration: 0.5, ease: "power3.out" }, at);
+    el.querySelectorAll(".ln").forEach((ln, j) => {
+      tl.fromTo(ln, { opacity: 0, x: -30 }, { opacity: 1, x: 0, duration: 0.35, ease: "power2.out" }, at + 0.15 + j * 0.3);
+    });
+  });
+}
+enter("#sc-hook", 0.3, 8.496);
+tl.set(".prog i", {backgroundColor: "#26324a"}, 0);
+enter("#sc-intro", 9.246, 11.064);
+tl.set(".prog i", {backgroundColor: "#26324a"}, 9.096);
+enter("#sc-user", 20.76, 15.024);
+tl.set(".prog i", {backgroundColor: "#26324a"}, 20.610000000000003);
+tl.set(".prog i:nth-child(1)", {backgroundColor: "#f29111"}, 20.610000000000003);
+enter("#sc-grant", 36.234, 16.056);
+tl.set(".prog i", {backgroundColor: "#26324a"}, 36.084);
+tl.set(".prog i:nth-child(2)", {backgroundColor: "#f29111"}, 36.084);
+enter("#sc-scope", 52.74, 10.104);
+tl.set(".prog i", {backgroundColor: "#26324a"}, 52.59);
+tl.set(".prog i:nth-child(2)", {backgroundColor: "#f29111"}, 52.59);
+enter("#sc-deny", 63.294, 9.504);
+tl.set(".prog i", {backgroundColor: "#26324a"}, 63.144);
+tl.set(".prog i:nth-child(3)", {backgroundColor: "#f29111"}, 63.144);
+enter("#sc-revoke", 73.248, 10.224);
+tl.set(".prog i", {backgroundColor: "#26324a"}, 73.098);
+tl.set(".prog i:nth-child(4)", {backgroundColor: "#f29111"}, 73.098);
+enter("#sc-drop", 83.922, 11.64);
+tl.set(".prog i", {backgroundColor: "#26324a"}, 83.77199999999999);
+tl.set(".prog i:nth-child(5)", {backgroundColor: "#f29111"}, 83.77199999999999);
+enter("#sc-outro", 96.012, 15.288);
+tl.set(".prog i", {backgroundColor: "#26324a"}, 95.862);
+tl.to("#ex1", {backgroundColor: "#3a2a12", scale: 1.04, duration: 0.2}, 97.011);
+tl.to("#ex1", {backgroundColor: "#131c2e", scale: 1, duration: 0.2}, 99.12);
+tl.to("#ex2", {backgroundColor: "#3a2a12", scale: 1.04, duration: 0.2}, 99.12);
+tl.to("#ex2", {backgroundColor: "#131c2e", scale: 1, duration: 0.2}, 100.616);
+tl.to("#ex3", {backgroundColor: "#3a2a12", scale: 1.04, duration: 0.2}, 100.616);
+tl.to("#ex3", {backgroundColor: "#131c2e", scale: 1, duration: 0.2}, 101.966);
+tl.to("#ex4", {backgroundColor: "#3a2a12", scale: 1.04, duration: 0.2}, 101.966);
+tl.to("#ex4", {backgroundColor: "#131c2e", scale: 1, duration: 0.2}, 103.149);
+tl.to("#ex5", {backgroundColor: "#3a2a12", scale: 1.04, duration: 0.2}, 103.149);
+tl.to("#ex5", {backgroundColor: "#131c2e", scale: 1, duration: 0.2}, 105.063);
+tl.to("#ex6", {backgroundColor: "#3a2a12", scale: 1.04, duration: 0.2}, 105.063);
+tl.to("#ex6", {backgroundColor: "#131c2e", scale: 1, duration: 0.3}, 107.463 + 0.6);
+tl.fromTo(".bar", { scaleX: 0 }, { scaleX: 1, duration: 112.5, ease: "none" }, 0);
+window.__timelines = window.__timelines || {};
+window.__timelines["main"] = tl;
+tl.seek(0);
+</script>
+</body>
+</html>

@@ -1,0 +1,221 @@
+<!doctype html>
+<html lang="ko" data-resolution="portrait">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=1080, height=1920" />
+<script src="https://cdn.jsdelivr.net/npm/gsap@3.14.2/dist/gsap.min.js"></script>
+<style>
+:root {
+  --ground: #0b1220; --panel: #131c2e; --ink: #f4f6fb; --mute: #9aa6bd;
+  --blue: #3fa7d6; --orange: #f29111; --red: #ff5d5d; --green: #7ee08a; --violet: #c3a6ff;
+  --font: "Pretendard", sans-serif;
+  --mono: "Menlo", "SF Mono", monospace;
+}
+@font-face { font-family: "Pretendard"; src: url("assets/fonts/PretendardVariable.woff2") format("woff2"); font-weight: 45 920; }
+* { margin: 0; padding: 0; box-sizing: border-box; }
+html, body { width: 1080px; height: 1920px; overflow: hidden; background: var(--ground); }
+#root { position: relative; width: 100%; height: 100%; font-variant-ligatures: none; font-family: var(--font); color: var(--ink); overflow: hidden;
+  background: radial-gradient(1200px 900px at 80% -10%, #16365a 0%, transparent 60%),
+              radial-gradient(900px 900px at -10% 110%, #3a2410 0%, transparent 55%), var(--ground); }
+.clip { position: absolute; inset: 0; }
+.brand { position: absolute; top: 110px; left: 70px; right: 70px; display: flex; justify-content: space-between; align-items: center;
+  font-size: 34px; font-weight: 700; color: var(--mute); letter-spacing: 0.02em; }
+.brand b { color: var(--blue); } .brand b em { color: var(--orange); font-style: normal; }
+.prog { display: flex; gap: 12px; }
+.prog i { display: block; width: 56px; height: 12px; border-radius: 6px; background: #26324a; }
+.scene { padding: 210px 70px 0; display: flex; flex-direction: column; gap: 26px; }
+.pill { align-self: flex-start; padding: 12px 26px; border-radius: 999px; background: #1d2a44; color: var(--blue);
+  font-size: 34px; font-weight: 700; }
+.hook { display: flex; flex-direction: column; gap: 50px; padding-top: 140px; }
+.big { font-size: 150px; line-height: 1.12; font-weight: 800; letter-spacing: -0.04em; }
+.big em { font-style: normal; color: var(--orange); }
+.sub { font-size: 64px; font-weight: 700; color: var(--mute); } .sub b { color: var(--ink); }
+.title { font-size: 80px; font-weight: 800; letter-spacing: -0.03em; line-height: 1.1; }
+.desc { font-size: 46px; color: var(--mute); font-weight: 600; margin-top: -8px; } .desc b { color: var(--orange); }
+.code { background: #0a0f1a; border: 2px solid #26324a; border-radius: 26px; padding: 30px 32px; font-family: var(--mono);
+  font-size: 42px; line-height: 1.5; color: #d9e1f2; white-space: pre; box-shadow: 0 30px 60px rgba(0,0,0,.35);
+  font-variant-ligatures: none; font-feature-settings: "liga" 0, "calt" 0; }
+.code .ln { margin: 0 -14px; padding: 0 14px; border-radius: 10px; }
+.code .ln.mk { background: rgba(242,145,17,.13); }
+.kw { color: var(--blue); font-weight: 700; } .st { color: var(--green); } .nu { color: var(--orange); } .cm { color: #6f7d98; }
+.chips { display: flex; flex-wrap: wrap; gap: 18px; }
+.chips span { padding: 16px 30px; background: var(--panel); border-radius: 18px; font-size: 42px; font-weight: 700; }
+.warn, .note { padding: 26px 36px; border-radius: 24px; font-size: 44px; font-weight: 700; line-height: 1.45; }
+.warn { background: rgba(255,93,93,.12); border-left: 10px solid var(--red); } .warn b { color: var(--red); }
+.note { background: rgba(63,167,214,.12); border-left: 10px solid var(--blue); } .note b { color: var(--orange); }
+.note small { font-size: 38px; color: var(--mute); font-weight: 600; font-family: var(--mono); }
+code { font-family: var(--mono); color: var(--orange); }
+.tbl { align-self: flex-start; }
+.tlabel { font-size: 34px; font-weight: 700; color: var(--mute); margin-bottom: 10px; }
+.tbl table { border-collapse: collapse; font-family: var(--mono); font-size: 40px; background: var(--panel); border-radius: 18px; overflow: hidden; }
+.tbl th { color: var(--blue); text-align: left; padding: 12px 32px; background: #1a2640; }
+.tbl th u { text-decoration: none; color: var(--orange); }
+.tbl td { padding: 10px 32px; border-top: 1px solid #26324a; }
+.tbl tr.k1 td { color: var(--orange); } .tbl tr.k2 td { color: var(--green); } .tbl tr.k3 td { color: var(--violet); }
+.tbl tr.out td { color: #5b6782; text-decoration: line-through; }
+.tbl td.nl { color: var(--red) !important; font-style: italic; font-weight: 700; background: rgba(255,93,93,.12); }
+.link { align-self: flex-start; font-family: var(--mono); font-size: 38px; color: var(--mute); padding: 6px 0 6px 26px;
+  border-left: 8px solid var(--orange); }
+.link b { color: var(--orange); }
+.arrow { font-family: var(--mono); font-size: 38px; color: var(--orange); font-weight: 700; }
+.vs { display: grid; grid-template-columns: 1fr 1fr; gap: 22px; }
+.card { background: var(--panel); border-radius: 26px; padding: 26px 32px; display: flex; flex-direction: column; gap: 6px; }
+.card b { font-family: var(--mono); font-size: 52px; color: var(--blue); }
+.vs .card span { font-size: 44px; font-weight: 800; } .vs .card .ok { color: var(--green); } .vs .card .ng { color: var(--red); }
+.res { display: flex; flex-wrap: wrap; align-items: center; gap: 14px; margin-top: -6px; }
+.res i { font-style: normal; font-size: 34px; color: var(--mute); font-weight: 700; }
+.res span { padding: 8px 22px; border-radius: 14px; background: var(--panel); font-size: 40px; font-weight: 700; }
+.res span.k1 { color: var(--orange); } .res span.k2 { color: var(--green); } .res span.k3 { color: var(--violet); }
+.res span.ok { color: var(--green); }
+.res span.bad { color: var(--red); background: rgba(255,93,93,.14); box-shadow: inset 0 0 0 3px var(--red); } .vs .card em { font-style: normal; color: var(--orange); }
+.list { display: flex; flex-direction: column; gap: 16px; }
+.row { display: flex; align-items: center; gap: 30px; background: var(--panel); border-radius: 22px; padding: 14px 36px; font-size: 48px;
+  transform-origin: left center; }
+.row .no { font-size: 52px; font-weight: 900; color: var(--orange); width: 50px; }
+.row b { font-family: var(--mono); color: var(--blue); }
+.cta { margin-top: 20px; font-size: 54px; font-weight: 800; text-align: center; }
+.cap { top: auto; bottom: 260px; height: auto; display: flex; justify-content: center; padding: 0 60px; }
+.cap span { background: rgba(0,0,0,.78); color: #fff; font-size: 48px; font-weight: 700; line-height: 1.4; padding: 16px 30px;
+  border-radius: 18px; text-align: center; word-break: keep-all; }
+.bar { position: absolute; left: 0; bottom: 0; height: 10px; width: 1080px; background: var(--orange); transform-origin: left center; }
+</style>
+</head>
+<body>
+<div id="root" data-composition-id="main" data-start="0" data-duration="144.62" data-width="1080" data-height="1920">
+  <div class="brand"><b>MySQL <em>트랜잭션</em> 정리</b><div class="prog"><i></i><i></i><i></i><i></i><i></i></div></div>
+  <section id="sc-hook" class="clip scene" data-start="0.000" data-duration="8.736" data-track-index="1"><div class="hook">
+   <div class="pill in">MySQL · 트랜잭션 핵심 정리</div>
+   <h1 class="big in"><em>COMMIT</em><br/>ROLLBACK</h1>
+   <div class="sub in">전부 성공 or <b>전부 취소</b></div>
+ </div></section>
+<section id="sc-intro" class="clip scene" data-start="8.736" data-duration="11.778" data-track-index="1"><div class="pill in">SQL 4위 · TCL</div><h2 class="title in">이체 중 멈추면?</h2><p class="desc in">kim → lee <b>10000원</b> 송금</p><div class="code in"><div class="ln"><span class="kw">UPDATE</span> accounts</div><div class="ln">  <span class="kw">SET</span> balance = balance - <span class="nu">10000</span></div><div class="ln">  <span class="kw">WHERE</span> name = <span class="st">&#x27;kim&#x27;</span>;</div><div class="ln mk"><span class="cm">-- 여기서 멈추면?</span></div></div><div class="tbl in "><table><tr><th>name</th><th>balance</th></tr><tr class="k1"><td>kim</td><td>40000</td></tr><tr class="k2"><td>lee</td><td>10000</td></tr></table></div><div class="warn in">⚠ 합계 60000 → <b>50000</b> · 1만 원 증발</div></section>
+<section id="sc-concept" class="clip scene" data-start="20.514" data-duration="18.954" data-track-index="1"><div class="pill in">STEP 1 · 트랜잭션</div><h2 class="title in">트랜잭션</h2><p class="desc in">여러 작업을 <b>하나로</b> 묶기</p><div class="vs"><div class="card in"><b>COMMIT</b><span>전부 반영</span><span class="ok">출금 ✓ 입금 ✓</span></div><div class="card in"><b>ROLLBACK</b><span>전부 취소</span><span class="ng">출금 ✗ 입금 ✗</span></div></div><div class="note in">원자성 (Atomicity)<br/><small>전부 되거나, 전부 안 되거나</small></div><div class="warn in">⚠ 오류가 나도 <b>자동으로</b> 전부 취소 ✗<br/><small>ROLLBACK을 직접 실행</small></div></section>
+<section id="sc-commit" class="clip scene" data-start="39.468" data-duration="10.266" data-track-index="1"><div class="pill in">STEP 1-1</div><h2 class="title in">COMMIT</h2><p class="desc in">커밋하는 순간 <b>한꺼번에 확정</b></p><div class="code in"><div class="ln mk"><span class="kw">START</span> <span class="kw">TRANSACTION</span>;</div><div class="ln"><span class="kw">UPDATE</span> accounts</div><div class="ln">  <span class="kw">SET</span> balance = balance - <span class="nu">10000</span></div><div class="ln">  <span class="kw">WHERE</span> name = <span class="st">&#x27;kim&#x27;</span>;</div><div class="ln"><span class="kw">UPDATE</span> accounts</div><div class="ln">  <span class="kw">SET</span> balance = balance + <span class="nu">10000</span></div><div class="ln">  <span class="kw">WHERE</span> name = <span class="st">&#x27;lee&#x27;</span>;</div><div class="ln mk"><span class="kw">COMMIT</span>;</div></div><div class="tbl in "><div class="tlabel">결과 · 합계 60000 그대로</div><table><tr><th>name</th><th>balance</th></tr><tr class="k1"><td>kim</td><td>40000</td></tr><tr class="k2"><td>lee</td><td>20000</td></tr></table></div></section>
+<section id="sc-rollback" class="clip scene" data-start="49.734" data-duration="9.114" data-track-index="1"><div class="pill in">STEP 2 · ROLLBACK</div><h2 class="title in">ROLLBACK</h2><p class="desc in">시작 전 상태로 <b>되돌리기</b></p><div class="code in"><div class="ln"><span class="kw">START</span> <span class="kw">TRANSACTION</span>;</div><div class="ln"><span class="kw">UPDATE</span> accounts</div><div class="ln">  <span class="kw">SET</span> balance = balance - <span class="nu">10000</span></div><div class="ln">  <span class="kw">WHERE</span> name = <span class="st">&#x27;kim&#x27;</span>;</div><div class="ln mk"><span class="cm">-- 문제 발생!</span></div><div class="ln mk"><span class="kw">ROLLBACK</span>;</div></div><div class="tbl in "><div class="tlabel">결과 · 출금 취소 → 처음 그대로</div><table><tr><th>name</th><th>balance</th></tr><tr class="k1"><td>kim</td><td>50000</td></tr><tr class="k2"><td>lee</td><td>10000</td></tr></table></div></section>
+<section id="sc-isolation" class="clip scene" data-start="58.848" data-duration="13.746" data-track-index="1"><div class="pill in">STEP 3 · 격리</div><h2 class="title in">커밋 전 변경</h2><p class="desc in">다른 세션엔 <b>보이지 않음</b></p><div class="tlabel in">세션 A · 아직 커밋 전</div><div class="code in"><div class="ln"><span class="kw">START</span> <span class="kw">TRANSACTION</span>;</div><div class="ln"><span class="kw">UPDATE</span> accounts</div><div class="ln">  <span class="kw">SET</span> balance = balance - <span class="nu">10000</span></div><div class="ln">  <span class="kw">WHERE</span> name = <span class="st">&#x27;kim&#x27;</span>;</div></div><div class="tlabel in">세션 B · 동시에 조회</div><div class="code in"><div class="ln mk"><span class="kw">SELECT</span> balance <span class="kw">FROM</span> accounts</div><div class="ln mk">  <span class="kw">WHERE</span> name = <span class="st">&#x27;kim&#x27;</span>;</div></div><div class="res in"><i>B가 보는 값 →</i><span class="k1">50000 (변경 전)</span></div><div class="note in">MySQL 기본 격리 수준<br/><small>REPEATABLE READ</small></div></section>
+<section id="sc-autocommit" class="clip scene" data-start="72.594" data-duration="11.61" data-track-index="1"><div class="pill in">STEP 4 · 주의</div><h2 class="title in">autocommit</h2><p class="desc in">기본은 <b>문장마다 바로 확정</b></p><div class="code in"><div class="ln mk"><span class="kw">SELECT</span> @@autocommit;</div></div><div class="res in"><i>결과 →</i><span class="bad">1 (켜짐)</span></div><div class="code in"><div class="ln"><span class="kw">UPDATE</span> accounts</div><div class="ln">  <span class="kw">SET</span> balance = balance - <span class="nu">10000</span></div><div class="ln">  <span class="kw">WHERE</span> name = <span class="st">&#x27;kim&#x27;</span>;</div><div class="ln mk"><span class="kw">ROLLBACK</span>;</div></div><div class="tbl in "><div class="tlabel">ROLLBACK 했지만 이미 반영 ⚠</div><table><tr><th>name</th><th>balance</th></tr><tr class="k1"><td>kim</td><td>40000</td></tr><tr class="k2"><td>lee</td><td>10000</td></tr></table></div></section>
+<section id="sc-savepoint" class="clip scene" data-start="84.204" data-duration="15.114" data-track-index="1"><div class="pill in">STEP 5 · SAVEPOINT</div><h2 class="title in">SAVEPOINT</h2><p class="desc in"><b>일부만</b> 되돌리기</p><div class="code in"><div class="ln"><span class="kw">START</span> <span class="kw">TRANSACTION</span>;</div><div class="ln"><span class="kw">UPDATE</span> accounts</div><div class="ln">  <span class="kw">SET</span> balance = balance - <span class="nu">10000</span></div><div class="ln">  <span class="kw">WHERE</span> name = <span class="st">&#x27;kim&#x27;</span>;</div><div class="ln mk"><span class="kw">SAVEPOINT</span> sent;</div><div class="ln"><span class="kw">UPDATE</span> accounts</div><div class="ln">  <span class="kw">SET</span> balance = balance + <span class="nu">100000</span></div><div class="ln">  <span class="kw">WHERE</span> name = <span class="st">&#x27;lee&#x27;</span>;</div><div class="ln mk"><span class="kw">ROLLBACK</span> <span class="kw">TO</span> sent;</div></div><div class="tbl in "><div class="tlabel">ROLLBACK TO 직후 · 아직 커밋 전</div><table><tr><th>name</th><th>balance</th></tr><tr class="k1"><td>kim</td><td>40000</td></tr><tr class="k2"><td>lee</td><td>10000</td></tr></table></div></section>
+<section id="sc-finish" class="clip scene" data-start="99.318" data-duration="12.81" data-track-index="1"><div class="pill in">STEP 5-1 · 마무리</div><h2 class="title in">끝은 COMMIT</h2><p class="desc in">ROLLBACK TO는 트랜잭션을 <b>끝내지 않음</b></p><div class="tlabel in">이어서 · 리에게 제대로 입금</div><div class="code in"><div class="ln"><span class="kw">UPDATE</span> accounts</div><div class="ln">  <span class="kw">SET</span> balance = balance + <span class="nu">10000</span></div><div class="ln">  <span class="kw">WHERE</span> name = <span class="st">&#x27;lee&#x27;</span>;</div><div class="ln mk"><span class="kw">COMMIT</span>;</div></div><div class="tbl in "><div class="tlabel">COMMIT 후 · 합계 60000 그대로</div><table><tr><th>name</th><th>balance</th></tr><tr class="k1"><td>kim</td><td>40000</td></tr><tr class="k2"><td>lee</td><td>20000</td></tr></table></div></section>
+<section id="sc-caution" class="clip scene" data-start="112.128" data-duration="14.082" data-track-index="1"><div class="pill in">STEP 5-2 · 주의</div><h2 class="title in">DDL은 자동 커밋</h2><p class="desc in">트랜잭션 도중이라도 <b>확정</b></p><div class="code in"><div class="ln"><span class="kw">START</span> <span class="kw">TRANSACTION</span>;</div><div class="ln"><span class="kw">UPDATE</span> accounts</div><div class="ln">  <span class="kw">SET</span> balance = balance - <span class="nu">10000</span></div><div class="ln">  <span class="kw">WHERE</span> name = <span class="st">&#x27;kim&#x27;</span>;</div><div class="ln mk"><span class="kw">ALTER</span> <span class="kw">TABLE</span> accounts</div><div class="ln mk">  <span class="kw">ADD</span> <span class="kw">COLUMN</span> memo <span class="kw">VARCHAR</span>(<span class="nu">20</span>);</div><div class="ln"><span class="kw">ROLLBACK</span>;</div></div><div class="tbl in "><div class="tlabel">ROLLBACK 했지만 출금은 확정 ⚠</div><table><tr><th>name</th><th>balance</th></tr><tr class="k1"><td>kim</td><td>40000</td></tr><tr class="k2"><td>lee</td><td>10000</td></tr></table></div><div class="warn in">⚠ 길게 열면 다른 작업이 <b>대기</b></div></section>
+<section id="sc-outro" class="clip scene" data-start="126.210" data-duration="18.41" data-track-index="1"><div class="pill in">정리</div><h2 class="title in">트랜잭션 핵심 6가지</h2><div class="list in"><div class="row" id="ex1"><span class="no">1</span><b>START TRANSACTION</b></div><div class="row" id="ex2"><span class="no">2</span><b>COMMIT · 확정</b></div><div class="row" id="ex3"><span class="no">3</span><b>ROLLBACK · 취소</b></div><div class="row" id="ex4"><span class="no">4</span><b>autocommit = 1</b></div><div class="row" id="ex5"><span class="no">5</span><b>SAVEPOINT</b></div><div class="row" id="ex6"><span class="no">6</span><b>DDL → 자동 커밋</b></div></div><div class="cta in">👍 구독 · 좋아요</div></section>
+  <div id="cap-hook-0" class="clip cap" data-start="0.300" data-duration="1.813" data-track-index="2"><span>이체하다 서버가 멈추면,</span></div>
+<div id="cap-hook-1" class="clip cap" data-start="2.113" data-duration="2.249" data-track-index="2"><span>내 돈은 어떻게 될까요?</span></div>
+<div id="cap-hook-2" class="clip cap" data-start="4.362" data-duration="1.797" data-track-index="2"><span>트랜잭션의 커밋과 롤백,</span></div>
+<div id="cap-hook-3" class="clip cap" data-start="6.159" data-duration="2.277" data-track-index="2"><span>한 번에 정리해 드립니다.</span></div>
+<div id="cap-intro-0" class="clip cap" data-start="8.886" data-duration="2.092" data-track-index="2"><span>킴이 리에게 만 원을 보내려면,</span></div>
+<div id="cap-intro-1" class="clip cap" data-start="10.978" data-duration="1.663" data-track-index="2"><span>킴의 잔액을 빼고 리의 잔액을</span></div>
+<div id="cap-intro-2" class="clip cap" data-start="12.641" data-duration="2.729" data-track-index="2"><span>더하는 업데이트가 두 번 필요해요.</span></div>
+<div id="cap-intro-3" class="clip cap" data-start="15.370" data-duration="2.478" data-track-index="2"><span>그런데 첫 번째만 실행되고 멈추면,</span></div>
+<div id="cap-intro-4" class="clip cap" data-start="17.848" data-duration="2.366" data-track-index="2"><span>만 원이 그대로 사라집니다.</span></div>
+<div id="cap-concept-0" class="clip cap" data-start="20.664" data-duration="1.568" data-track-index="2"><span>그래서 여러 작업을 하나로</span></div>
+<div id="cap-concept-1" class="clip cap" data-start="22.232" data-duration="2.327" data-track-index="2"><span>묶는 트랜잭션을 씁니다.</span></div>
+<div id="cap-concept-2" class="clip cap" data-start="24.559" data-duration="2.656" data-track-index="2"><span>모두 성공하면 커밋으로 전부 반영하고,</span></div>
+<div id="cap-concept-3" class="clip cap" data-start="27.215" data-duration="3.315" data-track-index="2"><span>문제가 생기면 롤백으로 전부 취소하죠.</span></div>
+<div id="cap-concept-4" class="clip cap" data-start="30.530" data-duration="2.533" data-track-index="2"><span>이 성질을 원자성이라고 해요.</span></div>
+<div id="cap-concept-5" class="clip cap" data-start="33.064" data-duration="3.493" data-track-index="2"><span>단, 오류가 났다고 저절로 전부 취소되진 않으니,</span></div>
+<div id="cap-concept-6" class="clip cap" data-start="36.557" data-duration="2.611" data-track-index="2"><span>롤백은 직접 실행해야 해요.</span></div>
+<div id="cap-commit-0" class="clip cap" data-start="39.618" data-duration="1.691" data-track-index="2"><span>스타트 트랜잭션으로 시작해</span></div>
+<div id="cap-commit-1" class="clip cap" data-start="41.309" data-duration="1.663" data-track-index="2"><span>두 업데이트를 실행하고,</span></div>
+<div id="cap-commit-2" class="clip cap" data-start="42.972" data-duration="3.242" data-track-index="2"><span>커밋하면 그때 한꺼번에 확정됩니다.</span></div>
+<div id="cap-commit-3" class="clip cap" data-start="46.214" data-duration="3.220" data-track-index="2"><span>킴은 4만 원, 리는 2만 원이 되죠.</span></div>
+<div id="cap-rollback-0" class="clip cap" data-start="49.884" data-duration="3.337" data-track-index="2"><span>중간에 문제가 생기면 커밋 대신 롤백.</span></div>
+<div id="cap-rollback-1" class="clip cap" data-start="53.221" data-duration="2.667" data-track-index="2"><span>트랜잭션 안에서 한 변경이 모두 취소되고,</span></div>
+<div id="cap-rollback-2" class="clip cap" data-start="55.888" data-duration="2.660" data-track-index="2"><span>시작하기 전 상태로 돌아갑니다.</span></div>
+<div id="cap-isolation-0" class="clip cap" data-start="58.998" data-duration="2.896" data-track-index="2"><span>또, 커밋하기 전의 변경은 기본 설정에서</span></div>
+<div id="cap-isolation-1" class="clip cap" data-start="61.894" data-duration="2.361" data-track-index="2"><span>다른 세션에 보이지 않아요.</span></div>
+<div id="cap-isolation-2" class="clip cap" data-start="64.255" data-duration="1.864" data-track-index="2"><span>다른 세션 B에서 조회하면 킴의</span></div>
+<div id="cap-isolation-3" class="clip cap" data-start="66.119" data-duration="2.444" data-track-index="2"><span>잔액은 아직 5만 원이죠.</span></div>
+<div id="cap-isolation-4" class="clip cap" data-start="68.563" data-duration="1.663" data-track-index="2"><span>계산 도중의 어정쩡한 값을</span></div>
+<div id="cap-isolation-5" class="clip cap" data-start="70.226" data-duration="2.068" data-track-index="2"><span>남이 읽지 않는 거예요.</span></div>
+<div id="cap-autocommit-0" class="clip cap" data-start="72.744" data-duration="0.887" data-track-index="2"><span>주의할 점.</span></div>
+<div id="cap-autocommit-1" class="clip cap" data-start="73.631" data-duration="2.545" data-track-index="2"><span>마이에스큐엘은 기본이 오토 커밋이라,</span></div>
+<div id="cap-autocommit-2" class="clip cap" data-start="76.176" data-duration="1.763" data-track-index="2"><span>트랜잭션을 열지 않고 실행한</span></div>
+<div id="cap-autocommit-3" class="clip cap" data-start="77.939" data-duration="2.506" data-track-index="2"><span>업데이트는 바로 확정돼요.</span></div>
+<div id="cap-autocommit-4" class="clip cap" data-start="80.445" data-duration="3.459" data-track-index="2"><span>이 상태에서는 롤백해도 되돌아가지 않습니다.</span></div>
+<div id="cap-savepoint-0" class="clip cap" data-start="84.354" data-duration="3.538" data-track-index="2"><span>세이브포인트로 일부만 되돌릴 수도 있어요.</span></div>
+<div id="cap-savepoint-1" class="clip cap" data-start="87.892" data-duration="2.411" data-track-index="2"><span>킴의 출금 뒤에 세이브포인트를 찍고,</span></div>
+<div id="cap-savepoint-2" class="clip cap" data-start="90.303" data-duration="2.109" data-track-index="2"><span>리에게 10만 원을 잘못 더했다면,</span></div>
+<div id="cap-savepoint-3" class="clip cap" data-start="92.412" data-duration="3.047" data-track-index="2"><span>롤백 투로 그 지점까지만 취소합니다.</span></div>
+<div id="cap-savepoint-4" class="clip cap" data-start="95.459" data-duration="1.529" data-track-index="2"><span>킴의 출금은 남지만,</span></div>
+<div id="cap-savepoint-5" class="clip cap" data-start="96.988" data-duration="2.030" data-track-index="2"><span>아직 커밋 전이에요.</span></div>
+<div id="cap-finish-0" class="clip cap" data-start="99.468" data-duration="3.225" data-track-index="2"><span>롤백 투는 트랜잭션을 끝내지 않아요.</span></div>
+<div id="cap-finish-1" class="clip cap" data-start="102.693" data-duration="1.618" data-track-index="2"><span>이어서 리에게 만 원을 제대로</span></div>
+<div id="cap-finish-2" class="clip cap" data-start="104.312" data-duration="2.913" data-track-index="2"><span>더하고 커밋해야 이체가 끝납니다.</span></div>
+<div id="cap-finish-3" class="clip cap" data-start="107.225" data-duration="2.299" data-track-index="2"><span>킴은 4만 원, 리는 2만 원,</span></div>
+<div id="cap-finish-4" class="clip cap" data-start="109.524" data-duration="2.304" data-track-index="2"><span>합계 6만 원 그대로죠.</span></div>
+<div id="cap-caution-0" class="clip cap" data-start="112.278" data-duration="2.237" data-track-index="2"><span>마지막으로, 트랜잭션 도중에 얼터</span></div>
+<div id="cap-caution-1" class="clip cap" data-start="114.516" data-duration="1.607" data-track-index="2"><span>같은 DDL을 실행하면,</span></div>
+<div id="cap-caution-2" class="clip cap" data-start="116.123" data-duration="3.198" data-track-index="2"><span>그 전까지의 작업이 자동으로 커밋돼요.</span></div>
+<div id="cap-caution-3" class="clip cap" data-start="119.320" data-duration="2.221" data-track-index="2"><span>그리고 트랜잭션을 오래 열어 두면 같은</span></div>
+<div id="cap-caution-4" class="clip cap" data-start="121.541" data-duration="4.369" data-track-index="2"><span>행을 고치려는 다른 작업이 기다리게 되니, 짧게 끝내세요.</span></div>
+<div id="cap-outro-0" class="clip cap" data-start="126.360" data-duration="4.135" data-track-index="2"><span>정리하면, 스타트 트랜잭션으로 묶고, 커밋으로 확정,</span></div>
+<div id="cap-outro-1" class="clip cap" data-start="130.495" data-duration="1.925" data-track-index="2"><span>롤백으로 취소.</span></div>
+<div id="cap-outro-2" class="clip cap" data-start="132.420" data-duration="1.998" data-track-index="2"><span>오토 커밋과 세이브포인트,</span></div>
+<div id="cap-outro-3" class="clip cap" data-start="134.418" data-duration="2.400" data-track-index="2"><span>DDL의 자동 커밋까지.</span></div>
+<div id="cap-outro-4" class="clip cap" data-start="136.818" data-duration="2.757" data-track-index="2"><span>이것만 알면 트랜잭션 기본은 끝!</span></div>
+<div id="cap-outro-5" class="clip cap" data-start="139.574" data-duration="3.850" data-track-index="2"><span>도움이 됐다면 구독과 좋아요 부탁드립니다!</span></div>
+  <div class="bar"></div>
+  <audio id="vo" src="assets/narration.mp3" data-start="0" data-duration="144.62" data-track-index="0"></audio>
+</div>
+<script>
+const tl = gsap.timeline({ paused: true });
+function enter(sel, t, dur) {
+  const items = document.querySelectorAll(sel + " .in");
+  const step = Math.min(0.9, (dur * 0.5) / Math.max(1, items.length));
+  items.forEach((el, i) => {
+    const at = Math.max(0, t - 0.1) + i * step;
+    tl.fromTo(el, { opacity: 0, y: 50 }, { opacity: 1, y: 0, duration: 0.5, ease: "power3.out" }, at);
+    el.querySelectorAll(".ln").forEach((ln, j) => {
+      tl.fromTo(ln, { opacity: 0, x: -30 }, { opacity: 1, x: 0, duration: 0.35, ease: "power2.out" }, at + 0.15 + j * 0.3);
+    });
+  });
+}
+enter("#sc-hook", 0.3, 8.136);
+tl.set(".prog i", {backgroundColor: "#26324a"}, 0);
+enter("#sc-intro", 8.886, 11.328);
+tl.set(".prog i", {backgroundColor: "#26324a"}, 8.735999999999999);
+enter("#sc-concept", 20.664, 18.504);
+tl.set(".prog i", {backgroundColor: "#26324a"}, 20.514000000000003);
+tl.set(".prog i:nth-child(1)", {backgroundColor: "#f29111"}, 20.514000000000003);
+enter("#sc-commit", 39.618, 9.816);
+tl.set(".prog i", {backgroundColor: "#26324a"}, 39.468);
+tl.set(".prog i:nth-child(1)", {backgroundColor: "#f29111"}, 39.468);
+enter("#sc-rollback", 49.884, 8.664);
+tl.set(".prog i", {backgroundColor: "#26324a"}, 49.734);
+tl.set(".prog i:nth-child(2)", {backgroundColor: "#f29111"}, 49.734);
+enter("#sc-isolation", 58.998, 13.296);
+tl.set(".prog i", {backgroundColor: "#26324a"}, 58.848);
+tl.set(".prog i:nth-child(3)", {backgroundColor: "#f29111"}, 58.848);
+enter("#sc-autocommit", 72.744, 11.16);
+tl.set(".prog i", {backgroundColor: "#26324a"}, 72.594);
+tl.set(".prog i:nth-child(4)", {backgroundColor: "#f29111"}, 72.594);
+enter("#sc-savepoint", 84.354, 14.664);
+tl.set(".prog i", {backgroundColor: "#26324a"}, 84.204);
+tl.set(".prog i:nth-child(5)", {backgroundColor: "#f29111"}, 84.204);
+enter("#sc-finish", 99.468, 12.36);
+tl.set(".prog i", {backgroundColor: "#26324a"}, 99.318);
+tl.set(".prog i:nth-child(5)", {backgroundColor: "#f29111"}, 99.318);
+enter("#sc-caution", 112.278, 13.632);
+tl.set(".prog i", {backgroundColor: "#26324a"}, 112.128);
+tl.set(".prog i:nth-child(5)", {backgroundColor: "#f29111"}, 112.128);
+enter("#sc-outro", 126.36, 17.064);
+tl.set(".prog i", {backgroundColor: "#26324a"}, 126.21);
+tl.to("#ex1", {backgroundColor: "#3a2a12", scale: 1.04, duration: 0.2}, 127.426);
+tl.to("#ex1", {backgroundColor: "#131c2e", scale: 1, duration: 0.2}, 129.256);
+tl.to("#ex2", {backgroundColor: "#3a2a12", scale: 1.04, duration: 0.2}, 129.256);
+tl.to("#ex2", {backgroundColor: "#131c2e", scale: 1, duration: 0.2}, 130.495);
+tl.to("#ex3", {backgroundColor: "#3a2a12", scale: 1.04, duration: 0.2}, 130.495);
+tl.to("#ex3", {backgroundColor: "#131c2e", scale: 1, duration: 0.2}, 132.42);
+tl.to("#ex4", {backgroundColor: "#3a2a12", scale: 1.04, duration: 0.2}, 132.42);
+tl.to("#ex4", {backgroundColor: "#131c2e", scale: 1, duration: 0.2}, 133.28);
+tl.to("#ex5", {backgroundColor: "#3a2a12", scale: 1.04, duration: 0.2}, 133.28);
+tl.to("#ex5", {backgroundColor: "#131c2e", scale: 1, duration: 0.2}, 134.418);
+tl.to("#ex6", {backgroundColor: "#3a2a12", scale: 1.04, duration: 0.2}, 134.418);
+tl.to("#ex6", {backgroundColor: "#131c2e", scale: 1, duration: 0.3}, 136.818 + 0.6);
+tl.fromTo(".bar", { scaleX: 0 }, { scaleX: 1, duration: 144.62, ease: "none" }, 0);
+window.__timelines = window.__timelines || {};
+window.__timelines["main"] = tl;
+tl.seek(0);
+</script>
+</body>
+</html>

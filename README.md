@@ -18,12 +18,20 @@
 | --- | --- | --- | --- | --- |
 | 2026-10-28 | MySQL SQL 개요와 종류 — 가성비 학습 순위 TOP 5 | 2:32 | [mysql-shorts](mysql-shorts) | [YouTube](https://www.youtube.com/watch?v=TL1x_Wq0S4c) |
 | 2026-10-28 | DQL SELECT 기본 문법 · JOIN · GROUP BY | 2:36 | [select-join-groupby-shorts](select-join-groupby-shorts) | [YouTube](https://www.youtube.com/watch?v=fm1n7fj-ulI) |
+| 2026-10-29 | WHERE 조건: 비교 · AND·OR · IN · LIKE | 2:39 | [where-conditions-shorts](where-conditions-shorts) | [YouTube](https://www.youtube.com/watch?v=FKns3gfo_78) |
+| 2026-10-30 | DDL: CREATE · ALTER · INDEX · DROP | 2:22 | [ddl-shorts](ddl-shorts) | [YouTube](https://www.youtube.com/watch?v=4df8EiijSPs) |
+| 2026-10-30 | TCL: 트랜잭션 · COMMIT · ROLLBACK · SAVEPOINT | 2:25 | [tcl-shorts](tcl-shorts) | [YouTube](https://www.youtube.com/watch?v=rYCTlI8fT2Q) |
+| 2026-10-30 | DCL: CREATE USER · GRANT · REVOKE | 1:53 | [dcl-shorts](dcl-shorts) | [YouTube](https://www.youtube.com/watch?v=DXtrvu4V6QA) |
+| 2026-11-02 | 자바 입문: Hello World 출력하기 (class · main · println · \n · print) | 2:33 | [java-hello-shorts](java-hello-shorts) | [YouTube](https://www.youtube.com/watch?v=vmLd9hf1s18) |
 
 ## 제작 방식
 
 - **영상**: [HyperFrames](https://hyperframes.heygen.com) — HTML/CSS + GSAP 애니메이션을 MP4로 렌더링
 - **나레이션**: [Edge TTS](https://github.com/rany2/edge-tts) `ko-KR-SunHiNeural` 음성 (+12% 속도)
 - **자막**: Edge TTS의 단어 경계(WordBoundary) 타이밍에 맞춰 자동 생성
+- **예제 검증**: 빌드할 때 화면의 예제 쿼리를 실제로 실행해 대본의 결과와 대조하고, `queries.sql`로 저장
+  (SELECT는 SQLite, DDL·TCL·DCL은 Docker로 띄운 임시 MySQL 26.10.0(이미지 고정) — `tools/mysql-sandbox.sh start`)
+  (Java 영상은 화면의 예제를 `javac`·`java`로 컴파일·실행해 출력 또는 컴파일 오류를 대조하고, `examples.txt`로 저장)
 - **폰트**: [Pretendard](https://github.com/orioncactus/pretendard) (SIL OFL 1.1)
 
 ## 폴더 구조
@@ -33,12 +41,14 @@
 ├── README.md
 ├── requirements.txt          # Python 의존성 (edge-tts)
 ├── output/                   # 렌더링된 영상 (git 제외)
+├── tools/mysql-sandbox.sh    # 예제 검증용 임시 MySQL 컨테이너 (start / stop)
 ├── select-join-groupby-shorts/   # (영상별 폴더, 구조는 아래와 동일)
 └── mysql-shorts/             # HyperFrames 프로젝트 (영상 1개 = 폴더 1개)
     ├── script.json           # 장면별 나레이션 대본
     ├── gen_vo.py             # 대본 → 장면별 TTS 음성 + 타이밍(vo.json)
     ├── build.py              # vo.json → narration.mp3 + index.html(화면·자막)
     ├── index.html            # 생성된 HyperFrames 컴포지션
+    ├── queries.sql           # 영상의 예제 쿼리 (where-conditions-shorts부터, 직접 실행 가능)
     └── assets/fonts/         # Pretendard 폰트 + 라이선스(OFL.txt)
 ```
 

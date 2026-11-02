@@ -1,0 +1,225 @@
+<!doctype html>
+<html lang="ko" data-resolution="portrait">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=1080, height=1920" />
+<script src="https://cdn.jsdelivr.net/npm/gsap@3.14.2/dist/gsap.min.js"></script>
+<style>
+:root {
+  --ground: #0b1220; --panel: #131c2e; --ink: #f4f6fb; --mute: #9aa6bd;
+  --blue: #3fa7d6; --orange: #f29111; --red: #ff5d5d; --green: #7ee08a; --violet: #c3a6ff;
+  --font: "Pretendard", sans-serif;
+  --mono: "Menlo", "SF Mono", monospace;
+}
+@font-face { font-family: "Pretendard"; src: url("assets/fonts/PretendardVariable.woff2") format("woff2"); font-weight: 45 920; }
+* { margin: 0; padding: 0; box-sizing: border-box; }
+html, body { width: 1080px; height: 1920px; overflow: hidden; background: var(--ground); }
+#root { position: relative; width: 100%; height: 100%; font-variant-ligatures: none; font-family: var(--font); color: var(--ink); overflow: hidden;
+  background: radial-gradient(1200px 900px at 80% -10%, #16365a 0%, transparent 60%),
+              radial-gradient(900px 900px at -10% 110%, #3a2410 0%, transparent 55%), var(--ground); }
+.clip { position: absolute; inset: 0; }
+.brand { position: absolute; top: 110px; left: 70px; right: 70px; display: flex; justify-content: space-between; align-items: center;
+  font-size: 34px; font-weight: 700; color: var(--mute); letter-spacing: 0.02em; }
+.brand b { color: var(--blue); } .brand b em { color: var(--orange); font-style: normal; }
+.prog { display: flex; gap: 12px; }
+.prog i { display: block; width: 56px; height: 12px; border-radius: 6px; background: #26324a; }
+.scene { padding: 210px 70px 0; display: flex; flex-direction: column; gap: 26px; }
+.pill { align-self: flex-start; padding: 12px 26px; border-radius: 999px; background: #1d2a44; color: var(--blue);
+  font-size: 34px; font-weight: 700; }
+.hook { display: flex; flex-direction: column; gap: 50px; padding-top: 140px; }
+.big { font-size: 150px; line-height: 1.12; font-weight: 800; letter-spacing: -0.04em; }
+.big em { font-style: normal; color: var(--orange); }
+.sub { font-size: 64px; font-weight: 700; color: var(--mute); } .sub b { color: var(--ink); }
+.title { font-size: 80px; font-weight: 800; letter-spacing: -0.03em; line-height: 1.1; }
+.desc { font-size: 46px; color: var(--mute); font-weight: 600; margin-top: -8px; } .desc b { color: var(--orange); }
+.code { background: #0a0f1a; border: 2px solid #26324a; border-radius: 26px; padding: 30px 32px; font-family: var(--mono);
+  font-size: 42px; line-height: 1.5; color: #d9e1f2; white-space: pre; box-shadow: 0 30px 60px rgba(0,0,0,.35);
+  font-variant-ligatures: none; font-feature-settings: "liga" 0, "calt" 0; }
+.code.sm { font-size: 34px; padding: 26px 28px; }
+.code .ln { margin: 0 -14px; padding: 0 14px; border-radius: 10px; }
+.code .ln.mk { background: rgba(242,145,17,.13); }
+.kw { color: var(--blue); font-weight: 700; } .st { color: var(--green); } .nu { color: var(--orange); } .cm { color: #6f7d98; } .es { color: var(--orange); font-weight: 700; }
+.term { background: #05080f; border: 2px solid #26324a; border-radius: 22px; padding: 18px 32px 22px; font-family: var(--mono);
+  font-size: 40px; line-height: 1.4; color: var(--ink); white-space: pre; tab-size: 8; }
+.term i { display: block; font-style: normal; font-family: var(--font); font-size: 28px; font-weight: 700; color: var(--mute); margin-bottom: 6px; }
+.term .cmd { color: var(--blue); }
+.term.err { border-color: rgba(255,93,93,.5); color: var(--red); font-size: 34px; white-space: normal; }
+.warn small { font-size: 36px; color: var(--mute); font-weight: 600; }
+.nest > div, .nest > div div { border: 3px solid; border-radius: 22px; padding: 16px 26px 20px; display: flex; flex-direction: column; gap: 12px; }
+.nest b { font-size: 38px; font-weight: 800; font-family: var(--mono); }
+.nest .k1 { border-color: var(--orange); } .nest .k1 > b { color: var(--orange); }
+.nest .k2 { border-color: var(--green); } .nest .k2 > b { color: var(--green); }
+.nest .k3 { border-color: var(--violet); } .nest .k3 > b { color: var(--violet); }
+.chips { display: flex; flex-wrap: wrap; gap: 18px; }
+.chips span { padding: 16px 30px; background: var(--panel); border-radius: 18px; font-size: 42px; font-weight: 700; }
+.warn, .note { padding: 26px 36px; border-radius: 24px; font-size: 44px; font-weight: 700; line-height: 1.45; }
+.warn { background: rgba(255,93,93,.12); border-left: 10px solid var(--red); } .warn b { color: var(--red); }
+.note { background: rgba(63,167,214,.12); border-left: 10px solid var(--blue); } .note b { color: var(--orange); }
+.note small { font-size: 38px; color: var(--mute); font-weight: 600; font-family: var(--mono); }
+code { font-family: var(--mono); color: var(--orange); }
+.tbl { align-self: flex-start; }
+.tlabel { font-size: 34px; font-weight: 700; color: var(--mute); margin-bottom: 10px; }
+.tbl table { border-collapse: collapse; font-family: var(--mono); font-size: 40px; background: var(--panel); border-radius: 18px; overflow: hidden; }
+.tbl th { color: var(--blue); text-align: left; padding: 12px 32px; background: #1a2640; }
+.tbl th u { text-decoration: none; color: var(--orange); }
+.tbl td { padding: 10px 32px; border-top: 1px solid #26324a; }
+.tbl tr.k1 td { color: var(--orange); } .tbl tr.k2 td { color: var(--green); } .tbl tr.k3 td { color: var(--violet); }
+.tbl tr.out td { color: #5b6782; text-decoration: line-through; }
+.tbl td.nl { color: var(--red) !important; font-style: italic; font-weight: 700; background: rgba(255,93,93,.12); }
+.link { align-self: flex-start; font-family: var(--mono); font-size: 38px; color: var(--mute); padding: 6px 0 6px 26px;
+  border-left: 8px solid var(--orange); }
+.link b { color: var(--orange); }
+.arrow { font-family: var(--mono); font-size: 38px; color: var(--orange); font-weight: 700; }
+.vs { display: grid; grid-template-columns: 1fr 1fr; gap: 22px; }
+.card { background: var(--panel); border-radius: 26px; padding: 26px 32px; display: flex; flex-direction: column; gap: 6px; }
+.card b { font-family: var(--mono); font-size: 52px; color: var(--blue); }
+.vs .card span { font-size: 44px; font-weight: 800; } .vs .card .ok { color: var(--green); } .vs .card .ng { color: var(--red); }
+.res { display: flex; flex-wrap: wrap; align-items: center; gap: 14px; margin-top: -6px; }
+.res i { font-style: normal; font-size: 34px; color: var(--mute); font-weight: 700; }
+.res span { padding: 8px 22px; border-radius: 14px; background: var(--panel); font-size: 40px; font-weight: 700; }
+.res span.k1 { color: var(--orange); } .res span.k2 { color: var(--green); } .res span.k3 { color: var(--violet); }
+.res span.bad { color: var(--red); background: rgba(255,93,93,.14); box-shadow: inset 0 0 0 3px var(--red); } .vs .card em { font-style: normal; color: var(--orange); }
+.list { display: flex; flex-direction: column; gap: 16px; }
+.row { display: flex; align-items: center; gap: 30px; background: var(--panel); border-radius: 22px; padding: 14px 36px; font-size: 48px;
+  transform-origin: left center; }
+.row .no { font-size: 52px; font-weight: 900; color: var(--orange); width: 50px; }
+.row b { font-family: var(--mono); color: var(--blue); }
+.cta { margin-top: 20px; font-size: 54px; font-weight: 800; text-align: center; }
+.cap { top: auto; bottom: 260px; height: auto; display: flex; justify-content: center; padding: 0 60px; }
+.cap span { background: rgba(0,0,0,.78); color: #fff; font-size: 48px; font-weight: 700; line-height: 1.4; padding: 16px 30px;
+  border-radius: 18px; text-align: center; word-break: keep-all; }
+.bar { position: absolute; left: 0; bottom: 0; height: 10px; width: 1080px; background: var(--orange); transform-origin: left center; }
+</style>
+</head>
+<body>
+<div id="root" data-composition-id="main" data-start="0" data-duration="153.49" data-width="1080" data-height="1920">
+  <div class="brand"><b>JAVA <em>Hello World</em> 정리</b><div class="prog"><i></i><i></i><i></i><i></i><i></i></div></div>
+  <section id="sc-hook" class="clip scene" data-start="0.000" data-duration="11.88" data-track-index="1"><div class="hook">
+   <div class="pill in">JAVA 입문 · 첫 프로그램</div>
+   <h1 class="big in"><em>Hello</em><br/><em>World</em><br/>출력하기</h1>
+   <div class="sub in">class · main · <b>println</b></div>
+ </div></section>
+<section id="sc-basic" class="clip scene" data-start="11.880" data-duration="13.698" data-track-index="1"><div class="pill in">프로그램의 기본 형태</div><h2 class="title in">Hello World</h2><p class="desc in">자바 프로그램의 <b>기본 형태</b></p><div class="code in sm"><div class="ln"><span class="kw">public</span> <span class="kw">class</span> Main {</div><div class="ln">  <span class="kw">public</span> <span class="kw">static</span> <span class="kw">void</span> main(<span class="kw">String</span>[] args) {</div><div class="ln">    System.out.println(<span class="st">"Hello World"</span>);</div><div class="ln">  }</div><div class="ln">}</div></div><div class="term in"><i>실행 결과</i><div>Hello World</div></div><div class="nest in"><div class="k1"><b>class Main</b><div class="k2"><b>main 메서드</b><div class="k3"><b>출력 문장</b></div></div></div></div></section>
+<section id="sc-class" class="clip scene" data-start="25.578" data-duration="17.586" data-track-index="1"><div class="pill in">STEP 1 · 클래스</div><h2 class="title in">class</h2><p class="desc in">코드는 <b>클래스 안</b>에 작성</p><div class="tlabel in">📄 Main.java</div><div class="code in sm"><div class="ln mk"><span class="kw">public</span> <span class="kw">class</span> Main {</div><div class="ln">  <span class="kw">public</span> <span class="kw">static</span> <span class="kw">void</span> main(<span class="kw">String</span>[] args) {</div><div class="ln">    System.out.println(<span class="st">"Hello World"</span>);</div><div class="ln">  }</div><div class="ln mk">}</div></div><div class="warn in">⚠ 파일 이름 ≠ public 클래스 이름<br/>→ <b>컴파일 오류</b> <small>(Hello.java ✗)</small></div><div class="term in"><i>터미널</i><div class="cmd">$ javac Main.java</div><div class="cmd">$ java Main</div><div>Hello World</div></div></section>
+<section id="sc-main" class="clip scene" data-start="43.164" data-duration="17.85" data-track-index="1"><div class="pill in">STEP 1-1 · main</div><h2 class="title in">main 메서드</h2><p class="desc in">프로그램의 <b>시작점</b></p><div class="code in sm"><div class="ln"><span class="kw">public</span> <span class="kw">class</span> Main {</div><div class="ln mk">  <span class="kw">public</span> <span class="kw">static</span> <span class="kw">void</span> main(<span class="kw">String</span>[] args) {</div><div class="ln">    System.out.println(<span class="st">"Hello World"</span>);</div><div class="ln">  }</div><div class="ln">}</div></div><div class="chips in"><span><code>{ }</code> 블록 묶기</span><span><code>;</code> 문장 끝</span></div><div class="tlabel in">✗ 세미콜론 빠짐</div><div class="code in"><div class="ln mk">System.out.println(<span class="st">"Hi"</span>)</div></div><div class="term err in"><i>컴파일 오류</i><div>error: &#x27;;&#x27; expected</div></div></section>
+<section id="sc-string" class="clip scene" data-start="61.014" data-duration="16.65" data-track-index="1"><div class="pill in">STEP 2 · 문자열</div><h2 class="title in">큰따옴표</h2><p class="desc in">문자열은 <b>" "</b>로 감싸기</p><div class="code in"><div class="ln mk">System.out.println(<span class="st">"Hello World"</span>);</div></div><div class="term in"><i>실행 결과</i><div>Hello World</div></div><div class="tlabel in">✗ 작은따옴표 · 따옴표 없음</div><div class="code in"><div class="ln mk">System.out.println(<span class="st">'Hello'</span>);</div><div class="ln mk">System.out.println(Hello);</div></div><div class="term err in"><i>컴파일 오류</i><div>error: unclosed character literal</div><div>error: cannot find symbol</div></div><div class="note in"><b>'A'</b> 작은따옴표는 <b>문자 하나</b>(char)</div></section>
+<section id="sc-println" class="clip scene" data-start="77.664" data-duration="18.954" data-track-index="1"><div class="pill in">STEP 3 · 출력</div><h2 class="title in">System.out.println</h2><p class="desc in">출력하고 <b>줄바꿈</b></p><div class="vs"><div class="card in"><b>System.out</b><span>표준 출력(콘솔)</span></div><div class="card in"><b>println</b><span>출력 + 줄바꿈</span></div></div><div class="code in"><div class="ln mk">System.out.println(<span class="st">"Hello"</span>);</div><div class="ln mk">System.out.println(<span class="st">"World"</span>);</div></div><div class="term in"><i>실행 결과</i><div>Hello</div><div>World</div></div><div class="tlabel in">✗ 대소문자 구분</div><div class="code in"><div class="ln mk">system.out.println(<span class="st">"Hi"</span>);</div></div><div class="term err in"><i>컴파일 오류</i><div>error: package system does not exist</div></div></section>
+<section id="sc-newline" class="clip scene" data-start="96.618" data-duration="18.21" data-track-index="1"><div class="pill in">STEP 4 · 이스케이프</div><h2 class="title in">\n 줄바꿈</h2><p class="desc in"><b>\n</b> 자리에서 줄이 바뀜</p><div class="code in"><div class="ln mk">System.out.println(<span class="st">"Hi<span class="es">\n</span>Java"</span>);</div></div><div class="term in"><i>실행 결과</i><div>Hi</div><div>Java</div></div><div class="chips in"><span><code>\n</code> 줄바꿈</span><span><code>\t</code> 탭</span><span><code>\"</code> 큰따옴표</span></div><div class="code in"><div class="ln mk">System.out.println(<span class="st">"A<span class="es">\t</span>B <span class="es">\"</span>C<span class="es">\"</span>"</span>);</div></div><div class="term in"><i>실행 결과</i><div>A	B &quot;C&quot;</div></div></section>
+<section id="sc-compare" class="clip scene" data-start="114.828" data-duration="20.562" data-track-index="1"><div class="pill in">STEP 5 · 비교</div><h2 class="title in">print vs println</h2><p class="desc in">print는 <b>줄을 안 바꿈</b></p><div class="code in"><div class="ln">System.out.print(<span class="st">"A"</span>);</div><div class="ln">System.out.print(<span class="st">"B"</span>);</div><div class="ln mk">System.out.println(<span class="st">"C"</span>);</div><div class="ln">System.out.print(<span class="st">"D"</span>);</div></div><div class="term in"><i>실행 결과</i><div>ABC</div><div>D</div></div><div class="tlabel in">print + \n = println처럼 줄바꿈</div><div class="code in"><div class="ln mk">System.out.print(<span class="st">"Hi<span class="es">\n</span>"</span>);</div></div></section>
+<section id="sc-outro" class="clip scene" data-start="135.390" data-duration="18.1" data-track-index="1"><div class="pill in">정리</div><h2 class="title in">Hello World 핵심 5가지</h2><div class="list in"><div class="row" id="ex1"><span class="no">1</span><b>class · main</b></div><div class="row" id="ex2"><span class="no">2</span><b>&quot; &quot; 문자열</b></div><div class="row" id="ex3"><span class="no">3</span><b>System.out.println</b></div><div class="row" id="ex4"><span class="no">4</span><b>\n 줄바꿈</b></div><div class="row" id="ex5"><span class="no">5</span><b>print vs println</b></div></div><div class="cta in">👍 구독 · 좋아요</div></section>
+  <div id="cap-hook-0" class="clip cap" data-start="0.300" data-duration="3.002" data-track-index="2"><span>프로그래밍의 첫걸음, 헬로 월드!</span></div>
+<div id="cap-hook-1" class="clip cap" data-start="3.302" data-duration="3.772" data-track-index="2"><span>자바 프로그램의 기본 형태부터 문자열 출력, 줄바꿈,</span></div>
+<div id="cap-hook-2" class="clip cap" data-start="7.075" data-duration="1.663" data-track-index="2"><span>그리고 프린트와 프린트엘엔의</span></div>
+<div id="cap-hook-3" class="clip cap" data-start="8.738" data-duration="2.842" data-track-index="2"><span>차이까지 짧게 정리해 드립니다.</span></div>
+<div id="cap-basic-0" class="clip cap" data-start="12.030" data-duration="2.645" data-track-index="2"><span>먼저 전체 모습부터 볼게요.</span></div>
+<div id="cap-basic-1" class="clip cap" data-start="14.675" data-duration="2.444" data-track-index="2"><span>이 다섯 줄이 화면에 헬로 월드를 출력하는</span></div>
+<div id="cap-basic-2" class="clip cap" data-start="17.119" data-duration="2.958" data-track-index="2"><span>가장 기본적인 자바 프로그램입니다.</span></div>
+<div id="cap-basic-3" class="clip cap" data-start="20.077" data-duration="2.076" data-track-index="2"><span>클래스가 메인 메서드를 감싸고,</span></div>
+<div id="cap-basic-4" class="clip cap" data-start="22.153" data-duration="3.125" data-track-index="2"><span>메인 메서드 안에 출력 문장이 들어 있어요.</span></div>
+<div id="cap-class-0" class="clip cap" data-start="25.728" data-duration="3.170" data-track-index="2"><span>자바 코드는 클래스 안에 작성합니다.</span></div>
+<div id="cap-class-1" class="clip cap" data-start="28.898" data-duration="2.042" data-track-index="2"><span>퍼블릭 클래스 메인이라고 썼다면,</span></div>
+<div id="cap-class-2" class="clip cap" data-start="30.940" data-duration="2.020" data-track-index="2"><span>파일 이름도 클래스 이름과 똑같이</span></div>
+<div id="cap-class-3" class="clip cap" data-start="32.960" data-duration="2.411" data-track-index="2"><span>메인 닷 자바로 저장해야 해요.</span></div>
+<div id="cap-class-4" class="clip cap" data-start="35.371" data-duration="2.723" data-track-index="2"><span>다르면 컴파일 오류가 납니다.</span></div>
+<div id="cap-class-5" class="clip cap" data-start="38.094" data-duration="2.567" data-track-index="2"><span>저장한 파일은 자바씨로 컴파일하고,</span></div>
+<div id="cap-class-6" class="clip cap" data-start="40.661" data-duration="2.203" data-track-index="2"><span>자바 명령으로 실행해요.</span></div>
+<div id="cap-main-0" class="clip cap" data-start="43.314" data-duration="2.282" data-track-index="2"><span>클래스 안의 퍼블릭 스태틱 보이드 메인은</span></div>
+<div id="cap-main-1" class="clip cap" data-start="45.596" data-duration="2.930" data-track-index="2"><span>프로그램의 시작점인 메인 메서드예요.</span></div>
+<div id="cap-main-2" class="clip cap" data-start="48.526" data-duration="3.214" data-track-index="2"><span>자바는 이 메서드부터 실행을 시작합니다.</span></div>
+<div id="cap-main-3" class="clip cap" data-start="51.740" data-duration="3.159" data-track-index="2"><span>처음에는 이 줄을 통째로 외워 두세요.</span></div>
+<div id="cap-main-4" class="clip cap" data-start="54.899" data-duration="2.567" data-track-index="2"><span>중괄호는 블록의 시작과 끝을 묶고,</span></div>
+<div id="cap-main-5" class="clip cap" data-start="57.466" data-duration="3.248" data-track-index="2"><span>문장 끝에는 꼭 세미콜론을 붙입니다.</span></div>
+<div id="cap-string-0" class="clip cap" data-start="61.164" data-duration="4.431" data-track-index="2"><span>출력할 글자, 즉 문자열은 큰따옴표로 감쌉니다.</span></div>
+<div id="cap-string-1" class="clip cap" data-start="65.595" data-duration="3.292" data-track-index="2"><span>따옴표 안의 내용이 적힌 그대로 출력돼요.</span></div>
+<div id="cap-string-2" class="clip cap" data-start="68.887" data-duration="2.054" data-track-index="2"><span>작은따옴표로 감싸거나 따옴표를</span></div>
+<div id="cap-string-3" class="clip cap" data-start="70.941" data-duration="2.757" data-track-index="2"><span>빼먹으면 컴파일 오류가 납니다.</span></div>
+<div id="cap-string-4" class="clip cap" data-start="73.698" data-duration="1.562" data-track-index="2"><span>작은따옴표는 문자 하나를</span></div>
+<div id="cap-string-5" class="clip cap" data-start="75.260" data-duration="2.104" data-track-index="2"><span>나타낼 때 쓰거든요.</span></div>
+<div id="cap-println-0" class="clip cap" data-start="77.814" data-duration="1.847" data-track-index="2"><span>시스템 닷 아웃 닷 프린트엘엔은</span></div>
+<div id="cap-println-1" class="clip cap" data-start="79.661" data-duration="2.076" data-track-index="2"><span>괄호 안의 값을 출력하고,</span></div>
+<div id="cap-println-2" class="clip cap" data-start="81.737" data-duration="2.227" data-track-index="2"><span>끝에서 줄을 바꿉니다.</span></div>
+<div id="cap-println-3" class="clip cap" data-start="83.964" data-duration="1.763" data-track-index="2"><span>시스템 아웃은 표준 출력,</span></div>
+<div id="cap-println-4" class="clip cap" data-start="85.727" data-duration="2.400" data-track-index="2"><span>보통은 콘솔 화면이에요.</span></div>
+<div id="cap-println-5" class="clip cap" data-start="88.126" data-duration="3.080" data-track-index="2"><span>그래서 두 번 쓰면 두 줄로 출력되죠.</span></div>
+<div id="cap-println-6" class="clip cap" data-start="91.207" data-duration="1.987" data-track-index="2"><span>자바는 대소문자를 구분하니,</span></div>
+<div id="cap-println-7" class="clip cap" data-start="93.193" data-duration="3.125" data-track-index="2"><span>시스템의 에스는 꼭 대문자로 쓰세요.</span></div>
+<div id="cap-newline-0" class="clip cap" data-start="96.768" data-duration="2.338" data-track-index="2"><span>문자열 안에 백슬래시 엔을 넣으면,</span></div>
+<div id="cap-newline-1" class="clip cap" data-start="99.106" data-duration="2.428" data-track-index="2"><span>그 자리에서 줄이 바뀝니다.</span></div>
+<div id="cap-newline-2" class="clip cap" data-start="101.534" data-duration="2.254" data-track-index="2"><span>하이 백슬래시 엔 자바를 출력하면,</span></div>
+<div id="cap-newline-3" class="clip cap" data-start="103.788" data-duration="2.734" data-track-index="2"><span>문장은 하나지만 두 줄로 나와요.</span></div>
+<div id="cap-newline-4" class="clip cap" data-start="106.522" data-duration="1.719" data-track-index="2"><span>이렇게 백슬래시로 시작하는 특수</span></div>
+<div id="cap-newline-5" class="clip cap" data-start="108.241" data-duration="2.132" data-track-index="2"><span>문자를 이스케이프 문자라고 하고,</span></div>
+<div id="cap-newline-6" class="clip cap" data-start="110.373" data-duration="1.339" data-track-index="2"><span>탭은 백슬래시 티,</span></div>
+<div id="cap-newline-7" class="clip cap" data-start="111.712" data-duration="2.816" data-track-index="2"><span>큰따옴표는 백슬래시 큰따옴표로 씁니다.</span></div>
+<div id="cap-compare-0" class="clip cap" data-start="114.978" data-duration="3.527" data-track-index="2"><span>마지막으로 프린트와 프린트엘엔 비교입니다.</span></div>
+<div id="cap-compare-1" class="clip cap" data-start="118.505" data-duration="3.270" data-track-index="2"><span>프린트는 출력만 하고 줄을 바꾸지 않아요.</span></div>
+<div id="cap-compare-2" class="clip cap" data-start="121.775" data-duration="1.987" data-track-index="2"><span>그래서 에이와 비를 프린트로,</span></div>
+<div id="cap-compare-3" class="clip cap" data-start="123.761" data-duration="1.953" data-track-index="2"><span>씨를 프린트엘엔으로 출력하면</span></div>
+<div id="cap-compare-4" class="clip cap" data-start="125.715" data-duration="1.708" data-track-index="2"><span>에이비씨가 한 줄에 붙고,</span></div>
+<div id="cap-compare-5" class="clip cap" data-start="127.422" data-duration="2.589" data-track-index="2"><span>다음 디는 새 줄에서 시작합니다.</span></div>
+<div id="cap-compare-6" class="clip cap" data-start="130.011" data-duration="2.020" data-track-index="2"><span>프린트에 백슬래시 엔을 붙이면,</span></div>
+<div id="cap-compare-7" class="clip cap" data-start="132.032" data-duration="3.058" data-track-index="2"><span>프린트엘엔처럼 줄을 바꿀 수 있어요.</span></div>
+<div id="cap-outro-0" class="clip cap" data-start="135.540" data-duration="2.383" data-track-index="2"><span>정리하면, 클래스와 메인 메서드,</span></div>
+<div id="cap-outro-1" class="clip cap" data-start="137.923" data-duration="1.596" data-track-index="2"><span>문자열은 큰따옴표,</span></div>
+<div id="cap-outro-2" class="clip cap" data-start="139.519" data-duration="2.031" data-track-index="2"><span>출력은 시스템 아웃 프린트엘엔,</span></div>
+<div id="cap-outro-3" class="clip cap" data-start="141.550" data-duration="1.730" data-track-index="2"><span>줄바꿈은 백슬래시 엔,</span></div>
+<div id="cap-outro-4" class="clip cap" data-start="143.280" data-duration="2.188" data-track-index="2"><span>그리고 프린트와 프린트엘엔의 차이.</span></div>
+<div id="cap-outro-5" class="clip cap" data-start="145.467" data-duration="2.986" data-track-index="2"><span>이것만 알면 자바 첫 프로그램 완성!</span></div>
+<div id="cap-outro-6" class="clip cap" data-start="148.453" data-duration="3.839" data-track-index="2"><span>도움이 됐다면 구독과 좋아요 부탁드립니다!</span></div>
+  <div class="bar"></div>
+  <audio id="vo" src="assets/narration.mp3" data-start="0" data-duration="153.49" data-track-index="0"></audio>
+</div>
+<script>
+const tl = gsap.timeline({ paused: true });
+function enter(sel, t, dur) {
+  const items = document.querySelectorAll(sel + " .in");
+  const step = Math.min(0.9, (dur * 0.5) / Math.max(1, items.length));
+  items.forEach((el, i) => {
+    const at = Math.max(0, t - 0.1) + i * step;
+    tl.fromTo(el, { opacity: 0, y: 50 }, { opacity: 1, y: 0, duration: 0.5, ease: "power3.out" }, at);
+    el.querySelectorAll(".ln").forEach((ln, j) => {
+      tl.fromTo(ln, { opacity: 0, x: -30 }, { opacity: 1, x: 0, duration: 0.35, ease: "power2.out" }, at + 0.15 + j * 0.3);
+    });
+  });
+}
+enter("#sc-hook", 0.3, 11.28);
+tl.set(".prog i", {backgroundColor: "#26324a"}, 0);
+enter("#sc-basic", 12.03, 13.248);
+tl.set(".prog i", {backgroundColor: "#26324a"}, 11.879999999999999);
+enter("#sc-class", 25.728, 17.136);
+tl.set(".prog i", {backgroundColor: "#26324a"}, 25.578000000000003);
+tl.set(".prog i:nth-child(1)", {backgroundColor: "#f29111"}, 25.578000000000003);
+enter("#sc-main", 43.314, 17.4);
+tl.set(".prog i", {backgroundColor: "#26324a"}, 43.164);
+tl.set(".prog i:nth-child(1)", {backgroundColor: "#f29111"}, 43.164);
+enter("#sc-string", 61.164, 16.2);
+tl.set(".prog i", {backgroundColor: "#26324a"}, 61.014);
+tl.set(".prog i:nth-child(2)", {backgroundColor: "#f29111"}, 61.014);
+enter("#sc-println", 77.814, 18.504);
+tl.set(".prog i", {backgroundColor: "#26324a"}, 77.66399999999999);
+tl.set(".prog i:nth-child(3)", {backgroundColor: "#f29111"}, 77.66399999999999);
+enter("#sc-newline", 96.768, 17.76);
+tl.set(".prog i", {backgroundColor: "#26324a"}, 96.618);
+tl.set(".prog i:nth-child(4)", {backgroundColor: "#f29111"}, 96.618);
+enter("#sc-compare", 114.978, 20.112);
+tl.set(".prog i", {backgroundColor: "#26324a"}, 114.82799999999999);
+tl.set(".prog i:nth-child(5)", {backgroundColor: "#f29111"}, 114.82799999999999);
+enter("#sc-outro", 135.54, 16.752);
+tl.set(".prog i", {backgroundColor: "#26324a"}, 135.39);
+tl.to("#ex1", {backgroundColor: "#3a2a12", scale: 1.04, duration: 0.2}, 136.438);
+tl.to("#ex1", {backgroundColor: "#131c2e", scale: 1, duration: 0.2}, 137.923);
+tl.to("#ex2", {backgroundColor: "#3a2a12", scale: 1.04, duration: 0.2}, 137.923);
+tl.to("#ex2", {backgroundColor: "#131c2e", scale: 1, duration: 0.2}, 139.519);
+tl.to("#ex3", {backgroundColor: "#3a2a12", scale: 1.04, duration: 0.2}, 139.519);
+tl.to("#ex3", {backgroundColor: "#131c2e", scale: 1, duration: 0.2}, 141.55);
+tl.to("#ex4", {backgroundColor: "#3a2a12", scale: 1.04, duration: 0.2}, 141.55);
+tl.to("#ex4", {backgroundColor: "#131c2e", scale: 1, duration: 0.2}, 143.637);
+tl.to("#ex5", {backgroundColor: "#3a2a12", scale: 1.04, duration: 0.2}, 143.637);
+tl.to("#ex5", {backgroundColor: "#131c2e", scale: 1, duration: 0.3}, 145.858 + 0.6);
+tl.fromTo(".bar", { scaleX: 0 }, { scaleX: 1, duration: 153.49, ease: "none" }, 0);
+window.__timelines = window.__timelines || {};
+window.__timelines["main"] = tl;
+tl.seek(0);
+</script>
+</body>
+</html>

@@ -1,0 +1,234 @@
+<!doctype html>
+<html lang="ko" data-resolution="portrait">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=1080, height=1920" />
+<script src="https://cdn.jsdelivr.net/npm/gsap@3.14.2/dist/gsap.min.js"></script>
+<style>
+:root {
+  --ground: #0b1220; --panel: #131c2e; --ink: #f4f6fb; --mute: #9aa6bd;
+  --blue: #3fa7d6; --orange: #f29111; --red: #ff5d5d; --green: #7ee08a; --violet: #c3a6ff;
+  --font: "Pretendard", sans-serif;
+  --mono: "Menlo", "SF Mono", monospace;
+}
+@font-face { font-family: "Pretendard"; src: url("assets/fonts/PretendardVariable.woff2") format("woff2"); font-weight: 45 920; }
+* { margin: 0; padding: 0; box-sizing: border-box; }
+html, body { width: 1080px; height: 1920px; overflow: hidden; background: var(--ground); }
+#root { position: relative; width: 100%; height: 100%; font-variant-ligatures: none; font-family: var(--font); color: var(--ink); overflow: hidden;
+  background: radial-gradient(1200px 900px at 80% -10%, #16365a 0%, transparent 60%),
+              radial-gradient(900px 900px at -10% 110%, #3a2410 0%, transparent 55%), var(--ground); }
+.clip { position: absolute; inset: 0; }
+.brand { position: absolute; top: 110px; left: 70px; right: 70px; display: flex; justify-content: space-between; align-items: center;
+  font-size: 34px; font-weight: 700; color: var(--mute); letter-spacing: 0.02em; }
+.brand b { color: var(--blue); } .brand b em { color: var(--orange); font-style: normal; }
+.prog { display: flex; gap: 12px; }
+.prog i { display: block; width: 56px; height: 12px; border-radius: 6px; background: #26324a; }
+.scene { padding: 210px 70px 0; display: flex; flex-direction: column; gap: 26px; }
+.pill { align-self: flex-start; padding: 12px 26px; border-radius: 999px; background: #1d2a44; color: var(--blue);
+  font-size: 34px; font-weight: 700; }
+.hook { display: flex; flex-direction: column; gap: 50px; padding-top: 140px; }
+.big { font-size: 150px; line-height: 1.12; font-weight: 800; letter-spacing: -0.04em; }
+.big em { font-style: normal; color: var(--orange); }
+.sub { font-size: 64px; font-weight: 700; color: var(--mute); } .sub b { color: var(--ink); }
+.title { font-size: 80px; font-weight: 800; letter-spacing: -0.03em; line-height: 1.1; }
+.desc { font-size: 46px; color: var(--mute); font-weight: 600; margin-top: -8px; } .desc b { color: var(--orange); }
+.code { background: #0a0f1a; border: 2px solid #26324a; border-radius: 26px; padding: 30px 32px; font-family: var(--mono);
+  font-size: 42px; line-height: 1.5; color: #d9e1f2; white-space: pre; box-shadow: 0 30px 60px rgba(0,0,0,.35);
+  font-variant-ligatures: none; font-feature-settings: "liga" 0, "calt" 0; }
+.code .ln { margin: 0 -14px; padding: 0 14px; border-radius: 10px; }
+.code .ln.mk { background: rgba(242,145,17,.13); }
+.kw { color: var(--blue); font-weight: 700; } .st { color: var(--green); } .nu { color: var(--orange); } .cm { color: #6f7d98; }
+.chips { display: flex; flex-wrap: wrap; gap: 18px; }
+.chips span { padding: 16px 30px; background: var(--panel); border-radius: 18px; font-size: 42px; font-weight: 700; }
+.warn, .note { padding: 26px 36px; border-radius: 24px; font-size: 44px; font-weight: 700; line-height: 1.45; }
+.warn { background: rgba(255,93,93,.12); border-left: 10px solid var(--red); } .warn b { color: var(--red); }
+.note { background: rgba(63,167,214,.12); border-left: 10px solid var(--blue); } .note b { color: var(--orange); }
+.note small { font-size: 38px; color: var(--mute); font-weight: 600; font-family: var(--mono); }
+code { font-family: var(--mono); color: var(--orange); }
+.tbl { align-self: flex-start; }
+.tlabel { font-size: 34px; font-weight: 700; color: var(--mute); margin-bottom: 10px; }
+.tbl table { border-collapse: collapse; font-family: var(--mono); font-size: 40px; background: var(--panel); border-radius: 18px; overflow: hidden; }
+.tbl th { color: var(--blue); text-align: left; padding: 12px 32px; background: #1a2640; }
+.tbl th u { text-decoration: none; color: var(--orange); }
+.tbl td { padding: 10px 32px; border-top: 1px solid #26324a; }
+.tbl tr.k1 td { color: var(--orange); } .tbl tr.k2 td { color: var(--green); } .tbl tr.k3 td { color: var(--violet); }
+.tbl tr.out td { color: #5b6782; text-decoration: line-through; }
+.tbl td.nl { color: var(--red) !important; font-style: italic; font-weight: 700; background: rgba(255,93,93,.12); }
+.link { align-self: flex-start; font-family: var(--mono); font-size: 38px; color: var(--mute); padding: 6px 0 6px 26px;
+  border-left: 8px solid var(--orange); }
+.link b { color: var(--orange); }
+.arrow { font-family: var(--mono); font-size: 38px; color: var(--orange); font-weight: 700; }
+.vs { display: grid; grid-template-columns: 1fr 1fr; gap: 22px; }
+.card { background: var(--panel); border-radius: 26px; padding: 26px 32px; display: flex; flex-direction: column; gap: 6px; }
+.card b { font-family: var(--mono); font-size: 52px; color: var(--blue); }
+.vs .card span { font-size: 44px; font-weight: 800; } .vs .card .ok { color: var(--green); } .vs .card .ng { color: var(--red); }
+.res { display: flex; flex-wrap: wrap; align-items: center; gap: 14px; margin-top: -6px; }
+.res i { font-style: normal; font-size: 34px; color: var(--mute); font-weight: 700; }
+.res span { padding: 8px 22px; border-radius: 14px; background: var(--panel); font-size: 40px; font-weight: 700; }
+.res span.k1 { color: var(--orange); } .res span.k2 { color: var(--green); } .res span.k3 { color: var(--violet); }
+.res span.bad { color: var(--red); background: rgba(255,93,93,.14); box-shadow: inset 0 0 0 3px var(--red); } .vs .card em { font-style: normal; color: var(--orange); }
+.list { display: flex; flex-direction: column; gap: 16px; }
+.row { display: flex; align-items: center; gap: 30px; background: var(--panel); border-radius: 22px; padding: 14px 36px; font-size: 48px;
+  transform-origin: left center; }
+.row .no { font-size: 52px; font-weight: 900; color: var(--orange); width: 50px; }
+.row b { font-family: var(--mono); color: var(--blue); }
+.cta { margin-top: 20px; font-size: 54px; font-weight: 800; text-align: center; }
+.cap { top: auto; bottom: 260px; height: auto; display: flex; justify-content: center; padding: 0 60px; }
+.cap span { background: rgba(0,0,0,.78); color: #fff; font-size: 48px; font-weight: 700; line-height: 1.4; padding: 16px 30px;
+  border-radius: 18px; text-align: center; word-break: keep-all; }
+.bar { position: absolute; left: 0; bottom: 0; height: 10px; width: 1080px; background: var(--orange); transform-origin: left center; }
+</style>
+</head>
+<body>
+<div id="root" data-composition-id="main" data-start="0" data-duration="159.25" data-width="1080" data-height="1920">
+  <div class="brand"><b>SQL <em>WHERE</em> 정리</b><div class="prog"><i></i><i></i><i></i><i></i><i></i></div></div>
+  <section id="sc-hook" class="clip scene" data-start="0.000" data-duration="8.712" data-track-index="1"><div class="hook">
+   <div class="pill in">MySQL · WHERE 핵심 정리</div>
+   <h1 class="big in"><em>WHERE</em><br/>AND · OR<br/>IN · LIKE</h1>
+   <div class="sub in">원하는 행만 <b>골라내기</b></div>
+ </div></section>
+<section id="sc-intro" class="clip scene" data-start="8.712" data-duration="8.73" data-track-index="1"><div class="pill in">WHERE의 역할</div><h2 class="title in">WHERE</h2><p class="desc in">조건이 <b>참인 행</b>만 남김</p><div class="code in"><div class="ln"><span class="kw">SELECT</span> name, price</div><div class="ln"><span class="kw">FROM</span> products</div><div class="ln mk"><span class="kw">WHERE</span> 조건;</div></div><div class="tbl in "><div class="tlabel">products · 상품 6개</div><table><tr><th>id</th><th>name</th><th>category</th><th>price</th></tr><tr class="k1"><td>1</td><td>SQL 입문서</td><td>book</td><td>18000</td></tr><tr class="k2"><td>2</td><td>볼펜</td><td>pen</td><td>1500</td></tr><tr class="k1"><td>3</td><td>SQL 문제집</td><td>book</td><td>9000</td></tr><tr class="k3"><td>4</td><td>노트</td><td>note</td><td>3000</td></tr><tr class="k2"><td>5</td><td>만년필</td><td>pen</td><td>45000</td></tr><tr class="k2"><td>6</td><td>형광펜</td><td>pen</td><td>2000</td></tr></table></div></section>
+<section id="sc-compare" class="clip scene" data-start="17.442" data-duration="14.418" data-track-index="1"><div class="pill in">STEP 1 · 비교</div><h2 class="title in">비교 연산자</h2><p class="desc in">같다 · 다르다 · 크다 · 작다</p><div class="chips in"><span>= 같다</span><span>&lt;&gt;  != 다르다</span><span>&gt;  &gt;=  &lt;  &lt;=</span></div><div class="code in"><div class="ln"><span class="kw">SELECT</span> name, price</div><div class="ln"><span class="kw">FROM</span> products</div><div class="ln mk"><span class="kw">WHERE</span> price &gt;= <span class="nu">10000</span>;</div></div><div class="tbl in "><div class="tlabel">결과 · 1만 원 이상</div><table><tr><th>name</th><th>price</th></tr><tr class="k1"><td>SQL 입문서</td><td>18000</td></tr><tr class="k2"><td>만년필</td><td>45000</td></tr></table></div></section>
+<section id="sc-string" class="clip scene" data-start="31.860" data-duration="9.018" data-track-index="1"><div class="pill in">STEP 1-1</div><h2 class="title in">문자열 비교</h2><p class="desc in">값은 <b>작은따옴표</b>로 감싸기</p><div class="code in"><div class="ln"><span class="kw">SELECT</span> name, category</div><div class="ln"><span class="kw">FROM</span> products</div><div class="ln mk"><span class="kw">WHERE</span> category = <span class="st">&#x27;book&#x27;</span>;</div></div><div class="tbl in "><div class="tlabel">결과</div><table><tr><th>name</th><th>category</th></tr><tr class="k1"><td>SQL 입문서</td><td>book</td></tr><tr class="k1"><td>SQL 문제집</td><td>book</td></tr></table></div></section>
+<section id="sc-between" class="clip scene" data-start="40.878" data-duration="11.634" data-track-index="1"><div class="pill in">STEP 1-2</div><h2 class="title in">BETWEEN</h2><p class="desc in">범위 조건 · <b>양 끝 값 포함</b></p><div class="code in"><div class="ln"><span class="kw">SELECT</span> name, price</div><div class="ln"><span class="kw">FROM</span> products</div><div class="ln mk"><span class="kw">WHERE</span> price</div><div class="ln mk">  <span class="kw">BETWEEN</span> <span class="nu">3000</span> <span class="kw">AND</span> <span class="nu">10000</span>;</div></div><div class="tbl in "><div class="tlabel">결과 · 노트(3000)도 포함</div><table><tr><th>name</th><th>price</th></tr><tr class="k1"><td>SQL 문제집</td><td>9000</td></tr><tr class="k3"><td>노트</td><td>3000</td></tr></table></div><div class="note in">같은 뜻 <code><br/>price &gt;= 3000 AND price &lt;= 10000</code></div></section>
+<section id="sc-and" class="clip scene" data-start="52.512" data-duration="10.386" data-track-index="1"><div class="pill in">STEP 2 · AND</div><h2 class="title in">AND</h2><p class="desc in">두 조건이 <b>모두</b> 참</p><div class="code in"><div class="ln"><span class="kw">SELECT</span> name, category, price</div><div class="ln"><span class="kw">FROM</span> products</div><div class="ln mk"><span class="kw">WHERE</span> category = <span class="st">&#x27;book&#x27;</span></div><div class="ln mk">  <span class="kw">AND</span> price &lt; <span class="nu">10000</span>;</div></div><div class="tbl in "><div class="tlabel">결과 · 책이면서 1만 원 미만 → 1개</div><table><tr><th>name</th><th>category</th><th>price</th></tr><tr class="out"><td>SQL 입문서</td><td>book</td><td>18000</td></tr><tr class="out"><td>볼펜</td><td>pen</td><td>1500</td></tr><tr class="k1"><td>SQL 문제집</td><td>book</td><td>9000</td></tr><tr class="out"><td>노트</td><td>note</td><td>3000</td></tr><tr class="out"><td>만년필</td><td>pen</td><td>45000</td></tr><tr class="out"><td>형광펜</td><td>pen</td><td>2000</td></tr></table></div></section>
+<section id="sc-or" class="clip scene" data-start="62.898" data-duration="8.61" data-track-index="1"><div class="pill in">STEP 2-1</div><h2 class="title in">OR</h2><p class="desc in">둘 중 <b>하나만</b> 참이어도 통과</p><div class="code in"><div class="ln"><span class="kw">SELECT</span> name, category, price</div><div class="ln"><span class="kw">FROM</span> products</div><div class="ln mk"><span class="kw">WHERE</span> category = <span class="st">&#x27;pen&#x27;</span></div><div class="ln mk">   <span class="kw">OR</span> price &gt;= <span class="nu">18000</span>;</div></div><div class="tbl in "><div class="tlabel">결과 · 펜이거나 18000원 이상 → 4개</div><table><tr><th>name</th><th>category</th><th>price</th></tr><tr class="k1"><td>SQL 입문서</td><td>book</td><td>18000</td></tr><tr class="k2"><td>볼펜</td><td>pen</td><td>1500</td></tr><tr class="out"><td>SQL 문제집</td><td>book</td><td>9000</td></tr><tr class="out"><td>노트</td><td>note</td><td>3000</td></tr><tr class="k2"><td>만년필</td><td>pen</td><td>45000</td></tr><tr class="k2"><td>형광펜</td><td>pen</td><td>2000</td></tr></table></div></section>
+<section id="sc-paren" class="clip scene" data-start="71.508" data-duration="15.282" data-track-index="1"><div class="pill in">STEP 2-2</div><h2 class="title in">AND가 먼저!</h2><p class="desc in">책이나 펜 중 <b>1만 원 이상</b></p><div class="tlabel in">✗ 괄호 없음 → AND부터 묶임</div><div class="code in"><div class="ln"><span class="kw">WHERE</span> category = <span class="st">&#x27;book&#x27;</span></div><div class="ln mk">   <span class="kw">OR</span> category = <span class="st">&#x27;pen&#x27;</span></div><div class="ln mk">  <span class="kw">AND</span> price &gt;= <span class="nu">10000</span>;</div></div><div class="res in"><i>결과 →</i><span class="k1">SQL 입문서</span><span class="k1 bad">SQL 문제집 ⚠</span><span class="k2">만년필</span></div><div class="tlabel in">✓ 괄호로 의도 고정</div><div class="code in"><div class="ln mk"><span class="kw">WHERE</span> (category = <span class="st">&#x27;book&#x27;</span></div><div class="ln mk">    <span class="kw">OR</span> category = <span class="st">&#x27;pen&#x27;</span>)</div><div class="ln">  <span class="kw">AND</span> price &gt;= <span class="nu">10000</span>;</div></div><div class="res in"><i>결과 →</i><span class="k1">SQL 입문서</span><span class="k2">만년필</span></div></section>
+<section id="sc-in" class="clip scene" data-start="86.790" data-duration="11.658" data-track-index="1"><div class="pill in">STEP 3 · IN</div><h2 class="title in">IN · NOT IN</h2><p class="desc in"><b>OR 여러 개</b>를 짧게</p><div class="code in"><div class="ln"><span class="kw">WHERE</span> category</div><div class="ln mk">  <span class="kw">IN</span> (<span class="st">&#x27;book&#x27;</span>, <span class="st">&#x27;pen&#x27;</span>);</div></div><div class="res in"><i>결과 →</i><span class="k1">SQL 입문서</span><span class="k2">볼펜</span><span class="k1">SQL 문제집</span><span class="k2">만년필</span><span class="k2">형광펜</span></div><div class="code in"><div class="ln"><span class="kw">WHERE</span> category</div><div class="ln mk">  <span class="kw">NOT</span> <span class="kw">IN</span> (<span class="st">&#x27;book&#x27;</span>, <span class="st">&#x27;pen&#x27;</span>);</div></div><div class="res in"><i>결과 →</i><span class="k3">노트</span></div><div class="note in">IN = <code>category = 'book' OR …</code></div></section>
+<section id="sc-like" class="clip scene" data-start="98.448" data-duration="14.322" data-track-index="1"><div class="pill in">STEP 4 · LIKE</div><h2 class="title in">LIKE 패턴</h2><p class="desc in"><b>%</b> 0글자 이상 · <b>_</b> 정확히 1글자</p><div class="code in"><div class="ln mk"><span class="kw">WHERE</span> name <span class="kw">LIKE</span> <span class="st">&#x27;%펜&#x27;</span>;</div></div><div class="res in"><i>결과 →</i><span class="k2">볼펜</span><span class="k2">형광펜</span></div><div class="code in"><div class="ln mk"><span class="kw">WHERE</span> name <span class="kw">LIKE</span> <span class="st">&#x27;_펜&#x27;</span>;</div></div><div class="res in"><i>결과 →</i><span class="k2">볼펜</span></div><div class="chips in"><span>% = 아무 글자 0개 이상</span><span>_ = 아무 글자 1개</span></div></section>
+<section id="sc-like2" class="clip scene" data-start="112.770" data-duration="13.938" data-track-index="1"><div class="pill in">STEP 4-1</div><h2 class="title in">LIKE 주의점</h2><p class="desc in"><b>%로 시작</b>하면 범위 검색 불가</p><div class="vs"><div class="card in"><b>'SQL%'</b><span>앞부분 고정</span><span class="ok">범위 검색 ✓</span></div><div class="card in"><b>'%펜'</b><span>앞부분 미정</span><span class="ng">범위 검색 ✗</span></div></div><div class="warn in">⚠ 인덱스로 범위를 좁힐 수 없어<br/>데이터가 많으면 <b>느려질 수 있음</b><br/><small>앞부분을 안다면 고정한 패턴으로</small></div></section>
+<section id="sc-null" class="clip scene" data-start="126.708" data-duration="18.258" data-track-index="1"><div class="pill in">STEP 5 · NULL</div><h2 class="title in">IS NULL</h2><p class="desc in">NULL은 <b>=로 비교 불가</b></p><div class="tlabel in">✗ 항상 결과 없음</div><div class="code in"><div class="ln mk"><span class="kw">WHERE</span> category = <span class="kw">NULL</span>;</div></div><div class="tlabel in">✓ NULL 찾기 · 제외하기</div><div class="code in"><div class="ln mk"><span class="kw">WHERE</span> category <span class="kw">IS</span> <span class="kw">NULL</span>;</div><div class="ln mk"><span class="kw">WHERE</span> category <span class="kw">IS</span> <span class="kw">NOT</span> <span class="kw">NULL</span>;</div></div><div class="tlabel in">⚠ NOT IN 목록에 NULL → 결과 없음</div><div class="code in"><div class="ln"><span class="kw">WHERE</span> category</div><div class="ln mk">  <span class="kw">NOT</span> <span class="kw">IN</span> (<span class="st">&#x27;book&#x27;</span>, <span class="kw">NULL</span>);</div></div></section>
+<section id="sc-outro" class="clip scene" data-start="144.966" data-duration="14.284" data-track-index="1"><div class="pill in">정리</div><h2 class="title in">WHERE 핵심 6가지</h2><div class="list in"><div class="row" id="ex1"><span class="no">1</span><b>비교 · BETWEEN</b></div><div class="row" id="ex2"><span class="no">2</span><b>AND · OR</b></div><div class="row" id="ex3"><span class="no">3</span><b>( ) 괄호</b></div><div class="row" id="ex4"><span class="no">4</span><b>IN · NOT IN</b></div><div class="row" id="ex5"><span class="no">5</span><b>LIKE  %  _</b></div><div class="row" id="ex6"><span class="no">6</span><b>IS NULL</b></div></div><div class="cta in">👍 구독 · 좋아요</div></section>
+  <div id="cap-hook-0" class="clip cap" data-start="0.300" data-duration="2.572" data-track-index="2"><span>원하는 데이터만 쏙 골라내는 웨어 절.</span></div>
+<div id="cap-hook-1" class="clip cap" data-start="2.872" data-duration="2.679" data-track-index="2"><span>비교 연산자부터 앤드와 오어, 인,</span></div>
+<div id="cap-hook-2" class="clip cap" data-start="5.551" data-duration="2.861" data-track-index="2"><span>라이크까지 한 번에 정리해 드립니다.</span></div>
+<div id="cap-intro-0" class="clip cap" data-start="8.862" data-duration="1.780" data-track-index="2"><span>웨어는 프롬 뒤에 붙어서,</span></div>
+<div id="cap-intro-1" class="clip cap" data-start="10.642" data-duration="2.450" data-track-index="2"><span>조건이 참인 행만 남깁니다.</span></div>
+<div id="cap-intro-2" class="clip cap" data-start="13.092" data-duration="1.641" data-track-index="2"><span>오늘은 상품 여섯 개가 담긴</span></div>
+<div id="cap-intro-3" class="clip cap" data-start="14.733" data-duration="2.409" data-track-index="2"><span>이 테이블로 연습해 볼게요.</span></div>
+<div id="cap-compare-0" class="clip cap" data-start="17.592" data-duration="2.489" data-track-index="2"><span>먼저 비교 연산자입니다.</span></div>
+<div id="cap-compare-1" class="clip cap" data-start="20.081" data-duration="1.339" data-track-index="2"><span>같다는 이퀄 하나,</span></div>
+<div id="cap-compare-2" class="clip cap" data-start="21.420" data-duration="2.455" data-track-index="2"><span>다르다는 꺾쇠 두 개나 느낌표 이퀄,</span></div>
+<div id="cap-compare-3" class="clip cap" data-start="23.875" data-duration="2.745" data-track-index="2"><span>크다 작다는 수학 기호 그대로예요.</span></div>
+<div id="cap-compare-4" class="clip cap" data-start="26.621" data-duration="2.333" data-track-index="2"><span>가격이 1만 원 이상인 상품을 고르면,</span></div>
+<div id="cap-compare-5" class="clip cap" data-start="28.954" data-duration="2.606" data-track-index="2"><span>입문서와 만년필이 남습니다.</span></div>
+<div id="cap-string-0" class="clip cap" data-start="32.010" data-duration="3.125" data-track-index="2"><span>문자열은 작은따옴표로 감쌉니다.</span></div>
+<div id="cap-string-1" class="clip cap" data-start="35.135" data-duration="1.998" data-track-index="2"><span>카테고리가 북인 상품을 고르면,</span></div>
+<div id="cap-string-2" class="clip cap" data-start="37.133" data-duration="3.445" data-track-index="2"><span>SQL 입문서와 SQL 문제집이 나오죠.</span></div>
+<div id="cap-between-0" class="clip cap" data-start="41.028" data-duration="3.002" data-track-index="2"><span>범위는 비트윈으로 쓸 수 있어요.</span></div>
+<div id="cap-between-1" class="clip cap" data-start="44.030" data-duration="2.232" data-track-index="2"><span>3천 원에서 1만 원 사이를 고르면,</span></div>
+<div id="cap-between-2" class="clip cap" data-start="46.262" data-duration="2.801" data-track-index="2"><span>딱 3천 원인 노트도 포함됩니다.</span></div>
+<div id="cap-between-3" class="clip cap" data-start="49.064" data-duration="3.148" data-track-index="2"><span>비트윈은 양 끝 값을 포함하거든요.</span></div>
+<div id="cap-and-0" class="clip cap" data-start="52.662" data-duration="2.545" data-track-index="2"><span>조건을 함께 걸 때는 앤드.</span></div>
+<div id="cap-and-1" class="clip cap" data-start="55.207" data-duration="2.980" data-track-index="2"><span>두 조건이 모두 참인 행만 남습니다.</span></div>
+<div id="cap-and-2" class="clip cap" data-start="58.187" data-duration="1.987" data-track-index="2"><span>책이면서 1만 원 미만인 상품은</span></div>
+<div id="cap-and-3" class="clip cap" data-start="60.173" data-duration="2.425" data-track-index="2"><span>SQL 문제집 하나뿐이에요.</span></div>
+<div id="cap-or-0" class="clip cap" data-start="63.048" data-duration="3.538" data-track-index="2"><span>오어는 둘 중 하나만 참이어도 통과합니다.</span></div>
+<div id="cap-or-1" class="clip cap" data-start="66.586" data-duration="2.779" data-track-index="2"><span>펜이거나 1만 8천 원 이상인 상품을 고르면,</span></div>
+<div id="cap-or-2" class="clip cap" data-start="69.365" data-duration="1.843" data-track-index="2"><span>네 개가 남아요.</span></div>
+<div id="cap-paren-0" class="clip cap" data-start="71.658" data-duration="2.422" data-track-index="2"><span>여기서 자주 하는 실수.</span></div>
+<div id="cap-paren-1" class="clip cap" data-start="74.080" data-duration="1.708" data-track-index="2"><span>책이나 펜 중에서 1만 원 이상을</span></div>
+<div id="cap-paren-2" class="clip cap" data-start="75.787" data-duration="1.797" data-track-index="2"><span>찾으려고 괄호 없이 쓰면,</span></div>
+<div id="cap-paren-3" class="clip cap" data-start="77.584" data-duration="2.333" data-track-index="2"><span>앤드가 오어보다 먼저 묶여서 9천 원짜리</span></div>
+<div id="cap-paren-4" class="clip cap" data-start="79.917" data-duration="2.690" data-track-index="2"><span>SQL 문제집까지 섞여 나와요.</span></div>
+<div id="cap-paren-5" class="clip cap" data-start="82.607" data-duration="1.730" data-track-index="2"><span>앤드와 오어를 섞을 때는,</span></div>
+<div id="cap-paren-6" class="clip cap" data-start="84.337" data-duration="2.153" data-track-index="2"><span>꼭 괄호로 묶으세요.</span></div>
+<div id="cap-in-0" class="clip cap" data-start="86.940" data-duration="1.467" data-track-index="2"><span>오어를 여러 번 쓰는 대신</span></div>
+<div id="cap-in-1" class="clip cap" data-start="88.407" data-duration="2.171" data-track-index="2"><span>인을 쓰면 깔끔합니다.</span></div>
+<div id="cap-in-2" class="clip cap" data-start="90.578" data-duration="3.214" data-track-index="2"><span>괄호 안의 값 중 하나와 같으면 통과하죠.</span></div>
+<div id="cap-in-3" class="clip cap" data-start="93.793" data-duration="1.696" data-track-index="2"><span>반대로 낫 인을 쓰면,</span></div>
+<div id="cap-in-4" class="clip cap" data-start="95.489" data-duration="2.659" data-track-index="2"><span>목록에 없는 노트만 남습니다.</span></div>
+<div id="cap-like-0" class="clip cap" data-start="98.598" data-duration="3.025" data-track-index="2"><span>라이크는 글자 패턴으로 찾습니다.</span></div>
+<div id="cap-like-1" class="clip cap" data-start="101.623" data-duration="2.422" data-track-index="2"><span>퍼센트는 0글자 이상의 아무 글자,</span></div>
+<div id="cap-like-2" class="clip cap" data-start="104.044" data-duration="2.667" data-track-index="2"><span>언더바는 정확히 한 글자예요.</span></div>
+<div id="cap-like-3" class="clip cap" data-start="106.712" data-duration="2.321" data-track-index="2"><span>퍼센트 펜은 볼펜과 형광펜을,</span></div>
+<div id="cap-like-4" class="clip cap" data-start="109.033" data-duration="3.437" data-track-index="2"><span>언더바 펜은 두 글자인 볼펜만 찾습니다.</span></div>
+<div id="cap-like2-0" class="clip cap" data-start="112.920" data-duration="2.193" data-track-index="2"><span>단, 퍼센트로 시작하는 패턴은</span></div>
+<div id="cap-like2-1" class="clip cap" data-start="115.113" data-duration="1.752" data-track-index="2"><span>앞부분이 정해지지 않아서,</span></div>
+<div id="cap-like2-2" class="clip cap" data-start="116.865" data-duration="3.064" data-track-index="2"><span>인덱스로 범위를 좁혀 찾을 수 없어요.</span></div>
+<div id="cap-like2-3" class="clip cap" data-start="119.929" data-duration="2.065" data-track-index="2"><span>데이터가 많으면 느려질 수 있으니,</span></div>
+<div id="cap-like2-4" class="clip cap" data-start="121.994" data-duration="1.306" data-track-index="2"><span>앞부분을 알고 있다면</span></div>
+<div id="cap-like2-5" class="clip cap" data-start="123.299" data-duration="3.109" data-track-index="2"><span>SQL 퍼센트처럼 고정해서 쓰세요.</span></div>
+<div id="cap-null-0" class="clip cap" data-start="126.858" data-duration="1.964" data-track-index="2"><span>마지막 주의점.</span></div>
+<div id="cap-null-1" class="clip cap" data-start="128.822" data-duration="2.746" data-track-index="2"><span>널은 이퀄로 비교할 수 없습니다.</span></div>
+<div id="cap-null-2" class="clip cap" data-start="131.568" data-duration="1.808" data-track-index="2"><span>이퀄 널 조건은 참이 되지 않아서</span></div>
+<div id="cap-null-3" class="clip cap" data-start="133.376" data-duration="2.210" data-track-index="2"><span>결과가 항상 비어요.</span></div>
+<div id="cap-null-4" class="clip cap" data-start="135.586" data-duration="1.629" data-track-index="2"><span>널을 찾을 때는 이즈 널,</span></div>
+<div id="cap-null-5" class="clip cap" data-start="137.215" data-duration="2.880" data-track-index="2"><span>아닌 것은 이즈 낫 널을 쓰세요.</span></div>
+<div id="cap-null-6" class="clip cap" data-start="140.095" data-duration="2.165" data-track-index="2"><span>그리고 낫 인 목록에 널이 섞이면,</span></div>
+<div id="cap-null-7" class="clip cap" data-start="142.260" data-duration="2.406" data-track-index="2"><span>결과가 텅 비니 조심하세요.</span></div>
+<div id="cap-outro-0" class="clip cap" data-start="145.116" data-duration="3.800" data-track-index="2"><span>정리하면, 비교 연산자와 비트윈, 앤드와 오어,</span></div>
+<div id="cap-outro-1" class="clip cap" data-start="148.916" data-duration="2.835" data-track-index="2"><span>그리고 괄호, 인, 라이크, 이즈 널.</span></div>
+<div id="cap-outro-2" class="clip cap" data-start="151.751" data-duration="2.450" data-track-index="2"><span>이것만 알면 웨어 기본은 끝!</span></div>
+<div id="cap-outro-3" class="clip cap" data-start="154.201" data-duration="3.851" data-track-index="2"><span>도움이 됐다면 구독과 좋아요 부탁드립니다!</span></div>
+  <div class="bar"></div>
+  <audio id="vo" src="assets/narration.mp3" data-start="0" data-duration="159.25" data-track-index="0"></audio>
+</div>
+<script>
+const tl = gsap.timeline({ paused: true });
+function enter(sel, t, dur) {
+  const items = document.querySelectorAll(sel + " .in");
+  const step = Math.min(0.9, (dur * 0.5) / Math.max(1, items.length));
+  items.forEach((el, i) => {
+    const at = Math.max(0, t - 0.1) + i * step;
+    tl.fromTo(el, { opacity: 0, y: 50 }, { opacity: 1, y: 0, duration: 0.5, ease: "power3.out" }, at);
+    el.querySelectorAll(".ln").forEach((ln, j) => {
+      tl.fromTo(ln, { opacity: 0, x: -30 }, { opacity: 1, x: 0, duration: 0.35, ease: "power2.out" }, at + 0.15 + j * 0.3);
+    });
+  });
+}
+enter("#sc-hook", 0.3, 8.112);
+tl.set(".prog i", {backgroundColor: "#26324a"}, 0);
+enter("#sc-intro", 8.862, 8.28);
+tl.set(".prog i", {backgroundColor: "#26324a"}, 8.712);
+enter("#sc-compare", 17.592, 13.968);
+tl.set(".prog i", {backgroundColor: "#26324a"}, 17.442);
+tl.set(".prog i:nth-child(1)", {backgroundColor: "#f29111"}, 17.442);
+enter("#sc-string", 32.01, 8.568);
+tl.set(".prog i", {backgroundColor: "#26324a"}, 31.86);
+tl.set(".prog i:nth-child(1)", {backgroundColor: "#f29111"}, 31.86);
+enter("#sc-between", 41.028, 11.184);
+tl.set(".prog i", {backgroundColor: "#26324a"}, 40.878);
+tl.set(".prog i:nth-child(1)", {backgroundColor: "#f29111"}, 40.878);
+enter("#sc-and", 52.662, 9.936);
+tl.set(".prog i", {backgroundColor: "#26324a"}, 52.512);
+tl.set(".prog i:nth-child(2)", {backgroundColor: "#f29111"}, 52.512);
+enter("#sc-or", 63.048, 8.16);
+tl.set(".prog i", {backgroundColor: "#26324a"}, 62.898);
+tl.set(".prog i:nth-child(2)", {backgroundColor: "#f29111"}, 62.898);
+enter("#sc-paren", 71.658, 14.832);
+tl.set(".prog i", {backgroundColor: "#26324a"}, 71.508);
+tl.set(".prog i:nth-child(2)", {backgroundColor: "#f29111"}, 71.508);
+enter("#sc-in", 86.94, 11.208);
+tl.set(".prog i", {backgroundColor: "#26324a"}, 86.78999999999999);
+tl.set(".prog i:nth-child(3)", {backgroundColor: "#f29111"}, 86.78999999999999);
+enter("#sc-like", 98.598, 13.872);
+tl.set(".prog i", {backgroundColor: "#26324a"}, 98.448);
+tl.set(".prog i:nth-child(4)", {backgroundColor: "#f29111"}, 98.448);
+enter("#sc-like2", 112.92, 13.488);
+tl.set(".prog i", {backgroundColor: "#26324a"}, 112.77);
+tl.set(".prog i:nth-child(4)", {backgroundColor: "#f29111"}, 112.77);
+enter("#sc-null", 126.858, 17.808);
+tl.set(".prog i", {backgroundColor: "#26324a"}, 126.708);
+tl.set(".prog i:nth-child(5)", {backgroundColor: "#f29111"}, 126.708);
+enter("#sc-outro", 145.116, 12.936);
+tl.set(".prog i", {backgroundColor: "#26324a"}, 144.966);
+tl.to("#ex1", {backgroundColor: "#3a2a12", scale: 1.04, duration: 0.2}, 146.092);
+tl.to("#ex1", {backgroundColor: "#131c2e", scale: 1, duration: 0.2}, 147.8);
+tl.to("#ex2", {backgroundColor: "#3a2a12", scale: 1.04, duration: 0.2}, 147.8);
+tl.to("#ex2", {backgroundColor: "#131c2e", scale: 1, duration: 0.2}, 149.262);
+tl.to("#ex3", {backgroundColor: "#3a2a12", scale: 1.04, duration: 0.2}, 149.262);
+tl.to("#ex3", {backgroundColor: "#131c2e", scale: 1, duration: 0.2}, 149.842);
+tl.to("#ex4", {backgroundColor: "#3a2a12", scale: 1.04, duration: 0.2}, 149.842);
+tl.to("#ex4", {backgroundColor: "#131c2e", scale: 1, duration: 0.2}, 150.423);
+tl.to("#ex5", {backgroundColor: "#3a2a12", scale: 1.04, duration: 0.2}, 150.423);
+tl.to("#ex5", {backgroundColor: "#131c2e", scale: 1, duration: 0.2}, 151.204);
+tl.to("#ex6", {backgroundColor: "#3a2a12", scale: 1.04, duration: 0.2}, 151.204);
+tl.to("#ex6", {backgroundColor: "#131c2e", scale: 1, duration: 0.3}, 151.751 + 0.6);
+tl.fromTo(".bar", { scaleX: 0 }, { scaleX: 1, duration: 159.25, ease: "none" }, 0);
+window.__timelines = window.__timelines || {};
+window.__timelines["main"] = tl;
+tl.seek(0);
+</script>
+</body>
+</html>

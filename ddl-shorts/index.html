@@ -1,0 +1,221 @@
+<!doctype html>
+<html lang="ko" data-resolution="portrait">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=1080, height=1920" />
+<script src="https://cdn.jsdelivr.net/npm/gsap@3.14.2/dist/gsap.min.js"></script>
+<style>
+:root {
+  --ground: #0b1220; --panel: #131c2e; --ink: #f4f6fb; --mute: #9aa6bd;
+  --blue: #3fa7d6; --orange: #f29111; --red: #ff5d5d; --green: #7ee08a; --violet: #c3a6ff;
+  --font: "Pretendard", sans-serif;
+  --mono: "Menlo", "SF Mono", monospace;
+}
+@font-face { font-family: "Pretendard"; src: url("assets/fonts/PretendardVariable.woff2") format("woff2"); font-weight: 45 920; }
+* { margin: 0; padding: 0; box-sizing: border-box; }
+html, body { width: 1080px; height: 1920px; overflow: hidden; background: var(--ground); }
+#root { position: relative; width: 100%; height: 100%; font-variant-ligatures: none; font-family: var(--font); color: var(--ink); overflow: hidden;
+  background: radial-gradient(1200px 900px at 80% -10%, #16365a 0%, transparent 60%),
+              radial-gradient(900px 900px at -10% 110%, #3a2410 0%, transparent 55%), var(--ground); }
+.clip { position: absolute; inset: 0; }
+.brand { position: absolute; top: 110px; left: 70px; right: 70px; display: flex; justify-content: space-between; align-items: center;
+  font-size: 34px; font-weight: 700; color: var(--mute); letter-spacing: 0.02em; }
+.brand b { color: var(--blue); } .brand b em { color: var(--orange); font-style: normal; }
+.prog { display: flex; gap: 12px; }
+.prog i { display: block; width: 56px; height: 12px; border-radius: 6px; background: #26324a; }
+.scene { padding: 210px 70px 0; display: flex; flex-direction: column; gap: 26px; }
+.pill { align-self: flex-start; padding: 12px 26px; border-radius: 999px; background: #1d2a44; color: var(--blue);
+  font-size: 34px; font-weight: 700; }
+.hook { display: flex; flex-direction: column; gap: 50px; padding-top: 140px; }
+.big { font-size: 150px; line-height: 1.12; font-weight: 800; letter-spacing: -0.04em; }
+.big em { font-style: normal; color: var(--orange); }
+.sub { font-size: 64px; font-weight: 700; color: var(--mute); } .sub b { color: var(--ink); }
+.title { font-size: 80px; font-weight: 800; letter-spacing: -0.03em; line-height: 1.1; }
+.desc { font-size: 46px; color: var(--mute); font-weight: 600; margin-top: -8px; } .desc b { color: var(--orange); }
+.code { background: #0a0f1a; border: 2px solid #26324a; border-radius: 26px; padding: 30px 32px; font-family: var(--mono);
+  font-size: 42px; line-height: 1.5; color: #d9e1f2; white-space: pre; box-shadow: 0 30px 60px rgba(0,0,0,.35);
+  font-variant-ligatures: none; font-feature-settings: "liga" 0, "calt" 0; }
+.code .ln { margin: 0 -14px; padding: 0 14px; border-radius: 10px; }
+.code .ln.mk { background: rgba(242,145,17,.13); }
+.kw { color: var(--blue); font-weight: 700; } .st { color: var(--green); } .nu { color: var(--orange); } .cm { color: #6f7d98; }
+.chips { display: flex; flex-wrap: wrap; gap: 18px; }
+.chips span { padding: 16px 30px; background: var(--panel); border-radius: 18px; font-size: 42px; font-weight: 700; }
+.warn, .note { padding: 26px 36px; border-radius: 24px; font-size: 44px; font-weight: 700; line-height: 1.45; }
+.warn { background: rgba(255,93,93,.12); border-left: 10px solid var(--red); } .warn b { color: var(--red); }
+.note { background: rgba(63,167,214,.12); border-left: 10px solid var(--blue); } .note b { color: var(--orange); }
+.note small { font-size: 38px; color: var(--mute); font-weight: 600; font-family: var(--mono); }
+code { font-family: var(--mono); color: var(--orange); }
+.tbl { align-self: flex-start; }
+.tlabel { font-size: 34px; font-weight: 700; color: var(--mute); margin-bottom: 10px; }
+.tbl table { border-collapse: collapse; font-family: var(--mono); font-size: 40px; background: var(--panel); border-radius: 18px; overflow: hidden; }
+.tbl th { color: var(--blue); text-align: left; padding: 12px 32px; background: #1a2640; }
+.tbl th u { text-decoration: none; color: var(--orange); }
+.tbl td { padding: 10px 32px; border-top: 1px solid #26324a; }
+.tbl tr.k1 td { color: var(--orange); } .tbl tr.k2 td { color: var(--green); } .tbl tr.k3 td { color: var(--violet); }
+.tbl tr.out td { color: #5b6782; text-decoration: line-through; }
+.tbl td.nl { color: var(--red) !important; font-style: italic; font-weight: 700; background: rgba(255,93,93,.12); }
+.link { align-self: flex-start; font-family: var(--mono); font-size: 38px; color: var(--mute); padding: 6px 0 6px 26px;
+  border-left: 8px solid var(--orange); }
+.link b { color: var(--orange); }
+.arrow { font-family: var(--mono); font-size: 38px; color: var(--orange); font-weight: 700; }
+.vs { display: grid; grid-template-columns: 1fr 1fr; gap: 22px; }
+.card { background: var(--panel); border-radius: 26px; padding: 26px 32px; display: flex; flex-direction: column; gap: 6px; }
+.card b { font-family: var(--mono); font-size: 52px; color: var(--blue); }
+.vs .card span { font-size: 44px; font-weight: 800; } .vs .card .ok { color: var(--green); } .vs .card .ng { color: var(--red); }
+.res { display: flex; flex-wrap: wrap; align-items: center; gap: 14px; margin-top: -6px; }
+.res i { font-style: normal; font-size: 34px; color: var(--mute); font-weight: 700; }
+.res span { padding: 8px 22px; border-radius: 14px; background: var(--panel); font-size: 40px; font-weight: 700; }
+.res span.k1 { color: var(--orange); } .res span.k2 { color: var(--green); } .res span.k3 { color: var(--violet); }
+.res span.ok { color: var(--green); }
+.res span.bad { color: var(--red); background: rgba(255,93,93,.14); box-shadow: inset 0 0 0 3px var(--red); } .vs .card em { font-style: normal; color: var(--orange); }
+.list { display: flex; flex-direction: column; gap: 16px; }
+.row { display: flex; align-items: center; gap: 30px; background: var(--panel); border-radius: 22px; padding: 14px 36px; font-size: 48px;
+  transform-origin: left center; }
+.row .no { font-size: 52px; font-weight: 900; color: var(--orange); width: 50px; }
+.row b { font-family: var(--mono); color: var(--blue); }
+.cta { margin-top: 20px; font-size: 54px; font-weight: 800; text-align: center; }
+.cap { top: auto; bottom: 260px; height: auto; display: flex; justify-content: center; padding: 0 60px; }
+.cap span { background: rgba(0,0,0,.78); color: #fff; font-size: 48px; font-weight: 700; line-height: 1.4; padding: 16px 30px;
+  border-radius: 18px; text-align: center; word-break: keep-all; }
+.bar { position: absolute; left: 0; bottom: 0; height: 10px; width: 1080px; background: var(--orange); transform-origin: left center; }
+</style>
+</head>
+<body>
+<div id="root" data-composition-id="main" data-start="0" data-duration="142.4" data-width="1080" data-height="1920">
+  <div class="brand"><b>MySQL <em>DDL</em> 정리</b><div class="prog"><i></i><i></i><i></i><i></i><i></i></div></div>
+  <section id="sc-hook" class="clip scene" data-start="0.000" data-duration="10.728" data-track-index="1"><div class="hook">
+   <div class="pill in">MySQL · DDL 핵심 정리</div>
+   <h1 class="big in"><em>DDL</em><br/>CREATE<br/>ALTER · DROP</h1>
+   <div class="sub in">테이블 <b>구조</b> 다루기</div>
+ </div></section>
+<section id="sc-intro" class="clip scene" data-start="10.728" data-duration="11.49" data-track-index="1"><div class="pill in">SQL 3위 · DDL</div><h2 class="title in">DDL</h2><p class="desc in">Data Definition Language · <b>구조</b>를 정의</p><div class="vs"><div class="card in"><b>DML</b><span>행 · 데이터</span><span class="ok">INSERT<br/>UPDATE<br/>DELETE</span></div><div class="card in"><b>DDL</b><span>테이블 · 구조</span><span><em>CREATE<br/>ALTER<br/>DROP</em></span></div></div></section>
+<section id="sc-create" class="clip scene" data-start="22.218" data-duration="11.61" data-track-index="1"><div class="pill in">STEP 1 · CREATE</div><h2 class="title in">CREATE TABLE</h2><p class="desc in">컬럼 <b>이름 + 자료형</b>을 차례로</p><div class="code in"><div class="ln"><span class="kw">CREATE</span> <span class="kw">TABLE</span> products (</div><div class="ln mk">  id <span class="kw">INT</span> <span class="kw">PRIMARY</span> <span class="kw">KEY</span>,</div><div class="ln mk">  name <span class="kw">VARCHAR</span>(<span class="nu">50</span>) <span class="kw">NOT</span> <span class="kw">NULL</span>,</div><div class="ln mk">  category <span class="kw">VARCHAR</span>(<span class="nu">20</span>),</div><div class="ln mk">  price <span class="kw">INT</span> <span class="kw">DEFAULT</span> <span class="nu">0</span></div><div class="ln">);</div></div><div class="chips in"><span>INT = 정수</span><span>VARCHAR(50) = 최대 50글자</span></div></section>
+<section id="sc-constraint" class="clip scene" data-start="33.828" data-duration="18.57" data-track-index="1"><div class="pill in">STEP 1-1</div><h2 class="title in">제약 조건</h2><p class="desc in">잘못된 값을 <b>미리 막기</b></p><div class="chips in"><span>PRIMARY KEY 중복·NULL ✗</span><span>NOT NULL → NULL ✗ (빈 문자열은 ○)</span><span>DEFAULT 기본값</span></div><div class="code in"><div class="ln mk"><span class="kw">DESC</span> products;</div></div><div class="tbl in "><div class="tlabel">DESC 결과 (일부 열)</div><table><tr><th>Field</th><th>Null</th><th>Key</th><th>Default</th></tr><tr class=""><td>id</td><td>NO</td><td>PRI</td><td>NULL</td></tr><tr class=""><td>name</td><td>NO</td><td></td><td>NULL</td></tr><tr class=""><td>category</td><td>YES</td><td></td><td>NULL</td></tr><tr class=""><td>price</td><td>YES</td><td></td><td>0</td></tr></table></div></section>
+<section id="sc-add" class="clip scene" data-start="52.398" data-duration="9.69" data-track-index="1"><div class="pill in">STEP 2 · ALTER</div><h2 class="title in">ADD COLUMN</h2><p class="desc in">컬럼 추가 · 기존 행엔 <b>DEFAULT</b></p><div class="code in"><div class="ln"><span class="kw">ALTER</span> <span class="kw">TABLE</span> products</div><div class="ln mk">  <span class="kw">ADD</span> <span class="kw">COLUMN</span> stock <span class="kw">INT</span> <span class="kw">DEFAULT</span> <span class="nu">0</span>;</div></div><div class="tbl in "><div class="tlabel">기존 6행 → stock = 0</div><table><tr><th>name</th><th>stock</th></tr><tr class="k1"><td>SQL 입문서</td><td>0</td></tr><tr class="k2"><td>볼펜</td><td>0</td></tr><tr class="k1"><td>SQL 문제집</td><td>0</td></tr><tr class="k3"><td>노트</td><td>0</td></tr><tr class="k2"><td>만년필</td><td>0</td></tr><tr class="k2"><td>형광펜</td><td>0</td></tr></table></div></section>
+<section id="sc-modify" class="clip scene" data-start="62.088" data-duration="16.098" data-track-index="1"><div class="pill in">STEP 2-1</div><h2 class="title in">MODIFY 주의점</h2><p class="desc in">정의를 <b>통째로</b> 다시 씀</p><div class="tlabel in">✗ NOT NULL 빠뜨림</div><div class="code in"><div class="ln"><span class="kw">ALTER</span> <span class="kw">TABLE</span> products</div><div class="ln mk">  <span class="kw">MODIFY</span> name <span class="kw">VARCHAR</span>(<span class="nu">100</span>);</div></div><div class="res in"><i>name 컬럼 NULL 허용 →</i><span class="bad">YES ⚠</span></div><div class="tlabel in">✓ 속성까지 다시 적기</div><div class="code in"><div class="ln"><span class="kw">ALTER</span> <span class="kw">TABLE</span> products</div><div class="ln mk">  <span class="kw">MODIFY</span> name <span class="kw">VARCHAR</span>(<span class="nu">100</span>)</div><div class="ln mk">    <span class="kw">NOT</span> <span class="kw">NULL</span>;</div></div><div class="res in"><i>name 컬럼 NULL 허용 →</i><span class="ok">NO ✓</span></div><div class="res in"><i>ALTER TABLE products 뒤에 →</i><span class="">RENAME COLUMN stock TO qty</span><span class="">DROP COLUMN qty</span></div></section>
+<section id="sc-index" class="clip scene" data-start="78.186" data-duration="15.666" data-track-index="1"><div class="pill in">STEP 3 · INDEX</div><h2 class="title in">CREATE INDEX</h2><p class="desc in">자주 검색하는 컬럼을 <b>빠르게</b></p><div class="code in"><div class="ln mk"><span class="kw">CREATE</span> <span class="kw">INDEX</span> idx_category</div><div class="ln mk">  <span class="kw">ON</span> products (category);</div></div><div class="tbl in "><div class="tlabel">products의 인덱스</div><table><tr><th>인덱스</th><th>컬럼</th></tr><tr class=""><td>PRIMARY</td><td>id</td></tr><tr class=""><td>idx_category</td><td>category</td></tr></table></div><div class="vs"><div class="card in"><b>장점</b><span class="ok">WHERE 검색 ↑</span></div><div class="card in"><b>단점</b><span class="ng">쓰기·저장 비용 ↑</span></div></div></section>
+<section id="sc-drop" class="clip scene" data-start="93.852" data-duration="13.146" data-track-index="1"><div class="pill in">STEP 4 · DROP</div><h2 class="title in">지우기 3종</h2><p class="desc in">무엇을 지우는지 <b>구분</b>하기</p><div class="tbl in "><div class="tlabel">DDL: DROP · TRUNCATE / DML: DELETE</div><table><tr><th>명령</th><th>지우는 것</th><th>구조</th></tr><tr class=""><td>DROP TABLE</td><td>테이블 전체</td><td>사라짐</td></tr><tr class=""><td>TRUNCATE</td><td>모든 행</td><td>남음</td></tr><tr class=""><td>DELETE…WHERE</td><td>조건 맞는 행</td><td>남음</td></tr></table></div><div class="note in">DELETE만 <b>DML</b> · WHERE로 골라 지움</div></section>
+<section id="sc-commit" class="clip scene" data-start="106.998" data-duration="18.186" data-track-index="1"><div class="pill in">STEP 5 · 주의</div><h2 class="title in">롤백 불가</h2><p class="desc in">MySQL DDL은 기본적으로 <b>자동 커밋</b></p><div class="tlabel in">✓ DELETE는 되돌릴 수 있음</div><div class="code in"><div class="ln"><span class="kw">START</span> <span class="kw">TRANSACTION</span>;</div><div class="ln mk"><span class="kw">DELETE</span> <span class="kw">FROM</span> products;</div><div class="ln"><span class="kw">ROLLBACK</span>;</div></div><div class="res in"><i>결과 →</i><span class="ok">6행 그대로 ✓</span></div><div class="tlabel in">✗ DROP은 되돌릴 수 없음</div><div class="code in"><div class="ln"><span class="kw">START</span> <span class="kw">TRANSACTION</span>;</div><div class="ln mk"><span class="kw">DROP</span> <span class="kw">TABLE</span> products;</div><div class="ln"><span class="kw">ROLLBACK</span>;</div></div><div class="res in"><i>결과 →</i><span class="bad">products 테이블 없음 ⚠</span></div><div class="warn in">⚠ DROP · TRUNCATE 전에는 <b>백업</b> 먼저</div></section>
+<section id="sc-outro" class="clip scene" data-start="125.184" data-duration="17.216" data-track-index="1"><div class="pill in">정리</div><h2 class="title in">DDL 핵심 6가지</h2><div class="list in"><div class="row" id="ex1"><span class="no">1</span><b>CREATE TABLE</b></div><div class="row" id="ex2"><span class="no">2</span><b>제약 조건</b></div><div class="row" id="ex3"><span class="no">3</span><b>ALTER TABLE</b></div><div class="row" id="ex4"><span class="no">4</span><b>CREATE INDEX</b></div><div class="row" id="ex5"><span class="no">5</span><b>DROP · TRUNCATE</b></div><div class="row" id="ex6"><span class="no">6</span><b>DDL은 롤백 ✗</b></div></div><div class="cta in">👍 구독 · 좋아요</div></section>
+  <div id="cap-hook-0" class="clip cap" data-start="0.300" data-duration="3.984" data-track-index="2"><span>테이블을 만들고, 바꾸고, 지우는 DDL.</span></div>
+<div id="cap-hook-1" class="clip cap" data-start="4.284" data-duration="1.574" data-track-index="2"><span>크리에이트, 얼터,</span></div>
+<div id="cap-hook-2" class="clip cap" data-start="5.858" data-duration="1.763" data-track-index="2"><span>드롭부터 한 번 실행하면 되돌릴</span></div>
+<div id="cap-hook-3" class="clip cap" data-start="7.621" data-duration="2.807" data-track-index="2"><span>수 없는 이유까지 정리해 드립니다.</span></div>
+<div id="cap-intro-0" class="clip cap" data-start="10.878" data-duration="2.400" data-track-index="2"><span>DDL은 데이터 정의어.</span></div>
+<div id="cap-intro-1" class="clip cap" data-start="13.278" data-duration="1.719" data-track-index="2"><span>행에 담긴 데이터가 아니라,</span></div>
+<div id="cap-intro-2" class="clip cap" data-start="14.996" data-duration="2.902" data-track-index="2"><span>테이블이라는 그릇의 구조를 다룹니다.</span></div>
+<div id="cap-intro-3" class="clip cap" data-start="17.898" data-duration="1.909" data-track-index="2"><span>데이터를 넣고 고치는 DML과는</span></div>
+<div id="cap-intro-4" class="clip cap" data-start="19.807" data-duration="2.111" data-track-index="2"><span>다루는 대상이 달라요.</span></div>
+<div id="cap-create-0" class="clip cap" data-start="22.368" data-duration="2.444" data-track-index="2"><span>먼저 크리에이트 테이블.</span></div>
+<div id="cap-create-1" class="clip cap" data-start="24.812" data-duration="1.283" data-track-index="2"><span>괄호 안에 컬럼 이름과</span></div>
+<div id="cap-create-2" class="clip cap" data-start="26.096" data-duration="2.400" data-track-index="2"><span>자료형을 차례로 적습니다.</span></div>
+<div id="cap-create-3" class="clip cap" data-start="28.495" data-duration="3.069" data-track-index="2"><span>인트는 정수, 바차 50은 최대 50글자까지</span></div>
+<div id="cap-create-4" class="clip cap" data-start="31.564" data-duration="1.964" data-track-index="2"><span>담는 문자열이에요.</span></div>
+<div id="cap-constraint-0" class="clip cap" data-start="33.978" data-duration="3.103" data-track-index="2"><span>자료형 뒤에는 제약 조건을 붙여요.</span></div>
+<div id="cap-constraint-1" class="clip cap" data-start="37.081" data-duration="1.529" data-track-index="2"><span>프라이머리 키는 행을 구별하는</span></div>
+<div id="cap-constraint-2" class="clip cap" data-start="38.610" data-duration="2.020" data-track-index="2"><span>값이라 중복도 널도 안 되고,</span></div>
+<div id="cap-constraint-3" class="clip cap" data-start="40.630" data-duration="2.076" data-track-index="2"><span>낫 널은 널을 막아요.</span></div>
+<div id="cap-constraint-4" class="clip cap" data-start="42.706" data-duration="2.645" data-track-index="2"><span>빈 문자열까지 막지는 않아요.</span></div>
+<div id="cap-constraint-5" class="clip cap" data-start="45.351" data-duration="1.574" data-track-index="2"><span>디폴트는 값을 안 넣으면</span></div>
+<div id="cap-constraint-6" class="clip cap" data-start="46.924" data-duration="2.656" data-track-index="2"><span>대신 들어가는 기본값입니다.</span></div>
+<div id="cap-constraint-7" class="clip cap" data-start="49.581" data-duration="2.517" data-track-index="2"><span>데스크로 구조를 확인해 보세요.</span></div>
+<div id="cap-add-0" class="clip cap" data-start="52.548" data-duration="3.393" data-track-index="2"><span>만든 뒤에 구조를 바꿀 땐 얼터 테이블.</span></div>
+<div id="cap-add-1" class="clip cap" data-start="55.941" data-duration="2.433" data-track-index="2"><span>애드 컬럼으로 재고 컬럼을 추가하면,</span></div>
+<div id="cap-add-2" class="clip cap" data-start="58.374" data-duration="1.417" data-track-index="2"><span>이미 있던 행에도 디폴트</span></div>
+<div id="cap-add-3" class="clip cap" data-start="59.791" data-duration="1.997" data-track-index="2"><span>값 0이 채워집니다.</span></div>
+<div id="cap-modify-0" class="clip cap" data-start="62.238" data-duration="2.193" data-track-index="2"><span>자료형을 바꾸는 모디파이는 컬럼</span></div>
+<div id="cap-modify-1" class="clip cap" data-start="64.431" data-duration="2.528" data-track-index="2"><span>정의를 통째로 다시 씁니다.</span></div>
+<div id="cap-modify-2" class="clip cap" data-start="66.959" data-duration="1.652" data-track-index="2"><span>그래서 낫 널을 빼먹으면,</span></div>
+<div id="cap-modify-3" class="clip cap" data-start="68.611" data-duration="2.946" data-track-index="2"><span>널을 허용하는 컬럼으로 바뀌어 버려요.</span></div>
+<div id="cap-modify-4" class="clip cap" data-start="71.557" data-duration="1.518" data-track-index="2"><span>얼터 테이블 뒤에 리네임</span></div>
+<div id="cap-modify-5" class="clip cap" data-start="73.075" data-duration="1.875" data-track-index="2"><span>컬럼을 쓰면 이름 변경,</span></div>
+<div id="cap-modify-6" class="clip cap" data-start="74.950" data-duration="2.936" data-track-index="2"><span>드롭 컬럼을 쓰면 컬럼 삭제예요.</span></div>
+<div id="cap-index-0" class="clip cap" data-start="78.336" data-duration="1.668" data-track-index="2"><span>자주 검색하는 컬럼에는</span></div>
+<div id="cap-index-1" class="clip cap" data-start="80.004" data-duration="2.394" data-track-index="2"><span>인덱스를 만들어 둡니다.</span></div>
+<div id="cap-index-2" class="clip cap" data-start="82.398" data-duration="1.585" data-track-index="2"><span>책 뒤의 찾아보기처럼,</span></div>
+<div id="cap-index-3" class="clip cap" data-start="83.983" data-duration="1.529" data-track-index="2"><span>전체를 뒤지지 않고 원하는</span></div>
+<div id="cap-index-4" class="clip cap" data-start="85.512" data-duration="2.188" data-track-index="2"><span>행을 빨리 찾게 해 주죠.</span></div>
+<div id="cap-index-5" class="clip cap" data-start="87.700" data-duration="1.440" data-track-index="2"><span>대신 데이터를 넣고 고칠</span></div>
+<div id="cap-index-6" class="clip cap" data-start="89.140" data-duration="2.210" data-track-index="2"><span>때마다 인덱스도 함께 갱신되니,</span></div>
+<div id="cap-index-7" class="clip cap" data-start="91.349" data-duration="2.203" data-track-index="2"><span>필요한 곳에만 만드세요.</span></div>
+<div id="cap-drop-0" class="clip cap" data-start="94.002" data-duration="2.790" data-track-index="2"><span>지울 때는 세 가지를 구분하세요.</span></div>
+<div id="cap-drop-1" class="clip cap" data-start="96.792" data-duration="1.897" data-track-index="2"><span>드롭 테이블은 테이블 자체를,</span></div>
+<div id="cap-drop-2" class="clip cap" data-start="98.689" data-duration="2.478" data-track-index="2"><span>트렁케이트는 구조는 남기고 모든 행을,</span></div>
+<div id="cap-drop-3" class="clip cap" data-start="101.167" data-duration="3.114" data-track-index="2"><span>딜리트는 웨어 조건에 맞는 행만 지웁니다.</span></div>
+<div id="cap-drop-4" class="clip cap" data-start="104.281" data-duration="2.417" data-track-index="2"><span>이 중 딜리트만 DML이에요.</span></div>
+<div id="cap-commit-0" class="clip cap" data-start="107.148" data-duration="2.388" data-track-index="2"><span>가장 중요한 주의점.</span></div>
+<div id="cap-commit-1" class="clip cap" data-start="109.536" data-duration="2.255" data-track-index="2"><span>마이에스큐엘에서 DDL은 기본적으로</span></div>
+<div id="cap-commit-2" class="clip cap" data-start="111.791" data-duration="2.924" data-track-index="2"><span>실행될 때 자동으로 커밋돼요.</span></div>
+<div id="cap-commit-3" class="clip cap" data-start="114.715" data-duration="1.819" data-track-index="2"><span>그래서 트랜잭션 안에서 딜리트한</span></div>
+<div id="cap-commit-4" class="clip cap" data-start="116.534" data-duration="1.953" data-track-index="2"><span>행은 롤백으로 살릴 수 있지만,</span></div>
+<div id="cap-commit-5" class="clip cap" data-start="118.487" data-duration="2.891" data-track-index="2"><span>드롭한 테이블은 되돌릴 수 없습니다.</span></div>
+<div id="cap-commit-6" class="clip cap" data-start="121.378" data-duration="1.451" data-track-index="2"><span>드롭과 트렁케이트 전에는</span></div>
+<div id="cap-commit-7" class="clip cap" data-start="122.829" data-duration="2.055" data-track-index="2"><span>꼭 백업부터 하세요.</span></div>
+<div id="cap-outro-0" class="clip cap" data-start="125.334" data-duration="2.394" data-track-index="2"><span>정리하면, 크리에이트로 만들고,</span></div>
+<div id="cap-outro-1" class="clip cap" data-start="127.728" data-duration="2.757" data-track-index="2"><span>제약 조건으로 지키고, 얼터로 바꾸고,</span></div>
+<div id="cap-outro-2" class="clip cap" data-start="130.484" data-duration="1.239" data-track-index="2"><span>인덱스로 빠르게,</span></div>
+<div id="cap-outro-3" class="clip cap" data-start="131.723" data-duration="1.870" data-track-index="2"><span>드롭은 신중하게.</span></div>
+<div id="cap-outro-4" class="clip cap" data-start="133.593" data-duration="3.761" data-track-index="2"><span>DDL은 롤백이 안 된다는 것, 꼭 기억하세요.</span></div>
+<div id="cap-outro-5" class="clip cap" data-start="137.354" data-duration="3.844" data-track-index="2"><span>도움이 됐다면 구독과 좋아요 부탁드립니다!</span></div>
+  <div class="bar"></div>
+  <audio id="vo" src="assets/narration.mp3" data-start="0" data-duration="142.4" data-track-index="0"></audio>
+</div>
+<script>
+const tl = gsap.timeline({ paused: true });
+function enter(sel, t, dur) {
+  const items = document.querySelectorAll(sel + " .in");
+  const step = Math.min(0.9, (dur * 0.5) / Math.max(1, items.length));
+  items.forEach((el, i) => {
+    const at = Math.max(0, t - 0.1) + i * step;
+    tl.fromTo(el, { opacity: 0, y: 50 }, { opacity: 1, y: 0, duration: 0.5, ease: "power3.out" }, at);
+    el.querySelectorAll(".ln").forEach((ln, j) => {
+      tl.fromTo(ln, { opacity: 0, x: -30 }, { opacity: 1, x: 0, duration: 0.35, ease: "power2.out" }, at + 0.15 + j * 0.3);
+    });
+  });
+}
+enter("#sc-hook", 0.3, 10.128);
+tl.set(".prog i", {backgroundColor: "#26324a"}, 0);
+enter("#sc-intro", 10.878, 11.04);
+tl.set(".prog i", {backgroundColor: "#26324a"}, 10.728);
+enter("#sc-create", 22.368, 11.16);
+tl.set(".prog i", {backgroundColor: "#26324a"}, 22.218);
+tl.set(".prog i:nth-child(1)", {backgroundColor: "#f29111"}, 22.218);
+enter("#sc-constraint", 33.978, 18.12);
+tl.set(".prog i", {backgroundColor: "#26324a"}, 33.828);
+tl.set(".prog i:nth-child(1)", {backgroundColor: "#f29111"}, 33.828);
+enter("#sc-add", 52.548, 9.24);
+tl.set(".prog i", {backgroundColor: "#26324a"}, 52.398);
+tl.set(".prog i:nth-child(2)", {backgroundColor: "#f29111"}, 52.398);
+enter("#sc-modify", 62.238, 15.648);
+tl.set(".prog i", {backgroundColor: "#26324a"}, 62.088);
+tl.set(".prog i:nth-child(2)", {backgroundColor: "#f29111"}, 62.088);
+enter("#sc-index", 78.336, 15.216);
+tl.set(".prog i", {backgroundColor: "#26324a"}, 78.18599999999999);
+tl.set(".prog i:nth-child(3)", {backgroundColor: "#f29111"}, 78.18599999999999);
+enter("#sc-drop", 94.002, 12.696);
+tl.set(".prog i", {backgroundColor: "#26324a"}, 93.85199999999999);
+tl.set(".prog i:nth-child(4)", {backgroundColor: "#f29111"}, 93.85199999999999);
+enter("#sc-commit", 107.148, 17.736);
+tl.set(".prog i", {backgroundColor: "#26324a"}, 106.99799999999999);
+tl.set(".prog i:nth-child(5)", {backgroundColor: "#f29111"}, 106.99799999999999);
+enter("#sc-outro", 125.334, 15.864);
+tl.set(".prog i", {backgroundColor: "#26324a"}, 125.184);
+tl.to("#ex1", {backgroundColor: "#3a2a12", scale: 1.04, duration: 0.2}, 126.333);
+tl.to("#ex1", {backgroundColor: "#131c2e", scale: 1, duration: 0.2}, 127.728);
+tl.to("#ex2", {backgroundColor: "#3a2a12", scale: 1.04, duration: 0.2}, 127.728);
+tl.to("#ex2", {backgroundColor: "#131c2e", scale: 1, duration: 0.2}, 129.268);
+tl.to("#ex3", {backgroundColor: "#3a2a12", scale: 1.04, duration: 0.2}, 129.268);
+tl.to("#ex3", {backgroundColor: "#131c2e", scale: 1, duration: 0.2}, 130.484);
+tl.to("#ex4", {backgroundColor: "#3a2a12", scale: 1.04, duration: 0.2}, 130.484);
+tl.to("#ex4", {backgroundColor: "#131c2e", scale: 1, duration: 0.2}, 131.723);
+tl.to("#ex5", {backgroundColor: "#3a2a12", scale: 1.04, duration: 0.2}, 131.723);
+tl.to("#ex5", {backgroundColor: "#131c2e", scale: 1, duration: 0.2}, 133.593);
+tl.to("#ex6", {backgroundColor: "#3a2a12", scale: 1.04, duration: 0.2}, 133.593);
+tl.to("#ex6", {backgroundColor: "#131c2e", scale: 1, duration: 0.3}, 135.814 + 0.6);
+tl.fromTo(".bar", { scaleX: 0 }, { scaleX: 1, duration: 142.4, ease: "none" }, 0);
+window.__timelines = window.__timelines || {};
+window.__timelines["main"] = tl;
+tl.seek(0);
+</script>
+</body>
+</html>

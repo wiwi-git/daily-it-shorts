@@ -23,6 +23,7 @@
 | 2026-10-30 | TCL: 트랜잭션 · COMMIT · ROLLBACK · SAVEPOINT | 2:25 | [tcl-shorts](tcl-shorts) | [YouTube](https://www.youtube.com/watch?v=rYCTlI8fT2Q) |
 | 2026-10-30 | DCL: CREATE USER · GRANT · REVOKE | 1:53 | [dcl-shorts](dcl-shorts) | [YouTube](https://www.youtube.com/watch?v=DXtrvu4V6QA) |
 | 2026-11-02 | 자바 입문: Hello World 출력하기 (class · main · println · \n · print) | 2:33 | [java-hello-shorts](java-hello-shorts) | [YouTube](https://www.youtube.com/watch?v=vmLd9hf1s18) |
+| 2026-11-03 | 자바 입문: 변수 (선언 · 대입 · int · double · char · String) | 2:50 | [java-variables-shorts](java-variables-shorts) | [YouTube](https://www.youtube.com/watch?v=fnfHwBrKP1A) |
 
 ## 제작 방식
 

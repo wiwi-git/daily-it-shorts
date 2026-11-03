@@ -1,0 +1,120 @@
+// 영상에 나오는 예제 프로그램 (build.py가 생성 · 직접 고치지 말 것)
+// 각 예제를 파일 이름대로 저장한 뒤: javac -encoding UTF-8 Main.java && java Main
+
+// [5. 문자 타입] Main.java → 출력 없음 (컴파일·실행 성공)
+public class Main {
+  public static void main(String[] args) {
+    char a = 'A', b = '가', c = '7';
+  }
+}
+
+// [1. 변수란] Main.java → 출력:
+//   20
+public class Main {
+  public static void main(String[] args) {
+    int age = 20;
+    System.out.println(age);
+  }
+}
+
+// [2. 선언과 대입] Main.java → 출력:
+//   95
+public class Main {
+  public static void main(String[] args) {
+    int score;    // 선언
+    score = 90;   // 대입
+    score = 95;   // 다시 대입
+    System.out.println(score);
+  }
+}
+
+// [2. 선언과 대입] Main.java → 출력 없음 (컴파일·실행 성공)
+public class Main {
+  public static void main(String[] args) {
+    int level = 1;
+  }
+}
+
+// [2-1. 주의할 점] Main.java → 컴파일 오류: variable x might not have been initialized
+public class Main {
+  public static void main(String[] args) {
+    int x; System.out.println(x);
+  }
+}
+
+// [2-1. 주의할 점] Main.java → 컴파일 오류: variable a is already defined in method main(String[])
+public class Main {
+  public static void main(String[] args) {
+    int a = 1; int a = 2;
+  }
+}
+
+// [2-1. 주의할 점] Main.java → 컴파일 오류: not a statement
+public class Main {
+  public static void main(String[] args) {
+    int 1st = 1;
+  }
+}
+
+// [3. 정수 타입] Main.java → 출력 없음 (컴파일·실행 성공)
+public class Main {
+  public static void main(String[] args) {
+    long big = 3000000000L;
+  }
+}
+
+// [3. 정수 타입] Main.java → 컴파일 오류: integer number too large
+public class Main {
+  public static void main(String[] args) {
+    long big = 3000000000;
+  }
+}
+
+// [4. 실수 타입] Main.java → 컴파일 오류: incompatible types: possible lossy conversion from double to float
+public class Main {
+  public static void main(String[] args) {
+    float f = 3.14;
+  }
+}
+
+// [4. 실수 타입] Main.java → 출력:
+//   3
+//   3.5
+public class Main {
+  public static void main(String[] args) {
+    float rate = 0.5f;
+    System.out.println(7 / 2);
+    System.out.println(7 / 2.0);
+  }
+}
+
+// [5. 문자 타입] Main.java → 컴파일 오류: incompatible types: String cannot be converted to char
+public class Main {
+  public static void main(String[] args) {
+    char c = "A";
+  }
+}
+
+// [5. 문자 타입] Main.java → 출력:
+//   A
+//   65
+public class Main {
+  public static void main(String[] args) {
+    char c = 'A';
+    System.out.println(c);
+    System.out.println((int) c);
+  }
+}
+
+// [5-1. 문자열 타입] Main.java → 출력:
+//   Hi Java
+//   12
+//   3
+public class Main {
+  public static void main(String[] args) {
+    String name = "Java";
+    System.out.println("Hi " + name);
+    System.out.println("1" + 2);
+    System.out.println(1 + 2);
+  }
+}

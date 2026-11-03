@@ -1,0 +1,243 @@
+<!doctype html>
+<html lang="ko" data-resolution="portrait">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=1080, height=1920" />
+<script src="https://cdn.jsdelivr.net/npm/gsap@3.14.2/dist/gsap.min.js"></script>
+<style>
+:root {
+  --ground: #0b1220; --panel: #131c2e; --ink: #f4f6fb; --mute: #9aa6bd;
+  --blue: #3fa7d6; --orange: #f29111; --red: #ff5d5d; --green: #7ee08a; --violet: #c3a6ff;
+  --font: "Pretendard", sans-serif;
+  --mono: "Menlo", "SF Mono", monospace;
+}
+@font-face { font-family: "Pretendard"; src: url("assets/fonts/PretendardVariable.woff2") format("woff2"); font-weight: 45 920; }
+* { margin: 0; padding: 0; box-sizing: border-box; }
+html, body { width: 1080px; height: 1920px; overflow: hidden; background: var(--ground); }
+#root { position: relative; width: 100%; height: 100%; font-variant-ligatures: none; font-family: var(--font); color: var(--ink); overflow: hidden;
+  background: radial-gradient(1200px 900px at 80% -10%, #16365a 0%, transparent 60%),
+              radial-gradient(900px 900px at -10% 110%, #3a2410 0%, transparent 55%), var(--ground); }
+.clip { position: absolute; inset: 0; }
+.brand { position: absolute; top: 110px; left: 70px; right: 70px; display: flex; justify-content: space-between; align-items: center;
+  font-size: 34px; font-weight: 700; color: var(--mute); letter-spacing: 0.02em; }
+.brand b { color: var(--blue); } .brand b em { color: var(--orange); font-style: normal; }
+.prog { display: flex; gap: 12px; }
+.prog i { display: block; width: 56px; height: 12px; border-radius: 6px; background: #26324a; }
+.scene { padding: 210px 70px 0; display: flex; flex-direction: column; gap: 26px; }
+.pill { align-self: flex-start; padding: 12px 26px; border-radius: 999px; background: #1d2a44; color: var(--blue);
+  font-size: 34px; font-weight: 700; }
+.hook { display: flex; flex-direction: column; gap: 50px; padding-top: 140px; }
+.big { font-size: 150px; line-height: 1.12; font-weight: 800; letter-spacing: -0.04em; }
+.big em { font-style: normal; color: var(--orange); }
+.sub { font-size: 64px; font-weight: 700; color: var(--mute); } .sub b { color: var(--ink); }
+.title { font-size: 80px; font-weight: 800; letter-spacing: -0.03em; line-height: 1.1; }
+.desc { font-size: 46px; color: var(--mute); font-weight: 600; margin-top: -8px; } .desc b { color: var(--orange); }
+.code { background: #0a0f1a; border: 2px solid #26324a; border-radius: 26px; padding: 30px 32px; font-family: var(--mono);
+  font-size: 42px; line-height: 1.5; color: #d9e1f2; white-space: pre; box-shadow: 0 30px 60px rgba(0,0,0,.35);
+  font-variant-ligatures: none; font-feature-settings: "liga" 0, "calt" 0; }
+.code.sm { font-size: 34px; padding: 26px 28px; }
+.code .ln { margin: 0 -14px; padding: 0 14px; border-radius: 10px; }
+.code .ln.mk { background: rgba(242,145,17,.13); }
+.kw { color: var(--blue); font-weight: 700; } .st { color: var(--green); } .nu { color: var(--orange); } .cm { color: #6f7d98; } .es { color: var(--orange); font-weight: 700; }
+.term { background: #05080f; border: 2px solid #26324a; border-radius: 22px; padding: 18px 32px 22px; font-family: var(--mono);
+  font-size: 40px; line-height: 1.4; color: var(--ink); white-space: pre; tab-size: 8; }
+.term i { display: block; font-style: normal; font-family: var(--font); font-size: 28px; font-weight: 700; color: var(--mute); margin-bottom: 6px; }
+.term .cmd { color: var(--blue); }
+.term.err { border-color: rgba(255,93,93,.5); color: var(--red); font-size: 34px; white-space: normal; }
+.warn small { font-size: 36px; color: var(--mute); font-weight: 600; }
+.nest > div, .nest > div div { border: 3px solid; border-radius: 22px; padding: 16px 26px 20px; display: flex; flex-direction: column; gap: 12px; }
+.nest b { font-size: 38px; font-weight: 800; font-family: var(--mono); }
+.nest .k1 { border-color: var(--orange); } .nest .k1 > b { color: var(--orange); }
+.nest .k2 { border-color: var(--green); } .nest .k2 > b { color: var(--green); }
+.nest .k3 { border-color: var(--violet); } .nest .k3 > b { color: var(--violet); }
+.chips { display: flex; flex-wrap: wrap; gap: 18px; }
+.chips span { padding: 16px 30px; background: var(--panel); border-radius: 18px; font-size: 42px; font-weight: 700; }
+.warn, .note { padding: 26px 36px; border-radius: 24px; font-size: 44px; font-weight: 700; line-height: 1.45; }
+.warn { background: rgba(255,93,93,.12); border-left: 10px solid var(--red); } .warn b { color: var(--red); }
+.note { background: rgba(63,167,214,.12); border-left: 10px solid var(--blue); } .note b { color: var(--orange); }
+.note small { font-size: 38px; color: var(--mute); font-weight: 600; font-family: var(--mono); }
+code { font-family: var(--mono); color: var(--orange); }
+.var { display: grid; grid-template-columns: 1fr 1.3fr 1fr; gap: 18px; }
+.var div { background: var(--panel); border-radius: 24px; padding: 20px 30px 24px; display: flex; flex-direction: column; gap: 4px; }
+.var small { font-size: 32px; font-weight: 700; color: var(--mute); }
+.var b { font-family: var(--mono); font-size: 64px; }
+.var .v { border: 4px dashed var(--orange); } .var .v b { color: var(--orange); }
+.tbl { align-self: flex-start; }
+.tlabel { font-size: 34px; font-weight: 700; color: var(--mute); margin-bottom: 10px; }
+.tbl table { border-collapse: collapse; font-family: var(--mono); font-size: 40px; background: var(--panel); border-radius: 18px; overflow: hidden; }
+.tbl th { color: var(--blue); text-align: left; padding: 12px 32px; background: #1a2640; }
+.tbl th u { text-decoration: none; color: var(--orange); }
+.tbl td { padding: 10px 32px; border-top: 1px solid #26324a; }
+.tbl tr.k1 td { color: var(--orange); } .tbl tr.k2 td { color: var(--green); } .tbl tr.k3 td { color: var(--violet); }
+.tbl tr.out td { color: #5b6782; text-decoration: line-through; }
+.tbl td.nl { color: var(--red) !important; font-style: italic; font-weight: 700; background: rgba(255,93,93,.12); }
+.link { align-self: flex-start; font-family: var(--mono); font-size: 38px; color: var(--mute); padding: 6px 0 6px 26px;
+  border-left: 8px solid var(--orange); }
+.link b { color: var(--orange); }
+.arrow { font-family: var(--mono); font-size: 38px; color: var(--orange); font-weight: 700; }
+.vs { display: grid; grid-template-columns: 1fr 1fr; gap: 22px; }
+.card { background: var(--panel); border-radius: 26px; padding: 26px 32px; display: flex; flex-direction: column; gap: 6px; }
+.card b { font-family: var(--mono); font-size: 52px; color: var(--blue); }
+.vs .card span { font-size: 44px; font-weight: 800; } .vs .card .ok { color: var(--green); } .vs .card .ng { color: var(--red); }
+.res { display: flex; flex-wrap: wrap; align-items: center; gap: 14px; margin-top: -6px; }
+.res i { font-style: normal; font-size: 34px; color: var(--mute); font-weight: 700; }
+.res span { padding: 8px 22px; border-radius: 14px; background: var(--panel); font-size: 40px; font-weight: 700; }
+.res span.k1 { color: var(--orange); } .res span.k2 { color: var(--green); } .res span.k3 { color: var(--violet); }
+.res span.bad { color: var(--red); background: rgba(255,93,93,.14); box-shadow: inset 0 0 0 3px var(--red); } .vs .card em { font-style: normal; color: var(--orange); }
+.list { display: flex; flex-direction: column; gap: 16px; }
+.row { display: flex; align-items: center; gap: 30px; background: var(--panel); border-radius: 22px; padding: 14px 36px; font-size: 48px;
+  transform-origin: left center; }
+.row .no { font-size: 52px; font-weight: 900; color: var(--orange); width: 50px; }
+.row b { font-family: var(--mono); color: var(--blue); }
+.cta { margin-top: 20px; font-size: 54px; font-weight: 800; text-align: center; }
+.cap { top: auto; bottom: 260px; height: auto; display: flex; justify-content: center; padding: 0 60px; }
+.cap span { background: rgba(0,0,0,.78); color: #fff; font-size: 48px; font-weight: 700; line-height: 1.4; padding: 16px 30px;
+  border-radius: 18px; text-align: center; word-break: keep-all; }
+.bar { position: absolute; left: 0; bottom: 0; height: 10px; width: 1080px; background: var(--orange); transform-origin: left center; }
+</style>
+</head>
+<body>
+<div id="root" data-composition-id="main" data-start="0" data-duration="169.55" data-width="1080" data-height="1920">
+  <div class="brand"><b>JAVA <em>변수</em> 정리</b><div class="prog"><i></i><i></i><i></i><i></i><i></i></div></div>
+  <section id="sc-hook" class="clip scene" data-start="0.000" data-duration="10.056" data-track-index="1"><div class="hook">
+   <div class="pill in">JAVA 입문 · 두 번째</div>
+   <h1 class="big in"><em>변수</em><br/>완전 정리</h1>
+   <div class="sub in">int · double · <b>char</b> · String</div>
+ </div></section>
+<section id="sc-define" class="clip scene" data-start="10.056" data-duration="18.354" data-track-index="1"><div class="pill in">STEP 1 · 변수란</div><h2 class="title in">변수</h2><p class="desc in">값을 저장하는 <b>이름 붙은 공간</b></p><div class="var in"><div><small>타입</small><b class="kw">int</b></div><div><small>이름표</small><b>age</b></div><div class="v"><small>값</small><b>20</b></div></div><div class="code in"><div class="ln mk"><span class="kw">int</span> age = <span class="nu">20</span>;</div><div class="ln">System.out.println(age);</div></div><div class="term in"><i>실행 결과</i><div>20</div></div></section>
+<section id="sc-declare" class="clip scene" data-start="28.410" data-duration="23.298" data-track-index="1"><div class="pill in">STEP 2 · 선언과 대입</div><h2 class="title in">선언과 대입</h2><p class="desc in"><b>=</b> 오른쪽 값을 왼쪽에 저장</p><div class="code in"><div class="ln mk"><span class="kw">int</span> score;    <span class="cm">// 선언</span></div><div class="ln mk">score = <span class="nu">90</span>;   <span class="cm">// 대입</span></div><div class="ln mk">score = <span class="nu">95</span>;   <span class="cm">// 다시 대입</span></div><div class="ln">System.out.println(score);</div></div><div class="term in"><i>실행 결과</i><div>95</div></div><div class="tlabel in">선언 + 대입 한 줄 = 초기화</div><div class="code in"><div class="ln mk"><span class="kw">int</span> level = <span class="nu">1</span>;</div></div></section>
+<section id="sc-rule" class="clip scene" data-start="51.708" data-duration="14.034" data-track-index="1"><div class="pill in">STEP 2-1 · 주의</div><h2 class="title in">주의할 점</h2><p class="desc in">지역 변수는 값을 넣기 전 <b>사용 불가</b></p><div class="tlabel in">✗ 컴파일 오류</div><div class="code in"><div class="ln mk"><span class="kw">int</span> x; System.out.println(x);</div><div class="ln mk"><span class="kw">int</span> a = <span class="nu">1</span>; <span class="kw">int</span> a = <span class="nu">2</span>;</div><div class="ln mk"><span class="kw">int</span> <span class="nu">1st</span> = <span class="nu">1</span>;</div></div><div class="term err in"><i>컴파일 오류</i><div>error: variable x might not have been initialized</div><div>error: variable a is already defined in method main(String[])</div><div>error: not a statement</div></div><div class="chips in"><span>✗ <code>1st</code> 이름은 숫자로 시작 불가</span></div></section>
+<section id="sc-int" class="clip scene" data-start="65.742" data-duration="20.898" data-track-index="1"><div class="pill in">STEP 3 · 정수</div><h2 class="title in">정수 타입</h2><p class="desc in">기본은 <b>int</b>, 큰 수는 <b>long</b></p><div class="tbl in"><div class="tlabel in">정수 타입 4가지</div><table><tr><th>타입</th><th>크기</th><th>범위</th></tr><tr class=""><td>byte</td><td>1바이트</td><td>-128 ~ 127</td></tr><tr class=""><td>short</td><td>2바이트</td><td>약 ±3만</td></tr><tr class="k1"><td>int</td><td>4바이트</td><td>약 ±21억</td></tr><tr class="k2"><td>long</td><td>8바이트</td><td>약 ±922경</td></tr></table></div><div class="tlabel in">✓ L 붙이면 long</div><div class="code in"><div class="ln mk"><span class="kw">long</span> big = <span class="nu">3000000000L</span>;</div></div><div class="tlabel in">✗ L 없음 → int 범위 초과</div><div class="code in"><div class="ln mk"><span class="kw">long</span> big = <span class="nu">3000000000</span>;</div></div><div class="term err in"><i>컴파일 오류</i><div>error: integer number too large</div></div></section>
+<section id="sc-real" class="clip scene" data-start="86.640" data-duration="19.53" data-track-index="1"><div class="pill in">STEP 4 · 실수</div><h2 class="title in">실수 타입</h2><p class="desc in">기본은 <b>double</b>, float엔 <b>f</b></p><div class="vs"><div class="card in"><b>float</b><span>4바이트 · <em>f</em> 필수</span></div><div class="card in"><b>double</b><span>8바이트 · <em>기본</em></span></div></div><div class="code in"><div class="ln mk"><span class="kw">float</span> f = <span class="nu">3.14</span>;</div></div><div class="term err in"><i>컴파일 오류</i><div>error: incompatible types: possible lossy conversion from double to float</div></div><div class="code in"><div class="ln"><span class="kw">float</span> rate = <span class="nu">0.5f</span>;</div><div class="ln">System.out.println(<span class="nu">7</span> / <span class="nu">2</span>);</div><div class="ln mk">System.out.println(<span class="nu">7</span> / <span class="nu">2.0</span>);</div></div><div class="term in"><i>실행 결과</i><div>3</div><div>3.5</div></div></section>
+<section id="sc-char" class="clip scene" data-start="106.170" data-duration="21.234" data-track-index="1"><div class="pill in">STEP 5 · 문자</div><h2 class="title in">char</h2><p class="desc in"><b>' '</b> 작은따옴표 · 딱 한 글자</p><div class="chips in"><span><code>'A'</code></span><span><code>'가'</code></span><span><code>'7'</code></span></div><div class="tlabel in">✗ 큰따옴표는 문자열</div><div class="code in"><div class="ln mk"><span class="kw">char</span> c = <span class="st">"A"</span>;</div></div><div class="term err in"><i>컴파일 오류</i><div>error: incompatible types: String cannot be converted to char</div></div><div class="code in"><div class="ln"><span class="kw">char</span> c = <span class="st">'A'</span>;</div><div class="ln">System.out.println(c);</div><div class="ln mk">System.out.println((<span class="kw">int</span>) c);</div></div><div class="term in"><i>실행 결과</i><div>A</div><div>65</div></div></section>
+<section id="sc-string" class="clip scene" data-start="127.404" data-duration="24.138" data-track-index="1"><div class="pill in">STEP 5-1 · 문자열</div><h2 class="title in">String</h2><p class="desc in">대문자 <b>S</b> · <b>" "</b> 큰따옴표</p><div class="vs"><div class="card in"><b>기본형</b><span>int · double · char</span></div><div class="card in"><b>참조형</b><span>String <em>(클래스)</em></span></div></div><div class="code in"><div class="ln"><span class="kw">String</span> name = <span class="st">"Java"</span>;</div><div class="ln">System.out.println(<span class="st">"Hi "</span> + name);</div><div class="ln mk">System.out.println(<span class="st">"1"</span> + <span class="nu">2</span>);</div><div class="ln mk">System.out.println(<span class="nu">1</span> + <span class="nu">2</span>);</div></div><div class="term in"><i>실행 결과</i><div>Hi Java</div><div>12</div><div>3</div></div></section>
+<section id="sc-outro" class="clip scene" data-start="151.542" data-duration="18.008" data-track-index="1"><div class="pill in">정리</div><h2 class="title in">변수 핵심 5가지</h2><div class="list in"><div class="row" id="ex1"><span class="no">1</span><b>변수 = 이름 붙은 공간</b></div><div class="row" id="ex2"><span class="no">2</span><b>선언 · 대입 · 초기화</b></div><div class="row" id="ex3"><span class="no">3</span><b>정수 int · long</b></div><div class="row" id="ex4"><span class="no">4</span><b>실수 double · float</b></div><div class="row" id="ex5"><span class="no">5</span><b>char &#x27; &#x27; · String &quot; &quot;</b></div></div><div class="cta in">👍 구독 · 좋아요</div></section>
+  <div id="cap-hook-0" class="clip cap" data-start="0.300" data-duration="3.013" data-track-index="2"><span>자바 입문 두 번째, 변수!</span></div>
+<div id="cap-hook-1" class="clip cap" data-start="3.313" data-duration="3.348" data-track-index="2"><span>변수의 개념부터 선언과 대입, 정수와 실수,</span></div>
+<div id="cap-hook-2" class="clip cap" data-start="6.662" data-duration="3.094" data-track-index="2"><span>문자와 문자열까지 정리해 드립니다.</span></div>
+<div id="cap-define-0" class="clip cap" data-start="10.206" data-duration="2.037" data-track-index="2"><span>변수는 값을 저장해 두는,</span></div>
+<div id="cap-define-1" class="clip cap" data-start="12.243" data-duration="2.182" data-track-index="2"><span>이름 붙은 공간이에요.</span></div>
+<div id="cap-define-2" class="clip cap" data-start="14.425" data-duration="1.652" data-track-index="2"><span>상자에 이름표를 붙이고 값을</span></div>
+<div id="cap-define-3" class="clip cap" data-start="16.077" data-duration="2.466" data-track-index="2"><span>넣는다고 생각하면 쉬워요.</span></div>
+<div id="cap-define-4" class="clip cap" data-start="18.543" data-duration="1.708" data-track-index="2"><span>인트 에이지 이퀄 이십은,</span></div>
+<div id="cap-define-5" class="clip cap" data-start="20.251" data-duration="1.786" data-track-index="2"><span>정수를 담는 에이지라는 상자에</span></div>
+<div id="cap-define-6" class="clip cap" data-start="22.036" data-duration="2.310" data-track-index="2"><span>이십을 넣으라는 뜻입니다.</span></div>
+<div id="cap-define-7" class="clip cap" data-start="24.347" data-duration="1.406" data-track-index="2"><span>이제 에이지라는 이름으로</span></div>
+<div id="cap-define-8" class="clip cap" data-start="25.753" data-duration="2.357" data-track-index="2"><span>값을 꺼내 쓸 수 있어요.</span></div>
+<div id="cap-declare-0" class="clip cap" data-start="28.560" data-duration="1.836" data-track-index="2"><span>변수를 만드는 것을 선언,</span></div>
+<div id="cap-declare-1" class="clip cap" data-start="30.396" data-duration="2.684" data-track-index="2"><span>값을 넣는 것을 대입이라고 합니다.</span></div>
+<div id="cap-declare-2" class="clip cap" data-start="33.080" data-duration="2.165" data-track-index="2"><span>인트 스코어 세미콜론으로 선언하고,</span></div>
+<div id="cap-declare-3" class="clip cap" data-start="35.245" data-duration="2.623" data-track-index="2"><span>스코어 이퀄 구십으로 대입해요.</span></div>
+<div id="cap-declare-4" class="clip cap" data-start="37.868" data-duration="1.875" data-track-index="2"><span>여기서 이퀄은 같다가 아니라,</span></div>
+<div id="cap-declare-5" class="clip cap" data-start="39.743" data-duration="1.607" data-track-index="2"><span>오른쪽 값을 왼쪽 변수에</span></div>
+<div id="cap-declare-6" class="clip cap" data-start="41.350" data-duration="2.054" data-track-index="2"><span>저장한다는 뜻이에요.</span></div>
+<div id="cap-declare-7" class="clip cap" data-start="43.404" data-duration="2.388" data-track-index="2"><span>다시 대입하면 새 값으로 바뀌어서,</span></div>
+<div id="cap-declare-8" class="clip cap" data-start="45.792" data-duration="1.909" data-track-index="2"><span>구십오가 출력돼요.</span></div>
+<div id="cap-declare-9" class="clip cap" data-start="47.701" data-duration="1.540" data-track-index="2"><span>선언과 동시에 값을 넣는</span></div>
+<div id="cap-declare-10" class="clip cap" data-start="49.241" data-duration="2.167" data-track-index="2"><span>것은 초기화라고 해요.</span></div>
+<div id="cap-rule-0" class="clip cap" data-start="51.858" data-duration="2.121" data-track-index="2"><span>주의할 점도 있어요.</span></div>
+<div id="cap-rule-1" class="clip cap" data-start="53.979" data-duration="2.165" data-track-index="2"><span>메서드 안의 지역 변수는 값을 넣기</span></div>
+<div id="cap-rule-2" class="clip cap" data-start="56.144" data-duration="2.812" data-track-index="2"><span>전에 쓰면 컴파일 오류가 납니다.</span></div>
+<div id="cap-rule-3" class="clip cap" data-start="58.956" data-duration="3.069" data-track-index="2"><span>같은 이름으로 두 번 선언해도 오류예요.</span></div>
+<div id="cap-rule-4" class="clip cap" data-start="62.025" data-duration="1.049" data-track-index="2"><span>그리고 변수 이름은</span></div>
+<div id="cap-rule-5" class="clip cap" data-start="63.075" data-duration="2.367" data-track-index="2"><span>숫자로 시작할 수 없어요.</span></div>
+<div id="cap-int-0" class="clip cap" data-start="65.892" data-duration="4.258" data-track-index="2"><span>정수 타입은 바이트, 쇼트, 인트, 롱 네 가지로,</span></div>
+<div id="cap-int-1" class="clip cap" data-start="70.150" data-duration="2.394" data-track-index="2"><span>크기에 따라 범위가 달라요.</span></div>
+<div id="cap-int-2" class="clip cap" data-start="72.544" data-duration="4.487" data-track-index="2"><span>기본은 인트로, 약 플러스 마이너스 이십일억까지 담습니다.</span></div>
+<div id="cap-int-3" class="clip cap" data-start="77.030" data-duration="1.607" data-track-index="2"><span>더 큰 수는 롱을 쓰고,</span></div>
+<div id="cap-int-4" class="clip cap" data-start="78.638" data-duration="2.768" data-track-index="2"><span>숫자 뒤에 대문자 엘을 붙여요.</span></div>
+<div id="cap-int-5" class="clip cap" data-start="81.405" data-duration="1.641" data-track-index="2"><span>엘 없이 삼십억을 쓰면,</span></div>
+<div id="cap-int-6" class="clip cap" data-start="83.046" data-duration="3.294" data-track-index="2"><span>인트 범위를 넘어서 컴파일 오류가 납니다.</span></div>
+<div id="cap-real-0" class="clip cap" data-start="86.790" data-duration="2.472" data-track-index="2"><span>실수 타입은 플로트와 더블이 있고,</span></div>
+<div id="cap-real-1" class="clip cap" data-start="89.262" data-duration="1.981" data-track-index="2"><span>기본은 더블입니다.</span></div>
+<div id="cap-real-2" class="clip cap" data-start="91.243" data-duration="2.567" data-track-index="2"><span>소수점이 있는 숫자는 더블로 취급돼서,</span></div>
+<div id="cap-real-3" class="clip cap" data-start="93.810" data-duration="3.493" data-track-index="2"><span>플로트에 넣으려면 뒤에 에프를 붙여야 해요.</span></div>
+<div id="cap-real-4" class="clip cap" data-start="97.303" data-duration="1.317" data-track-index="2"><span>그리고 정수끼리 나누면</span></div>
+<div id="cap-real-5" class="clip cap" data-start="98.620" data-duration="2.589" data-track-index="2"><span>소수점 아래가 버려집니다.</span></div>
+<div id="cap-real-6" class="clip cap" data-start="101.210" data-duration="1.529" data-track-index="2"><span>칠 나누기 이는 삼,</span></div>
+<div id="cap-real-7" class="clip cap" data-start="102.739" data-duration="3.131" data-track-index="2"><span>칠 나누기 이 점 영은 삼 점 오가 돼요.</span></div>
+<div id="cap-char-0" class="clip cap" data-start="106.320" data-duration="2.628" data-track-index="2"><span>문자 타입 차는 문자 하나를 저장하고,</span></div>
+<div id="cap-char-1" class="clip cap" data-start="108.948" data-duration="2.439" data-track-index="2"><span>작은따옴표로 감쌉니다.</span></div>
+<div id="cap-char-2" class="clip cap" data-start="111.387" data-duration="4.029" data-track-index="2"><span>에이, 가, 칠처럼 딱 한 글자만 들어가요.</span></div>
+<div id="cap-char-3" class="clip cap" data-start="115.416" data-duration="1.886" data-track-index="2"><span>큰따옴표로 감싸면 문자열이</span></div>
+<div id="cap-char-4" class="clip cap" data-start="117.302" data-duration="2.422" data-track-index="2"><span>되어서 차에 넣을 수 없어요.</span></div>
+<div id="cap-char-5" class="clip cap" data-start="119.724" data-duration="1.451" data-track-index="2"><span>그리고 문자는 내부적으로</span></div>
+<div id="cap-char-6" class="clip cap" data-start="121.175" data-duration="1.696" data-track-index="2"><span>숫자 코드로 저장돼서,</span></div>
+<div id="cap-char-7" class="clip cap" data-start="122.871" data-duration="1.518" data-track-index="2"><span>대문자 에이를 인트로 바꿔</span></div>
+<div id="cap-char-8" class="clip cap" data-start="124.389" data-duration="2.715" data-track-index="2"><span>출력하면 육십오가 나옵니다.</span></div>
+<div id="cap-string-0" class="clip cap" data-start="127.554" data-duration="1.702" data-track-index="2"><span>여러 글자는 대문자 에스로</span></div>
+<div id="cap-string-1" class="clip cap" data-start="129.256" data-duration="2.042" data-track-index="2"><span>시작하는 문자열 타입 스트링에,</span></div>
+<div id="cap-string-2" class="clip cap" data-start="131.298" data-duration="2.573" data-track-index="2"><span>큰따옴표로 감싸서 저장해요.</span></div>
+<div id="cap-string-3" class="clip cap" data-start="133.871" data-duration="2.969" data-track-index="2"><span>인트, 더블, 차 같은 기본형과 달리,</span></div>
+<div id="cap-string-4" class="clip cap" data-start="136.840" data-duration="2.991" data-track-index="2"><span>스트링은 클래스로 만든 참조형이에요.</span></div>
+<div id="cap-string-5" class="clip cap" data-start="139.831" data-duration="1.384" data-track-index="2"><span>더하기 기호로 문자열을</span></div>
+<div id="cap-string-6" class="clip cap" data-start="141.215" data-duration="1.317" data-track-index="2"><span>이어 붙일 수 있는데,</span></div>
+<div id="cap-string-7" class="clip cap" data-start="142.532" data-duration="1.417" data-track-index="2"><span>문자열과 숫자를 더하면</span></div>
+<div id="cap-string-8" class="clip cap" data-start="143.949" data-duration="2.321" data-track-index="2"><span>숫자도 글자로 붙어요.</span></div>
+<div id="cap-string-9" class="clip cap" data-start="146.270" data-duration="2.232" data-track-index="2"><span>그래서 큰따옴표 일 더하기 이는 십이,</span></div>
+<div id="cap-string-10" class="clip cap" data-start="148.503" data-duration="2.739" data-track-index="2"><span>숫자 일 더하기 이는 삼이 됩니다.</span></div>
+<div id="cap-outro-0" class="clip cap" data-start="151.692" data-duration="3.052" data-track-index="2"><span>정리하면, 변수는 이름 붙은 저장 공간,</span></div>
+<div id="cap-outro-1" class="clip cap" data-start="154.744" data-duration="1.964" data-track-index="2"><span>선언과 대입으로 값을 넣고,</span></div>
+<div id="cap-outro-2" class="clip cap" data-start="156.709" data-duration="1.596" data-track-index="2"><span>정수는 인트와 롱,</span></div>
+<div id="cap-outro-3" class="clip cap" data-start="158.305" data-duration="1.853" data-track-index="2"><span>실수는 더블과 플로트,</span></div>
+<div id="cap-outro-4" class="clip cap" data-start="160.157" data-duration="1.830" data-track-index="2"><span>문자는 작은따옴표 차,</span></div>
+<div id="cap-outro-5" class="clip cap" data-start="161.988" data-duration="2.517" data-track-index="2"><span>문자열은 큰따옴표 스트링.</span></div>
+<div id="cap-outro-6" class="clip cap" data-start="164.505" data-duration="3.843" data-track-index="2"><span>도움이 됐다면 구독과 좋아요 부탁드립니다!</span></div>
+  <div class="bar"></div>
+  <audio id="vo" src="assets/narration.mp3" data-start="0" data-duration="169.55" data-track-index="0"></audio>
+</div>
+<script>
+const tl = gsap.timeline({ paused: true });
+function enter(sel, t, dur) {
+  const items = document.querySelectorAll(sel + " .in");
+  const step = Math.min(0.9, (dur * 0.5) / Math.max(1, items.length));
+  items.forEach((el, i) => {
+    const at = Math.max(0, t - 0.1) + i * step;
+    tl.fromTo(el, { opacity: 0, y: 50 }, { opacity: 1, y: 0, duration: 0.5, ease: "power3.out" }, at);
+    el.querySelectorAll(".ln").forEach((ln, j) => {
+      tl.fromTo(ln, { opacity: 0, x: -30 }, { opacity: 1, x: 0, duration: 0.35, ease: "power2.out" }, at + 0.15 + j * 0.3);
+    });
+  });
+}
+enter("#sc-hook", 0.3, 9.456);
+tl.set(".prog i", {backgroundColor: "#26324a"}, 0);
+enter("#sc-define", 10.206, 17.904);
+tl.set(".prog i", {backgroundColor: "#26324a"}, 10.056);
+tl.set(".prog i:nth-child(1)", {backgroundColor: "#f29111"}, 10.056);
+enter("#sc-declare", 28.56, 22.848);
+tl.set(".prog i", {backgroundColor: "#26324a"}, 28.41);
+tl.set(".prog i:nth-child(2)", {backgroundColor: "#f29111"}, 28.41);
+enter("#sc-rule", 51.858, 13.584);
+tl.set(".prog i", {backgroundColor: "#26324a"}, 51.708);
+tl.set(".prog i:nth-child(2)", {backgroundColor: "#f29111"}, 51.708);
+enter("#sc-int", 65.892, 20.448);
+tl.set(".prog i", {backgroundColor: "#26324a"}, 65.74199999999999);
+tl.set(".prog i:nth-child(3)", {backgroundColor: "#f29111"}, 65.74199999999999);
+enter("#sc-real", 86.79, 19.08);
+tl.set(".prog i", {backgroundColor: "#26324a"}, 86.64);
+tl.set(".prog i:nth-child(4)", {backgroundColor: "#f29111"}, 86.64);
+enter("#sc-char", 106.32, 20.784);
+tl.set(".prog i", {backgroundColor: "#26324a"}, 106.16999999999999);
+tl.set(".prog i:nth-child(5)", {backgroundColor: "#f29111"}, 106.16999999999999);
+enter("#sc-string", 127.554, 23.688);
+tl.set(".prog i", {backgroundColor: "#26324a"}, 127.404);
+tl.set(".prog i:nth-child(5)", {backgroundColor: "#f29111"}, 127.404);
+enter("#sc-outro", 151.692, 16.656);
+tl.set(".prog i", {backgroundColor: "#26324a"}, 151.542);
+tl.to("#ex1", {backgroundColor: "#3a2a12", scale: 1.04, duration: 0.2}, 152.713);
+tl.to("#ex1", {backgroundColor: "#131c2e", scale: 1, duration: 0.2}, 154.744);
+tl.to("#ex2", {backgroundColor: "#3a2a12", scale: 1.04, duration: 0.2}, 154.744);
+tl.to("#ex2", {backgroundColor: "#131c2e", scale: 1, duration: 0.2}, 156.709);
+tl.to("#ex3", {backgroundColor: "#3a2a12", scale: 1.04, duration: 0.2}, 156.709);
+tl.to("#ex3", {backgroundColor: "#131c2e", scale: 1, duration: 0.2}, 158.305);
+tl.to("#ex4", {backgroundColor: "#3a2a12", scale: 1.04, duration: 0.2}, 158.305);
+tl.to("#ex4", {backgroundColor: "#131c2e", scale: 1, duration: 0.2}, 160.157);
+tl.to("#ex5", {backgroundColor: "#3a2a12", scale: 1.04, duration: 0.2}, 160.157);
+tl.to("#ex5", {backgroundColor: "#131c2e", scale: 1, duration: 0.3}, 164.505 + 0.6);
+tl.fromTo(".bar", { scaleX: 0 }, { scaleX: 1, duration: 169.55, ease: "none" }, 0);
+window.__timelines = window.__timelines || {};
+window.__timelines["main"] = tl;
+tl.seek(0);
+</script>
+</body>
+</html>

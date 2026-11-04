@@ -1,0 +1,158 @@
+// 영상에 나오는 예제 프로그램 (build.py가 생성 · 직접 고치지 말 것)
+// 각 예제를 파일 이름대로 저장한 뒤: javac -encoding UTF-8 Main.java && java Main
+
+// [1. 배열이란] Main.java → 출력:
+//   90
+//   75
+//   88
+public class Main {
+  public static void main(String[] args) {
+    int[] scores = {90, 75, 88};
+    System.out.println(scores[0]);
+    System.out.println(scores[1]);
+    System.out.println(scores[2]);
+  }
+}
+
+// [2. new로 만들기] Main.java → 출력:
+//   0
+//   0.0
+//   false
+//   null
+public class Main {
+  public static void main(String[] args) {
+    System.out.println((new int[1])[0]);
+    System.out.println((new double[1])[0]);
+    System.out.println((new boolean[1])[0]);
+    System.out.println((new String[1])[0]);
+  }
+}
+
+// [5. 다차원 배열] Main.java → 출력:
+//   2
+//   3
+//   000007
+public class Main {
+  public static void main(String[] args) {
+    int[][] seats = new int[2][3];
+    seats[1][2] = 7;
+    System.out.println(seats.length);
+    System.out.println(seats[0].length);
+    System.out.print(seats[0][0]);
+    System.out.print(seats[0][1]);
+    System.out.print(seats[0][2]);
+    System.out.print(seats[1][0]);
+    System.out.print(seats[1][1]);
+    System.out.print(seats[1][2]);
+  }
+}
+
+// [3-1. 값 교환] Main.java → 출력:
+//   90 75 88 90
+public class Main {
+  public static void main(String[] args) {
+    int[] scores = {90, 75, 88};
+    int temp = scores[0];
+    System.out.println(scores[0] + " " + scores[1] + " " + scores[2] + " " + temp);
+  }
+}
+
+// [3-1. 값 교환] Main.java → 출력:
+//   75 75 88 90
+public class Main {
+  public static void main(String[] args) {
+    int[] scores = {90, 75, 88};
+    int temp = scores[0];
+    scores[0] = scores[1];
+    System.out.println(scores[0] + " " + scores[1] + " " + scores[2] + " " + temp);
+  }
+}
+
+// [1. 배열이란] Main.java → 출력 없음 (컴파일·실행 성공)
+public class Main {
+  public static void main(String[] args) {
+    int s1 = 90, s2 = 75, s3 = 88;
+  }
+}
+
+// [2. new로 만들기] Main.java → 출력:
+//   0
+public class Main {
+  public static void main(String[] args) {
+    int[] scores = new int[3];
+    System.out.println(scores[0]);
+  }
+}
+
+// [3. 값 넣고 꺼내기] Main.java → 출력:
+//   90
+public class Main {
+  public static void main(String[] args) {
+    int[] scores = new int[3];
+    scores[0] = 90;   // 넣기
+    System.out.println(scores[0]);
+  }
+}
+
+// [3. 값 넣고 꺼내기] Main.java → 출력:
+//   3
+public class Main {
+  public static void main(String[] args) {
+    int[] scores = {90, 75, 88};
+    int n = scores.length;
+    System.out.println(n);
+  }
+}
+
+// [3-1. 값 교환] Main.java → 출력:
+//   75 90 88 90
+public class Main {
+  public static void main(String[] args) {
+    int[] scores = {90, 75, 88};
+    int temp = scores[0];
+    scores[0] = scores[1];
+    scores[1] = temp;
+    System.out.println(scores[0] + " " + scores[1] + " " + scores[2] + " " + temp);
+  }
+}
+
+// [3-1. 값 교환] Main.java → 출력:
+//   75 75 88
+public class Main {
+  public static void main(String[] args) {
+    int[] scores = {90, 75, 88};
+    scores[0] = scores[1];
+    scores[1] = scores[0];
+    System.out.println(scores[0] + " " + scores[1] + " " + scores[2]);
+  }
+}
+
+// [4. 인덱스 에러] Main.java → 실행 오류: Exception in thread "main" java.lang.ArrayIndexOutOfBoundsException: Index 3 out of bounds for length 3
+public class Main {
+  public static void main(String[] args) {
+    int[] scores = {90, 75, 88};
+    System.out.println(scores[3]);
+  }
+}
+
+// [4. 인덱스 에러] Main.java → 출력:
+//   88
+//   2
+public class Main {
+  public static void main(String[] args) {
+    int[] scores = {90, 75, 88};
+    int i = scores.length - 1; // 2
+    System.out.println(scores[i]);
+    System.out.println(i);
+  }
+}
+
+// [5. 다차원 배열] Main.java → 출력:
+//   7
+public class Main {
+  public static void main(String[] args) {
+    int[][] seats = new int[2][3];
+    seats[1][2] = 7;
+    System.out.println(seats[1][2]);
+  }
+}

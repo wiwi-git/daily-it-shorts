@@ -1,0 +1,278 @@
+<!doctype html>
+<html lang="ko" data-resolution="portrait">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=1080, height=1920" />
+<script src="https://cdn.jsdelivr.net/npm/gsap@3.14.2/dist/gsap.min.js"></script>
+<style>
+:root {
+  --ground: #0b1220; --panel: #131c2e; --ink: #f4f6fb; --mute: #9aa6bd;
+  --blue: #3fa7d6; --orange: #f29111; --red: #ff5d5d; --green: #7ee08a; --violet: #c3a6ff;
+  --font: "Pretendard", sans-serif;
+  --mono: "Menlo", "SF Mono", monospace;
+}
+@font-face { font-family: "Pretendard"; src: url("assets/fonts/PretendardVariable.woff2") format("woff2"); font-weight: 45 920; }
+* { margin: 0; padding: 0; box-sizing: border-box; }
+html, body { width: 1080px; height: 1920px; overflow: hidden; background: var(--ground); }
+#root { position: relative; width: 100%; height: 100%; font-variant-ligatures: none; font-family: var(--font); color: var(--ink); overflow: hidden;
+  background: radial-gradient(1200px 900px at 80% -10%, #16365a 0%, transparent 60%),
+              radial-gradient(900px 900px at -10% 110%, #3a2410 0%, transparent 55%), var(--ground); }
+.clip { position: absolute; inset: 0; }
+.brand { position: absolute; top: 110px; left: 70px; right: 70px; display: flex; justify-content: space-between; align-items: center;
+  font-size: 34px; font-weight: 700; color: var(--mute); letter-spacing: 0.02em; }
+.brand b { color: var(--blue); } .brand b em { color: var(--orange); font-style: normal; }
+.prog { display: flex; gap: 12px; }
+.prog i { display: block; width: 56px; height: 12px; border-radius: 6px; background: #26324a; }
+.scene { padding: 210px 70px 0; display: flex; flex-direction: column; gap: 26px; }
+.pill { align-self: flex-start; padding: 12px 26px; border-radius: 999px; background: #1d2a44; color: var(--blue);
+  font-size: 34px; font-weight: 700; }
+.hook { display: flex; flex-direction: column; gap: 50px; padding-top: 140px; }
+.big { font-size: 150px; line-height: 1.12; font-weight: 800; letter-spacing: -0.04em; }
+.big em { font-style: normal; color: var(--orange); }
+.sub { font-size: 64px; font-weight: 700; color: var(--mute); } .sub b { color: var(--ink); }
+.title { font-size: 80px; font-weight: 800; letter-spacing: -0.03em; line-height: 1.1; }
+.desc { font-size: 46px; color: var(--mute); font-weight: 600; margin-top: -8px; } .desc b { color: var(--orange); }
+.code { background: #0a0f1a; border: 2px solid #26324a; border-radius: 26px; padding: 30px 32px; font-family: var(--mono);
+  font-size: 42px; line-height: 1.5; color: #d9e1f2; white-space: pre; box-shadow: 0 30px 60px rgba(0,0,0,.35);
+  font-variant-ligatures: none; font-feature-settings: "liga" 0, "calt" 0; }
+.code.sm { font-size: 34px; padding: 26px 28px; }
+.code .ln { margin: 0 -14px; padding: 0 14px; border-radius: 10px; }
+.code .ln.mk { background: rgba(242,145,17,.13); }
+.kw { color: var(--blue); font-weight: 700; } .st { color: var(--green); } .nu { color: var(--orange); } .cm { color: #6f7d98; } .es { color: var(--orange); font-weight: 700; }
+.term { background: #05080f; border: 2px solid #26324a; border-radius: 22px; padding: 18px 32px 22px; font-family: var(--mono);
+  font-size: 40px; line-height: 1.4; color: var(--ink); white-space: pre; tab-size: 8; }
+.term i { display: block; font-style: normal; font-family: var(--font); font-size: 28px; font-weight: 700; color: var(--mute); margin-bottom: 6px; }
+.term .cmd { color: var(--blue); }
+.term.err { border-color: rgba(255,93,93,.5); color: var(--red); font-size: 34px; white-space: normal; }
+.warn small { font-size: 36px; color: var(--mute); font-weight: 600; }
+.nest > div, .nest > div div { border: 3px solid; border-radius: 22px; padding: 16px 26px 20px; display: flex; flex-direction: column; gap: 12px; }
+.nest b { font-size: 38px; font-weight: 800; font-family: var(--mono); }
+.nest .k1 { border-color: var(--orange); } .nest .k1 > b { color: var(--orange); }
+.nest .k2 { border-color: var(--green); } .nest .k2 > b { color: var(--green); }
+.nest .k3 { border-color: var(--violet); } .nest .k3 > b { color: var(--violet); }
+.chips { display: flex; flex-wrap: wrap; gap: 18px; }
+.chips span { padding: 16px 30px; background: var(--panel); border-radius: 18px; font-size: 42px; font-weight: 700; }
+.warn, .note { padding: 26px 36px; border-radius: 24px; font-size: 44px; font-weight: 700; line-height: 1.45; }
+.warn { background: rgba(255,93,93,.12); border-left: 10px solid var(--red); } .warn b { color: var(--red); }
+.note { background: rgba(63,167,214,.12); border-left: 10px solid var(--blue); } .note b { color: var(--orange); }
+.note small { font-size: 38px; color: var(--mute); font-weight: 600; font-family: var(--mono); }
+code { font-family: var(--mono); color: var(--orange); }
+.var { display: grid; grid-template-columns: 1fr 1.3fr 1fr; gap: 18px; }
+.var div { background: var(--panel); border-radius: 24px; padding: 20px 30px 24px; display: flex; flex-direction: column; gap: 4px; }
+.var small { font-size: 32px; font-weight: 700; color: var(--mute); }
+.var b { font-family: var(--mono); font-size: 64px; }
+.var .v { border: 4px dashed var(--orange); } .var .v b { color: var(--orange); }
+.tbl { align-self: flex-start; }
+.tlabel { font-size: 34px; font-weight: 700; color: var(--mute); margin-bottom: 10px; }
+.tbl table { border-collapse: collapse; font-family: var(--mono); font-size: 40px; background: var(--panel); border-radius: 18px; overflow: hidden; }
+.tbl th { color: var(--blue); text-align: left; padding: 12px 32px; background: #1a2640; }
+.tbl th u { text-decoration: none; color: var(--orange); }
+.tbl td { padding: 10px 32px; border-top: 1px solid #26324a; }
+.tbl tr.k1 td { color: var(--orange); } .tbl tr.k2 td { color: var(--green); } .tbl tr.k3 td { color: var(--violet); }
+.tbl tr.out td { color: #5b6782; text-decoration: line-through; }
+.tbl td.nl { color: var(--red) !important; font-style: italic; font-weight: 700; background: rgba(255,93,93,.12); }
+.link { align-self: flex-start; font-family: var(--mono); font-size: 38px; color: var(--mute); padding: 6px 0 6px 26px;
+  border-left: 8px solid var(--orange); }
+.link b { color: var(--orange); }
+.arrow { font-family: var(--mono); font-size: 38px; color: var(--orange); font-weight: 700; }
+.vs { display: grid; grid-template-columns: 1fr 1fr; gap: 22px; }
+.card { background: var(--panel); border-radius: 26px; padding: 26px 32px; display: flex; flex-direction: column; gap: 6px; }
+.card b { font-family: var(--mono); font-size: 52px; color: var(--blue); }
+.vs .card span { font-size: 44px; font-weight: 800; } .vs .card .ok { color: var(--green); } .vs .card .ng { color: var(--red); }
+.res { display: flex; flex-wrap: wrap; align-items: center; gap: 14px; margin-top: -6px; }
+.res i { font-style: normal; font-size: 34px; color: var(--mute); font-weight: 700; }
+.res span { padding: 8px 22px; border-radius: 14px; background: var(--panel); font-size: 40px; font-weight: 700; }
+.res span.k1 { color: var(--orange); } .res span.k2 { color: var(--green); } .res span.k3 { color: var(--violet); }
+.res span.bad { color: var(--red); background: rgba(255,93,93,.14); box-shadow: inset 0 0 0 3px var(--red); } .vs .card em { font-style: normal; color: var(--orange); }
+.list { display: flex; flex-direction: column; gap: 16px; }
+.row { display: flex; align-items: center; gap: 30px; background: var(--panel); border-radius: 22px; padding: 14px 36px; font-size: 48px;
+  transform-origin: left center; }
+.row .no { font-size: 52px; font-weight: 900; color: var(--orange); width: 50px; }
+.row b { font-family: var(--mono); color: var(--blue); }
+.cta { margin-top: 20px; font-size: 54px; font-weight: 800; text-align: center; }
+.arr { display: flex; align-items: flex-start; gap: 14px; }
+.arr .nm { font-family: var(--mono); font-size: 38px; font-weight: 700; color: var(--mute); padding-top: 34px; margin-right: 6px; }
+.arr .nm.tn { margin-left: 30px; color: var(--blue); }
+.cw { display: flex; flex-direction: column; align-items: center; gap: 6px; }
+.cw small { font-family: var(--mono); font-size: 32px; font-weight: 700; color: var(--mute); height: 40px; }
+.box { position: relative; width: 150px; height: 110px; background: var(--panel); border: 3px solid #26324a; border-radius: 18px; }
+.box b { position: absolute; inset: 0; display: flex; align-items: center; justify-content: center;
+  font-family: var(--mono); font-size: 56px; font-weight: 800; }
+.box.ghost { border: 3px dashed var(--red); background: rgba(255,93,93,.08); } .box.ghost b { color: var(--red); }
+.k1 { color: var(--orange); } .k2 { color: var(--green); } .k3 { color: var(--violet); } .z { color: var(--mute); }
+#sc-swap .arr .cw:last-child .box { border-style: dashed; border-color: var(--blue); }
+.gridw { display: flex; flex-direction: column; gap: 22px; }
+.grid { display: grid; gap: 12px; align-items: center; }
+.grid i { font-style: normal; font-family: var(--mono); font-size: 32px; font-weight: 700; color: var(--mute); text-align: center; }
+.grid b { height: 96px; background: var(--panel); border-radius: 16px; display: flex; align-items: center; justify-content: center;
+  font-family: var(--mono); font-size: 52px; font-weight: 800; }
+.grid b.k1 { box-shadow: inset 0 0 0 4px var(--orange); }
+.dims { display: flex; flex-wrap: wrap; gap: 16px; }
+.dims span { padding: 12px 26px; background: var(--panel); border-radius: 16px; font-size: 40px; font-weight: 700; }
+.dims em { font-style: normal; color: var(--orange); }
+.cap { top: auto; bottom: 260px; height: auto; display: flex; justify-content: center; padding: 0 60px; }
+.cap span { background: rgba(0,0,0,.78); color: #fff; font-size: 48px; font-weight: 700; line-height: 1.4; padding: 16px 30px;
+  border-radius: 18px; text-align: center; word-break: keep-all; }
+.bar { position: absolute; left: 0; bottom: 0; height: 10px; width: 1080px; background: var(--orange); transform-origin: left center; }
+</style>
+</head>
+<body>
+<div id="root" data-composition-id="main" data-start="0" data-duration="164.08" data-width="1080" data-height="1920">
+  <div class="brand"><b>자바 입문 <em>배열</em> 정리</b><div class="prog"><i></i><i></i><i></i><i></i><i></i></div></div>
+  <section id="sc-hook" class="clip scene" data-start="0.000" data-duration="10.248" data-track-index="1"><div class="hook">
+   <div class="pill in">JAVA 입문 · 세 번째</div>
+   <h1 class="big in"><em>배열</em><br/>완전 정리</h1>
+   <div class="sub in">new · 인덱스 · <b>int[][]</b></div>
+ </div></section>
+<section id="sc-define" class="clip scene" data-start="10.248" data-duration="21.498" data-track-index="1"><div class="pill in">STEP 1 · 배열이란</div><h2 class="title in">배열</h2><p class="desc in">같은 타입 값 여러 개를 <b>한 이름</b>으로</p><div class="tlabel in">변수 3개로 따로</div><div class="code in"><div class="ln"><span class="kw">int</span> s1 = <span class="nu">90</span>, s2 = <span class="nu">75</span>, s3 = <span class="nu">88</span>;</div></div><div class="tlabel in">배열 1개로 묶어서 · 아래 숫자가 인덱스</div><div class="arr in"><span class="nm">scores</span><div class="cw"><div class="box"><b class="k1">90</b></div><small>0</small></div><div class="cw"><div class="box"><b class="k2">75</b></div><small>1</small></div><div class="cw"><div class="box"><b class="k3">88</b></div><small>2</small></div></div><div class="note in"><code>scores[0]</code> → 첫 번째 칸 = <b>90</b><br/><small>인덱스는 0부터 시작</small></div></section>
+<section id="sc-new" class="clip scene" data-start="31.746" data-duration="21.402" data-track-index="1"><div class="pill in">STEP 2 · new로 만들기</div><h2 class="title in">new 연산자</h2><p class="desc in"><b>new int[3]</b> = 정수 3칸 배열</p><div class="code in"><div class="ln mk"><span class="kw">int</span>[] scores = <span class="kw">new</span> <span class="kw">int</span>[<span class="nu">3</span>];</div><div class="ln">System.out.println(scores[<span class="nu">0</span>]);</div></div><div class="term in"><i>실행 결과</i><div>0</div></div><div class="warn in">크기는 만든 뒤 <b>바꿀 수 없음</b></div><div class="tbl in"><div class="tlabel in">값을 안 넣은 칸의 기본값</div><table><tr><th>타입</th><th>기본값</th></tr><tr class="k1"><td>int</td><td>0</td></tr><tr class=""><td>double</td><td>0.0</td></tr><tr class=""><td>boolean</td><td>false</td></tr><tr class=""><td>String</td><td>null</td></tr></table></div></section>
+<section id="sc-access" class="clip scene" data-start="53.148" data-duration="23.61" data-track-index="1"><div class="pill in">STEP 3 · 값 넣고 꺼내기</div><h2 class="title in">넣고 꺼내기</h2><p class="desc in">대괄호 <b>[인덱스]</b>로 접근</p><div class="code in"><div class="ln"><span class="kw">int</span>[] scores = <span class="kw">new</span> <span class="kw">int</span>[<span class="nu">3</span>];</div><div class="ln mk">scores[<span class="nu">0</span>] = <span class="nu">90</span>;   <span class="cm">// 넣기</span></div><div class="ln mk">System.out.println(scores[<span class="nu">0</span>]);</div></div><div class="term in"><i>실행 결과</i><div>90</div></div><div class="tlabel in">{ } 초기화 · new 생략, 크기 자동</div><div class="code in"><div class="ln mk"><span class="kw">int</span>[] scores = {<span class="nu">90</span>, <span class="nu">75</span>, <span class="nu">88</span>};</div><div class="ln mk"><span class="kw">int</span> n = scores.length;</div><div class="ln">System.out.println(n);</div></div><div class="term in"><i>실행 결과</i><div>3</div></div></section>
+<section id="sc-swap" class="clip scene" data-start="76.758" data-duration="21.714" data-track-index="1"><div class="pill in">STEP 3-1 · 값 교환</div><h2 class="title in">값 교환</h2><p class="desc in">임시 변수 <b>temp</b>에 잠시 보관</p><div class="arr in"><span class="nm">scores</span><div class="cw"><div class="box"><b class="k1" id=s0-0>90</b><b class="k2" id=s0-1 style=opacity:0>75</b></div><small>0</small></div><div class="cw"><div class="box"><b class="k2" id=s1-0>75</b><b class="k1" id=s1-1 style=opacity:0>90</b></div><small>1</small></div><div class="cw"><div class="box"><b class="k3">88</b></div><small>2</small></div><span class="nm tn">temp</span><div class="cw"><div class="box"><b class="z" id=tp-0>?</b><b class="k1" id=tp-1 style=opacity:0>90</b></div><small></small></div></div><div class="code in swapcode"><div class="ln"><span class="kw">int</span>[] scores = {<span class="nu">90</span>, <span class="nu">75</span>, <span class="nu">88</span>};</div><div class="ln"><span class="kw">int</span> temp = scores[<span class="nu">0</span>];</div><div class="ln">scores[<span class="nu">0</span>] = scores[<span class="nu">1</span>];</div><div class="ln">scores[<span class="nu">1</span>] = temp;</div></div><div class="tlabel late">✗ temp 없이 바로 덮어쓰면</div><div class="code late"><div class="ln mk">scores[<span class="nu">0</span>] = scores[<span class="nu">1</span>];</div><div class="ln mk">scores[<span class="nu">1</span>] = scores[<span class="nu">0</span>];</div></div><div class="warn late"><b>90</b>이 사라져서 둘 다 <code>75</code></div></section>
+<section id="sc-error" class="clip scene" data-start="98.472" data-duration="24.378" data-track-index="1"><div class="pill in">STEP 4 · 인덱스 에러</div><h2 class="title in">범위 밖 인덱스</h2><p class="desc in">쓸 수 있는 인덱스는 <b>0 ~ length-1</b></p><div class="arr in"><span class="nm">scores</span><div class="cw"><div class="box"><b class="k1">90</b></div><small>0</small></div><div class="cw"><div class="box"><b class="k2">75</b></div><small>1</small></div><div class="cw"><div class="box"><b class="k3">88</b></div><small>2</small></div><div class="cw"><div class="box ghost"><b class="z">✗</b></div><small>3</small></div></div><div class="tlabel in">✓ 컴파일은 성공 → ✗ 실행 중 에러</div><div class="code in"><div class="ln"><span class="kw">int</span>[] scores = {<span class="nu">90</span>, <span class="nu">75</span>, <span class="nu">88</span>};</div><div class="ln mk">System.out.println(scores[<span class="nu">3</span>]);</div></div><div class="term err in"><i>실행 오류</i><div>Exception in thread &quot;main&quot;</div><div>java.lang.ArrayIndexOutOfBoundsException:</div><div>Index 3 out of bounds for length 3</div></div><div class="tlabel in">✓ 마지막 칸은 length - 1</div><div class="code in"><div class="ln mk"><span class="kw">int</span> i = scores.length - <span class="nu">1</span>; <span class="cm">// 2</span></div><div class="ln">System.out.println(scores[i]);</div></div></section>
+<section id="sc-multi" class="clip scene" data-start="122.850" data-duration="21.882" data-track-index="1"><div class="pill in">STEP 5 · 다차원 배열</div><h2 class="title in">2차원 배열</h2><p class="desc in">대괄호 두 번 <b>[행][열]</b></p><div class="code in"><div class="ln mk"><span class="kw">int</span>[][] seats = <span class="kw">new</span> <span class="kw">int</span>[<span class="nu">2</span>][<span class="nu">3</span>];</div><div class="ln mk">seats[<span class="nu">1</span>][<span class="nu">2</span>] = <span class="nu">7</span>;</div><div class="ln">System.out.println(seats[<span class="nu">1</span>][<span class="nu">2</span>]);</div></div><div class="term in"><i>실행 결과</i><div>7</div></div><div class="gridw in"><div class="grid" style="grid-template-columns: 60px repeat(3, 150px)"><i></i><i>0</i><i>1</i><i>2</i><i>0</i><b class="z">0</b><b class="z">0</b><b class="z">0</b><i>1</i><b class="z">0</b><b class="z">0</b><b class="k1">7</b></div><div class="dims"><span><code>seats.length</code> = <em>2</em> 행</span><span><code>seats[0].length</code> = <em>3</em> 열</span></div></div></section>
+<section id="sc-outro" class="clip scene" data-start="144.732" data-duration="19.348" data-track-index="1"><div class="pill in">정리</div><h2 class="title in">배열 핵심 6가지</h2><div class="list in"><div class="row" id="ex1"><span class="no">1</span><b>배열 = 같은 타입의 묶음</b></div><div class="row" id="ex2"><span class="no">2</span><b>new int[3] · 기본값 0</b></div><div class="row" id="ex3"><span class="no">3</span><b>인덱스 0부터 · length</b></div><div class="row" id="ex4"><span class="no">4</span><b>교환은 temp로</b></div><div class="row" id="ex5"><span class="no">5</span><b>scores[3] → 실행 에러</b></div><div class="row" id="ex6"><span class="no">6</span><b>int[][] 다차원 배열</b></div></div><div class="cta in">👍 구독 · 좋아요</div></section>
+  <div id="cap-hook-0" class="clip cap" data-start="0.300" data-duration="2.835" data-track-index="2"><span>자바 입문 세 번째, 배열!</span></div>
+<div id="cap-hook-1" class="clip cap" data-start="3.135" data-duration="4.007" data-track-index="2"><span>배열의 개념부터 뉴 연산자, 값 교환, 인덱스 에러,</span></div>
+<div id="cap-hook-2" class="clip cap" data-start="7.141" data-duration="2.806" data-track-index="2"><span>다차원 배열까지 정리해 드립니다.</span></div>
+<div id="cap-define-0" class="clip cap" data-start="10.398" data-duration="2.271" data-track-index="2"><span>배열은 같은 타입의 값 여러 개를,</span></div>
+<div id="cap-define-1" class="clip cap" data-start="12.669" data-duration="3.153" data-track-index="2"><span>하나의 이름으로 묶어 저장하는 공간이에요.</span></div>
+<div id="cap-define-2" class="clip cap" data-start="15.822" data-duration="1.808" data-track-index="2"><span>학생 세 명의 점수를 변수</span></div>
+<div id="cap-define-3" class="clip cap" data-start="17.630" data-duration="1.562" data-track-index="2"><span>세 개에 따로 담는 대신,</span></div>
+<div id="cap-define-4" class="clip cap" data-start="19.193" data-duration="3.159" data-track-index="2"><span>스코어즈라는 배열 하나에 담을 수 있어요.</span></div>
+<div id="cap-define-5" class="clip cap" data-start="22.351" data-duration="2.422" data-track-index="2"><span>각 칸은 인덱스라는 번호로 구분하는데,</span></div>
+<div id="cap-define-6" class="clip cap" data-start="24.773" data-duration="2.600" data-track-index="2"><span>인덱스는 영부터 시작합니다.</span></div>
+<div id="cap-define-7" class="clip cap" data-start="27.373" data-duration="2.165" data-track-index="2"><span>그래서 첫 번째 칸은 스코어즈 영,</span></div>
+<div id="cap-define-8" class="clip cap" data-start="29.539" data-duration="1.907" data-track-index="2"><span>값은 구십이에요.</span></div>
+<div id="cap-new-0" class="clip cap" data-start="31.896" data-duration="2.801" data-track-index="2"><span>배열은 뉴 연산자로 만들어요.</span></div>
+<div id="cap-new-1" class="clip cap" data-start="34.697" data-duration="2.333" data-track-index="2"><span>인트 배열 스코어즈 이퀄 뉴 인트 삼은,</span></div>
+<div id="cap-new-2" class="clip cap" data-start="37.030" data-duration="3.326" data-track-index="2"><span>정수 세 칸짜리 배열을 만들라는 뜻이에요.</span></div>
+<div id="cap-new-3" class="clip cap" data-start="40.356" data-duration="3.348" data-track-index="2"><span>한 번 정한 크기는 나중에 바꿀 수 없어요.</span></div>
+<div id="cap-new-4" class="clip cap" data-start="43.704" data-duration="1.116" data-track-index="2"><span>그리고 값을 넣지 않은</span></div>
+<div id="cap-new-5" class="clip cap" data-start="44.820" data-duration="2.377" data-track-index="2"><span>칸에는 기본값이 들어가요.</span></div>
+<div id="cap-new-6" class="clip cap" data-start="47.197" data-duration="3.728" data-track-index="2"><span>인트는 영, 더블은 영 점 영, 불리언은 펄스,</span></div>
+<div id="cap-new-7" class="clip cap" data-start="50.925" data-duration="1.923" data-track-index="2"><span>스트링은 널입니다.</span></div>
+<div id="cap-access-0" class="clip cap" data-start="53.298" data-duration="2.885" data-track-index="2"><span>값을 넣을 때는 스코어즈 영 이퀄 구십처럼,</span></div>
+<div id="cap-access-1" class="clip cap" data-start="56.183" data-duration="2.896" data-track-index="2"><span>대괄호 안에 인덱스를 써서 대입해요.</span></div>
+<div id="cap-access-2" class="clip cap" data-start="59.079" data-duration="1.685" data-track-index="2"><span>꺼낼 때도 똑같이 스코어즈</span></div>
+<div id="cap-access-3" class="clip cap" data-start="60.764" data-duration="2.065" data-track-index="2"><span>영이라고 쓰면 됩니다.</span></div>
+<div id="cap-access-4" class="clip cap" data-start="62.829" data-duration="1.897" data-track-index="2"><span>만들면서 바로 값을 넣으려면</span></div>
+<div id="cap-access-5" class="clip cap" data-start="64.727" data-duration="2.165" data-track-index="2"><span>중괄호로 초기화해요.</span></div>
+<div id="cap-access-6" class="clip cap" data-start="66.892" data-duration="1.741" data-track-index="2"><span>이때는 뉴를 쓰지 않아도,</span></div>
+<div id="cap-access-7" class="clip cap" data-start="68.633" data-duration="3.025" data-track-index="2"><span>값의 개수만큼 크기가 정해져요.</span></div>
+<div id="cap-access-8" class="clip cap" data-start="71.657" data-duration="2.545" data-track-index="2"><span>배열의 크기는 점 렝스로 알 수 있고,</span></div>
+<div id="cap-access-9" class="clip cap" data-start="74.202" data-duration="2.256" data-track-index="2"><span>여기서는 삼이 나옵니다.</span></div>
+<div id="cap-swap-0" class="clip cap" data-start="76.908" data-duration="1.813" data-track-index="2"><span>두 칸의 값을 서로 바꿀 때는</span></div>
+<div id="cap-swap-1" class="clip cap" data-start="78.721" data-duration="2.595" data-track-index="2"><span>임시 변수 템프가 필요해요.</span></div>
+<div id="cap-swap-2" class="clip cap" data-start="81.317" data-duration="1.027" data-track-index="2"><span>먼저 스코어즈 영의</span></div>
+<div id="cap-swap-3" class="clip cap" data-start="82.343" data-duration="1.708" data-track-index="2"><span>구십을 템프에 옮겨 두고,</span></div>
+<div id="cap-swap-4" class="clip cap" data-start="84.051" data-duration="1.205" data-track-index="2"><span>스코어즈 영에 스코어즈</span></div>
+<div id="cap-swap-5" class="clip cap" data-start="85.256" data-duration="1.607" data-track-index="2"><span>일의 칠십오를 넣은 다음,</span></div>
+<div id="cap-swap-6" class="clip cap" data-start="86.863" data-duration="2.734" data-track-index="2"><span>템프의 구십을 스코어즈 일에 넣어요.</span></div>
+<div id="cap-swap-7" class="clip cap" data-start="89.598" data-duration="1.897" data-track-index="2"><span>그러면 칠십오, 구십,</span></div>
+<div id="cap-swap-8" class="clip cap" data-start="91.495" data-duration="1.842" data-track-index="2"><span>팔십팔이 됩니다.</span></div>
+<div id="cap-swap-9" class="clip cap" data-start="93.337" data-duration="1.752" data-track-index="2"><span>템프 없이 바로 덮어쓰면,</span></div>
+<div id="cap-swap-10" class="clip cap" data-start="95.089" data-duration="3.083" data-track-index="2"><span>구십이 사라져서 둘 다 칠십오가 돼요.</span></div>
+<div id="cap-error-0" class="clip cap" data-start="98.622" data-duration="1.825" data-track-index="2"><span>인덱스는 영부터 렝스 빼기</span></div>
+<div id="cap-error-1" class="clip cap" data-start="100.447" data-duration="2.204" data-track-index="2"><span>일까지만 쓸 수 있어요.</span></div>
+<div id="cap-error-2" class="clip cap" data-start="102.651" data-duration="3.259" data-track-index="2"><span>길이가 삼인 배열의 마지막 인덱스는 이예요.</span></div>
+<div id="cap-error-3" class="clip cap" data-start="105.910" data-duration="2.801" data-track-index="2"><span>스코어즈 삼처럼 크기를 넘는 인덱스를 쓰면,</span></div>
+<div id="cap-error-4" class="clip cap" data-start="108.711" data-duration="1.507" data-track-index="2"><span>컴파일은 되지만 실행하는</span></div>
+<div id="cap-error-5" class="clip cap" data-start="110.218" data-duration="2.065" data-track-index="2"><span>순간 에러가 납니다.</span></div>
+<div id="cap-error-6" class="clip cap" data-start="112.283" data-duration="2.667" data-track-index="2"><span>어레이 인덱스 아웃 오브 바운즈 익셉션,</span></div>
+<div id="cap-error-7" class="clip cap" data-start="114.950" data-duration="1.350" data-track-index="2"><span>인덱스 삼은 길이 삼의</span></div>
+<div id="cap-error-8" class="clip cap" data-start="116.301" data-duration="2.355" data-track-index="2"><span>범위를 벗어났다는 뜻이에요.</span></div>
+<div id="cap-error-9" class="clip cap" data-start="118.656" data-duration="1.696" data-track-index="2"><span>그래서 마지막 칸은 렝스 빼기</span></div>
+<div id="cap-error-10" class="clip cap" data-start="120.352" data-duration="2.198" data-track-index="2"><span>일로 꺼내는 게 안전해요.</span></div>
+<div id="cap-multi-0" class="clip cap" data-start="123.000" data-duration="3.415" data-track-index="2"><span>배열 안에 배열을 담으면 다차원 배열이에요.</span></div>
+<div id="cap-multi-1" class="clip cap" data-start="126.415" data-duration="3.147" data-track-index="2"><span>대괄호를 두 번 써서 뉴 인트 이, 삼이라고 하면,</span></div>
+<div id="cap-multi-2" class="clip cap" data-start="129.562" data-duration="2.846" data-track-index="2"><span>이 행 삼 열짜리 표가 만들어져요.</span></div>
+<div id="cap-multi-3" class="clip cap" data-start="132.409" data-duration="1.719" data-track-index="2"><span>시츠 일 이에 칠을 넣으면,</span></div>
+<div id="cap-multi-4" class="clip cap" data-start="134.127" data-duration="1.384" data-track-index="2"><span>일 번 행의 이 번 열,</span></div>
+<div id="cap-multi-5" class="clip cap" data-start="135.511" data-duration="3.203" data-track-index="2"><span>즉 두 번째 줄 세 번째 칸에 들어가요.</span></div>
+<div id="cap-multi-6" class="clip cap" data-start="138.714" data-duration="2.132" data-track-index="2"><span>시츠 점 렝스는 행의 개수인 이,</span></div>
+<div id="cap-multi-7" class="clip cap" data-start="140.846" data-duration="1.719" data-track-index="2"><span>시츠 영 점 렝스는 한 행의</span></div>
+<div id="cap-multi-8" class="clip cap" data-start="142.565" data-duration="1.867" data-track-index="2"><span>칸 수인 삼이에요.</span></div>
+<div id="cap-outro-0" class="clip cap" data-start="144.882" data-duration="2.974" data-track-index="2"><span>정리하면, 배열은 같은 타입 값의 묶음,</span></div>
+<div id="cap-outro-1" class="clip cap" data-start="147.856" data-duration="1.719" data-track-index="2"><span>뉴로 크기를 정해 만들고,</span></div>
+<div id="cap-outro-2" class="clip cap" data-start="149.575" data-duration="2.533" data-track-index="2"><span>인덱스는 영부터, 교환은 템프로,</span></div>
+<div id="cap-outro-3" class="clip cap" data-start="152.108" data-duration="2.076" data-track-index="2"><span>렝스 이상의 인덱스는 실행 에러,</span></div>
+<div id="cap-outro-4" class="clip cap" data-start="154.184" data-duration="1.607" data-track-index="2"><span>다차원은 대괄호 두 번.</span></div>
+<div id="cap-outro-5" class="clip cap" data-start="155.791" data-duration="3.254" data-track-index="2"><span>반복문 편에서 배열과 함께 다시 만나요.</span></div>
+<div id="cap-outro-6" class="clip cap" data-start="159.045" data-duration="3.837" data-track-index="2"><span>도움이 됐다면 구독과 좋아요 부탁드립니다!</span></div>
+  <div class="bar"></div>
+  <audio id="vo" src="assets/narration.mp3" data-start="0" data-duration="164.08" data-track-index="0"></audio>
+</div>
+<script>
+const tl = gsap.timeline({ paused: true });
+function enter(sel, t, dur) {
+  const items = document.querySelectorAll(sel + " .in");
+  const step = Math.min(0.9, (dur * 0.5) / Math.max(1, items.length));
+  items.forEach((el, i) => {
+    const at = Math.max(0, t - 0.1) + i * step;
+    tl.fromTo(el, { opacity: 0, y: 50 }, { opacity: 1, y: 0, duration: 0.5, ease: "power3.out" }, at);
+    el.querySelectorAll(".ln").forEach((ln, j) => {
+      tl.fromTo(ln, { opacity: 0, x: -30 }, { opacity: 1, x: 0, duration: 0.35, ease: "power2.out" }, at + 0.15 + j * 0.3);
+    });
+  });
+}
+function late(sel, t) {
+  document.querySelectorAll(sel + " .late").forEach((el, i) => {
+    tl.fromTo(el, { opacity: 0, y: 50 }, { opacity: 1, y: 0, duration: 0.5, ease: "power3.out" }, t + i * 0.35);
+    el.querySelectorAll(".ln").forEach((ln, j) => {
+      tl.fromTo(ln, { opacity: 0, x: -30 }, { opacity: 1, x: 0, duration: 0.35, ease: "power2.out" }, t + i * 0.35 + 0.15 + j * 0.3);
+    });
+  });
+}
+enter("#sc-hook", 0.3, 9.648);
+tl.set(".prog i", {backgroundColor: "#26324a"}, 0);
+enter("#sc-define", 10.398, 21.048);
+tl.set(".prog i", {backgroundColor: "#26324a"}, 10.248);
+tl.set(".prog i:nth-child(1)", {backgroundColor: "#f29111"}, 10.248);
+enter("#sc-new", 31.896, 20.952);
+tl.set(".prog i", {backgroundColor: "#26324a"}, 31.746000000000002);
+tl.set(".prog i:nth-child(2)", {backgroundColor: "#f29111"}, 31.746000000000002);
+enter("#sc-access", 53.298, 23.16);
+tl.set(".prog i", {backgroundColor: "#26324a"}, 53.148);
+tl.set(".prog i:nth-child(3)", {backgroundColor: "#f29111"}, 53.148);
+enter("#sc-swap", 76.908, 21.264);
+tl.set(".prog i", {backgroundColor: "#26324a"}, 76.758);
+tl.set(".prog i:nth-child(3)", {backgroundColor: "#f29111"}, 76.758);
+enter("#sc-error", 98.622, 23.928);
+tl.set(".prog i", {backgroundColor: "#26324a"}, 98.472);
+tl.set(".prog i:nth-child(4)", {backgroundColor: "#f29111"}, 98.472);
+enter("#sc-multi", 123.0, 21.432);
+tl.set(".prog i", {backgroundColor: "#26324a"}, 122.85);
+tl.set(".prog i:nth-child(5)", {backgroundColor: "#f29111"}, 122.85);
+enter("#sc-outro", 144.882, 18.0);
+tl.set(".prog i", {backgroundColor: "#26324a"}, 144.732);
+tl.to("#sc-swap .swapcode .ln:nth-child(2)", {backgroundColor: "rgba(242,145,17,.22)", duration: 0.2}, 83.169);
+tl.to("#tp-0", {opacity: 0, duration: 0.25}, 83.169);
+tl.fromTo("#tp-1", {opacity: 0, scale: 1.6}, {opacity: 1, scale: 1, duration: 0.4, ease: "back.out(2)"}, 83.169);
+tl.to("#sc-swap .swapcode .ln:nth-child(2)", {backgroundColor: "rgba(242,145,17,0)", duration: 0.2}, 86.004);
+tl.to("#sc-swap .swapcode .ln:nth-child(3)", {backgroundColor: "rgba(242,145,17,.22)", duration: 0.2}, 86.004);
+tl.to("#s0-0", {opacity: 0, duration: 0.25}, 86.004);
+tl.fromTo("#s0-1", {opacity: 0, scale: 1.6}, {opacity: 1, scale: 1, duration: 0.4, ease: "back.out(2)"}, 86.004);
+tl.to("#sc-swap .swapcode .ln:nth-child(3)", {backgroundColor: "rgba(242,145,17,0)", duration: 0.2}, 88.314);
+tl.to("#sc-swap .swapcode .ln:nth-child(4)", {backgroundColor: "rgba(242,145,17,.22)", duration: 0.2}, 88.314);
+tl.to("#s1-0", {opacity: 0, duration: 0.25}, 88.314);
+tl.fromTo("#s1-1", {opacity: 0, scale: 1.6}, {opacity: 1, scale: 1, duration: 0.4, ease: "back.out(2)"}, 88.314);
+late("#sc-swap", 93.627);
+tl.to("#ex1", {backgroundColor: "#3a2a12", scale: 1.04, duration: 0.2}, 145.814);
+tl.to("#ex1", {backgroundColor: "#131c2e", scale: 1, duration: 0.2}, 147.856);
+tl.to("#ex2", {backgroundColor: "#3a2a12", scale: 1.04, duration: 0.2}, 147.856);
+tl.to("#ex2", {backgroundColor: "#131c2e", scale: 1, duration: 0.2}, 149.575);
+tl.to("#ex3", {backgroundColor: "#3a2a12", scale: 1.04, duration: 0.2}, 149.575);
+tl.to("#ex3", {backgroundColor: "#131c2e", scale: 1, duration: 0.2}, 150.992);
+tl.to("#ex4", {backgroundColor: "#3a2a12", scale: 1.04, duration: 0.2}, 150.992);
+tl.to("#ex4", {backgroundColor: "#131c2e", scale: 1, duration: 0.2}, 152.108);
+tl.to("#ex5", {backgroundColor: "#3a2a12", scale: 1.04, duration: 0.2}, 152.108);
+tl.to("#ex5", {backgroundColor: "#131c2e", scale: 1, duration: 0.2}, 154.184);
+tl.to("#ex6", {backgroundColor: "#3a2a12", scale: 1.04, duration: 0.2}, 154.184);
+tl.to("#ex6", {backgroundColor: "#131c2e", scale: 1, duration: 0.3}, 159.045 + 0.6);
+tl.fromTo(".bar", { scaleX: 0 }, { scaleX: 1, duration: 164.08, ease: "none" }, 0);
+window.__timelines = window.__timelines || {};
+window.__timelines["main"] = tl;
+tl.seek(0);
+</script>
+</body>
+</html>

@@ -1,0 +1,152 @@
+// 영상에 나오는 예제 프로그램 (build.py가 생성 · 직접 고치지 말 것)
+// 각 예제를 파일 이름대로 저장한 뒤: javac -encoding UTF-8 Main.java && java Main
+
+// [1. 산술연산자 다섯 가지] Main.java → 출력:
+//   22
+//   12
+//   85
+//   3
+//   2
+public class Main {
+  public static void main(String[] args) {
+    System.out.println(17 + 5);
+    System.out.println(17 - 5);
+    System.out.println(17 * 5);
+    System.out.println(17 / 5);
+    System.out.println(17 % 5);
+  }
+}
+
+// [5-1. 증감 연산자] Main.java → 출력:
+//   6
+//   6
+//   5
+public class Main {
+  public static void main(String[] args) {
+    int x = 5;
+    x++;
+    System.out.println(x);
+    x = 5;
+    ++x;
+    System.out.println(x);
+    x--;
+    System.out.println(x);
+  }
+}
+
+// [2. 몫과 나머지] Main.java → 출력:
+//   3
+//   2
+public class Main {
+  public static void main(String[] args) {
+    System.out.println(17 / 5); // 3
+    System.out.println(17 % 5); // 2
+  }
+}
+
+// [2. 몫과 나머지] Main.java → 출력:
+//   1
+public class Main {
+  public static void main(String[] args) {
+    System.out.println(17 % 2); // 1
+  }
+}
+
+// [2-1. 실수 나눗셈] Main.java → 출력:
+//   3.4
+//   3.4
+public class Main {
+  public static void main(String[] args) {
+    double a = 17 / 5.0;
+    double b = (double) 17 / 5;
+    System.out.println(a);
+    System.out.println(b);
+  }
+}
+
+// [2-1. 실수 나눗셈] Main.java → 출력:
+//   3.0
+public class Main {
+  public static void main(String[] args) {
+    double c = (double) (17 / 5);
+    System.out.println(c);
+  }
+}
+
+// [3. 0으로 나누기] Main.java → 실행 오류: Exception in thread "main" java.lang.ArithmeticException: / by zero
+public class Main {
+  public static void main(String[] args) {
+    int n = 0;
+    System.out.println(17 / n);
+  }
+}
+
+// [3. 0으로 나누기] Main.java → 출력:
+//   Infinity
+public class Main {
+  public static void main(String[] args) {
+    int n = 0;
+    System.out.println(17.0 / n);
+  }
+}
+
+// [4. 계산 순서] Main.java → 출력:
+//   17
+//   21
+//   6
+public class Main {
+  public static void main(String[] args) {
+    int a = 3 * 5 + 2;    // 17
+    int b = 3 * (5 + 2);  // 21
+    int c = 17 / 5 * 2;   // 6
+    System.out.println(a);
+    System.out.println(b);
+    System.out.println(c);
+  }
+}
+
+// [5. 복합 대입 연산자] Main.java → 출력:
+//   12
+public class Main {
+  public static void main(String[] args) {
+    int candy = 17;
+    candy -= 5; // candy = candy - 5
+    System.out.println(candy);
+  }
+}
+
+// [5-1. 증감 연산자] Main.java → 출력:
+//   y=5, x=6
+public class Main {
+  public static void main(String[] args) {
+    int x = 5;
+    int y = x++;   // y=5, x=6
+    System.out.println("y=" + y + ", x=" + x);
+  }
+}
+
+// [5-1. 증감 연산자] Main.java → 출력:
+//   y=6, x=6
+public class Main {
+  public static void main(String[] args) {
+    int x = 5;
+    int y = ++x;   // y=6, x=6
+    System.out.println("y=" + y + ", x=" + x);
+  }
+}
+
+// [2-1. 실수 나눗셈] Main.java → 출력:
+//   3
+public class Main {
+  public static void main(String[] args) {
+    System.out.println(7 / 2);
+  }
+}
+
+// [3. 0으로 나누기] Main.java → 실행 오류: Exception in thread "main" java.lang.ArithmeticException: / by zero
+public class Main {
+  public static void main(String[] args) {
+    int n = 0;
+    System.out.println(17 % n);
+  }
+}

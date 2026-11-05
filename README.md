@@ -25,6 +25,7 @@
 | 2026-11-02 | 자바 입문: Hello World 출력하기 (class · main · println · \n · print) | 2:33 | [java-hello-shorts](java-hello-shorts) | [YouTube](https://www.youtube.com/watch?v=vmLd9hf1s18) |
 | 2026-11-03 | 자바 입문: 변수 (선언 · 대입 · int · double · char · String) | 2:50 | [java-variables-shorts](java-variables-shorts) | [YouTube](https://www.youtube.com/watch?v=fnfHwBrKP1A) |
 | 2026-11-04 | 자바 입문: 배열 (new · 인덱스 · 값 교환 · 인덱스 에러 · 다차원 배열) | 2:44 | [java-arrays-shorts](java-arrays-shorts) | [YouTube](https://www.youtube.com/watch?v=PvgAXvu44S8) |
+| 2026-11-05 | 자바 입문: 산술연산자 (+ - * / % · 몫과 나머지 · 0으로 나누기 · 계산 순서 · 복합 대입 · ++) | 2:45 | [java-arithmetic-shorts](java-arithmetic-shorts) | [YouTube](https://www.youtube.com/watch?v=qsWIQJt4wvI) |
 
 ## 제작 방식
 

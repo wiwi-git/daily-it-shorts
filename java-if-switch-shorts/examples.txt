@@ -1,0 +1,170 @@
+// 영상에 나오는 예제 프로그램 (build.py가 생성 · 직접 고치지 말 것)
+// 각 예제를 파일 이름대로 저장한 뒤: javac -encoding UTF-8 Main.java && java Main
+
+// [4. switch문] Main.java → 출력:
+//   수요일
+public class Main {
+  public static void main(String[] args) {
+    int score = 85;
+    int day = 3;
+    switch (day) {
+      case 3:
+        System.out.println("수요일");
+        break;
+      case 4:
+        System.out.println("목요일");
+        break;
+      default:
+        System.out.println("그 외");
+    }
+  }
+}
+
+// [4. switch문] Main.java → 출력:
+//   수요일
+//   목요일
+public class Main {
+  public static void main(String[] args) {
+    int score = 85;
+    int day = 3;
+    switch (day) {
+      case 3:
+        System.out.println("수요일");
+      case 4:
+        System.out.println("목요일");
+        break;
+      default:
+        System.out.println("그 외");
+    }
+  }
+}
+
+// [1. if문] Main.java → 출력:
+//   합격
+public class Main {
+  public static void main(String[] args) {
+    int score = 85;
+    if (score >= 60) {
+      System.out.println("합격");
+    }
+  }
+}
+
+// [1. if문] Main.java → 출력:
+//   합격
+public class Main {
+  public static void main(String[] args) {
+    int score = 85;
+    int day = 3;
+    if (score >= 60)
+      System.out.println("합격");
+  }
+}
+
+// [2. if-else] Main.java → 출력:
+//   다음 기회
+public class Main {
+  public static void main(String[] args) {
+    int score = 85;
+    int day = 3;
+    if (score >= 90) {
+      System.out.println("장학금");
+    } else {
+      System.out.println("다음 기회");
+    }
+  }
+}
+
+// [3. else if] Main.java → 출력:
+//   B
+public class Main {
+  public static void main(String[] args) {
+    int score = 85;
+    int day = 3;
+    if (score >= 90) {
+      System.out.println("A");
+    } else if (score >= 80) {
+      System.out.println("B");
+    } else if (score >= 70) {
+      System.out.println("C");
+    } else {
+      System.out.println("F");
+    }
+  }
+}
+
+// [3-1. 삼항 연산자] Main.java → 출력:
+//   합격
+public class Main {
+  public static void main(String[] args) {
+    int score = 85;
+    int day = 3;
+    String r = score >= 60
+        ? "합격" : "불합격";
+    System.out.println(r);
+  }
+}
+
+// [3-1. 삼항 연산자] Main.java → 출력:
+//   합격
+public class Main {
+  public static void main(String[] args) {
+    int score = 85;
+    int day = 3;
+    String r;
+    if (score >= 60) {
+      r = "합격";
+    } else {
+      r = "불합격";
+    }
+    System.out.println(r);
+  }
+}
+
+// [4. switch문] Main.java → 출력:
+//   수요일
+public class Main {
+  public static void main(String[] args) {
+    int score = 85;
+    int day = 3;
+    switch (day) {
+      case 3:
+        System.out.println("수요일");
+        break;
+      case 4:
+        System.out.println("목요일");
+        break;
+      default:
+        System.out.println("그 외");
+    }
+  }
+}
+
+// [5. 화살표 switch] Main.java → 출력:
+//   수요일
+public class Main {
+  public static void main(String[] args) {
+    int score = 85;
+    int day = 3;
+    String name = switch (day) {
+      case 3 -> "수요일";
+      case 4 -> "목요일";
+      default -> "그 외";
+    };
+    System.out.println(name);
+  }
+}
+
+// [5. 화살표 switch] Main.java → 출력:
+//   평일
+public class Main {
+  public static void main(String[] args) {
+    int score = 85;
+    int day = 3;
+    String type = switch (day) {
+      case 6, 7 -> "주말"; // 묶기
+      default -> "평일";
+    };
+    System.out.println(type);
+  }
+}

@@ -26,6 +26,9 @@
 | 2026-11-03 | 자바 입문: 변수 (선언 · 대입 · int · double · char · String) | 2:50 | [java-variables-shorts](java-variables-shorts) | [YouTube](https://www.youtube.com/watch?v=fnfHwBrKP1A) |
 | 2026-11-04 | 자바 입문: 배열 (new · 인덱스 · 값 교환 · 인덱스 에러 · 다차원 배열) | 2:44 | [java-arrays-shorts](java-arrays-shorts) | [YouTube](https://www.youtube.com/watch?v=PvgAXvu44S8) |
 | 2026-11-05 | 자바 입문: 산술연산자 (+ - * / % · 몫과 나머지 · 0으로 나누기 · 계산 순서 · 복합 대입 · ++) | 2:45 | [java-arithmetic-shorts](java-arithmetic-shorts) | [YouTube](https://www.youtube.com/watch?v=qsWIQJt4wvI) |
+| 2026-11-06 | 자바 입문: 비교·논리 연산자 (== != · equals() · && \|\| ! · 단락 평가 · 범위 검사 · 우선순위) | 2:44 | [java-compare-logic-shorts](java-compare-logic-shorts) | [YouTube](https://www.youtube.com/watch?v=2ytYJfWjn60) |
+| 2026-11-06 | 자바 입문: 조건문 (if · else if · 삼항 연산자 · switch · break · 화살표 switch) | 2:24 | [java-if-switch-shorts](java-if-switch-shorts) | [YouTube](https://www.youtube.com/watch?v=3LjHCPxlE5o) |
+| 2026-11-06 | 자바 입문: 반복문 (for · 합계 · 배열 순회 · while · do-while · break · continue) | 2:19 | [java-loops-shorts](java-loops-shorts) | [YouTube](https://www.youtube.com/watch?v=FillAoh7FIY) |
 
 ## 제작 방식
 

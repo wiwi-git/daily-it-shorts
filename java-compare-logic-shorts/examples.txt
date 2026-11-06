@@ -1,0 +1,130 @@
+// 영상에 나오는 예제 프로그램 (build.py가 생성 · 직접 고치지 말 것)
+// 각 예제를 파일 이름대로 저장한 뒤: javac -encoding UTF-8 Main.java && java Main
+
+// [2. 논리 연산자] Main.java → 출력:
+//   true true true true false
+//   true false false true false
+//   false true false true true
+//   false false false false true
+public class Main {
+  public static void main(String[] args) {
+    boolean[] v = {true, false};
+    for (boolean a : v)
+      for (boolean b : v)
+        System.out.println(a + " " + b + " " + (a && b) + " " + (a || b) + " " + !a);
+  }
+}
+
+// [4. 연산자 우선순위] Main.java → 출력:
+//   21
+//   90
+//   true
+//   true
+//   true
+public class Main {
+  public static void main(String[] args) {
+    int score = 85;
+    int age = 20;
+    System.out.println(age + 1);
+    System.out.println(score + 5);
+    System.out.println(age + 1 > 20);
+    System.out.println(score + 5 >= 90);
+    System.out.println(age + 1 > 20 && score + 5 >= 90);
+  }
+}
+
+// [1. 비교 연산자] Main.java → 출력:
+//   true
+//   false
+public class Main {
+  public static void main(String[] args) {
+    int score = 85;
+    boolean a = score >= 80;
+    boolean b = score == 100;
+    System.out.println(a);
+    System.out.println(b);
+  }
+}
+
+// [1-1. 자주 하는 실수] Main.java → 출력:
+//   false
+//   true
+public class Main {
+  public static void main(String[] args) {
+    String a = "java";
+    String b = new String("java");
+    System.out.println(a == b);
+    System.out.println(a.equals(b));
+  }
+}
+
+// [2. 논리 연산자] Main.java → 출력:
+//   true
+//   true
+public class Main {
+  public static void main(String[] args) {
+    int score = 85;
+    int age = 20;
+    boolean p = score >= 80
+             && age >= 20;   // true
+    boolean q = score >= 90
+             || age >= 18;   // true
+    System.out.println(p);
+    System.out.println(q);
+  }
+}
+
+// [2-1. 단락 평가] Main.java → 출력:
+//   false
+public class Main {
+  public static void main(String[] args) {
+    int x = 0;
+    boolean ok = x != 0
+              && 10 / x > 1;
+    System.out.println(ok);
+  }
+}
+
+// [2-1. 단락 평가] Main.java → 실행 오류: Exception in thread "main" java.lang.ArithmeticException: / by zero
+public class Main {
+  public static void main(String[] args) {
+    int x = 0;
+    boolean ok = 10 / x > 1
+              && x != 0;
+  }
+}
+
+// [3. 범위 검사] Main.java → 컴파일 오류: bad operand types for binary operator '<='
+public class Main {
+  public static void main(String[] args) {
+    int score = 85;
+    int age = 20;
+    boolean ok = 0 <= score <= 100;
+  }
+}
+
+// [3. 범위 검사] Main.java → 출력:
+//   true
+public class Main {
+  public static void main(String[] args) {
+    int score = 85;
+    int age = 20;
+    boolean ok = score >= 0
+              && score <= 100;
+    System.out.println(ok);
+  }
+}
+
+// [4. 연산자 우선순위] Main.java → 출력:
+//   true
+//   21
+public class Main {
+  public static void main(String[] args) {
+    int score = 85;
+    int age = 20;
+    boolean r = ++age > 20
+             && score + 5 >= 90;
+    System.out.println(r);
+    System.out.println(age);
+  }
+}

@@ -1,0 +1,293 @@
+<!doctype html>
+<html lang="ko" data-resolution="portrait">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=1080, height=1920" />
+<script src="https://cdn.jsdelivr.net/npm/gsap@3.14.2/dist/gsap.min.js"></script>
+<style>
+:root {
+  --ground: #0b1220; --panel: #131c2e; --ink: #f4f6fb; --mute: #9aa6bd;
+  --blue: #3fa7d6; --orange: #f29111; --red: #ff5d5d; --green: #7ee08a; --violet: #c3a6ff;
+  --font: "Pretendard", sans-serif;
+  --mono: "Menlo", "SF Mono", monospace;
+}
+@font-face { font-family: "Pretendard"; src: url("assets/fonts/PretendardVariable.woff2") format("woff2"); font-weight: 45 920; }
+* { margin: 0; padding: 0; box-sizing: border-box; }
+html, body { width: 1080px; height: 1920px; overflow: hidden; background: var(--ground); }
+#root { position: relative; width: 100%; height: 100%; font-variant-ligatures: none; font-family: var(--font); color: var(--ink); overflow: hidden;
+  background: radial-gradient(1200px 900px at 80% -10%, #16365a 0%, transparent 60%),
+              radial-gradient(900px 900px at -10% 110%, #3a2410 0%, transparent 55%), var(--ground); }
+.clip { position: absolute; inset: 0; }
+.brand { position: absolute; top: 110px; left: 70px; right: 70px; display: flex; justify-content: space-between; align-items: center;
+  font-size: 34px; font-weight: 700; color: var(--mute); letter-spacing: 0.02em; }
+.brand b { color: var(--blue); } .brand b em { color: var(--orange); font-style: normal; }
+.prog { display: flex; gap: 12px; }
+.prog i { display: block; width: 56px; height: 12px; border-radius: 6px; background: #26324a; }
+.scene { padding: 210px 70px 0; display: flex; flex-direction: column; gap: 26px; }
+.pill { align-self: flex-start; padding: 12px 26px; border-radius: 999px; background: #1d2a44; color: var(--blue);
+  font-size: 34px; font-weight: 700; }
+.hook { display: flex; flex-direction: column; gap: 50px; padding-top: 140px; }
+.big { font-size: 150px; line-height: 1.12; font-weight: 800; letter-spacing: -0.04em; }
+.big em { font-style: normal; color: var(--orange); }
+.sub { font-size: 64px; font-weight: 700; color: var(--mute); } .sub b { color: var(--ink); }
+.title { font-size: 80px; font-weight: 800; letter-spacing: -0.03em; line-height: 1.1; }
+.desc { font-size: 46px; color: var(--mute); font-weight: 600; margin-top: -8px; } .desc b { color: var(--orange); }
+.code { background: #0a0f1a; border: 2px solid #26324a; border-radius: 26px; padding: 30px 32px; font-family: var(--mono);
+  font-size: 42px; line-height: 1.5; color: #d9e1f2; white-space: pre; box-shadow: 0 30px 60px rgba(0,0,0,.35);
+  font-variant-ligatures: none; font-feature-settings: "liga" 0, "calt" 0; }
+.code.sm { font-size: 34px; padding: 26px 28px; }
+.code .ln { margin: 0 -14px; padding: 0 14px; border-radius: 10px; }
+.code .ln.mk { background: rgba(242,145,17,.13); }
+.kw { color: var(--blue); font-weight: 700; } .st { color: var(--green); } .nu { color: var(--orange); } .cm { color: #6f7d98; } .es { color: var(--orange); font-weight: 700; }
+.term { background: #05080f; border: 2px solid #26324a; border-radius: 22px; padding: 18px 32px 22px; font-family: var(--mono);
+  font-size: 40px; line-height: 1.4; color: var(--ink); white-space: pre; tab-size: 8; }
+.term i { display: block; font-style: normal; font-family: var(--font); font-size: 28px; font-weight: 700; color: var(--mute); margin-bottom: 6px; }
+.term .cmd { color: var(--blue); }
+.term.err { border-color: rgba(255,93,93,.5); color: var(--red); font-size: 34px; white-space: normal; }
+.warn small { font-size: 36px; color: var(--mute); font-weight: 600; }
+.nest > div, .nest > div div { border: 3px solid; border-radius: 22px; padding: 16px 26px 20px; display: flex; flex-direction: column; gap: 12px; }
+.nest b { font-size: 38px; font-weight: 800; font-family: var(--mono); }
+.nest .k1 { border-color: var(--orange); } .nest .k1 > b { color: var(--orange); }
+.nest .k2 { border-color: var(--green); } .nest .k2 > b { color: var(--green); }
+.nest .k3 { border-color: var(--violet); } .nest .k3 > b { color: var(--violet); }
+.chips { display: flex; flex-wrap: wrap; gap: 18px; }
+.chips span { padding: 16px 30px; background: var(--panel); border-radius: 18px; font-size: 42px; font-weight: 700; }
+.warn, .note { padding: 26px 36px; border-radius: 24px; font-size: 44px; font-weight: 700; line-height: 1.45; }
+.warn { background: rgba(255,93,93,.12); border-left: 10px solid var(--red); } .warn b { color: var(--red); }
+.note { background: rgba(63,167,214,.12); border-left: 10px solid var(--blue); } .note b { color: var(--orange); }
+.note small { font-size: 38px; color: var(--mute); font-weight: 600; font-family: var(--mono); }
+code { font-family: var(--mono); color: var(--orange); }
+.var { display: grid; grid-template-columns: 1fr 1.3fr 1fr; gap: 18px; }
+.var div { background: var(--panel); border-radius: 24px; padding: 20px 30px 24px; display: flex; flex-direction: column; gap: 4px; }
+.var small { font-size: 32px; font-weight: 700; color: var(--mute); }
+.var b { font-family: var(--mono); font-size: 64px; }
+.var .v { border: 4px dashed var(--orange); } .var .v b { color: var(--orange); }
+.tbl { align-self: flex-start; }
+.tlabel { font-size: 34px; font-weight: 700; color: var(--mute); margin-bottom: 10px; }
+.tbl table { border-collapse: collapse; font-family: var(--mono); font-size: 40px; background: var(--panel); border-radius: 18px; overflow: hidden; }
+.tbl th { color: var(--blue); text-align: left; padding: 12px 32px; background: #1a2640; }
+.tbl th u { text-decoration: none; color: var(--orange); }
+.tbl td { padding: 10px 32px; border-top: 1px solid #26324a; }
+.tbl tr.k1 td { color: var(--orange); } .tbl tr.k2 td { color: var(--green); } .tbl tr.k3 td { color: var(--violet); }
+.tbl tr.out td { color: #5b6782; text-decoration: line-through; }
+.tbl td.nl { color: var(--red) !important; font-style: italic; font-weight: 700; background: rgba(255,93,93,.12); }
+.link { align-self: flex-start; font-family: var(--mono); font-size: 38px; color: var(--mute); padding: 6px 0 6px 26px;
+  border-left: 8px solid var(--orange); }
+.link b { color: var(--orange); }
+.arrow { font-family: var(--mono); font-size: 38px; color: var(--orange); font-weight: 700; }
+.vs { display: grid; grid-template-columns: 1fr 1fr; gap: 22px; }
+.card { background: var(--panel); border-radius: 26px; padding: 26px 32px; display: flex; flex-direction: column; gap: 6px; }
+.card b { font-family: var(--mono); font-size: 52px; color: var(--blue); }
+.vs .card span { font-size: 44px; font-weight: 800; } .vs .card .ok { color: var(--green); } .vs .card .ng { color: var(--red); }
+.res { display: flex; flex-wrap: wrap; align-items: center; gap: 14px; margin-top: -6px; }
+.res i { font-style: normal; font-size: 34px; color: var(--mute); font-weight: 700; }
+.res span { padding: 8px 22px; border-radius: 14px; background: var(--panel); font-size: 40px; font-weight: 700; }
+.res span.k1 { color: var(--orange); } .res span.k2 { color: var(--green); } .res span.k3 { color: var(--violet); }
+.res span.bad { color: var(--red); background: rgba(255,93,93,.14); box-shadow: inset 0 0 0 3px var(--red); } .vs .card em { font-style: normal; color: var(--orange); }
+.list { display: flex; flex-direction: column; gap: 16px; }
+.row { display: flex; align-items: center; gap: 30px; background: var(--panel); border-radius: 22px; padding: 14px 36px; font-size: 48px;
+  transform-origin: left center; }
+.row .no { font-size: 52px; font-weight: 900; color: var(--orange); width: 50px; }
+.row b { font-family: var(--mono); color: var(--blue); }
+.cta { margin-top: 20px; font-size: 54px; font-weight: 800; text-align: center; }
+.arr { display: flex; align-items: flex-start; gap: 14px; }
+.arr .nm { font-family: var(--mono); font-size: 38px; font-weight: 700; color: var(--mute); padding-top: 34px; margin-right: 6px; }
+.arr .nm.tn { margin-left: 30px; color: var(--blue); }
+.cw { display: flex; flex-direction: column; align-items: center; gap: 6px; }
+.cw small { font-family: var(--mono); font-size: 32px; font-weight: 700; color: var(--mute); height: 40px; }
+.box { position: relative; width: 150px; height: 110px; background: var(--panel); border: 3px solid #26324a; border-radius: 18px; }
+.box b { position: absolute; inset: 0; display: flex; align-items: center; justify-content: center;
+  font-family: var(--mono); font-size: 56px; font-weight: 800; }
+.box.ghost { border: 3px dashed var(--red); background: rgba(255,93,93,.08); } .box.ghost b { color: var(--red); }
+.k1 { color: var(--orange); } .k2 { color: var(--green); } .k3 { color: var(--violet); } .z { color: var(--mute); }
+#sc-swap .arr .cw:last-child .box { border-style: dashed; border-color: var(--blue); }
+.gridw { display: flex; flex-direction: column; gap: 22px; }
+.grid { display: grid; gap: 12px; align-items: center; }
+.grid i { font-style: normal; font-family: var(--mono); font-size: 32px; font-weight: 700; color: var(--mute); text-align: center; }
+.grid b { height: 96px; background: var(--panel); border-radius: 16px; display: flex; align-items: center; justify-content: center;
+  font-family: var(--mono); font-size: 52px; font-weight: 800; }
+.grid b.k1 { box-shadow: inset 0 0 0 4px var(--orange); }
+.dims { display: flex; flex-wrap: wrap; gap: 16px; }
+.dims span { padding: 12px 26px; background: var(--panel); border-radius: 16px; font-size: 40px; font-weight: 700; }
+.dims em { font-style: normal; color: var(--orange); }
+.share { display: flex; gap: 12px; }
+.pp { width: 140px; display: flex; flex-direction: column; align-items: center; gap: 6px; }
+.pp .cd { width: 140px; height: 190px; background: var(--panel); border: 3px solid var(--orange); border-radius: 18px;
+  display: flex; flex-direction: column; align-items: center; justify-content: center; font-size: 46px; line-height: 1.15; }
+.pp.left .cd { border: 3px dashed var(--green); background: rgba(126,224,138,.08); }
+.pp small { font-size: 30px; font-weight: 700; color: var(--mute); } .pp.left small { color: var(--green); }
+.chips .gt { background: none; padding: 16px 0; color: var(--mute); }
+.cap { top: auto; bottom: 260px; height: auto; display: flex; justify-content: center; padding: 0 60px; }
+.cap span { background: rgba(0,0,0,.78); color: #fff; font-size: 48px; font-weight: 700; line-height: 1.4; padding: 16px 30px;
+  border-radius: 18px; text-align: center; word-break: keep-all; }
+.bar { position: absolute; left: 0; bottom: 0; height: 10px; width: 1080px; background: var(--orange); transform-origin: left center; }
+
+.ops { display: grid; grid-template-columns: repeat(3, 1fr); gap: 16px; }
+.ops div { background: var(--panel); border-radius: 20px; padding: 16px 22px; display: flex; align-items: center; gap: 18px;
+  font-size: 38px; font-weight: 700; }
+.ops code { font-size: 46px; font-weight: 800; min-width: 64px; }
+.chips.sm span { padding: 10px 20px; font-size: 36px; }
+.chips.sm .gt { padding: 10px 0; }
+.tbl th, .tbl td { white-space: nowrap; padding-left: 24px; padding-right: 24px; }
+.tbl td.t { color: var(--green); } .tbl td.f { color: var(--red); }
+.steps { display: flex; flex-direction: column; gap: 12px; }
+.st { display: flex; align-items: center; gap: 20px; background: var(--panel); border-radius: 18px; padding: 12px 26px; font-size: 36px; }
+.st .no { font-weight: 900; color: var(--orange); width: 28px; }
+.st i { font-style: normal; font-weight: 700; color: var(--blue); width: 80px; }
+.st code { color: var(--ink); } .st b { font-family: var(--mono); color: var(--orange); }
+
+</style>
+</head>
+<body>
+<div id="root" data-composition-id="main" data-start="0" data-duration="164.42" data-width="1080" data-height="1920">
+  <div class="brand"><b>자바 입문 <em>비교·논리 연산자</em> 정리</b><div class="prog"><i></i><i></i><i></i><i></i><i></i></div></div>
+  <section id="sc-hook" class="clip scene" data-start="0.000" data-duration="10.968" data-track-index="1"><div class="hook">
+   <div class="pill in">JAVA 입문 · 다섯 번째</div>
+   <h1 class="big in"><em>비교·논리</em><br/>연산자</h1>
+   <div class="sub in">== &amp;&amp; || · <b>우선순위</b></div>
+ </div></section>
+<section id="sc-compare" class="clip scene" data-start="10.968" data-duration="23.61" data-track-index="1"><div class="pill in">STEP 1 · 비교 연산자</div><h2 class="title in">결과는 true / false</h2><p class="desc in">두 값을 비교해 <b>boolean</b>으로</p><div class="ops in"><div><code>==</code>같다</div><div><code>!=</code>다르다</div><div><code>&gt;</code>크다</div><div><code>&lt;</code>작다</div><div><code>&gt;=</code>크거나 같다</div><div><code>&lt;=</code>작거나 같다</div></div><div class="code in"><div class="ln"><span class="kw">int</span> score = <span class="nu">85</span>;</div><div class="ln mk"><span class="kw">boolean</span> a = score &gt;= <span class="nu">80</span>;</div><div class="ln mk"><span class="kw">boolean</span> b = score == <span class="nu">100</span>;</div></div><div class="term in"><i>실행 결과</i><div>true</div><div>false</div></div></section>
+<section id="sc-pitfall" class="clip scene" data-start="34.578" data-duration="17.034" data-track-index="1"><div class="pill in">STEP 1-1 · 자주 하는 실수</div><h2 class="title in">= 와 ==</h2><p class="desc in"><b>=</b> 하나는 대입 · <b>==</b> 두 개가 비교</p><div class="note in"><code>score = 85</code> 대입<br/><code>score == 85</code> 비교</div><div class="tlabel in">문자열은 equals() — == 는 같은 객체인지 비교</div><div class="code in"><div class="ln"><span class="kw">String</span> a = <span class="st">"java"</span>;</div><div class="ln"><span class="kw">String</span> b = <span class="kw">new</span> <span class="kw">String</span>(<span class="st">"java"</span>);</div><div class="ln">System.out.println(a == b);</div><div class="ln mk">System.out.println(a.equals(b));</div></div><div class="term in"><i>실행 결과</i><div>false</div><div>true</div></div></section>
+<section id="sc-logic" class="clip scene" data-start="51.612" data-duration="17.826" data-track-index="1"><div class="pill in">STEP 2 · 논리 연산자</div><h2 class="title in">&amp;&amp; · || · !</h2><p class="desc in">조건 여러 개를 <b>묶기</b></p><div class="tbl in"><div class="tlabel in">진리표</div><table><tr><th>A</th><th>B</th><th>A &amp;&amp; B</th><th>A || B</th><th>!A</th></tr><tr><td class="t">true</td><td class="t">true</td><td class="t">true</td><td class="t">true</td><td class="f">false</td></tr><tr><td class="t">true</td><td class="f">false</td><td class="f">false</td><td class="t">true</td><td class="f">false</td></tr><tr><td class="f">false</td><td class="t">true</td><td class="f">false</td><td class="t">true</td><td class="t">true</td></tr><tr><td class="f">false</td><td class="f">false</td><td class="f">false</td><td class="f">false</td><td class="t">true</td></tr></table></div><div class="tlabel in">score = 85, age = 20 일 때</div><div class="code in"><div class="ln"><span class="kw">boolean</span> p = score &gt;= <span class="nu">80</span></div><div class="ln mk">         &amp;&amp; age &gt;= <span class="nu">20</span>;   <span class="cm">// true</span></div><div class="ln"><span class="kw">boolean</span> q = score &gt;= <span class="nu">90</span></div><div class="ln mk">         || age &gt;= <span class="nu">18</span>;   <span class="cm">// true</span></div></div></section>
+<section id="sc-short" class="clip scene" data-start="69.438" data-duration="21.09" data-track-index="1"><div class="pill in">STEP 2-1 · 단락 평가</div><h2 class="title in">앞에서 결정되면 끝</h2><p class="desc in"><b>&amp;&amp;</b> 앞이 false · <b>||</b> 앞이 true → 뒤는 건너뜀</p><div class="code in"><div class="ln"><span class="kw">int</span> x = <span class="nu">0</span>;</div><div class="ln mk"><span class="kw">boolean</span> ok = x != <span class="nu">0</span></div><div class="ln">          &amp;&amp; <span class="nu">10</span> / x &gt; <span class="nu">1</span>;</div></div><div class="term in"><i>실행 결과</i><div>false</div></div><div class="tlabel in">✗ 순서를 바꾸면 → 0으로 나누기</div><div class="code in"><div class="ln mk"><span class="kw">boolean</span> ok = <span class="nu">10</span> / x &gt; <span class="nu">1</span></div><div class="ln">          &amp;&amp; x != <span class="nu">0</span>;</div></div><div class="term err in"><i>실행 오류</i><div>Exception in thread &quot;main&quot;</div><div>java.lang.ArithmeticException:</div><div>/ by zero</div></div></section>
+<section id="sc-range" class="clip scene" data-start="90.528" data-duration="17.754" data-track-index="1"><div class="pill in">STEP 3 · 범위 검사</div><h2 class="title in">0 ≤ score ≤ 100 ?</h2><p class="desc in">수학처럼 쓰면 <b>컴파일 에러</b></p><div class="tlabel in">✗ 수학식 그대로</div><div class="code in"><div class="ln mk"><span class="kw">boolean</span> ok = <span class="nu">0</span> &lt;= score &lt;= <span class="nu">100</span>;</div></div><div class="term err in"><i>컴파일 오류</i><div>bad operand types for binary operator &#x27;&lt;=&#x27;</div></div><div class="note in"><code>0 &lt;= score</code> 가 먼저 <b>true</b><br/><small>→ true &lt;= 100 은 비교 불가</small></div><div class="tlabel in">✓ &amp;&amp; 로 나눠서</div><div class="code in"><div class="ln"><span class="kw">boolean</span> ok = score &gt;= <span class="nu">0</span></div><div class="ln mk">          &amp;&amp; score &lt;= <span class="nu">100</span>;</div></div></section>
+<section id="sc-order" class="clip scene" data-start="108.282" data-duration="32.562" data-track-index="1"><div class="pill in">STEP 4 · 우선순위</div><h2 class="title in">연산자 우선순위</h2><p class="desc in">헷갈릴 땐 <b>괄호</b>가 가장 확실</p><div class="chips sm in"><span><code>! ++</code> 단항</span><span class="gt">&gt;</span><span><code>* / + -</code> 산술</span><span class="gt">&gt;</span><span><code>&lt; &gt;=</code> 비교</span><span class="gt">&gt;</span><span><code>== !=</code> </span><span class="gt">&gt;</span><span><code>&amp;&amp;</code> </span><span class="gt">&gt;</span><span><code>||</code> </span><span class="gt">&gt;</span><span><code>=</code> 대입</span></div><div class="tlabel in">score = 85, age = 20 일 때</div><div class="code in"><div class="ln mk"><span class="kw">boolean</span> r = ++age &gt; <span class="nu">20</span></div><div class="ln mk">         &amp;&amp; score + <span class="nu">5</span> &gt;= <span class="nu">90</span>;</div></div><div class="steps"><div class="st" id="st1"><span class="no">1</span><i>단항</i><code>++age</code><b>→ 21</b></div><div class="st" id="st2"><span class="no">2</span><i>산술</i><code>score + 5</code><b>→ 90</b></div><div class="st" id="st3"><span class="no">3</span><i>비교</i><code>21 &gt; 20 · 90 &gt;= 90</code><b>→ true, true</b></div><div class="st" id="st4"><span class="no">4</span><i>논리</i><code>true &amp;&amp; true</code><b>→ true</b></div><div class="st" id="st5"><span class="no">5</span><i>대입</i><code>r = true</code></div></div></section>
+<section id="sc-outro" class="clip scene" data-start="140.844" data-duration="23.576" data-track-index="1"><div class="pill in">정리</div><h2 class="title in">비교·논리 핵심 7가지</h2><div class="list in"><div class="row" id="ex1"><span class="no">1</span><b>비교 결과 → true / false</b></div><div class="row" id="ex2"><span class="no">2</span><b>= 대입 · == 비교</b></div><div class="row" id="ex3"><span class="no">3</span><b>문자열은 equals()</b></div><div class="row" id="ex4"><span class="no">4</span><b>&amp;&amp; · || · !</b></div><div class="row" id="ex5"><span class="no">5</span><b>단락 평가: 앞에서 결정</b></div><div class="row" id="ex6"><span class="no">6</span><b>범위는 &amp;&amp; 로 나눠서</b></div><div class="row" id="ex7"><span class="no">7</span><b>산술 &gt; 비교 &gt; 논리 &gt; 대입</b></div></div><div class="cta in">👍 구독 · 좋아요</div></section>
+  <div id="cap-hook-0" class="clip cap" data-start="0.300" data-duration="1.668" data-track-index="2"><span>자바 입문 다섯 번째,</span></div>
+<div id="cap-hook-1" class="clip cap" data-start="1.968" data-duration="2.138" data-track-index="2"><span>비교와 논리 연산자!</span></div>
+<div id="cap-hook-2" class="clip cap" data-start="4.106" data-duration="2.266" data-track-index="2"><span>참과 거짓을 만드는 연산자와,</span></div>
+<div id="cap-hook-3" class="clip cap" data-start="6.371" data-duration="1.562" data-track-index="2"><span>여러 연산자가 섞일 때의</span></div>
+<div id="cap-hook-4" class="clip cap" data-start="7.934" data-duration="2.734" data-track-index="2"><span>우선순위까지 정리해 드립니다.</span></div>
+<div id="cap-compare-0" class="clip cap" data-start="11.118" data-duration="3.432" data-track-index="2"><span>비교 연산자는 두 값을 비교해서, 맞으면 트루,</span></div>
+<div id="cap-compare-1" class="clip cap" data-start="14.550" data-duration="2.439" data-track-index="2"><span>틀리면 폴스를 돌려줘요.</span></div>
+<div id="cap-compare-2" class="clip cap" data-start="16.989" data-duration="5.804" data-track-index="2"><span>같다, 다르다, 크다, 작다, 크거나 같다, 작거나 같다,</span></div>
+<div id="cap-compare-3" class="clip cap" data-start="22.792" data-duration="2.065" data-track-index="2"><span>이렇게 여섯 가지예요.</span></div>
+<div id="cap-compare-4" class="clip cap" data-start="24.857" data-duration="1.540" data-track-index="2"><span>스코어가 팔십오일 때,</span></div>
+<div id="cap-compare-5" class="clip cap" data-start="26.397" data-duration="2.132" data-track-index="2"><span>스코어 크거나 같다 팔십은 트루,</span></div>
+<div id="cap-compare-6" class="clip cap" data-start="28.529" data-duration="2.534" data-track-index="2"><span>스코어 같다 백은 폴스예요.</span></div>
+<div id="cap-compare-7" class="clip cap" data-start="31.062" data-duration="3.216" data-track-index="2"><span>결과는 불리언 변수에 담을 수 있어요.</span></div>
+<div id="cap-pitfall-0" class="clip cap" data-start="34.728" data-duration="2.455" data-track-index="2"><span>자주 하는 실수 두 가지.</span></div>
+<div id="cap-pitfall-1" class="clip cap" data-start="37.183" data-duration="1.473" data-track-index="2"><span>이퀄 하나는 대입이고,</span></div>
+<div id="cap-pitfall-2" class="clip cap" data-start="38.657" data-duration="2.321" data-track-index="2"><span>두 개를 붙여야 비교예요.</span></div>
+<div id="cap-pitfall-3" class="clip cap" data-start="40.978" data-duration="1.540" data-track-index="2"><span>그리고 문자열이 같은지는</span></div>
+<div id="cap-pitfall-4" class="clip cap" data-start="42.518" data-duration="2.377" data-track-index="2"><span>이퀄스 메서드로 비교해요.</span></div>
+<div id="cap-pitfall-5" class="clip cap" data-start="44.895" data-duration="1.417" data-track-index="2"><span>이퀄 두 개는 내용이 아니라</span></div>
+<div id="cap-pitfall-6" class="clip cap" data-start="46.313" data-duration="1.853" data-track-index="2"><span>같은 객체인지를 보기 때문에,</span></div>
+<div id="cap-pitfall-7" class="clip cap" data-start="48.166" data-duration="3.146" data-track-index="2"><span>글자가 같아도 폴스가 나올 수 있거든요.</span></div>
+<div id="cap-logic-0" class="clip cap" data-start="51.762" data-duration="3.203" data-track-index="2"><span>논리 연산자는 조건 여러 개를 묶어요.</span></div>
+<div id="cap-logic-1" class="clip cap" data-start="54.965" data-duration="2.143" data-track-index="2"><span>앤드는 둘 다 참일 때만 참,</span></div>
+<div id="cap-logic-2" class="clip cap" data-start="57.108" data-duration="1.953" data-track-index="2"><span>오어는 하나라도 참이면 참,</span></div>
+<div id="cap-logic-3" class="clip cap" data-start="59.061" data-duration="2.533" data-track-index="2"><span>낫은 참과 거짓을 뒤집어요.</span></div>
+<div id="cap-logic-4" class="clip cap" data-start="61.595" data-duration="1.395" data-track-index="2"><span>스코어가 팔십 이상이고</span></div>
+<div id="cap-logic-5" class="clip cap" data-start="62.990" data-duration="1.819" data-track-index="2"><span>에이지가 이십 이상이면 트루,</span></div>
+<div id="cap-logic-6" class="clip cap" data-start="64.809" data-duration="2.132" data-track-index="2"><span>스코어가 구십 이상이거나 에이지가</span></div>
+<div id="cap-logic-7" class="clip cap" data-start="66.941" data-duration="2.197" data-track-index="2"><span>십팔 이상이어도 트루예요.</span></div>
+<div id="cap-short-0" class="clip cap" data-start="69.588" data-duration="2.913" data-track-index="2"><span>앤드와 오어는 단락 평가를 해요.</span></div>
+<div id="cap-short-1" class="clip cap" data-start="72.501" data-duration="3.013" data-track-index="2"><span>앤드는 앞이 폴스면 결과가 이미 폴스라서,</span></div>
+<div id="cap-short-2" class="clip cap" data-start="75.514" data-duration="2.087" data-track-index="2"><span>뒤는 계산하지 않아요.</span></div>
+<div id="cap-short-3" class="clip cap" data-start="77.601" data-duration="1.585" data-track-index="2"><span>그래서 엑스가 영일 때,</span></div>
+<div id="cap-short-4" class="clip cap" data-start="79.186" data-duration="2.020" data-track-index="2"><span>엑스가 영이 아니고 십 나누기 엑스가</span></div>
+<div id="cap-short-5" class="clip cap" data-start="81.206" data-duration="2.679" data-track-index="2"><span>일보다 크다는 에러 없이 폴스예요.</span></div>
+<div id="cap-short-6" class="clip cap" data-start="83.885" data-duration="3.237" data-track-index="2"><span>순서를 바꾸면 영으로 나누기 에러가 나요.</span></div>
+<div id="cap-short-7" class="clip cap" data-start="87.121" data-duration="3.107" data-track-index="2"><span>오어는 앞이 트루면 뒤를 건너뛰어요.</span></div>
+<div id="cap-range-0" class="clip cap" data-start="90.678" data-duration="2.349" data-track-index="2"><span>점수가 영에서 백 사이인지 볼 때,</span></div>
+<div id="cap-range-1" class="clip cap" data-start="93.027" data-duration="2.221" data-track-index="2"><span>수학처럼 영 작거나 같다 스코어 작거나</span></div>
+<div id="cap-range-2" class="clip cap" data-start="95.248" data-duration="2.952" data-track-index="2"><span>같다 백으로 쓰면 컴파일 에러예요.</span></div>
+<div id="cap-range-3" class="clip cap" data-start="98.200" data-duration="2.143" data-track-index="2"><span>앞의 비교가 먼저 불리언이 되고,</span></div>
+<div id="cap-range-4" class="clip cap" data-start="100.343" data-duration="2.991" data-track-index="2"><span>불리언과 숫자는 비교할 수 없거든요.</span></div>
+<div id="cap-range-5" class="clip cap" data-start="103.334" data-duration="2.388" data-track-index="2"><span>앤드로 나눠서, 스코어가 영 이상,</span></div>
+<div id="cap-range-6" class="clip cap" data-start="105.723" data-duration="2.259" data-track-index="2"><span>그리고 백 이하로 써야 해요.</span></div>
+<div id="cap-order-0" class="clip cap" data-start="108.432" data-duration="3.504" data-track-index="2"><span>연산자가 섞이면 우선순위대로 계산해요.</span></div>
+<div id="cap-order-1" class="clip cap" data-start="111.936" data-duration="1.529" data-track-index="2"><span>낫이나 플러스 플러스 같은</span></div>
+<div id="cap-order-2" class="clip cap" data-start="113.466" data-duration="3.895" data-track-index="2"><span>단항 연산자가 가장 먼저, 다음은 산술, 비교,</span></div>
+<div id="cap-order-3" class="clip cap" data-start="117.361" data-duration="2.991" data-track-index="2"><span>같다 다르다, 앤드, 오어 순서고,</span></div>
+<div id="cap-order-4" class="clip cap" data-start="120.352" data-duration="2.355" data-track-index="2"><span>대입은 맨 마지막이에요.</span></div>
+<div id="cap-order-5" class="clip cap" data-start="122.707" data-duration="1.362" data-track-index="2"><span>예를 들어 플러스 플러스</span></div>
+<div id="cap-order-6" class="clip cap" data-start="124.068" data-duration="1.585" data-track-index="2"><span>에이지가 이십보다 크고,</span></div>
+<div id="cap-order-7" class="clip cap" data-start="125.653" data-duration="3.147" data-track-index="2"><span>스코어 더하기 오가 구십 이상인지 볼게요.</span></div>
+<div id="cap-order-8" class="clip cap" data-start="128.800" data-duration="2.388" data-track-index="2"><span>먼저 단항 연산으로 에이지가 이십일,</span></div>
+<div id="cap-order-9" class="clip cap" data-start="131.189" data-duration="1.585" data-track-index="2"><span>스코어 더하기 오는 구십,</span></div>
+<div id="cap-order-10" class="clip cap" data-start="132.774" data-duration="1.451" data-track-index="2"><span>비교하면 둘 다 트루,</span></div>
+<div id="cap-order-11" class="clip cap" data-start="134.224" data-duration="1.194" data-track-index="2"><span>앤드로 묶어 트루,</span></div>
+<div id="cap-order-12" class="clip cap" data-start="135.419" data-duration="2.221" data-track-index="2"><span>마지막에 알에 대입돼요.</span></div>
+<div id="cap-order-13" class="clip cap" data-start="137.640" data-duration="2.904" data-track-index="2"><span>헷갈릴 땐 괄호가 가장 확실해요.</span></div>
+<div id="cap-outro-0" class="clip cap" data-start="140.994" data-duration="3.621" data-track-index="2"><span>정리하면, 비교 연산자의 결과는 트루 아니면 폴스,</span></div>
+<div id="cap-outro-1" class="clip cap" data-start="144.615" data-duration="2.299" data-track-index="2"><span>이퀄 하나는 대입이고 두 개가 비교,</span></div>
+<div id="cap-outro-2" class="clip cap" data-start="146.915" data-duration="1.429" data-track-index="2"><span>문자열은 이퀄스,</span></div>
+<div id="cap-outro-3" class="clip cap" data-start="148.343" data-duration="2.623" data-track-index="2"><span>논리 연산자 앤드, 오어, 낫,</span></div>
+<div id="cap-outro-4" class="clip cap" data-start="150.966" data-duration="3.025" data-track-index="2"><span>앞에서 결정되면 뒤는 건너뛰는 단락 평가,</span></div>
+<div id="cap-outro-5" class="clip cap" data-start="153.990" data-duration="4.174" data-track-index="2"><span>범위는 앤드로 나눠 쓰기, 그리고 산술, 비교, 논리,</span></div>
+<div id="cap-outro-6" class="clip cap" data-start="158.165" data-duration="2.193" data-track-index="2"><span>대입 순서의 우선순위.</span></div>
+<div id="cap-outro-7" class="clip cap" data-start="160.358" data-duration="2.860" data-track-index="2"><span>구독과 좋아요 부탁드립니다!</span></div>
+  <div class="bar"></div>
+  <audio id="vo" src="assets/narration.mp3" data-start="0" data-duration="164.42" data-track-index="0"></audio>
+</div>
+<script>
+const tl = gsap.timeline({ paused: true });
+function enter(sel, t, dur) {
+  const items = document.querySelectorAll(sel + " .in");
+  const step = Math.min(0.9, (dur * 0.5) / Math.max(1, items.length));
+  items.forEach((el, i) => {
+    const at = Math.max(0, t - 0.1) + i * step;
+    tl.fromTo(el, { opacity: 0, y: 50 }, { opacity: 1, y: 0, duration: 0.5, ease: "power3.out" }, at);
+    el.querySelectorAll(".ln").forEach((ln, j) => {
+      tl.fromTo(ln, { opacity: 0, x: -30 }, { opacity: 1, x: 0, duration: 0.35, ease: "power2.out" }, at + 0.15 + j * 0.3);
+    });
+  });
+}
+function late(sel, t) {
+  document.querySelectorAll(sel + " .late").forEach((el, i) => {
+    tl.fromTo(el, { opacity: 0, y: 50 }, { opacity: 1, y: 0, duration: 0.5, ease: "power3.out" }, t + i * 0.35);
+    el.querySelectorAll(".ln").forEach((ln, j) => {
+      tl.fromTo(ln, { opacity: 0, x: -30 }, { opacity: 1, x: 0, duration: 0.35, ease: "power2.out" }, t + i * 0.35 + 0.15 + j * 0.3);
+    });
+  });
+}
+enter("#sc-hook", 0.3, 10.368);
+tl.set(".prog i", {backgroundColor: "#26324a"}, 0);
+enter("#sc-compare", 11.118, 23.16);
+tl.set(".prog i", {backgroundColor: "#26324a"}, 10.968);
+tl.set(".prog i:nth-child(1)", {backgroundColor: "#f29111"}, 10.968);
+enter("#sc-pitfall", 34.728, 16.584);
+tl.set(".prog i", {backgroundColor: "#26324a"}, 34.578);
+tl.set(".prog i:nth-child(1)", {backgroundColor: "#f29111"}, 34.578);
+enter("#sc-logic", 51.762, 17.376);
+tl.set(".prog i", {backgroundColor: "#26324a"}, 51.612);
+tl.set(".prog i:nth-child(2)", {backgroundColor: "#f29111"}, 51.612);
+enter("#sc-short", 69.588, 20.64);
+tl.set(".prog i", {backgroundColor: "#26324a"}, 69.43799999999999);
+tl.set(".prog i:nth-child(2)", {backgroundColor: "#f29111"}, 69.43799999999999);
+enter("#sc-range", 90.678, 17.304);
+tl.set(".prog i", {backgroundColor: "#26324a"}, 90.52799999999999);
+tl.set(".prog i:nth-child(3)", {backgroundColor: "#f29111"}, 90.52799999999999);
+enter("#sc-order", 108.432, 32.112);
+tl.set(".prog i", {backgroundColor: "#26324a"}, 108.282);
+tl.set(".prog i:nth-child(4)", {backgroundColor: "#f29111"}, 108.282);
+enter("#sc-outro", 140.994, 22.224);
+tl.set(".prog i", {backgroundColor: "#26324a"}, 140.844);
+tl.to("#ex1", {backgroundColor: "#3a2a12", scale: 1.04, duration: 0.2}, 142.004);
+tl.to("#ex1", {backgroundColor: "#131c2e", scale: 1, duration: 0.2}, 144.615);
+tl.to("#ex2", {backgroundColor: "#3a2a12", scale: 1.04, duration: 0.2}, 144.615);
+tl.to("#ex2", {backgroundColor: "#131c2e", scale: 1, duration: 0.2}, 146.915);
+tl.to("#ex3", {backgroundColor: "#3a2a12", scale: 1.04, duration: 0.2}, 146.915);
+tl.to("#ex3", {backgroundColor: "#131c2e", scale: 1, duration: 0.2}, 148.343);
+tl.to("#ex4", {backgroundColor: "#3a2a12", scale: 1.04, duration: 0.2}, 148.343);
+tl.to("#ex4", {backgroundColor: "#131c2e", scale: 1, duration: 0.2}, 150.966);
+tl.to("#ex5", {backgroundColor: "#3a2a12", scale: 1.04, duration: 0.2}, 150.966);
+tl.to("#ex5", {backgroundColor: "#131c2e", scale: 1, duration: 0.2}, 153.99);
+tl.to("#ex6", {backgroundColor: "#3a2a12", scale: 1.04, duration: 0.2}, 153.99);
+tl.to("#ex6", {backgroundColor: "#131c2e", scale: 1, duration: 0.2}, 156.055);
+tl.to("#ex7", {backgroundColor: "#3a2a12", scale: 1.04, duration: 0.2}, 156.055);
+tl.fromTo("#st1", {opacity: 0, y: 30}, {opacity: 1, y: 0, duration: 0.4, ease: "power3.out"}, 128.8);
+tl.fromTo("#st2", {opacity: 0, y: 30}, {opacity: 1, y: 0, duration: 0.4, ease: "power3.out"}, 131.189);
+tl.fromTo("#st3", {opacity: 0, y: 30}, {opacity: 1, y: 0, duration: 0.4, ease: "power3.out"}, 132.774);
+tl.fromTo("#st4", {opacity: 0, y: 30}, {opacity: 1, y: 0, duration: 0.4, ease: "power3.out"}, 134.224);
+tl.fromTo("#st5", {opacity: 0, y: 30}, {opacity: 1, y: 0, duration: 0.4, ease: "power3.out"}, 135.419);
+tl.to("#ex7", {backgroundColor: "#131c2e", scale: 1, duration: 0.3}, 160.358 + 0.6);
+tl.fromTo(".bar", { scaleX: 0 }, { scaleX: 1, duration: 164.42, ease: "none" }, 0);
+window.__timelines = window.__timelines || {};
+window.__timelines["main"] = tl;
+tl.seek(0);
+</script>
+</body>
+</html>

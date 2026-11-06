@@ -1,9 +1,7 @@
 # daily-it-shorts
 
 IT·기술 정보성 유튜브 쇼츠를 매일 하나씩 만드는 저장소. 영상 1개 = 폴더 1개(HyperFrames 프로젝트).
-새 영상은 **기존 영상과 같은 디자인·제작 방식**으로 만든다. 기준 구현은 가장 최근 폴더인
-`where-conditions-shorts/`(`gen_vo.py`, `build.py`)이며, 새 폴더는 이를 복사해 `script.json`과
-`build.py`의 `scenes`만 바꾸는 것에서 시작한다.
+새 영상은 **기존 영상과 같은 디자인·제작 방식**으로 만든다.
 
 ## 응답 언어
 

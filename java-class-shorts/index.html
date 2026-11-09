@@ -1,0 +1,283 @@
+<!doctype html>
+<html lang="ko" data-resolution="portrait">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=1080, height=1920" />
+<script src="https://cdn.jsdelivr.net/npm/gsap@3.14.2/dist/gsap.min.js"></script>
+<style>
+:root {
+  --ground: #0b1220; --panel: #131c2e; --ink: #f4f6fb; --mute: #9aa6bd;
+  --blue: #3fa7d6; --orange: #f29111; --red: #ff5d5d; --green: #7ee08a; --violet: #c3a6ff;
+  --font: "Pretendard", sans-serif;
+  --mono: "Menlo", "SF Mono", monospace;
+}
+@font-face { font-family: "Pretendard"; src: url("assets/fonts/PretendardVariable.woff2") format("woff2"); font-weight: 45 920; }
+* { margin: 0; padding: 0; box-sizing: border-box; }
+html, body { width: 1080px; height: 1920px; overflow: hidden; background: var(--ground); }
+#root { position: relative; width: 100%; height: 100%; font-variant-ligatures: none; font-family: var(--font); color: var(--ink); overflow: hidden;
+  background: radial-gradient(1200px 900px at 80% -10%, #16365a 0%, transparent 60%),
+              radial-gradient(900px 900px at -10% 110%, #3a2410 0%, transparent 55%), var(--ground); }
+.clip { position: absolute; inset: 0; }
+.brand { position: absolute; top: 110px; left: 70px; right: 70px; display: flex; justify-content: space-between; align-items: center;
+  font-size: 34px; font-weight: 700; color: var(--mute); letter-spacing: 0.02em; }
+.brand b { color: var(--blue); } .brand b em { color: var(--orange); font-style: normal; }
+.prog { display: flex; gap: 12px; }
+.prog i { display: block; width: 56px; height: 12px; border-radius: 6px; background: #26324a; }
+.scene { padding: 210px 70px 0; display: flex; flex-direction: column; gap: 26px; }
+.pill { align-self: flex-start; padding: 12px 26px; border-radius: 999px; background: #1d2a44; color: var(--blue);
+  font-size: 34px; font-weight: 700; }
+.hook { display: flex; flex-direction: column; gap: 50px; padding-top: 140px; }
+.big { font-size: 150px; line-height: 1.12; font-weight: 800; letter-spacing: -0.04em; }
+.big em { font-style: normal; color: var(--orange); }
+.sub { font-size: 64px; font-weight: 700; color: var(--mute); } .sub b { color: var(--ink); }
+.title { font-size: 80px; font-weight: 800; letter-spacing: -0.03em; line-height: 1.1; }
+.desc { font-size: 46px; color: var(--mute); font-weight: 600; margin-top: -8px; } .desc b { color: var(--orange); }
+.code { background: #0a0f1a; border: 2px solid #26324a; border-radius: 26px; padding: 30px 32px; font-family: var(--mono);
+  font-size: 42px; line-height: 1.5; color: #d9e1f2; white-space: pre; box-shadow: 0 30px 60px rgba(0,0,0,.35);
+  font-variant-ligatures: none; font-feature-settings: "liga" 0, "calt" 0; }
+.code.sm { font-size: 34px; padding: 26px 28px; }
+.code .ln { margin: 0 -14px; padding: 0 14px; border-radius: 10px; }
+.code .ln.mk { background: rgba(242,145,17,.13); }
+.kw { color: var(--blue); font-weight: 700; } .st { color: var(--green); } .nu { color: var(--orange); } .cm { color: #6f7d98; } .es { color: var(--orange); font-weight: 700; }
+.term { background: #05080f; border: 2px solid #26324a; border-radius: 22px; padding: 18px 32px 22px; font-family: var(--mono);
+  font-size: 40px; line-height: 1.4; color: var(--ink); white-space: pre; tab-size: 8; }
+.term i { display: block; font-style: normal; font-family: var(--font); font-size: 28px; font-weight: 700; color: var(--mute); margin-bottom: 6px; }
+.term .cmd { color: var(--blue); }
+.term.err { border-color: rgba(255,93,93,.5); color: var(--red); font-size: 34px; white-space: normal; }
+.warn small { font-size: 36px; color: var(--mute); font-weight: 600; }
+.nest > div, .nest > div div { border: 3px solid; border-radius: 22px; padding: 16px 26px 20px; display: flex; flex-direction: column; gap: 12px; }
+.nest b { font-size: 38px; font-weight: 800; font-family: var(--mono); }
+.nest .k1 { border-color: var(--orange); } .nest .k1 > b { color: var(--orange); }
+.nest .k2 { border-color: var(--green); } .nest .k2 > b { color: var(--green); }
+.nest .k3 { border-color: var(--violet); } .nest .k3 > b { color: var(--violet); }
+.chips { display: flex; flex-wrap: wrap; gap: 18px; }
+.chips span { padding: 16px 30px; background: var(--panel); border-radius: 18px; font-size: 42px; font-weight: 700; }
+.warn, .note { padding: 26px 36px; border-radius: 24px; font-size: 44px; font-weight: 700; line-height: 1.45; }
+.warn { background: rgba(255,93,93,.12); border-left: 10px solid var(--red); } .warn b { color: var(--red); }
+.note { background: rgba(63,167,214,.12); border-left: 10px solid var(--blue); } .note b { color: var(--orange); }
+.note small { font-size: 38px; color: var(--mute); font-weight: 600; font-family: var(--mono); }
+code { font-family: var(--mono); color: var(--orange); }
+.var { display: grid; grid-template-columns: 1fr 1.3fr 1fr; gap: 18px; }
+.var div { background: var(--panel); border-radius: 24px; padding: 20px 30px 24px; display: flex; flex-direction: column; gap: 4px; }
+.var small { font-size: 32px; font-weight: 700; color: var(--mute); }
+.var b { font-family: var(--mono); font-size: 64px; }
+.var .v { border: 4px dashed var(--orange); } .var .v b { color: var(--orange); }
+.tbl { align-self: flex-start; }
+.tlabel { font-size: 34px; font-weight: 700; color: var(--mute); margin-bottom: 10px; }
+.tbl table { border-collapse: collapse; font-family: var(--mono); font-size: 40px; background: var(--panel); border-radius: 18px; overflow: hidden; }
+.tbl th { color: var(--blue); text-align: left; padding: 12px 32px; background: #1a2640; }
+.tbl th u { text-decoration: none; color: var(--orange); }
+.tbl td { padding: 10px 32px; border-top: 1px solid #26324a; }
+.tbl tr.k1 td { color: var(--orange); } .tbl tr.k2 td { color: var(--green); } .tbl tr.k3 td { color: var(--violet); }
+.tbl tr.out td { color: #5b6782; text-decoration: line-through; }
+.tbl td.nl { color: var(--red) !important; font-style: italic; font-weight: 700; background: rgba(255,93,93,.12); }
+.link { align-self: flex-start; font-family: var(--mono); font-size: 38px; color: var(--mute); padding: 6px 0 6px 26px;
+  border-left: 8px solid var(--orange); }
+.link b { color: var(--orange); }
+.arrow { font-family: var(--mono); font-size: 38px; color: var(--orange); font-weight: 700; }
+.vs { display: grid; grid-template-columns: 1fr 1fr; gap: 22px; }
+.card { background: var(--panel); border-radius: 26px; padding: 26px 32px; display: flex; flex-direction: column; gap: 6px; }
+.card b { font-family: var(--mono); font-size: 52px; color: var(--blue); }
+.vs .card span { font-size: 44px; font-weight: 800; } .vs .card .ok { color: var(--green); } .vs .card .ng { color: var(--red); }
+.res { display: flex; flex-wrap: wrap; align-items: center; gap: 14px; margin-top: -6px; }
+.res i { font-style: normal; font-size: 34px; color: var(--mute); font-weight: 700; }
+.res span { padding: 8px 22px; border-radius: 14px; background: var(--panel); font-size: 40px; font-weight: 700; }
+.res span.k1 { color: var(--orange); } .res span.k2 { color: var(--green); } .res span.k3 { color: var(--violet); }
+.res span.bad { color: var(--red); background: rgba(255,93,93,.14); box-shadow: inset 0 0 0 3px var(--red); } .vs .card em { font-style: normal; color: var(--orange); }
+.list { display: flex; flex-direction: column; gap: 16px; }
+.row { display: flex; align-items: center; gap: 30px; background: var(--panel); border-radius: 22px; padding: 14px 36px; font-size: 48px;
+  transform-origin: left center; }
+.row .no { font-size: 52px; font-weight: 900; color: var(--orange); width: 50px; }
+.row b { font-family: var(--mono); color: var(--blue); }
+.cta { margin-top: 20px; font-size: 54px; font-weight: 800; text-align: center; }
+.arr { display: flex; align-items: flex-start; gap: 14px; }
+.arr .nm { font-family: var(--mono); font-size: 38px; font-weight: 700; color: var(--mute); padding-top: 34px; margin-right: 6px; }
+.arr .nm.tn { margin-left: 30px; color: var(--blue); }
+.cw { display: flex; flex-direction: column; align-items: center; gap: 6px; }
+.cw small { font-family: var(--mono); font-size: 32px; font-weight: 700; color: var(--mute); height: 40px; }
+.box { position: relative; width: 150px; height: 110px; background: var(--panel); border: 3px solid #26324a; border-radius: 18px; }
+.box b { position: absolute; inset: 0; display: flex; align-items: center; justify-content: center;
+  font-family: var(--mono); font-size: 56px; font-weight: 800; }
+.box.ghost { border: 3px dashed var(--red); background: rgba(255,93,93,.08); } .box.ghost b { color: var(--red); }
+.k1 { color: var(--orange); } .k2 { color: var(--green); } .k3 { color: var(--violet); } .z { color: var(--mute); }
+#sc-swap .arr .cw:last-child .box { border-style: dashed; border-color: var(--blue); }
+.gridw { display: flex; flex-direction: column; gap: 22px; }
+.grid { display: grid; gap: 12px; align-items: center; }
+.grid i { font-style: normal; font-family: var(--mono); font-size: 32px; font-weight: 700; color: var(--mute); text-align: center; }
+.grid b { height: 96px; background: var(--panel); border-radius: 16px; display: flex; align-items: center; justify-content: center;
+  font-family: var(--mono); font-size: 52px; font-weight: 800; }
+.grid b.k1 { box-shadow: inset 0 0 0 4px var(--orange); }
+.dims { display: flex; flex-wrap: wrap; gap: 16px; }
+.dims span { padding: 12px 26px; background: var(--panel); border-radius: 16px; font-size: 40px; font-weight: 700; }
+.dims em { font-style: normal; color: var(--orange); }
+.share { display: flex; gap: 12px; }
+.pp { width: 140px; display: flex; flex-direction: column; align-items: center; gap: 6px; }
+.pp .cd { width: 140px; height: 190px; background: var(--panel); border: 3px solid var(--orange); border-radius: 18px;
+  display: flex; flex-direction: column; align-items: center; justify-content: center; font-size: 46px; line-height: 1.15; }
+.pp.left .cd { border: 3px dashed var(--green); background: rgba(126,224,138,.08); }
+.pp small { font-size: 30px; font-weight: 700; color: var(--mute); } .pp.left small { color: var(--green); }
+.chips .gt { background: none; padding: 16px 0; color: var(--mute); }
+.cap { top: auto; bottom: 260px; height: auto; display: flex; justify-content: center; padding: 0 60px; }
+.cap span { background: rgba(0,0,0,.78); color: #fff; font-size: 48px; font-weight: 700; line-height: 1.4; padding: 16px 30px;
+  border-radius: 18px; text-align: center; word-break: keep-all; }
+.bar { position: absolute; left: 0; bottom: 0; height: 10px; width: 1080px; background: var(--orange); transform-origin: left center; }
+
+.refd { display: flex; flex-direction: column; gap: 18px; }
+.rr { display: flex; align-items: center; gap: 22px; }
+.rr .vars { display: flex; flex-direction: column; gap: 12px; }
+.rr .vars span { font-family: var(--mono); font-size: 46px; font-weight: 800; padding: 10px 26px; background: var(--panel);
+  border-radius: 16px; border: 3px solid currentColor; }
+.rr .ar { font-size: 60px; font-weight: 800; color: var(--mute); }
+.rr .obj { flex: 1; border: 3px solid; border-radius: 22px; padding: 14px 28px 18px; background: var(--panel);
+  display: flex; flex-direction: column; gap: 4px; font-family: var(--mono); font-size: 40px; color: var(--mute); }
+.rr .obj small { font-family: var(--font); font-size: 30px; font-weight: 700; }
+.rr .obj b { color: var(--ink); } .rr .obj b.e { color: #5b6782; }
+.rr .obj.k1 { border-color: var(--orange); } .rr .obj.k2 { border-color: var(--green); }
+.vs .card span.big2 { font-size: 52px; }
+.note small.t { font-family: var(--font); }
+
+</style>
+</head>
+<body>
+<div id="root" data-composition-id="main" data-start="0" data-duration="138.3" data-width="1080" data-height="1920">
+  <div class="brand"><b>자바 입문 <em>클래스</em> 정리</b><div class="prog"><i></i><i></i><i></i><i></i><i></i></div></div>
+  <section id="sc-hook" class="clip scene" data-start="0.000" data-duration="10.44" data-track-index="1"><div class="hook">
+   <div class="pill in">JAVA 입문 · 여덟 번째</div>
+   <h1 class="big in"><em>클래스</em>와<br/>객체</h1>
+   <div class="sub in">new · <b>필드</b></div>
+ </div></section>
+<section id="sc-class" class="clip scene" data-start="10.440" data-duration="21.762" data-track-index="1"><div class="pill in">STEP 1 · 클래스</div><h2 class="title in">클래스 = 틀</h2><p class="desc in">중괄호 안의 변수 = <b>필드</b></p><div class="vs in"><div class="card"><b>클래스</b><span class="big2">붕어빵 틀</span></div><div class="card"><b>객체</b><span class="big2">🐟 붕어빵</span></div></div><div class="code in"><div class="ln"><span class="kw">class</span> Student {</div><div class="ln mk">  <span class="kw">String</span> name; <span class="cm">// 이름</span></div><div class="ln mk">  <span class="kw">int</span> score;   <span class="cm">// 점수</span></div><div class="ln">}</div></div><div class="note in"><b>Main.java</b> 한 파일에 써도 OK<br/><small class="t">public 클래스는 파일 이름과 같은 하나만</small></div></section>
+<section id="sc-new" class="clip scene" data-start="32.202" data-duration="16.962" data-track-index="1"><div class="pill in">STEP 2 · new</div><h2 class="title in">new로 객체 만들기</h2><p class="desc in">클래스로 만든 객체 = <b>인스턴스</b></p><div class="code in"><div class="ln mk">Student s1 = <span class="kw">new</span> Student();</div></div><div class="chips in"><span><code>Student</code> 타입</span><span><code>s1</code> 변수</span><span><code>new Student()</code> 객체 생성</span></div><div class="refd in"><div class="tlabel in">s1 은 객체를 가리킴</div><div class="rr"><div class="vars"><span class="k1">s1</span></div><div class="ar">→</div><div class="obj k1"><small>Student 객체</small><div>name = <b class="e">?</b></div><div>score = <b class="e">?</b></div></div></div></div></section>
+<section id="sc-field" class="clip scene" data-start="49.164" data-duration="12.306" data-track-index="1"><div class="pill in">STEP 3 · 필드 접근</div><h2 class="title in">점(.)으로 필드 접근</h2><p class="desc in"><b>변수.필드</b> 로 넣고 꺼내기</p><div class="code in"><div class="ln">Student s1 = <span class="kw">new</span> Student();</div><div class="ln mk">s1.name = <span class="st">"민수"</span>;</div><div class="ln mk">s1.score = <span class="nu">85</span>;</div><div class="ln">System.out.println(s1.name);</div><div class="ln">System.out.println(s1.score);</div></div><div class="term in"><i>실행 결과</i><div>민수</div><div>85</div></div><div class="refd in"><div class="tlabel in">s1 이 가리키는 객체</div><div class="rr"><div class="vars"><span class="k1">s1</span></div><div class="ar">→</div><div class="obj k1"><small>Student 객체</small><div>name = <b class="">민수</b></div><div>score = <b class="">85</b></div></div></div></div></section>
+<section id="sc-default" class="clip scene" data-start="61.470" data-duration="17.106" data-track-index="1"><div class="pill in">STEP 3-1 · 기본값</div><h2 class="title in">필드의 기본값</h2><p class="desc in">값을 안 넣어도 <b>자동으로</b> 들어감</p><div class="tbl in"><div class="tlabel in">타입별 기본값</div><table><tr><th>필드 타입</th><th>기본값</th></tr><tr class=""><td>int</td><td>0</td></tr><tr class=""><td>double</td><td>0.0</td></tr><tr class=""><td>boolean</td><td>false</td></tr><tr class=""><td>String</td><td>null</td></tr></table></div><div class="code in"><div class="ln">Student s = <span class="kw">new</span> Student();</div><div class="ln mk">System.out.println(s.name);</div><div class="ln mk">System.out.println(s.score);</div></div><div class="term in"><i>실행 결과</i><div>null</div><div>0</div></div></section>
+<section id="sc-two" class="clip scene" data-start="78.576" data-duration="12.882" data-track-index="1"><div class="pill in">STEP 4 · 객체 여러 개</div><h2 class="title in">객체마다 필드는 따로</h2><p class="desc in">틀 하나로 <b>여러 개</b></p><div class="code in sm"><div class="ln">Student s2 = <span class="kw">new</span> Student();</div><div class="ln">s2.name = <span class="st">"지영"</span>;</div><div class="ln">s2.score = <span class="nu">92</span>;</div><div class="ln mk">System.out.println(s1.name);</div><div class="ln mk">System.out.println(s1.score);</div></div><div class="term in"><i>실행 결과</i><div>민수</div><div>85</div></div><div class="refd in"><div class="tlabel in">각자 자기 필드</div><div class="rr"><div class="vars"><span class="k1">s1</span></div><div class="ar">→</div><div class="obj k1"><small>Student 객체</small><div>name = <b class="">민수</b></div><div>score = <b class="">85</b></div></div></div><div class="rr"><div class="vars"><span class="k2">s2</span></div><div class="ar">→</div><div class="obj k2"><small>Student 객체</small><div>name = <b class="">지영</b></div><div>score = <b class="">92</b></div></div></div></div></section>
+<section id="sc-ref" class="clip scene" data-start="91.458" data-duration="15.594" data-track-index="1"><div class="pill in">STEP 4-1 · 참조 주의</div><h2 class="title in">s3 = s1 은 복사가 아님</h2><p class="desc in"><b>같은 객체</b>를 가리킴</p><div class="code in"><div class="ln mk">Student s3 = s1;</div><div class="ln">s3.score = <span class="nu">100</span>;</div><div class="ln">System.out.println(s1.score);</div></div><div class="term in"><i>실행 결과</i><div>100</div></div><div class="refd in"><div class="tlabel in">객체는 하나뿐</div><div class="rr"><div class="vars"><span class="k1">s1</span><span class="k1">s3</span></div><div class="ar">→</div><div class="obj k1"><small>Student 객체</small><div>name = <b class="">민수</b></div><div>score = <b class="">100</b></div></div></div></div><div class="warn in">객체가 아니라 <b>가리키는 화살표</b>만 복사</div></section>
+<section id="sc-error" class="clip scene" data-start="107.052" data-duration="12.882" data-track-index="1"><div class="pill in">STEP 5 · 없는 필드</div><h2 class="title in">선언 안 한 필드는 오류</h2><p class="desc in">필드는 클래스에 <b>먼저 선언</b></p><div class="code in"><div class="ln mk">s1.age = <span class="nu">20</span>;</div></div><div class="term err in"><i>컴파일 오류</i><div>cannot find symbol</div></div><div class="tlabel in">class Student 에 없는 이름</div><div class="code in"><div class="ln"><span class="kw">class</span> Student {</div><div class="ln">  <span class="kw">String</span> name; <span class="cm">// 이름</span></div><div class="ln">  <span class="kw">int</span> score;   <span class="cm">// 점수</span></div><div class="ln">}</div></div><div class="note in"><b>age</b> 를 쓰려면 <code>int age;</code> 를 먼저 선언</div></section>
+<section id="sc-outro" class="clip scene" data-start="119.934" data-duration="18.366" data-track-index="1"><div class="pill in">정리</div><h2 class="title in">클래스 핵심 7가지</h2><div class="list in"><div class="row" id="ex1"><span class="no">1</span><b>클래스 = 틀 · 객체 = 실체</b></div><div class="row" id="ex2"><span class="no">2</span><b>new 로 객체 생성</b></div><div class="row" id="ex3"><span class="no">3</span><b>s1.name 점으로 접근</b></div><div class="row" id="ex4"><span class="no">4</span><b>기본값 0 · false · null</b></div><div class="row" id="ex5"><span class="no">5</span><b>객체마다 필드는 따로</b></div><div class="row" id="ex6"><span class="no">6</span><b>s3 = s1 → 같은 객체</b></div><div class="row" id="ex7"><span class="no">7</span><b>없는 필드 → 컴파일 오류</b></div></div><div class="cta in">👍 구독 · 좋아요</div></section>
+  <div id="cap-hook-0" class="clip cap" data-start="0.300" data-duration="3.471" data-track-index="2"><span>자바 입문 여덟 번째, 클래스와 객체!</span></div>
+<div id="cap-hook-1" class="clip cap" data-start="3.771" data-duration="1.283" data-track-index="2"><span>클래스를 만들고,</span></div>
+<div id="cap-hook-2" class="clip cap" data-start="5.054" data-duration="1.529" data-track-index="2"><span>뉴로 객체를 만들고,</span></div>
+<div id="cap-hook-3" class="clip cap" data-start="6.583" data-duration="3.556" data-track-index="2"><span>필드에 값을 넣는 방법까지 정리해 드립니다.</span></div>
+<div id="cap-class-0" class="clip cap" data-start="10.590" data-duration="1.802" data-track-index="2"><span>클래스는 붕어빵 틀,</span></div>
+<div id="cap-class-1" class="clip cap" data-start="12.392" data-duration="3.097" data-track-index="2"><span>객체는 그 틀로 찍어 낸 붕어빵이에요.</span></div>
+<div id="cap-class-2" class="clip cap" data-start="15.490" data-duration="1.451" data-track-index="2"><span>학생을 나타내는 스튜던트</span></div>
+<div id="cap-class-3" class="clip cap" data-start="16.940" data-duration="2.355" data-track-index="2"><span>클래스를 만들어 볼게요.</span></div>
+<div id="cap-class-4" class="clip cap" data-start="19.295" data-duration="3.214" data-track-index="2"><span>중괄호 안에 선언한 변수를 필드라고 해요.</span></div>
+<div id="cap-class-5" class="clip cap" data-start="22.510" data-duration="3.237" data-track-index="2"><span>이름과 점수, 두 필드를 가졌죠.</span></div>
+<div id="cap-class-6" class="clip cap" data-start="25.746" data-duration="2.098" data-track-index="2"><span>메인과 같은 파일에 써도 되는데,</span></div>
+<div id="cap-class-7" class="clip cap" data-start="27.844" data-duration="1.696" data-track-index="2"><span>퍼블릭 클래스는 파일 이름과</span></div>
+<div id="cap-class-8" class="clip cap" data-start="29.541" data-duration="2.361" data-track-index="2"><span>같은 하나만 둘 수 있어요.</span></div>
+<div id="cap-new-0" class="clip cap" data-start="32.352" data-duration="1.568" data-track-index="2"><span>클래스는 틀일 뿐이라,</span></div>
+<div id="cap-new-1" class="clip cap" data-start="33.920" data-duration="2.662" data-track-index="2"><span>쓰려면 객체를 만들어야 해요.</span></div>
+<div id="cap-new-2" class="clip cap" data-start="36.582" data-duration="2.054" data-track-index="2"><span>뉴 스튜던트로 객체를 만들고,</span></div>
+<div id="cap-new-3" class="clip cap" data-start="38.635" data-duration="3.058" data-track-index="2"><span>스튜던트 타입 변수 에스 원에 담아요.</span></div>
+<div id="cap-new-4" class="clip cap" data-start="41.694" data-duration="1.284" data-track-index="2"><span>정확히는 에스 원이 그</span></div>
+<div id="cap-new-5" class="clip cap" data-start="42.977" data-duration="2.098" data-track-index="2"><span>객체를 가리키는 거예요.</span></div>
+<div id="cap-new-6" class="clip cap" data-start="45.075" data-duration="1.641" data-track-index="2"><span>이렇게 클래스로 만든 객체를</span></div>
+<div id="cap-new-7" class="clip cap" data-start="46.716" data-duration="2.148" data-track-index="2"><span>인스턴스라고도 불러요.</span></div>
+<div id="cap-field-0" class="clip cap" data-start="49.314" data-duration="3.482" data-track-index="2"><span>필드는 변수 이름 뒤에 점을 찍어서 써요.</span></div>
+<div id="cap-field-1" class="clip cap" data-start="52.796" data-duration="1.819" data-track-index="2"><span>에스 원 닷 네임에 민수,</span></div>
+<div id="cap-field-2" class="clip cap" data-start="54.615" data-duration="2.232" data-track-index="2"><span>에스 원 닷 스코어에 팔십오를 넣고,</span></div>
+<div id="cap-field-3" class="clip cap" data-start="56.847" data-duration="1.998" data-track-index="2"><span>똑같이 점으로 꺼내 출력하면,</span></div>
+<div id="cap-field-4" class="clip cap" data-start="58.845" data-duration="2.325" data-track-index="2"><span>민수와 팔십오가 나와요.</span></div>
+<div id="cap-default-0" class="clip cap" data-start="61.620" data-duration="2.801" data-track-index="2"><span>값을 넣지 않은 필드는 어떨까요?</span></div>
+<div id="cap-default-1" class="clip cap" data-start="64.421" data-duration="2.991" data-track-index="2"><span>필드에는 기본값이 자동으로 들어가요.</span></div>
+<div id="cap-default-2" class="clip cap" data-start="67.412" data-duration="3.795" data-track-index="2"><span>인트는 영, 더블은 영 점 영, 불리언은 폴스,</span></div>
+<div id="cap-default-3" class="clip cap" data-start="71.207" data-duration="2.768" data-track-index="2"><span>스트링 같은 참조 타입은 널이에요.</span></div>
+<div id="cap-default-4" class="clip cap" data-start="73.975" data-duration="1.708" data-track-index="2"><span>그래서 새 객체의 필드를 바로</span></div>
+<div id="cap-default-5" class="clip cap" data-start="75.683" data-duration="2.593" data-track-index="2"><span>출력하면 널과 영이 나와요.</span></div>
+<div id="cap-two-0" class="clip cap" data-start="78.726" data-duration="3.259" data-track-index="2"><span>틀 하나로 붕어빵을 여러 개 찍을 수 있죠.</span></div>
+<div id="cap-two-1" class="clip cap" data-start="81.985" data-duration="2.165" data-track-index="2"><span>에스 투를 하나 더 만들어 지영,</span></div>
+<div id="cap-two-2" class="clip cap" data-start="84.150" data-duration="1.161" data-track-index="2"><span>구십이를 넣어도,</span></div>
+<div id="cap-two-3" class="clip cap" data-start="85.311" data-duration="3.270" data-track-index="2"><span>에스 원은 그대로 민수, 팔십오예요.</span></div>
+<div id="cap-two-4" class="clip cap" data-start="88.581" data-duration="2.577" data-track-index="2"><span>필드는 객체마다 따로 있어요.</span></div>
+<div id="cap-ref-0" class="clip cap" data-start="91.608" data-duration="1.730" data-track-index="2"><span>주의할 점!</span></div>
+<div id="cap-ref-1" class="clip cap" data-start="93.338" data-duration="1.886" data-track-index="2"><span>에스 쓰리에 에스 원을 대입해도</span></div>
+<div id="cap-ref-2" class="clip cap" data-start="95.224" data-duration="2.366" data-track-index="2"><span>객체가 복사되지 않아요.</span></div>
+<div id="cap-ref-3" class="clip cap" data-start="97.590" data-duration="1.708" data-track-index="2"><span>같은 객체를 가리키는 변수가</span></div>
+<div id="cap-ref-4" class="clip cap" data-start="99.298" data-duration="2.266" data-track-index="2"><span>하나 더 생길 뿐이에요.</span></div>
+<div id="cap-ref-5" class="clip cap" data-start="101.563" data-duration="2.745" data-track-index="2"><span>그래서 에스 쓰리로 점수를 백으로 바꾸면,</span></div>
+<div id="cap-ref-6" class="clip cap" data-start="104.309" data-duration="2.443" data-track-index="2"><span>에스 원의 점수도 백이 돼요.</span></div>
+<div id="cap-error-0" class="clip cap" data-start="107.202" data-duration="1.746" data-track-index="2"><span>그리고 클래스에 선언하지 않은</span></div>
+<div id="cap-error-1" class="clip cap" data-start="108.948" data-duration="2.126" data-track-index="2"><span>필드는 쓸 수 없어요.</span></div>
+<div id="cap-error-2" class="clip cap" data-start="111.075" data-duration="2.132" data-track-index="2"><span>에스 원 닷 에이지에 값을 넣으면,</span></div>
+<div id="cap-error-3" class="clip cap" data-start="113.206" data-duration="3.371" data-track-index="2"><span>심볼을 찾을 수 없다는 컴파일 오류가 나요.</span></div>
+<div id="cap-error-4" class="clip cap" data-start="116.577" data-duration="3.057" data-track-index="2"><span>필드는 클래스 안에 먼저 선언해야 해요.</span></div>
+<div id="cap-outro-0" class="clip cap" data-start="120.084" data-duration="3.119" data-track-index="2"><span>정리하면, 클래스는 틀이고 객체는 실체,</span></div>
+<div id="cap-outro-1" class="clip cap" data-start="123.203" data-duration="1.350" data-track-index="2"><span>뉴로 객체 생성,</span></div>
+<div id="cap-outro-2" class="clip cap" data-start="124.554" data-duration="1.429" data-track-index="2"><span>점으로 필드 접근,</span></div>
+<div id="cap-outro-3" class="clip cap" data-start="125.982" data-duration="1.775" data-track-index="2"><span>필드는 기본값이 자동,</span></div>
+<div id="cap-outro-4" class="clip cap" data-start="127.757" data-duration="1.630" data-track-index="2"><span>객체마다 필드는 따로,</span></div>
+<div id="cap-outro-5" class="clip cap" data-start="129.386" data-duration="2.098" data-track-index="2"><span>대입은 같은 객체를 가리킬 뿐,</span></div>
+<div id="cap-outro-6" class="clip cap" data-start="131.484" data-duration="2.762" data-track-index="2"><span>선언 안 한 필드는 컴파일 오류.</span></div>
+<div id="cap-outro-7" class="clip cap" data-start="134.247" data-duration="2.853" data-track-index="2"><span>구독과 좋아요 부탁드립니다!</span></div>
+  <div class="bar"></div>
+  <audio id="vo" src="assets/narration.mp3" data-start="0" data-duration="138.3" data-track-index="0"></audio>
+</div>
+<script>
+const tl = gsap.timeline({ paused: true });
+function enter(sel, t, dur) {
+  const items = document.querySelectorAll(sel + " .in");
+  const step = Math.min(0.9, (dur * 0.5) / Math.max(1, items.length));
+  items.forEach((el, i) => {
+    const at = Math.max(0, t - 0.1) + i * step;
+    tl.fromTo(el, { opacity: 0, y: 50 }, { opacity: 1, y: 0, duration: 0.5, ease: "power3.out" }, at);
+    el.querySelectorAll(".ln").forEach((ln, j) => {
+      tl.fromTo(ln, { opacity: 0, x: -30 }, { opacity: 1, x: 0, duration: 0.35, ease: "power2.out" }, at + 0.15 + j * 0.3);
+    });
+  });
+}
+function late(sel, t) {
+  document.querySelectorAll(sel + " .late").forEach((el, i) => {
+    tl.fromTo(el, { opacity: 0, y: 50 }, { opacity: 1, y: 0, duration: 0.5, ease: "power3.out" }, t + i * 0.35);
+    el.querySelectorAll(".ln").forEach((ln, j) => {
+      tl.fromTo(ln, { opacity: 0, x: -30 }, { opacity: 1, x: 0, duration: 0.35, ease: "power2.out" }, t + i * 0.35 + 0.15 + j * 0.3);
+    });
+  });
+}
+enter("#sc-hook", 0.3, 9.84);
+tl.set(".prog i", {backgroundColor: "#26324a"}, 0);
+enter("#sc-class", 10.59, 21.312);
+tl.set(".prog i", {backgroundColor: "#26324a"}, 10.44);
+tl.set(".prog i:nth-child(1)", {backgroundColor: "#f29111"}, 10.44);
+enter("#sc-new", 32.352, 16.512);
+tl.set(".prog i", {backgroundColor: "#26324a"}, 32.202);
+tl.set(".prog i:nth-child(2)", {backgroundColor: "#f29111"}, 32.202);
+enter("#sc-field", 49.314, 11.856);
+tl.set(".prog i", {backgroundColor: "#26324a"}, 49.164);
+tl.set(".prog i:nth-child(3)", {backgroundColor: "#f29111"}, 49.164);
+enter("#sc-default", 61.62, 16.656);
+tl.set(".prog i", {backgroundColor: "#26324a"}, 61.47);
+tl.set(".prog i:nth-child(3)", {backgroundColor: "#f29111"}, 61.47);
+enter("#sc-two", 78.726, 12.432);
+tl.set(".prog i", {backgroundColor: "#26324a"}, 78.576);
+tl.set(".prog i:nth-child(4)", {backgroundColor: "#f29111"}, 78.576);
+enter("#sc-ref", 91.608, 15.144);
+tl.set(".prog i", {backgroundColor: "#26324a"}, 91.458);
+tl.set(".prog i:nth-child(4)", {backgroundColor: "#f29111"}, 91.458);
+enter("#sc-error", 107.202, 12.432);
+tl.set(".prog i", {backgroundColor: "#26324a"}, 107.05199999999999);
+tl.set(".prog i:nth-child(5)", {backgroundColor: "#f29111"}, 107.05199999999999);
+enter("#sc-outro", 120.084, 17.016);
+tl.set(".prog i", {backgroundColor: "#26324a"}, 119.934);
+tl.to("#ex1", {backgroundColor: "#3a2a12", scale: 1.04, duration: 0.2}, 121.049);
+tl.to("#ex1", {backgroundColor: "#131c2e", scale: 1, duration: 0.2}, 123.203);
+tl.to("#ex2", {backgroundColor: "#3a2a12", scale: 1.04, duration: 0.2}, 123.203);
+tl.to("#ex2", {backgroundColor: "#131c2e", scale: 1, duration: 0.2}, 124.554);
+tl.to("#ex3", {backgroundColor: "#3a2a12", scale: 1.04, duration: 0.2}, 124.554);
+tl.to("#ex3", {backgroundColor: "#131c2e", scale: 1, duration: 0.2}, 125.982);
+tl.to("#ex4", {backgroundColor: "#3a2a12", scale: 1.04, duration: 0.2}, 125.982);
+tl.to("#ex4", {backgroundColor: "#131c2e", scale: 1, duration: 0.2}, 127.757);
+tl.to("#ex5", {backgroundColor: "#3a2a12", scale: 1.04, duration: 0.2}, 127.757);
+tl.to("#ex5", {backgroundColor: "#131c2e", scale: 1, duration: 0.2}, 129.386);
+tl.to("#ex6", {backgroundColor: "#3a2a12", scale: 1.04, duration: 0.2}, 129.386);
+tl.to("#ex6", {backgroundColor: "#131c2e", scale: 1, duration: 0.2}, 131.484);
+tl.to("#ex7", {backgroundColor: "#3a2a12", scale: 1.04, duration: 0.2}, 131.484);
+tl.to("#ex7", {backgroundColor: "#131c2e", scale: 1, duration: 0.3}, 134.247 + 0.6);
+tl.fromTo(".bar", { scaleX: 0 }, { scaleX: 1, duration: 138.3, ease: "none" }, 0);
+window.__timelines = window.__timelines || {};
+window.__timelines["main"] = tl;
+tl.seek(0);
+</script>
+</body>
+</html>

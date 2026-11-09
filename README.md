@@ -29,6 +29,7 @@
 | 2026-11-06 | 자바 입문: 비교·논리 연산자 (== != · equals() · && \|\| ! · 단락 평가 · 범위 검사 · 우선순위) | 2:44 | [java-compare-logic-shorts](java-compare-logic-shorts) | [YouTube](https://www.youtube.com/watch?v=2ytYJfWjn60) |
 | 2026-11-06 | 자바 입문: 조건문 (if · else if · 삼항 연산자 · switch · break · 화살표 switch) | 2:24 | [java-if-switch-shorts](java-if-switch-shorts) | [YouTube](https://www.youtube.com/watch?v=3LjHCPxlE5o) |
 | 2026-11-06 | 자바 입문: 반복문 (for · 합계 · 배열 순회 · while · do-while · break · continue) | 2:19 | [java-loops-shorts](java-loops-shorts) | [YouTube](https://www.youtube.com/watch?v=FillAoh7FIY) |
+| 2026-11-09 | 자바 입문: 클래스와 객체 (class · new · 필드 · 기본값 · 참조) | 2:18 | [java-class-shorts](java-class-shorts) | [YouTube](https://www.youtube.com/watch?v=W85T7Ndfn3Q) |
 
 ## 제작 방식
 

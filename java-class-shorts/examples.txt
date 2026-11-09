@@ -1,0 +1,124 @@
+// 영상에 나오는 예제 프로그램 (build.py가 생성 · 직접 고치지 말 것)
+// 각 예제를 파일 이름대로 저장한 뒤: javac -encoding UTF-8 Main.java && java Main
+
+// [3-1. 필드의 기본값] Main.java → 출력:
+//   0 0.0 false null
+public class Main {
+  public static void main(String[] args) {
+    D d = new D();
+    System.out.println(d.i + " " + d.d + " " + d.b + " " + d.s);
+  }
+}
+
+class D { int i; double d; boolean b; String s; }
+
+// [1. 클래스] Main.java → 출력 없음 (컴파일·실행 성공)
+public class Main {
+  public static void main(String[] args) {
+  }
+}
+
+class Student {
+  String name; // 이름
+  int score;   // 점수
+}
+
+// [2. new로 객체 만들기] Main.java → 출력 없음 (컴파일·실행 성공)
+public class Main {
+  public static void main(String[] args) {
+    Student s1 = new Student();
+  }
+}
+
+class Student {
+  String name; // 이름
+  int score;   // 점수
+}
+
+// [3. 필드 접근] Main.java → 출력:
+//   민수
+//   85
+public class Main {
+  public static void main(String[] args) {
+    Student s1 = new Student();
+    s1.name = "민수";
+    s1.score = 85;
+    System.out.println(s1.name);
+    System.out.println(s1.score);
+  }
+}
+
+class Student {
+  String name; // 이름
+  int score;   // 점수
+}
+
+// [3-1. 필드의 기본값] Main.java → 출력:
+//   null
+//   0
+public class Main {
+  public static void main(String[] args) {
+    Student s = new Student();
+    System.out.println(s.name);
+    System.out.println(s.score);
+  }
+}
+
+class Student {
+  String name; // 이름
+  int score;   // 점수
+}
+
+// [4. 객체 여러 개] Main.java → 출력:
+//   민수
+//   85
+public class Main {
+  public static void main(String[] args) {
+    Student s1 = new Student();
+    s1.name = "민수";
+    s1.score = 85;
+    Student s2 = new Student();
+    s2.name = "지영";
+    s2.score = 92;
+    System.out.println(s1.name);
+    System.out.println(s1.score);
+  }
+}
+
+class Student {
+  String name; // 이름
+  int score;   // 점수
+}
+
+// [4-1. 참조 주의] Main.java → 출력:
+//   100
+public class Main {
+  public static void main(String[] args) {
+    Student s1 = new Student();
+    s1.name = "민수";
+    s1.score = 85;
+    Student s3 = s1;
+    s3.score = 100;
+    System.out.println(s1.score);
+  }
+}
+
+class Student {
+  String name; // 이름
+  int score;   // 점수
+}
+
+// [5. 선언하지 않은 필드] Main.java → 컴파일 오류: cannot find symbol
+public class Main {
+  public static void main(String[] args) {
+    Student s1 = new Student();
+    s1.name = "민수";
+    s1.score = 85;
+    s1.age = 20;
+  }
+}
+
+class Student {
+  String name; // 이름
+  int score;   // 점수
+}

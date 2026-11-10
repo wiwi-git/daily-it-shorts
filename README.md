@@ -35,7 +35,7 @@
 ## 제작 방식
 
 - **영상**: [HyperFrames](https://hyperframes.heygen.com) — HTML/CSS + GSAP 애니메이션을 MP4로 렌더링
-- **나레이션**: [Edge TTS](https://github.com/rany2/edge-tts) `ko-KR-SunHiNeural` 음성 (+12% 속도)
+- **나레이션**: [Edge TTS](https://github.com/rany2/edge-tts) `ko-KR-SunHiNeural` 음성 (+34% 속도, `java-method-constructor-shorts`부터 · 이전 영상은 +12%)
 - **자막**: Edge TTS의 단어 경계(WordBoundary) 타이밍에 맞춰 자동 생성
 - **예제 검증**: 빌드할 때 화면의 예제 쿼리를 실제로 실행해 대본의 결과와 대조하고, `queries.sql`로 저장
   (SELECT는 SQLite, DDL·TCL·DCL은 Docker로 띄운 임시 MySQL 26.10.0(이미지 고정) — `tools/mysql-sandbox.sh start`)

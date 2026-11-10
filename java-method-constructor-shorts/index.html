@@ -1,0 +1,291 @@
+<!doctype html>
+<html lang="ko" data-resolution="portrait">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=1080, height=1920" />
+<script src="https://cdn.jsdelivr.net/npm/gsap@3.14.2/dist/gsap.min.js"></script>
+<style>
+:root {
+  --ground: #0b1220; --panel: #131c2e; --ink: #f4f6fb; --mute: #9aa6bd;
+  --blue: #3fa7d6; --orange: #f29111; --red: #ff5d5d; --green: #7ee08a; --violet: #c3a6ff;
+  --font: "Pretendard", sans-serif;
+  --mono: "Menlo", "SF Mono", monospace;
+}
+@font-face { font-family: "Pretendard"; src: url("assets/fonts/PretendardVariable.woff2") format("woff2"); font-weight: 45 920; }
+* { margin: 0; padding: 0; box-sizing: border-box; }
+html, body { width: 1080px; height: 1920px; overflow: hidden; background: var(--ground); }
+#root { position: relative; width: 100%; height: 100%; font-variant-ligatures: none; font-family: var(--font); color: var(--ink); overflow: hidden;
+  background: radial-gradient(1200px 900px at 80% -10%, #16365a 0%, transparent 60%),
+              radial-gradient(900px 900px at -10% 110%, #3a2410 0%, transparent 55%), var(--ground); }
+.clip { position: absolute; inset: 0; }
+.brand { position: absolute; top: 110px; left: 70px; right: 70px; display: flex; justify-content: space-between; align-items: center;
+  font-size: 34px; font-weight: 700; color: var(--mute); letter-spacing: 0.02em; }
+.brand b { color: var(--blue); } .brand b em { color: var(--orange); font-style: normal; }
+.prog { display: flex; gap: 12px; }
+.prog i { display: block; width: 56px; height: 12px; border-radius: 6px; background: #26324a; }
+.scene { padding: 210px 70px 0; display: flex; flex-direction: column; gap: 26px; }
+.pill { align-self: flex-start; padding: 12px 26px; border-radius: 999px; background: #1d2a44; color: var(--blue);
+  font-size: 34px; font-weight: 700; }
+.hook { display: flex; flex-direction: column; gap: 50px; padding-top: 140px; }
+.big { font-size: 150px; line-height: 1.12; font-weight: 800; letter-spacing: -0.04em; }
+.big em { font-style: normal; color: var(--orange); }
+.sub { font-size: 64px; font-weight: 700; color: var(--mute); } .sub b { color: var(--ink); }
+.title { font-size: 80px; font-weight: 800; letter-spacing: -0.03em; line-height: 1.1; }
+.desc { font-size: 46px; color: var(--mute); font-weight: 600; margin-top: -8px; } .desc b { color: var(--orange); }
+.code { background: #0a0f1a; border: 2px solid #26324a; border-radius: 26px; padding: 30px 32px; font-family: var(--mono);
+  font-size: 42px; line-height: 1.5; color: #d9e1f2; white-space: pre; box-shadow: 0 30px 60px rgba(0,0,0,.35);
+  font-variant-ligatures: none; font-feature-settings: "liga" 0, "calt" 0; }
+.code.sm { font-size: 34px; padding: 26px 28px; }
+.code .ln { margin: 0 -14px; padding: 0 14px; border-radius: 10px; }
+.code .ln.mk { background: rgba(242,145,17,.13); }
+.kw { color: var(--blue); font-weight: 700; } .st { color: var(--green); } .nu { color: var(--orange); } .cm { color: #6f7d98; } .es { color: var(--orange); font-weight: 700; }
+.term { background: #05080f; border: 2px solid #26324a; border-radius: 22px; padding: 18px 32px 22px; font-family: var(--mono);
+  font-size: 40px; line-height: 1.4; color: var(--ink); white-space: pre; tab-size: 8; }
+.term i { display: block; font-style: normal; font-family: var(--font); font-size: 28px; font-weight: 700; color: var(--mute); margin-bottom: 6px; }
+.term .cmd { color: var(--blue); }
+.term.err { border-color: rgba(255,93,93,.5); color: var(--red); font-size: 34px; white-space: normal; }
+.warn small { font-size: 36px; color: var(--mute); font-weight: 600; }
+.nest > div, .nest > div div { border: 3px solid; border-radius: 22px; padding: 16px 26px 20px; display: flex; flex-direction: column; gap: 12px; }
+.nest b { font-size: 38px; font-weight: 800; font-family: var(--mono); }
+.nest .k1 { border-color: var(--orange); } .nest .k1 > b { color: var(--orange); }
+.nest .k2 { border-color: var(--green); } .nest .k2 > b { color: var(--green); }
+.nest .k3 { border-color: var(--violet); } .nest .k3 > b { color: var(--violet); }
+.chips { display: flex; flex-wrap: wrap; gap: 18px; }
+.chips span { padding: 16px 30px; background: var(--panel); border-radius: 18px; font-size: 42px; font-weight: 700; }
+.warn, .note { padding: 26px 36px; border-radius: 24px; font-size: 44px; font-weight: 700; line-height: 1.45; }
+.warn { background: rgba(255,93,93,.12); border-left: 10px solid var(--red); } .warn b { color: var(--red); }
+.note { background: rgba(63,167,214,.12); border-left: 10px solid var(--blue); } .note b { color: var(--orange); }
+.note small { font-size: 38px; color: var(--mute); font-weight: 600; font-family: var(--mono); }
+code { font-family: var(--mono); color: var(--orange); }
+.var { display: grid; grid-template-columns: 1fr 1.3fr 1fr; gap: 18px; }
+.var div { background: var(--panel); border-radius: 24px; padding: 20px 30px 24px; display: flex; flex-direction: column; gap: 4px; }
+.var small { font-size: 32px; font-weight: 700; color: var(--mute); }
+.var b { font-family: var(--mono); font-size: 64px; }
+.var .v { border: 4px dashed var(--orange); } .var .v b { color: var(--orange); }
+.tbl { align-self: flex-start; }
+.tlabel { font-size: 34px; font-weight: 700; color: var(--mute); margin-bottom: 10px; }
+.tbl table { border-collapse: collapse; font-family: var(--mono); font-size: 40px; background: var(--panel); border-radius: 18px; overflow: hidden; }
+.tbl th { color: var(--blue); text-align: left; padding: 12px 32px; background: #1a2640; }
+.tbl th u { text-decoration: none; color: var(--orange); }
+.tbl td { padding: 10px 32px; border-top: 1px solid #26324a; }
+.tbl tr.k1 td { color: var(--orange); } .tbl tr.k2 td { color: var(--green); } .tbl tr.k3 td { color: var(--violet); }
+.tbl tr.out td { color: #5b6782; text-decoration: line-through; }
+.tbl td.nl { color: var(--red) !important; font-style: italic; font-weight: 700; background: rgba(255,93,93,.12); }
+.link { align-self: flex-start; font-family: var(--mono); font-size: 38px; color: var(--mute); padding: 6px 0 6px 26px;
+  border-left: 8px solid var(--orange); }
+.link b { color: var(--orange); }
+.arrow { font-family: var(--mono); font-size: 38px; color: var(--orange); font-weight: 700; }
+.vs { display: grid; grid-template-columns: 1fr 1fr; gap: 22px; }
+.card { background: var(--panel); border-radius: 26px; padding: 26px 32px; display: flex; flex-direction: column; gap: 6px; }
+.card b { font-family: var(--mono); font-size: 52px; color: var(--blue); }
+.vs .card span { font-size: 44px; font-weight: 800; } .vs .card .ok { color: var(--green); } .vs .card .ng { color: var(--red); }
+.res { display: flex; flex-wrap: wrap; align-items: center; gap: 14px; margin-top: -6px; }
+.res i { font-style: normal; font-size: 34px; color: var(--mute); font-weight: 700; }
+.res span { padding: 8px 22px; border-radius: 14px; background: var(--panel); font-size: 40px; font-weight: 700; }
+.res span.k1 { color: var(--orange); } .res span.k2 { color: var(--green); } .res span.k3 { color: var(--violet); }
+.res span.bad { color: var(--red); background: rgba(255,93,93,.14); box-shadow: inset 0 0 0 3px var(--red); } .vs .card em { font-style: normal; color: var(--orange); }
+.list { display: flex; flex-direction: column; gap: 16px; }
+.row { display: flex; align-items: center; gap: 30px; background: var(--panel); border-radius: 22px; padding: 14px 36px; font-size: 48px;
+  transform-origin: left center; }
+.row .no { font-size: 52px; font-weight: 900; color: var(--orange); width: 50px; }
+.row b { font-family: var(--mono); color: var(--blue); }
+.cta { margin-top: 20px; font-size: 54px; font-weight: 800; text-align: center; }
+.arr { display: flex; align-items: flex-start; gap: 14px; }
+.arr .nm { font-family: var(--mono); font-size: 38px; font-weight: 700; color: var(--mute); padding-top: 34px; margin-right: 6px; }
+.arr .nm.tn { margin-left: 30px; color: var(--blue); }
+.cw { display: flex; flex-direction: column; align-items: center; gap: 6px; }
+.cw small { font-family: var(--mono); font-size: 32px; font-weight: 700; color: var(--mute); height: 40px; }
+.box { position: relative; width: 150px; height: 110px; background: var(--panel); border: 3px solid #26324a; border-radius: 18px; }
+.box b { position: absolute; inset: 0; display: flex; align-items: center; justify-content: center;
+  font-family: var(--mono); font-size: 56px; font-weight: 800; }
+.box.ghost { border: 3px dashed var(--red); background: rgba(255,93,93,.08); } .box.ghost b { color: var(--red); }
+.k1 { color: var(--orange); } .k2 { color: var(--green); } .k3 { color: var(--violet); } .z { color: var(--mute); }
+#sc-swap .arr .cw:last-child .box { border-style: dashed; border-color: var(--blue); }
+.gridw { display: flex; flex-direction: column; gap: 22px; }
+.grid { display: grid; gap: 12px; align-items: center; }
+.grid i { font-style: normal; font-family: var(--mono); font-size: 32px; font-weight: 700; color: var(--mute); text-align: center; }
+.grid b { height: 96px; background: var(--panel); border-radius: 16px; display: flex; align-items: center; justify-content: center;
+  font-family: var(--mono); font-size: 52px; font-weight: 800; }
+.grid b.k1 { box-shadow: inset 0 0 0 4px var(--orange); }
+.dims { display: flex; flex-wrap: wrap; gap: 16px; }
+.dims span { padding: 12px 26px; background: var(--panel); border-radius: 16px; font-size: 40px; font-weight: 700; }
+.dims em { font-style: normal; color: var(--orange); }
+.share { display: flex; gap: 12px; }
+.pp { width: 140px; display: flex; flex-direction: column; align-items: center; gap: 6px; }
+.pp .cd { width: 140px; height: 190px; background: var(--panel); border: 3px solid var(--orange); border-radius: 18px;
+  display: flex; flex-direction: column; align-items: center; justify-content: center; font-size: 46px; line-height: 1.15; }
+.pp.left .cd { border: 3px dashed var(--green); background: rgba(126,224,138,.08); }
+.pp small { font-size: 30px; font-weight: 700; color: var(--mute); } .pp.left small { color: var(--green); }
+.chips .gt { background: none; padding: 16px 0; color: var(--mute); }
+.cap { top: auto; bottom: 260px; height: auto; display: flex; justify-content: center; padding: 0 60px; }
+.cap span { background: rgba(0,0,0,.78); color: #fff; font-size: 48px; font-weight: 700; line-height: 1.4; padding: 16px 30px;
+  border-radius: 18px; text-align: center; word-break: keep-all; }
+.bar { position: absolute; left: 0; bottom: 0; height: 10px; width: 1080px; background: var(--orange); transform-origin: left center; }
+
+.vs .card span.big2 { font-size: 52px; }
+.vs .card small { font-size: 34px; color: var(--mute); font-weight: 700; }
+.note small.t { font-family: var(--font); }
+.anat { display: flex; flex-wrap: wrap; gap: 14px; }
+.anat span { padding: 12px 24px; background: var(--panel); border-radius: 16px; font-size: 38px; font-weight: 700; }
+.anat code { font-size: 40px; }
+
+</style>
+</head>
+<body>
+<div id="root" data-composition-id="main" data-start="0" data-duration="149.14" data-width="1080" data-height="1920">
+  <div class="brand"><b>자바 입문 <em>메소드·생성자</em> 정리</b><div class="prog"><i></i><i></i><i></i><i></i><i></i></div></div>
+  <section id="sc-hook" class="clip scene" data-start="0.000" data-duration="9.044" data-track-index="1"><div class="hook">
+   <div class="pill in">JAVA 입문 · 아홉 번째</div>
+   <h1 class="big in"><em>메소드</em>와<br/>생성자</h1>
+   <div class="sub in">return · <b>this</b></div>
+ </div></section>
+<section id="sc-method" class="clip scene" data-start="9.044" data-duration="20.199" data-track-index="1"><div class="pill in">STEP 1 · 메소드</div><h2 class="title in">메소드 = 객체의 동작</h2><p class="desc in">필드 이름을 <b>그대로</b> 사용</p><div class="code in sm"><div class="ln"><span class="kw">class</span> Student {</div><div class="ln">  ...</div><div class="ln mk">  <span class="kw">void</span> hello() {</div><div class="ln mk">    System.out.println(</div><div class="ln mk">        name + <span class="st">" 안녕"</span>);</div><div class="ln mk">  }</div><div class="ln">}</div></div><div class="anat in"><span><code>void</code> 반환 타입</span><span><code>hello</code> 이름</span><span><code>( )</code> 괄호</span><span><code>{ }</code> 할 일</span></div><div class="code in sm"><div class="ln">Student s1 = <span class="kw">new</span> Student();</div><div class="ln">s1.name = <span class="st">"민수"</span>;</div><div class="ln">s1.score = <span class="nu">85</span>;</div><div class="ln mk">s1.hello();</div></div><div class="term in"><i>실행 결과</i><div>민수 안녕</div></div></section>
+<section id="sc-param" class="clip scene" data-start="29.243" data-duration="13.215" data-track-index="1"><div class="pill in">STEP 2 · 매개변수</div><h2 class="title in">값을 넘겨받기</h2><p class="desc in">받는 변수 = <b>매개변수</b>, 넘기는 값 = <b>인자</b></p><div class="code in sm"><div class="ln"><span class="kw">class</span> Student {</div><div class="ln">  ...</div><div class="ln mk">  <span class="kw">void</span> addScore(<span class="kw">int</span> n) {</div><div class="ln">    score += n;</div><div class="ln">  }</div><div class="ln">}</div></div><div class="code in"><div class="ln mk">s1.addScore(<span class="nu">5</span>);</div><div class="ln">System.out.println(s1.score);</div></div><div class="vs in"><div class="card"><b>int n</b><span>매개변수</span></div><div class="card"><b>5</b><span>인자</span></div></div><div class="term in"><i>실행 결과 (85 + 5)</i><div>90</div></div></section>
+<section id="sc-ret" class="clip scene" data-start="42.458" data-duration="16.647" data-track-index="1"><div class="pill in">STEP 3 · return</div><h2 class="title in">결과 돌려주기</h2><p class="desc in">void 자리에 <b>돌려줄 타입</b></p><div class="code in sm"><div class="ln"><span class="kw">class</span> Student {</div><div class="ln">  ...</div><div class="ln mk">  <span class="kw">boolean</span> isPass() {</div><div class="ln mk">    <span class="kw">return</span> score &gt;= <span class="nu">60</span>;</div><div class="ln">  }</div><div class="ln">}</div></div><div class="code in"><div class="ln mk">System.out.println(s1.isPass());</div></div><div class="term in"><i>실행 결과 (85 ≥ 60)</i><div>true</div></div><div class="vs in"><div class="card"><b>void</b><span>돌려주는 값 없음</span></div><div class="card"><b>boolean</b><span>true / false</span></div></div></section>
+<section id="sc-ctor" class="clip scene" data-start="59.105" data-duration="17.847" data-track-index="1"><div class="pill in">STEP 4 · 생성자</div><h2 class="title in">new 할 때 값 넣기</h2><p class="desc in">클래스와 <b>이름이 같고</b>, 반환 타입 없음</p><div class="code in sm"><div class="ln"><span class="kw">class</span> Student {</div><div class="ln">  ...</div><div class="ln mk">  Student(<span class="kw">String</span> name,</div><div class="ln mk">          <span class="kw">int</span> score) {</div><div class="ln mk">    <span class="kw">this</span>.name = name;</div><div class="ln mk">    <span class="kw">this</span>.score = score;</div><div class="ln">  }</div><div class="ln">}</div></div><div class="code in"><div class="ln mk">Student s1 =</div><div class="ln mk">    <span class="kw">new</span> Student(<span class="st">"민수"</span>, <span class="nu">85</span>);</div></div><div class="term in"><i>s1.name, s1.score 출력</i><div>민수 85</div></div></section>
+<section id="sc-this" class="clip scene" data-start="76.952" data-duration="19.191" data-track-index="1"><div class="pill in">STEP 4-1 · this</div><h2 class="title in">this = 객체 자기 자신</h2><p class="desc in">필드와 매개변수 <b>이름이 같을 때</b> 구분</p><div class="vs in"><div class="card"><b>this.name</b><span>이 객체의 필드</span></div><div class="card"><b>name</b><span>넘겨받은 매개변수</span></div></div><div class="tlabel in">this 를 빼면?</div><div class="code in sm"><div class="ln"><span class="kw">class</span> Student {</div><div class="ln">  ...</div><div class="ln">  Student(<span class="kw">String</span> name,</div><div class="ln">          <span class="kw">int</span> score) {</div><div class="ln mk">    name = name;   <span class="cm">// this 없음</span></div><div class="ln mk">    score = score;</div><div class="ln">  }</div><div class="ln">}</div></div><div class="term in"><i>new Student("민수", 85) 뒤 s1.name, s1.score</i><div>null 0</div></div><div class="warn in">필드는 그대로 <b>null · 0</b></div></section>
+<section id="sc-default" class="clip scene" data-start="96.143" data-duration="16.167" data-track-index="1"><div class="pill in">STEP 5 · 기본 생성자</div><h2 class="title in">기본 생성자란?</h2><p class="desc in">매개변수 없고, 중괄호 안이 <b>비어 있는</b> 생성자</p><div class="tlabel in">생성자가 하나도 없으면</div><div class="code in"><div class="ln"><span class="kw">class</span> Student {</div><div class="ln">  <span class="kw">String</span> name; <span class="cm">// 이름</span></div><div class="ln">  <span class="kw">int</span> score;   <span class="cm">// 점수</span></div><div class="ln mk">  <span class="cm">// Student() {}</span></div><div class="ln mk">  <span class="cm">// ↑ 자바가 자동으로 추가</span></div><div class="ln">}</div></div><div class="code in"><div class="ln mk">Student s = <span class="kw">new</span> Student();</div></div><div class="note in">그래서 지난 시간 <code>new Student()</code> 가 됐던 것</div></section>
+<section id="sc-lost" class="clip scene" data-start="112.310" data-duration="16.191" data-track-index="1"><div class="pill in">STEP 5-1 · 주의</div><h2 class="title in">빈 괄호가 안 될 때</h2><p class="desc in">생성자를 만들면 <b>기본 생성자</b>는 안 생김</p><div class="code in"><div class="ln mk">Student s = <span class="kw">new</span> Student();</div></div><div class="term err in"><i>컴파일 오류</i><div>constructor Student in class Student cannot be applied to given types;</div></div><div class="tlabel in">해결: 빈 괄호 생성자 추가 = 오버로딩</div><div class="code in sm"><div class="ln"><span class="kw">class</span> Student {</div><div class="ln">  ...</div><div class="ln mk">  Student() {} <span class="cm">// 빈 괄호용</span></div><div class="ln">  Student(<span class="kw">String</span> name,</div><div class="ln">          <span class="kw">int</span> score) { … }</div><div class="ln">}</div></div></section>
+<section id="sc-outro" class="clip scene" data-start="128.501" data-duration="20.639" data-track-index="1"><div class="pill in">정리</div><h2 class="title in">메소드 · 생성자 8가지</h2><div class="list in"><div class="row" id="ex1"><span class="no">1</span><b>메소드 = 클래스 안의 동작</b></div><div class="row" id="ex2"><span class="no">2</span><b>s1.hello() 점으로 호출</b></div><div class="row" id="ex3"><span class="no">3</span><b>매개변수로 값 받기</b></div><div class="row" id="ex4"><span class="no">4</span><b>return 으로 결과 돌려주기</b></div><div class="row" id="ex5"><span class="no">5</span><b>생성자 = 클래스 이름, 반환 타입 X</b></div><div class="row" id="ex6"><span class="no">6</span><b>this = 객체 자기 자신</b></div><div class="row" id="ex7"><span class="no">7</span><b>기본 생성자 = 자동 추가</b></div><div class="row" id="ex8"><span class="no">8</span><b>생성자 만들면 기본 생성자 X</b></div></div><div class="cta in">👍 구독 · 좋아요</div></section>
+  <div id="cap-hook-0" class="clip cap" data-start="0.250" data-duration="1.393" data-track-index="2"><span>자바 입문 아홉 번째,</span></div>
+<div id="cap-hook-1" class="clip cap" data-start="1.643" data-duration="1.666" data-track-index="2"><span>메소드와 생성자!</span></div>
+<div id="cap-hook-2" class="clip cap" data-start="3.310" data-duration="1.707" data-track-index="2"><span>객체에 동작을 넣는 메소드와,</span></div>
+<div id="cap-hook-3" class="clip cap" data-start="5.017" data-duration="1.558" data-track-index="2"><span>객체를 만들 때 값을 바로 넣는</span></div>
+<div id="cap-hook-4" class="clip cap" data-start="6.575" data-duration="2.219" data-track-index="2"><span>생성자까지 정리해 드립니다.</span></div>
+<div id="cap-method-0" class="clip cap" data-start="9.169" data-duration="1.505" data-track-index="2"><span>지난 시간의 스튜던트 클래스에</span></div>
+<div id="cap-method-1" class="clip cap" data-start="10.674" data-duration="1.676" data-track-index="2"><span>동작을 넣어 볼게요.</span></div>
+<div id="cap-method-2" class="clip cap" data-start="12.350" data-duration="2.752" data-track-index="2"><span>클래스 안에 정의한 동작을 메소드라고 해요.</span></div>
+<div id="cap-method-3" class="clip cap" data-start="15.102" data-duration="1.325" data-track-index="2"><span>보이드 헬로, 괄호,</span></div>
+<div id="cap-method-4" class="clip cap" data-start="16.426" data-duration="1.250" data-track-index="2"><span>중괄호 순서로 쓰고,</span></div>
+<div id="cap-method-5" class="clip cap" data-start="17.676" data-duration="1.968" data-track-index="2"><span>중괄호 안에 할 일을 적어요.</span></div>
+<div id="cap-method-6" class="clip cap" data-start="19.645" data-duration="1.539" data-track-index="2"><span>메소드 안에서는 필드 이름을</span></div>
+<div id="cap-method-7" class="clip cap" data-start="21.184" data-duration="1.726" data-track-index="2"><span>그대로 쓸 수 있어요.</span></div>
+<div id="cap-method-8" class="clip cap" data-start="22.910" data-duration="1.838" data-track-index="2"><span>호출은 필드처럼 점을 찍어서,</span></div>
+<div id="cap-method-9" class="clip cap" data-start="24.747" data-duration="2.062" data-track-index="2"><span>에스 원 닷 헬로, 괄호.</span></div>
+<div id="cap-method-10" class="clip cap" data-start="26.809" data-duration="2.184" data-track-index="2"><span>그러면 민수 안녕이 출력돼요.</span></div>
+<div id="cap-param-0" class="clip cap" data-start="29.368" data-duration="2.444" data-track-index="2"><span>메소드에 값을 넘길 수도 있어요.</span></div>
+<div id="cap-param-1" class="clip cap" data-start="31.812" data-duration="1.035" data-track-index="2"><span>애드 스코어의 괄호 안에</span></div>
+<div id="cap-param-2" class="clip cap" data-start="32.847" data-duration="1.530" data-track-index="2"><span>선언한 인트 엔을 매개변수,</span></div>
+<div id="cap-param-3" class="clip cap" data-start="34.377" data-duration="2.687" data-track-index="2"><span>호출할 때 넣는 값 오를 인자라고 해요.</span></div>
+<div id="cap-param-4" class="clip cap" data-start="37.064" data-duration="1.959" data-track-index="2"><span>에스 원 닷 애드 스코어 오를 호출하면,</span></div>
+<div id="cap-param-5" class="clip cap" data-start="39.023" data-duration="1.362" data-track-index="2"><span>엔에 오가 들어가서 점수가</span></div>
+<div id="cap-param-6" class="clip cap" data-start="40.385" data-duration="1.823" data-track-index="2"><span>팔십오에서 구십이 돼요.</span></div>
+<div id="cap-ret-0" class="clip cap" data-start="42.583" data-duration="2.612" data-track-index="2"><span>메소드가 결과를 돌려줄 수도 있어요.</span></div>
+<div id="cap-ret-1" class="clip cap" data-start="45.195" data-duration="2.062" data-track-index="2"><span>보이드 자리에 돌려줄 값의 타입을 쓰고,</span></div>
+<div id="cap-ret-2" class="clip cap" data-start="47.256" data-duration="2.034" data-track-index="2"><span>리턴으로 값을 돌려줘요.</span></div>
+<div id="cap-ret-3" class="clip cap" data-start="49.290" data-duration="0.998" data-track-index="2"><span>이즈 패스는 점수가</span></div>
+<div id="cap-ret-4" class="clip cap" data-start="50.288" data-duration="2.304" data-track-index="2"><span>육십 이상이면 트루를 돌려줘요.</span></div>
+<div id="cap-ret-5" class="clip cap" data-start="52.592" data-duration="1.530" data-track-index="2"><span>호출한 자리가 그 값이 돼서,</span></div>
+<div id="cap-ret-6" class="clip cap" data-start="54.122" data-duration="1.940" data-track-index="2"><span>출력하면 트루가 나와요.</span></div>
+<div id="cap-ret-7" class="clip cap" data-start="56.062" data-duration="2.793" data-track-index="2"><span>보이드는 돌려주는 값이 없다는 뜻이에요.</span></div>
+<div id="cap-ctor-0" class="clip cap" data-start="59.230" data-duration="1.688" data-track-index="2"><span>이제 생성자예요.</span></div>
+<div id="cap-ctor-1" class="clip cap" data-start="60.918" data-duration="1.381" data-track-index="2"><span>지금까지는 객체를 만든 뒤</span></div>
+<div id="cap-ctor-2" class="clip cap" data-start="62.299" data-duration="2.285" data-track-index="2"><span>필드에 하나씩 값을 넣었죠.</span></div>
+<div id="cap-ctor-3" class="clip cap" data-start="64.584" data-duration="1.269" data-track-index="2"><span>생성자를 만들면 뉴 할</span></div>
+<div id="cap-ctor-4" class="clip cap" data-start="65.853" data-duration="1.894" data-track-index="2"><span>때 바로 넣을 수 있어요.</span></div>
+<div id="cap-ctor-5" class="clip cap" data-start="67.747" data-duration="1.884" data-track-index="2"><span>생성자는 클래스와 이름이 같고,</span></div>
+<div id="cap-ctor-6" class="clip cap" data-start="69.631" data-duration="1.903" data-track-index="2"><span>반환 타입을 쓰지 않아요.</span></div>
+<div id="cap-ctor-7" class="clip cap" data-start="71.534" data-duration="2.173" data-track-index="2"><span>뉴 스튜던트에 민수와 팔십오를 넘기면,</span></div>
+<div id="cap-ctor-8" class="clip cap" data-start="73.708" data-duration="2.994" data-track-index="2"><span>생성자가 실행돼서 한 줄로 객체가 완성돼요.</span></div>
+<div id="cap-this-0" class="clip cap" data-start="77.077" data-duration="2.233" data-track-index="2"><span>생성자 안의 디스는 지금 이 객체,</span></div>
+<div id="cap-this-1" class="clip cap" data-start="79.310" data-duration="1.797" data-track-index="2"><span>자기 자신을 가리켜요.</span></div>
+<div id="cap-this-2" class="clip cap" data-start="81.107" data-duration="1.698" data-track-index="2"><span>매개변수 이름이 필드와 같으면,</span></div>
+<div id="cap-this-3" class="clip cap" data-start="82.805" data-duration="2.369" data-track-index="2"><span>그냥 네임은 매개변수를 뜻해요.</span></div>
+<div id="cap-this-4" class="clip cap" data-start="85.174" data-duration="2.164" data-track-index="2"><span>그래서 디스 닷 네임은 이 객체의 필드,</span></div>
+<div id="cap-this-5" class="clip cap" data-start="87.338" data-duration="2.006" data-track-index="2"><span>네임은 넘겨받은 값이죠.</span></div>
+<div id="cap-this-6" class="clip cap" data-start="89.344" data-duration="2.304" data-track-index="2"><span>디스를 빼고 네임 이퀄 네임이라고 쓰면,</span></div>
+<div id="cap-this-7" class="clip cap" data-start="91.648" data-duration="2.164" data-track-index="2"><span>매개변수에 자기 값을 다시 넣을 뿐이라,</span></div>
+<div id="cap-this-8" class="clip cap" data-start="93.812" data-duration="2.081" data-track-index="2"><span>필드는 널과 영으로 남아요.</span></div>
+<div id="cap-default-0" class="clip cap" data-start="96.268" data-duration="1.617" data-track-index="2"><span>그럼 지난 시간엔 생성자 없이</span></div>
+<div id="cap-default-1" class="clip cap" data-start="97.885" data-duration="2.403" data-track-index="2"><span>어떻게 뉴 스튜던트를 했을까요?</span></div>
+<div id="cap-default-2" class="clip cap" data-start="100.289" data-duration="1.847" data-track-index="2"><span>클래스에 생성자가 하나도 없으면,</span></div>
+<div id="cap-default-3" class="clip cap" data-start="102.136" data-duration="2.705" data-track-index="2"><span>자바가 기본 생성자를 자동으로 넣어 줘요.</span></div>
+<div id="cap-default-4" class="clip cap" data-start="104.841" data-duration="1.847" data-track-index="2"><span>기본 생성자는 매개변수가 없고,</span></div>
+<div id="cap-default-5" class="clip cap" data-start="106.688" data-duration="2.341" data-track-index="2"><span>중괄호 안이 비어 있는 생성자예요.</span></div>
+<div id="cap-default-6" class="clip cap" data-start="109.029" data-duration="1.231" data-track-index="2"><span>그래서 빈 괄호로 객체를</span></div>
+<div id="cap-default-7" class="clip cap" data-start="110.261" data-duration="1.799" data-track-index="2"><span>만들 수 있었던 거예요.</span></div>
+<div id="cap-lost-0" class="clip cap" data-start="112.435" data-duration="1.446" data-track-index="2"><span>주의할 점!</span></div>
+<div id="cap-lost-1" class="clip cap" data-start="113.881" data-duration="1.530" data-track-index="2"><span>생성자를 직접 만들면 기본</span></div>
+<div id="cap-lost-2" class="clip cap" data-start="115.411" data-duration="1.838" data-track-index="2"><span>생성자는 자동으로 생기지 않아서,</span></div>
+<div id="cap-lost-3" class="clip cap" data-start="117.248" data-duration="2.761" data-track-index="2"><span>뉴 스튜던트 빈 괄호가 컴파일 오류가 나요.</span></div>
+<div id="cap-lost-4" class="clip cap" data-start="120.010" data-duration="1.614" data-track-index="2"><span>빈 괄호로도 만들고 싶다면,</span></div>
+<div id="cap-lost-5" class="clip cap" data-start="121.623" data-duration="1.194" data-track-index="2"><span>매개변수 없는 생성자를</span></div>
+<div id="cap-lost-6" class="clip cap" data-start="122.817" data-duration="1.791" data-track-index="2"><span>하나 더 만들면 돼요.</span></div>
+<div id="cap-lost-7" class="clip cap" data-start="124.609" data-duration="1.418" data-track-index="2"><span>이렇게 이름이 같은 생성자를 여러</span></div>
+<div id="cap-lost-8" class="clip cap" data-start="126.026" data-duration="2.225" data-track-index="2"><span>개 두는 것을 오버로딩이라고 해요.</span></div>
+<div id="cap-outro-0" class="clip cap" data-start="128.626" data-duration="2.438" data-track-index="2"><span>정리하면, 메소드는 클래스 안의 동작,</span></div>
+<div id="cap-outro-1" class="clip cap" data-start="131.064" data-duration="1.045" data-track-index="2"><span>점으로 호출하고,</span></div>
+<div id="cap-outro-2" class="clip cap" data-start="132.109" data-duration="1.446" data-track-index="2"><span>매개변수로 값을 받고,</span></div>
+<div id="cap-outro-3" class="clip cap" data-start="133.555" data-duration="2.012" data-track-index="2"><span>리턴으로 결과를 돌려줘요.</span></div>
+<div id="cap-outro-4" class="clip cap" data-start="135.566" data-duration="1.325" data-track-index="2"><span>생성자는 클래스와 이름이</span></div>
+<div id="cap-outro-5" class="clip cap" data-start="136.891" data-duration="2.127" data-track-index="2"><span>같고 반환 타입이 없어요.</span></div>
+<div id="cap-outro-6" class="clip cap" data-start="139.018" data-duration="1.521" data-track-index="2"><span>디스는 객체 자기 자신,</span></div>
+<div id="cap-outro-7" class="clip cap" data-start="140.538" data-duration="1.194" data-track-index="2"><span>기본 생성자는 자동으로</span></div>
+<div id="cap-outro-8" class="clip cap" data-start="141.732" data-duration="1.409" data-track-index="2"><span>들어가는 빈 생성자인데,</span></div>
+<div id="cap-outro-9" class="clip cap" data-start="143.141" data-duration="2.612" data-track-index="2"><span>생성자를 직접 만들면 생기지 않아요.</span></div>
+<div id="cap-outro-10" class="clip cap" data-start="145.753" data-duration="2.385" data-track-index="2"><span>구독과 좋아요 부탁드립니다!</span></div>
+  <div class="bar"></div>
+  <audio id="vo" src="assets/narration.mp3" data-start="0" data-duration="149.14" data-track-index="0"></audio>
+</div>
+<script>
+const tl = gsap.timeline({ paused: true });
+const SP = 1.2;
+function enter(sel, t, dur) {
+  const items = document.querySelectorAll(sel + " .in");
+  const step = Math.min(0.9 / SP, (dur * 0.5) / Math.max(1, items.length));
+  items.forEach((el, i) => {
+    const at = Math.max(0, t - 0.1 / SP) + i * step;
+    tl.fromTo(el, { opacity: 0, y: 50 }, { opacity: 1, y: 0, duration: 0.5 / SP, ease: "power3.out" }, at);
+    el.querySelectorAll(".ln").forEach((ln, j) => {
+      tl.fromTo(ln, { opacity: 0, x: -30 }, { opacity: 1, x: 0, duration: 0.35 / SP, ease: "power2.out" }, at + (0.15 + j * 0.3) / SP);
+    });
+  });
+}
+enter("#sc-hook", 0.25, 8.544);
+tl.set(".prog i", {backgroundColor: "#26324a"}, 0);
+enter("#sc-method", 9.169, 19.824);
+tl.set(".prog i", {backgroundColor: "#26324a"}, 9.044);
+tl.set(".prog i:nth-child(1)", {backgroundColor: "#f29111"}, 9.044);
+enter("#sc-param", 29.368, 12.84);
+tl.set(".prog i", {backgroundColor: "#26324a"}, 29.243);
+tl.set(".prog i:nth-child(2)", {backgroundColor: "#f29111"}, 29.243);
+enter("#sc-ret", 42.583, 16.272);
+tl.set(".prog i", {backgroundColor: "#26324a"}, 42.458);
+tl.set(".prog i:nth-child(3)", {backgroundColor: "#f29111"}, 42.458);
+enter("#sc-ctor", 59.23, 17.472);
+tl.set(".prog i", {backgroundColor: "#26324a"}, 59.105);
+tl.set(".prog i:nth-child(4)", {backgroundColor: "#f29111"}, 59.105);
+enter("#sc-this", 77.077, 18.816);
+tl.set(".prog i", {backgroundColor: "#26324a"}, 76.952);
+tl.set(".prog i:nth-child(4)", {backgroundColor: "#f29111"}, 76.952);
+enter("#sc-default", 96.268, 15.792);
+tl.set(".prog i", {backgroundColor: "#26324a"}, 96.143);
+tl.set(".prog i:nth-child(5)", {backgroundColor: "#f29111"}, 96.143);
+enter("#sc-lost", 112.435, 15.816);
+tl.set(".prog i", {backgroundColor: "#26324a"}, 112.31);
+tl.set(".prog i:nth-child(5)", {backgroundColor: "#f29111"}, 112.31);
+enter("#sc-outro", 128.626, 19.512);
+tl.set(".prog i", {backgroundColor: "#26324a"}, 128.501);
+tl.to("#ex1", {backgroundColor: "#3a2a12", scale: 1.04, duration: 0.2}, 129.469);
+tl.to("#ex1", {backgroundColor: "#131c2e", scale: 1, duration: 0.2}, 131.064);
+tl.to("#ex2", {backgroundColor: "#3a2a12", scale: 1.04, duration: 0.2}, 131.064);
+tl.to("#ex2", {backgroundColor: "#131c2e", scale: 1, duration: 0.2}, 132.109);
+tl.to("#ex3", {backgroundColor: "#3a2a12", scale: 1.04, duration: 0.2}, 132.109);
+tl.to("#ex3", {backgroundColor: "#131c2e", scale: 1, duration: 0.2}, 133.555);
+tl.to("#ex4", {backgroundColor: "#3a2a12", scale: 1.04, duration: 0.2}, 133.555);
+tl.to("#ex4", {backgroundColor: "#131c2e", scale: 1, duration: 0.2}, 135.566);
+tl.to("#ex5", {backgroundColor: "#3a2a12", scale: 1.04, duration: 0.2}, 135.566);
+tl.to("#ex5", {backgroundColor: "#131c2e", scale: 1, duration: 0.2}, 139.018);
+tl.to("#ex6", {backgroundColor: "#3a2a12", scale: 1.04, duration: 0.2}, 139.018);
+tl.to("#ex6", {backgroundColor: "#131c2e", scale: 1, duration: 0.2}, 140.538);
+tl.to("#ex7", {backgroundColor: "#3a2a12", scale: 1.04, duration: 0.2}, 140.538);
+tl.to("#ex7", {backgroundColor: "#131c2e", scale: 1, duration: 0.2}, 143.141);
+tl.to("#ex8", {backgroundColor: "#3a2a12", scale: 1.04, duration: 0.2}, 143.141);
+tl.to("#ex8", {backgroundColor: "#131c2e", scale: 1, duration: 0.3}, 145.753 + 0.6);
+tl.fromTo(".bar", { scaleX: 0 }, { scaleX: 1, duration: 149.14, ease: "none" }, 0);
+window.__timelines = window.__timelines || {};
+window.__timelines["main"] = tl;
+tl.seek(0);
+</script>
+</body>
+</html>

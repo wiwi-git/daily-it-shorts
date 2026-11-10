@@ -1,0 +1,151 @@
+// 영상에 나오는 예제 프로그램 (build.py가 생성 · 직접 고치지 말 것)
+// 각 예제를 파일 이름대로 저장한 뒤: javac -encoding UTF-8 Main.java && java Main
+
+// [5-1. 기본 생성자 주의] Main.java → 출력:
+//   null 민수
+public class Main {
+  public static void main(String[] args) {
+    Student a = new Student();
+    Student b = new Student("민수", 85);
+    System.out.println(a.name + " " + b.name);
+  }
+}
+
+class Student {
+  String name; // 이름
+  int score;   // 점수
+  Student() {} // 빈 괄호용
+  Student(String name,
+          int score) {
+    this.name = name;
+    this.score = score;
+  }
+}
+
+// [1. 메소드 정의·호출] Main.java → 출력:
+//   민수 안녕
+public class Main {
+  public static void main(String[] args) {
+    Student s1 = new Student();
+    s1.name = "민수";
+    s1.score = 85;
+    s1.hello();
+  }
+}
+
+class Student {
+  String name; // 이름
+  int score;   // 점수
+  void hello() {
+    System.out.println(
+        name + " 안녕");
+  }
+}
+
+// [2. 매개변수] Main.java → 출력:
+//   90
+public class Main {
+  public static void main(String[] args) {
+    Student s1 = new Student();
+    s1.name = "민수";
+    s1.score = 85;
+    s1.addScore(5);
+    System.out.println(s1.score);
+  }
+}
+
+class Student {
+  String name; // 이름
+  int score;   // 점수
+  void addScore(int n) {
+    score += n;
+  }
+}
+
+// [3. 반환값 return] Main.java → 출력:
+//   true
+public class Main {
+  public static void main(String[] args) {
+    Student s1 = new Student();
+    s1.name = "민수";
+    s1.score = 85;
+    System.out.println(s1.isPass());
+  }
+}
+
+class Student {
+  String name; // 이름
+  int score;   // 점수
+  boolean isPass() {
+    return score >= 60;
+  }
+}
+
+// [4. 생성자] Main.java → 출력:
+//   민수 85
+public class Main {
+  public static void main(String[] args) {
+    Student s1 =
+        new Student("민수", 85);
+    System.out.println(s1.name + " " + s1.score);
+  }
+}
+
+class Student {
+  String name; // 이름
+  int score;   // 점수
+  Student(String name,
+          int score) {
+    this.name = name;
+    this.score = score;
+  }
+}
+
+// [4-1. this] Main.java → 출력:
+//   null 0
+public class Main {
+  public static void main(String[] args) {
+    Student s1 =
+        new Student("민수", 85);
+    System.out.println(s1.name + " " + s1.score);
+  }
+}
+
+class Student {
+  String name; // 이름
+  int score;   // 점수
+  Student(String name,
+          int score) {
+    name = name;   // this 없음
+    score = score;
+  }
+}
+
+// [5. 기본 생성자] Main.java → 출력 없음 (컴파일·실행 성공)
+public class Main {
+  public static void main(String[] args) {
+    Student s = new Student();
+  }
+}
+
+class Student {
+  String name; // 이름
+  int score;   // 점수
+}
+
+// [5-1. 기본 생성자 주의] Main.java → 컴파일 오류: constructor Student in class Student cannot be applied to given types;
+public class Main {
+  public static void main(String[] args) {
+    Student s = new Student();
+  }
+}
+
+class Student {
+  String name; // 이름
+  int score;   // 점수
+  Student(String name,
+          int score) {
+    this.name = name;
+    this.score = score;
+  }
+}

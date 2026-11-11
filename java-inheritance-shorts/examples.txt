@@ -1,0 +1,317 @@
+// 영상에 나오는 예제 프로그램 (build.py가 생성 · 직접 고치지 말 것)
+// 각 예제를 파일 이름대로 저장한 뒤: javac -encoding UTF-8 Main.java && java Main
+
+// [1. 중복 코드] Main.java → 출력 없음 (컴파일·실행 성공)
+public class Main {
+  public static void main(String[] args) {
+  }
+}
+
+class Student {
+  String name;
+  int score;
+  void hello() {
+    System.out.println(
+        name + " 안녕");
+  }
+}
+
+class Teacher {
+  String name;
+  String subject;
+  void hello() {
+    System.out.println(
+        name + " 안녕");
+  }
+}
+
+// [1. extends] Main.java → 출력 없음 (컴파일·실행 성공)
+public class Main {
+  public static void main(String[] args) {
+  }
+}
+
+class Person {
+  String name;
+  void hello() {
+    System.out.println(
+        name + " 안녕");
+  }
+}
+
+class Student extends Person {
+  int score;
+}
+
+class Teacher extends Person {
+  String subject;
+}
+
+// [2. 물려받은 것 쓰기] Main.java → 출력:
+//   서준 안녕
+//   수학
+public class Main {
+  public static void main(String[] args) {
+    Teacher t1 = new Teacher();
+    t1.name = "서준";
+    t1.subject = "수학";
+    t1.hello();
+    System.out.println(t1.subject);
+  }
+}
+
+class Person {
+  String name;
+  void hello() {
+    System.out.println(
+        name + " 안녕");
+  }
+}
+
+class Student extends Person {
+  int score;
+}
+
+class Teacher extends Person {
+  String subject;
+}
+
+// [2. 물려받은 것 쓰기] Main.java → 출력:
+//   민수 안녕
+public class Main {
+  public static void main(String[] args) {
+    Student s1 = new Student();
+    s1.name = "민수";
+    s1.score = 85;
+    s1.hello();
+  }
+}
+
+class Person {
+  String name;
+  void hello() {
+    System.out.println(
+        name + " 안녕");
+  }
+}
+
+class Student extends Person {
+  int score;
+}
+
+class Teacher extends Person {
+  String subject;
+}
+
+// [3. 오버라이딩] Main.java → 출력:
+//   학생 민수 안녕
+//   서준 선생님 안녕
+public class Main {
+  public static void main(String[] args) {
+    Student s1 = new Student();
+    s1.name = "민수";
+    s1.score = 85;
+    Teacher t1 = new Teacher();
+    t1.name = "서준";
+    t1.subject = "수학";
+    s1.hello();
+    t1.hello();
+  }
+}
+
+class Person {
+  String name;
+  void hello() {
+    System.out.println(
+        name + " 안녕");
+  }
+}
+
+class Student extends Person {
+  int score;
+  void hello() {
+    System.out.println(
+      "학생 " + name + " 안녕");
+  }
+}
+
+class Teacher extends Person {
+  String subject;
+  void hello() {
+    System.out.println(
+      name + " 선생님 안녕");
+  }
+}
+
+// [3. 오버라이딩 vs 오버로딩] Main.java → 출력:
+//   학생 민수 안녕
+//   서준 선생님 안녕
+public class Main {
+  public static void main(String[] args) {
+    Student s1 = new Student();
+    s1.name = "민수";
+    s1.score = 85;
+    Teacher t1 = new Teacher();
+    t1.name = "서준";
+    t1.subject = "수학";
+    s1.hello();
+    t1.hello();
+  }
+}
+
+class Person {
+  String name;
+  void hello() {
+    System.out.println(
+        name + " 안녕");
+  }
+}
+
+class Student extends Person {
+  int score;
+  @Override
+  void hello() {
+    System.out.println(
+      "학생 " + name + " 안녕");
+  }
+}
+
+class Teacher extends Person {
+  String subject;
+  @Override
+  void hello() {
+    System.out.println(
+      name + " 선생님 안녕");
+  }
+}
+
+// [4. super()] Main.java → 출력:
+//   부모 생성자
+//   자식 생성자
+public class Main {
+  public static void main(String[] args) {
+    new Student("민수", 85);
+  }
+}
+
+class Person {
+  String name;
+  Person(String name) {
+    System.out.println("부모 생성자");
+    this.name = name;
+  }
+}
+
+class Student extends Person {
+  int score;
+  Student(String name,
+          int score) {
+    super(name);
+    System.out.println("자식 생성자");
+    this.score = score;
+  }
+}
+
+// [4. 실행 순서] Main.java → 출력:
+//   부모 생성자
+//   자식 생성자
+public class Main {
+  public static void main(String[] args) {
+    new Student("민수", 85);
+  }
+}
+
+class Person {
+  String name;
+  Person(String name) {
+    System.out.println("부모 생성자");
+    this.name = name;
+  }
+}
+
+class Student extends Person {
+  int score;
+  Student(String name,
+          int score) {
+    super(name);
+    System.out.println("자식 생성자");
+    this.score = score;
+  }
+}
+
+// [4-1. super() 주의] Main.java → 컴파일 오류: constructor Person in class Person cannot be applied to given types;
+public class Main {
+  public static void main(String[] args) {
+    new Student("민수", 85);
+  }
+}
+
+class Person {
+  String name;
+  Person(String name) {
+    System.out.println("부모 생성자");
+    this.name = name;
+  }
+}
+
+class Student extends Person {
+  int score;
+  Student(String name,
+          int score) {
+    // super(name); 없음
+    this.score = score;
+  }
+}
+
+// [5. super.메소드()] Main.java → 출력:
+//   민수 안녕
+//   점수 85
+public class Main {
+  public static void main(String[] args) {
+    Student s1 = new Student();
+    s1.name = "민수";
+    s1.score = 85;
+    s1.hello();
+  }
+}
+
+class Person {
+  String name;
+  void hello() {
+    System.out.println(
+        name + " 안녕");
+  }
+}
+
+class Student extends Person {
+  int score;
+  @Override
+  void hello() {
+    super.hello();
+    System.out.println(
+        "점수 " + score);
+  }
+}
+
+// [5-1. 단일 상속] Main.java → 컴파일 오류: '{' expected
+public class Main {
+  public static void main(String[] args) {
+  }
+}
+
+class Person {
+  String name;
+  void hello() {
+    System.out.println(
+        name + " 안녕");
+  }
+}
+
+class Teacher extends Person {
+  String subject;
+}
+
+class Student extends
+    Person, Teacher {
+  int score;
+}

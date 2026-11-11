@@ -1,0 +1,311 @@
+<!doctype html>
+<html lang="ko" data-resolution="portrait">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=1080, height=1920" />
+<script src="https://cdn.jsdelivr.net/npm/gsap@3.14.2/dist/gsap.min.js"></script>
+<style>
+:root {
+  --ground: #0b1220; --panel: #131c2e; --ink: #f4f6fb; --mute: #9aa6bd;
+  --blue: #3fa7d6; --orange: #f29111; --red: #ff5d5d; --green: #7ee08a; --violet: #c3a6ff;
+  --font: "Pretendard", sans-serif;
+  --mono: "Menlo", "SF Mono", monospace;
+}
+@font-face { font-family: "Pretendard"; src: url("assets/fonts/PretendardVariable.woff2") format("woff2"); font-weight: 45 920; }
+* { margin: 0; padding: 0; box-sizing: border-box; }
+html, body { width: 1080px; height: 1920px; overflow: hidden; background: var(--ground); }
+#root { position: relative; width: 100%; height: 100%; font-variant-ligatures: none; font-family: var(--font); color: var(--ink); overflow: hidden;
+  background: radial-gradient(1200px 900px at 80% -10%, #16365a 0%, transparent 60%),
+              radial-gradient(900px 900px at -10% 110%, #3a2410 0%, transparent 55%), var(--ground); }
+.clip { position: absolute; inset: 0; }
+.brand { position: absolute; top: 110px; left: 70px; right: 70px; display: flex; justify-content: space-between; align-items: center;
+  font-size: 34px; font-weight: 700; color: var(--mute); letter-spacing: 0.02em; }
+.brand b { color: var(--blue); } .brand b em { color: var(--orange); font-style: normal; }
+.prog { display: flex; gap: 12px; }
+.prog i { display: block; width: 56px; height: 12px; border-radius: 6px; background: #26324a; }
+.scene { padding: 210px 70px 0; display: flex; flex-direction: column; gap: 26px; }
+.pill { align-self: flex-start; padding: 12px 26px; border-radius: 999px; background: #1d2a44; color: var(--blue);
+  font-size: 34px; font-weight: 700; }
+.hook { display: flex; flex-direction: column; gap: 50px; padding-top: 140px; }
+.big { font-size: 150px; line-height: 1.12; font-weight: 800; letter-spacing: -0.04em; }
+.big em { font-style: normal; color: var(--orange); }
+.sub { font-size: 64px; font-weight: 700; color: var(--mute); } .sub b { color: var(--ink); }
+.title { font-size: 80px; font-weight: 800; letter-spacing: -0.03em; line-height: 1.1; }
+.desc { font-size: 46px; color: var(--mute); font-weight: 600; margin-top: -8px; } .desc b { color: var(--orange); }
+.code { background: #0a0f1a; border: 2px solid #26324a; border-radius: 26px; padding: 30px 32px; font-family: var(--mono);
+  font-size: 42px; line-height: 1.5; color: #d9e1f2; white-space: pre; box-shadow: 0 30px 60px rgba(0,0,0,.35);
+  font-variant-ligatures: none; font-feature-settings: "liga" 0, "calt" 0; }
+.code.sm { font-size: 34px; padding: 26px 28px; }
+.code .ln { margin: 0 -14px; padding: 0 14px; border-radius: 10px; }
+.code .ln.mk { background: rgba(242,145,17,.13); }
+.kw { color: var(--blue); font-weight: 700; } .st { color: var(--green); } .nu { color: var(--orange); } .cm { color: #6f7d98; } .es { color: var(--orange); font-weight: 700; }
+.term { background: #05080f; border: 2px solid #26324a; border-radius: 22px; padding: 18px 32px 22px; font-family: var(--mono);
+  font-size: 40px; line-height: 1.4; color: var(--ink); white-space: pre; tab-size: 8; }
+.term i { display: block; font-style: normal; font-family: var(--font); font-size: 28px; font-weight: 700; color: var(--mute); margin-bottom: 6px; }
+.term .cmd { color: var(--blue); }
+.term.err { border-color: rgba(255,93,93,.5); color: var(--red); font-size: 34px; white-space: normal; }
+.warn small { font-size: 36px; color: var(--mute); font-weight: 600; }
+.nest > div, .nest > div div { border: 3px solid; border-radius: 22px; padding: 16px 26px 20px; display: flex; flex-direction: column; gap: 12px; }
+.nest b { font-size: 38px; font-weight: 800; font-family: var(--mono); }
+.nest .k1 { border-color: var(--orange); } .nest .k1 > b { color: var(--orange); }
+.nest .k2 { border-color: var(--green); } .nest .k2 > b { color: var(--green); }
+.nest .k3 { border-color: var(--violet); } .nest .k3 > b { color: var(--violet); }
+.chips { display: flex; flex-wrap: wrap; gap: 18px; }
+.chips span { padding: 16px 30px; background: var(--panel); border-radius: 18px; font-size: 42px; font-weight: 700; }
+.warn, .note { padding: 26px 36px; border-radius: 24px; font-size: 44px; font-weight: 700; line-height: 1.45; }
+.warn { background: rgba(255,93,93,.12); border-left: 10px solid var(--red); } .warn b { color: var(--red); }
+.note { background: rgba(63,167,214,.12); border-left: 10px solid var(--blue); } .note b { color: var(--orange); }
+.note small { font-size: 38px; color: var(--mute); font-weight: 600; font-family: var(--mono); }
+code { font-family: var(--mono); color: var(--orange); }
+.var { display: grid; grid-template-columns: 1fr 1.3fr 1fr; gap: 18px; }
+.var div { background: var(--panel); border-radius: 24px; padding: 20px 30px 24px; display: flex; flex-direction: column; gap: 4px; }
+.var small { font-size: 32px; font-weight: 700; color: var(--mute); }
+.var b { font-family: var(--mono); font-size: 64px; }
+.var .v { border: 4px dashed var(--orange); } .var .v b { color: var(--orange); }
+.tbl { align-self: flex-start; }
+.tlabel { font-size: 34px; font-weight: 700; color: var(--mute); margin-bottom: 10px; }
+.tbl table { border-collapse: collapse; font-family: var(--mono); font-size: 40px; background: var(--panel); border-radius: 18px; overflow: hidden; }
+.tbl th { color: var(--blue); text-align: left; padding: 12px 32px; background: #1a2640; }
+.tbl th u { text-decoration: none; color: var(--orange); }
+.tbl td { padding: 10px 32px; border-top: 1px solid #26324a; }
+.tbl tr.k1 td { color: var(--orange); } .tbl tr.k2 td { color: var(--green); } .tbl tr.k3 td { color: var(--violet); }
+.tbl tr.out td { color: #5b6782; text-decoration: line-through; }
+.tbl td.nl { color: var(--red) !important; font-style: italic; font-weight: 700; background: rgba(255,93,93,.12); }
+.link { align-self: flex-start; font-family: var(--mono); font-size: 38px; color: var(--mute); padding: 6px 0 6px 26px;
+  border-left: 8px solid var(--orange); }
+.link b { color: var(--orange); }
+.arrow { font-family: var(--mono); font-size: 38px; color: var(--orange); font-weight: 700; }
+.vs { display: grid; grid-template-columns: 1fr 1fr; gap: 22px; }
+.card { background: var(--panel); border-radius: 26px; padding: 26px 32px; display: flex; flex-direction: column; gap: 6px; }
+.card b { font-family: var(--mono); font-size: 52px; color: var(--blue); }
+.vs .card span { font-size: 44px; font-weight: 800; } .vs .card .ok { color: var(--green); } .vs .card .ng { color: var(--red); }
+.res { display: flex; flex-wrap: wrap; align-items: center; gap: 14px; margin-top: -6px; }
+.res i { font-style: normal; font-size: 34px; color: var(--mute); font-weight: 700; }
+.res span { padding: 8px 22px; border-radius: 14px; background: var(--panel); font-size: 40px; font-weight: 700; }
+.res span.k1 { color: var(--orange); } .res span.k2 { color: var(--green); } .res span.k3 { color: var(--violet); }
+.res span.bad { color: var(--red); background: rgba(255,93,93,.14); box-shadow: inset 0 0 0 3px var(--red); } .vs .card em { font-style: normal; color: var(--orange); }
+.list { display: flex; flex-direction: column; gap: 16px; }
+.row { display: flex; align-items: center; gap: 30px; background: var(--panel); border-radius: 22px; padding: 14px 36px; font-size: 48px;
+  transform-origin: left center; }
+.row .no { font-size: 52px; font-weight: 900; color: var(--orange); width: 50px; }
+.row b { font-family: var(--mono); color: var(--blue); }
+.cta { margin-top: 20px; font-size: 54px; font-weight: 800; text-align: center; }
+.arr { display: flex; align-items: flex-start; gap: 14px; }
+.arr .nm { font-family: var(--mono); font-size: 38px; font-weight: 700; color: var(--mute); padding-top: 34px; margin-right: 6px; }
+.arr .nm.tn { margin-left: 30px; color: var(--blue); }
+.cw { display: flex; flex-direction: column; align-items: center; gap: 6px; }
+.cw small { font-family: var(--mono); font-size: 32px; font-weight: 700; color: var(--mute); height: 40px; }
+.box { position: relative; width: 150px; height: 110px; background: var(--panel); border: 3px solid #26324a; border-radius: 18px; }
+.box b { position: absolute; inset: 0; display: flex; align-items: center; justify-content: center;
+  font-family: var(--mono); font-size: 56px; font-weight: 800; }
+.box.ghost { border: 3px dashed var(--red); background: rgba(255,93,93,.08); } .box.ghost b { color: var(--red); }
+.k1 { color: var(--orange); } .k2 { color: var(--green); } .k3 { color: var(--violet); } .z { color: var(--mute); }
+#sc-swap .arr .cw:last-child .box { border-style: dashed; border-color: var(--blue); }
+.gridw { display: flex; flex-direction: column; gap: 22px; }
+.grid { display: grid; gap: 12px; align-items: center; }
+.grid i { font-style: normal; font-family: var(--mono); font-size: 32px; font-weight: 700; color: var(--mute); text-align: center; }
+.grid b { height: 96px; background: var(--panel); border-radius: 16px; display: flex; align-items: center; justify-content: center;
+  font-family: var(--mono); font-size: 52px; font-weight: 800; }
+.grid b.k1 { box-shadow: inset 0 0 0 4px var(--orange); }
+.dims { display: flex; flex-wrap: wrap; gap: 16px; }
+.dims span { padding: 12px 26px; background: var(--panel); border-radius: 16px; font-size: 40px; font-weight: 700; }
+.dims em { font-style: normal; color: var(--orange); }
+.share { display: flex; gap: 12px; }
+.pp { width: 140px; display: flex; flex-direction: column; align-items: center; gap: 6px; }
+.pp .cd { width: 140px; height: 190px; background: var(--panel); border: 3px solid var(--orange); border-radius: 18px;
+  display: flex; flex-direction: column; align-items: center; justify-content: center; font-size: 46px; line-height: 1.15; }
+.pp.left .cd { border: 3px dashed var(--green); background: rgba(126,224,138,.08); }
+.pp small { font-size: 30px; font-weight: 700; color: var(--mute); } .pp.left small { color: var(--green); }
+.chips .gt { background: none; padding: 16px 0; color: var(--mute); }
+.cap { top: auto; bottom: 260px; height: auto; display: flex; justify-content: center; padding: 0 60px; }
+.cap span { background: rgba(0,0,0,.78); color: #fff; font-size: 48px; font-weight: 700; line-height: 1.4; padding: 16px 30px;
+  border-radius: 18px; text-align: center; word-break: keep-all; }
+.bar { position: absolute; left: 0; bottom: 0; height: 10px; width: 1080px; background: var(--orange); transform-origin: left center; }
+
+.code.k1 { border-color: var(--orange); } .code.k2 { border-color: var(--green); } .code.k3 { border-color: var(--violet); }
+.vs .card span.big2 { font-size: 52px; }
+.vs .card small { font-size: 34px; color: var(--mute); font-weight: 700; }
+.vs .card.k1 b, .vs .card.k2 b, .vs .card.k3 b { color: inherit; }
+.vs .card.k2 b { color: var(--green); } .vs .card.k3 b { color: var(--violet); }
+.vs .card span { font-size: 38px; }
+.note small.t { font-family: var(--font); }
+
+</style>
+</head>
+<body>
+<div id="root" data-composition-id="main" data-start="0" data-duration="172.22" data-width="1080" data-height="1920">
+  <div class="brand"><b>자바 <em>상속</em> 정리</b><div class="prog"><i></i><i></i><i></i><i></i><i></i></div></div>
+  <section id="sc-hook" class="clip scene" data-start="0.000" data-duration="9.812" data-track-index="1"><div class="hook">
+   <div class="pill in">JAVA 입문 · 열 번째</div>
+   <h1 class="big in">클래스의<br/><em>상속</em></h1>
+   <div class="sub in">extends · <b>super</b></div>
+ </div></section>
+<section id="sc-dup" class="clip scene" data-start="9.812" data-duration="10.335" data-track-index="1"><div class="pill in">STEP 1 · 중복 코드</div><h2 class="title in">똑같은 코드가 반복</h2><p class="desc in"><b>name · hello()</b> 가 두 클래스에 중복</p><div class="code in sm k2"><div class="ln"><span class="kw">class</span> Student {</div><div class="ln mk">  <span class="kw">String</span> name;</div><div class="ln">  <span class="kw">int</span> score;</div><div class="ln mk">  <span class="kw">void</span> hello() { … }</div><div class="ln">}</div></div><div class="code in sm k3"><div class="ln"><span class="kw">class</span> Teacher {</div><div class="ln mk">  <span class="kw">String</span> name;</div><div class="ln">  <span class="kw">String</span> subject;</div><div class="ln mk">  <span class="kw">void</span> hello() { … }</div><div class="ln">}</div></div><div class="warn in">클래스가 늘수록 <b>복사</b>도 늘어요</div></section>
+<section id="sc-extends" class="clip scene" data-start="20.147" data-duration="13.743" data-track-index="1"><div class="pill in">STEP 1 · extends</div><h2 class="title in">공통 부분은 부모로</h2><p class="desc in"><b>extends 부모이름</b> 으로 물려받기</p><div class="code in sm k1"><div class="ln"><span class="kw">class</span> Person {</div><div class="ln">  <span class="kw">String</span> name;</div><div class="ln">  <span class="kw">void</span> hello() { … }</div><div class="ln">}</div></div><div class="code in sm k2"><div class="ln mk"><span class="kw">class</span> Student <span class="kw">extends</span> Person {</div><div class="ln">  <span class="kw">int</span> score;</div><div class="ln">}</div></div><div class="code in sm k3"><div class="ln mk"><span class="kw">class</span> Teacher <span class="kw">extends</span> Person {</div><div class="ln">  <span class="kw">String</span> subject;</div><div class="ln">}</div></div><div class="note in">물려주는 쪽 = <b>부모 클래스</b> · 받는 쪽 = <b>자식 클래스</b></div></section>
+<section id="sc-inherit" class="clip scene" data-start="33.890" data-duration="17.007" data-track-index="1"><div class="pill in">STEP 2 · 물려받은 것 쓰기</div><h2 class="title in">자식 객체로 부모 것 사용</h2><p class="desc in">Student 안에 <b>hello()</b> 가 없어도 호출</p><div class="code in sm"><div class="ln">Student s1 = <span class="kw">new</span> Student();</div><div class="ln mk">s1.name = <span class="st">"민수"</span>;</div><div class="ln">s1.score = <span class="nu">85</span>;</div><div class="ln mk">s1.hello();</div></div><div class="term in"><i>실행 결과 (Person 의 hello)</i><div>민수 안녕</div></div><div class="vs in"><div class="card k2"><b>Student</b><span>name · hello() 물려받음</span><small>+ 자기 필드 score</small></div><div class="card k3"><b>Teacher</b><span>name · hello() 물려받음</span><small>+ 자기 필드 subject</small></div></div></section>
+<section id="sc-override" class="clip scene" data-start="50.897" data-duration="15.975" data-track-index="1"><div class="pill in">STEP 3 · 오버라이딩</div><h2 class="title in">같은 hello(), 다른 결과</h2><p class="desc in">물려받은 메소드를 <b>다시 정의(재정의)</b></p><div class="code in sm k2"><div class="ln"><span class="kw">class</span> Student <span class="kw">extends</span> Person {</div><div class="ln mk">  <span class="kw">void</span> hello() {</div><div class="ln mk">    System.out.println(</div><div class="ln mk">      <span class="st">"학생 "</span> + name + <span class="st">" 안녕"</span>);</div><div class="ln">  }</div><div class="ln">}</div></div><div class="code in sm k3"><div class="ln"><span class="kw">class</span> Teacher <span class="kw">extends</span> Person {</div><div class="ln mk">  <span class="kw">void</span> hello() {</div><div class="ln mk">    System.out.println(</div><div class="ln mk">      name + <span class="st">" 선생님 안녕"</span>);</div><div class="ln">  }</div><div class="ln">}</div></div><div class="term in"><i>실행 결과</i><div>학생 민수 안녕</div><div>서준 선생님 안녕</div></div></section>
+<section id="sc-overload" class="clip scene" data-start="66.872" data-duration="16.623" data-track-index="1"><div class="pill in">STEP 3 · 오버라이딩</div><h2 class="title in">@Override 와 비교</h2><p class="desc in"><b>오버라이딩</b> ≠ 오버로딩</p><div class="code in sm k2"><div class="ln"><span class="kw">class</span> Student <span class="kw">extends</span> Person {</div><div class="ln mk">  <span class="kw">@Override</span></div><div class="ln">  <span class="kw">void</span> hello() { … }</div><div class="ln">}</div></div><div class="note in"><b>@Override</b> = 진짜 오버라이딩인지 <b>컴파일러가 확인</b></div><div class="vs in"><div class="card"><b>오버로딩</b><span>같은 클래스</span><small>이름 같고 매개변수 다름</small></div><div class="card"><b>오버라이딩</b><span>자식 클래스</span><small>이름·매개변수 같고 내용만 다시</small></div></div></section>
+<section id="sc-super" class="clip scene" data-start="83.495" data-duration="11.559" data-track-index="1"><div class="pill in">STEP 4 · super()</div><h2 class="title in">부모 생성자 호출</h2><p class="desc in">자식 생성자 첫 줄의 <b>super(name)</b></p><div class="code in sm k1"><div class="ln"><span class="kw">class</span> Person {</div><div class="ln">  Person(<span class="kw">String</span> name) {</div><div class="ln">    System.out.println(<span class="st">"부모 생성자"</span>);</div><div class="ln">    <span class="kw">this</span>.name = name;</div><div class="ln">  }</div><div class="ln">}</div></div><div class="code in sm k2"><div class="ln"><span class="kw">class</span> Student <span class="kw">extends</span> Person {</div><div class="ln">  <span class="kw">int</span> score;</div><div class="ln">  Student(<span class="kw">String</span> name,</div><div class="ln">          <span class="kw">int</span> score) {</div><div class="ln mk">    <span class="kw">super</span>(name);</div><div class="ln">    System.out.println(<span class="st">"자식 생성자"</span>);</div><div class="ln">    <span class="kw">this</span>.score = score;</div><div class="ln">  }</div><div class="ln">}</div></div></section>
+<section id="sc-superrun" class="clip scene" data-start="95.054" data-duration="11.391" data-track-index="1"><div class="pill in">STEP 4 · 실행 순서</div><h2 class="title in">부모가 먼저, 자식이 다음</h2><p class="desc in">생성자마다 <b>출력문</b>을 넣어 확인</p><div class="code in"><div class="ln"><span class="kw">new</span> Student(<span class="st">"민수"</span>, <span class="nu">85</span>);</div></div><div class="term in"><i>실행 결과</i><div>부모 생성자</div><div>자식 생성자</div></div><div class="vs in"><div class="card k1"><b>① 부모 생성자</b><span>Person(name) 먼저</span></div><div class="card k2"><b>② 자식 생성자</b><span>Student 가 다음</span></div></div></section>
+<section id="sc-superctor" class="clip scene" data-start="106.445" data-duration="16.767" data-track-index="1"><div class="pill in">STEP 4-1 · 주의</div><h2 class="title in">super() 가 없으면?</h2><p class="desc in">부모의 <b>기본 생성자</b>를 찾다가 실패</p><div class="code in sm"><div class="ln"><span class="kw">class</span> Student <span class="kw">extends</span> Person {</div><div class="ln">  <span class="kw">int</span> score;</div><div class="ln">  Student(<span class="kw">String</span> name,</div><div class="ln">          <span class="kw">int</span> score) {</div><div class="ln mk">    <span class="cm">// super(name); 없음</span></div><div class="ln">    <span class="kw">this</span>.score = score;</div><div class="ln">  }</div><div class="ln">}</div></div><div class="term err in"><i>컴파일 오류</i><div>constructor Person in class Person cannot be applied to given types;</div></div><div class="note in">지난 시간: 생성자를 만들면 <b>기본 생성자가 없다</b> → <code>Person()</code> 없음</div></section>
+<section id="sc-supermethod" class="clip scene" data-start="123.212" data-duration="15.687" data-track-index="1"><div class="pill in">STEP 5 · super.메소드()</div><h2 class="title in">부모 버전도 함께</h2><p class="desc in">오버라이딩 안에서 <b>super.hello()</b></p><div class="code in sm"><div class="ln">s1.hello();</div></div><div class="term in"><i>실행 결과</i><div>민수 안녕</div><div>점수 85</div></div><div class="vs in"><div class="card"><b>super(name);</b><span>부모 생성자 호출</span><small>생성자 첫 줄</small></div><div class="card"><b>super.hello();</b><span>부모 메소드 호출</span><small>메소드 안</small></div></div></section>
+<section id="sc-single" class="clip scene" data-start="138.899" data-duration="10.623" data-track-index="1"><div class="pill in">STEP 5-1 · 주의</div><h2 class="title in">부모 클래스는 하나만</h2><p class="desc in"><b>extends</b> 뒤에는 클래스 하나</p><div class="code in sm"><div class="ln mk"><span class="kw">class</span> Student <span class="kw">extends</span></div><div class="ln mk">    Person, Teacher {</div><div class="ln">  <span class="kw">int</span> score;</div><div class="ln">}</div></div><div class="term err in"><i>컴파일 오류</i><div>&#x27;{&#x27; expected</div></div><div class="warn in">부모를 둘 적으면 <b>컴파일 오류</b></div></section>
+<section id="sc-outro" class="clip scene" data-start="149.522" data-duration="22.698" data-track-index="1"><div class="pill in">정리</div><h2 class="title in">상속 6가지</h2><div class="list in"><div class="row" id="ex1"><span class="no">1</span><b>extends = 부모를 물려받기</b></div><div class="row" id="ex2"><span class="no">2</span><b>부모의 필드·메소드를 바로 사용</b></div><div class="row" id="ex3"><span class="no">3</span><b>오버라이딩 = 다시 정의</b></div><div class="row" id="ex4"><span class="no">4</span><b>super() = 부모 생성자 먼저 호출</b></div><div class="row" id="ex5"><span class="no">5</span><b>super.메소드() = 부모 메소드</b></div><div class="row" id="ex6"><span class="no">6</span><b>부모 클래스는 하나만</b></div></div><div class="cta in">👍 구독 · 좋아요</div></section>
+  <div id="cap-hook-0" class="clip cap" data-start="0.250" data-duration="2.705" data-track-index="2"><span>자바 입문 열 번째, 클래스의 상속!</span></div>
+<div id="cap-hook-1" class="clip cap" data-start="2.955" data-duration="1.632" data-track-index="2"><span>같은 코드를 반복해서 쓰지 않게 해</span></div>
+<div id="cap-hook-2" class="clip cap" data-start="4.588" data-duration="2.910" data-track-index="2"><span>주는 부모 클래스와 자식 클래스, 오버라이딩,</span></div>
+<div id="cap-hook-3" class="clip cap" data-start="7.498" data-duration="2.064" data-track-index="2"><span>슈퍼까지 정리해 드립니다.</span></div>
+<div id="cap-dup-0" class="clip cap" data-start="9.937" data-duration="1.216" data-track-index="2"><span>지난 시간의 스튜던트와</span></div>
+<div id="cap-dup-1" class="clip cap" data-start="11.153" data-duration="1.900" data-track-index="2"><span>티처 클래스를 볼게요.</span></div>
+<div id="cap-dup-2" class="clip cap" data-start="13.053" data-duration="1.203" data-track-index="2"><span>둘 다 네임 필드와 헬로</span></div>
+<div id="cap-dup-3" class="clip cap" data-start="14.256" data-duration="2.173" data-track-index="2"><span>메소드가 똑같이 들어 있어요.</span></div>
+<div id="cap-dup-4" class="clip cap" data-start="16.430" data-duration="1.297" data-track-index="2"><span>클래스가 늘어날수록 같은</span></div>
+<div id="cap-dup-5" class="clip cap" data-start="17.726" data-duration="2.171" data-track-index="2"><span>코드를 계속 복사해야 하죠.</span></div>
+<div id="cap-extends-0" class="clip cap" data-start="20.272" data-duration="2.537" data-track-index="2"><span>공통 부분은 퍼슨 클래스로 빼내요.</span></div>
+<div id="cap-extends-1" class="clip cap" data-start="22.809" data-duration="1.101" data-track-index="2"><span>그리고 클래스 이름 뒤에</span></div>
+<div id="cap-extends-2" class="clip cap" data-start="23.910" data-duration="1.427" data-track-index="2"><span>익스텐즈 퍼슨을 붙이면,</span></div>
+<div id="cap-extends-3" class="clip cap" data-start="25.337" data-duration="1.763" data-track-index="2"><span>부모가 자식에게 물려주듯 스튜던트와</span></div>
+<div id="cap-extends-4" class="clip cap" data-start="27.100" data-duration="2.780" data-track-index="2"><span>티처가 퍼슨의 필드와 메소드를 물려받아요.</span></div>
+<div id="cap-extends-5" class="clip cap" data-start="29.880" data-duration="1.651" data-track-index="2"><span>물려주는 쪽이 부모 클래스,</span></div>
+<div id="cap-extends-6" class="clip cap" data-start="31.531" data-duration="2.109" data-track-index="2"><span>받는 쪽이 자식 클래스예요.</span></div>
+<div id="cap-inherit-0" class="clip cap" data-start="34.015" data-duration="1.832" data-track-index="2"><span>스튜던트 안에는 헬로가 없는데도,</span></div>
+<div id="cap-inherit-1" class="clip cap" data-start="35.847" data-duration="1.110" data-track-index="2"><span>에스 원 닷 헬로를 부르면</span></div>
+<div id="cap-inherit-2" class="clip cap" data-start="36.957" data-duration="1.862" data-track-index="2"><span>민수 안녕이 출력돼요.</span></div>
+<div id="cap-inherit-3" class="clip cap" data-start="38.819" data-duration="2.472" data-track-index="2"><span>부모의 메소드를 물려받았기 때문이에요.</span></div>
+<div id="cap-inherit-4" class="clip cap" data-start="41.291" data-duration="1.241" data-track-index="2"><span>네임 필드도 물려받아서</span></div>
+<div id="cap-inherit-5" class="clip cap" data-start="42.532" data-duration="1.903" data-track-index="2"><span>점을 찍어 쓸 수 있어요.</span></div>
+<div id="cap-inherit-6" class="clip cap" data-start="44.435" data-duration="2.780" data-track-index="2"><span>자식은 자기만의 필드도 더할 수 있어요.</span></div>
+<div id="cap-inherit-7" class="clip cap" data-start="47.215" data-duration="1.166" data-track-index="2"><span>스튜던트는 스코어,</span></div>
+<div id="cap-inherit-8" class="clip cap" data-start="48.381" data-duration="2.266" data-track-index="2"><span>티처는 서브젝트를 더 가져요.</span></div>
+<div id="cap-override-0" class="clip cap" data-start="51.022" data-duration="2.687" data-track-index="2"><span>그런데 자식마다 헬로를 다르게 하고 싶다면?</span></div>
+<div id="cap-override-1" class="clip cap" data-start="53.709" data-duration="1.250" data-track-index="2"><span>자식 클래스에서 물려받은</span></div>
+<div id="cap-override-2" class="clip cap" data-start="54.959" data-duration="1.129" data-track-index="2"><span>메소드를 같은 이름,</span></div>
+<div id="cap-override-3" class="clip cap" data-start="56.087" data-duration="2.584" data-track-index="2"><span>같은 매개변수로 다시 정의하면 돼요.</span></div>
+<div id="cap-override-4" class="clip cap" data-start="58.671" data-duration="1.185" data-track-index="2"><span>이것을 오버라이딩,</span></div>
+<div id="cap-override-5" class="clip cap" data-start="59.856" data-duration="1.530" data-track-index="2"><span>재정의라고 해요.</span></div>
+<div id="cap-override-6" class="clip cap" data-start="61.386" data-duration="1.138" data-track-index="2"><span>같은 헬로를 불러도,</span></div>
+<div id="cap-override-7" class="clip cap" data-start="62.524" data-duration="1.614" data-track-index="2"><span>스튜던트는 학생 민수 안녕,</span></div>
+<div id="cap-override-8" class="clip cap" data-start="64.138" data-duration="2.484" data-track-index="2"><span>티처는 서준 선생님 안녕이 나와요.</span></div>
+<div id="cap-overload-0" class="clip cap" data-start="66.997" data-duration="2.242" data-track-index="2"><span>메소드 위에 골뱅이 오버라이드를 붙이면,</span></div>
+<div id="cap-overload-1" class="clip cap" data-start="69.239" data-duration="1.894" data-track-index="2"><span>진짜 오버라이딩이 맞는지 컴파일러에게</span></div>
+<div id="cap-overload-2" class="clip cap" data-start="71.133" data-duration="1.844" data-track-index="2"><span>확인을 맡길 수 있어요.</span></div>
+<div id="cap-overload-3" class="clip cap" data-start="72.976" data-duration="2.360" data-track-index="2"><span>지난 시간의 오버로딩과 헷갈리기 쉬운데요,</span></div>
+<div id="cap-overload-4" class="clip cap" data-start="75.337" data-duration="1.446" data-track-index="2"><span>오버로딩은 같은 클래스에서</span></div>
+<div id="cap-overload-5" class="clip cap" data-start="76.782" data-duration="1.968" data-track-index="2"><span>이름은 같고 매개변수가 다른 것,</span></div>
+<div id="cap-overload-6" class="clip cap" data-start="78.751" data-duration="1.800" data-track-index="2"><span>오버라이딩은 자식 클래스에서 이름과</span></div>
+<div id="cap-overload-7" class="clip cap" data-start="80.551" data-duration="2.694" data-track-index="2"><span>매개변수가 같고 내용만 다시 쓰는 거예요.</span></div>
+<div id="cap-super-0" class="clip cap" data-start="83.620" data-duration="1.819" data-track-index="2"><span>이번엔 생성자예요.</span></div>
+<div id="cap-super-1" class="clip cap" data-start="85.439" data-duration="1.931" data-track-index="2"><span>퍼슨에 네임을 받는 생성자를 만들고,</span></div>
+<div id="cap-super-2" class="clip cap" data-start="87.370" data-duration="1.912" data-track-index="2"><span>스튜던트 생성자 첫 줄에서 슈퍼 괄호</span></div>
+<div id="cap-super-3" class="clip cap" data-start="89.282" data-duration="2.332" data-track-index="2"><span>네임으로 부모 생성자를 호출해요.</span></div>
+<div id="cap-super-4" class="clip cap" data-start="91.614" data-duration="1.119" data-track-index="2"><span>두 생성자에는 확인용</span></div>
+<div id="cap-super-5" class="clip cap" data-start="92.734" data-duration="2.070" data-track-index="2"><span>출력문을 하나씩 넣었어요.</span></div>
+<div id="cap-superrun-0" class="clip cap" data-start="95.179" data-duration="1.813" data-track-index="2"><span>뉴 스튜던트로 객체를 만들면,</span></div>
+<div id="cap-superrun-1" class="clip cap" data-start="96.992" data-duration="1.605" data-track-index="2"><span>부모 생성자의 출력이 먼저,</span></div>
+<div id="cap-superrun-2" class="clip cap" data-start="98.597" data-duration="2.571" data-track-index="2"><span>자식 생성자의 출력이 다음에 나와요.</span></div>
+<div id="cap-superrun-3" class="clip cap" data-start="101.168" data-duration="1.259" data-track-index="2"><span>부모 부분을 먼저 만든 뒤에</span></div>
+<div id="cap-superrun-4" class="clip cap" data-start="102.427" data-duration="1.334" data-track-index="2"><span>자식을 완성하기 때문에,</span></div>
+<div id="cap-superrun-5" class="clip cap" data-start="103.761" data-duration="2.434" data-track-index="2"><span>부모 생성자가 항상 먼저 실행돼요.</span></div>
+<div id="cap-superctor-0" class="clip cap" data-start="106.570" data-duration="1.446" data-track-index="2"><span>주의할 점!</span></div>
+<div id="cap-superctor-1" class="clip cap" data-start="108.016" data-duration="2.715" data-track-index="2"><span>슈퍼 네임을 지우면 컴파일 오류가 나요.</span></div>
+<div id="cap-superctor-2" class="clip cap" data-start="110.730" data-duration="1.390" data-track-index="2"><span>슈퍼를 쓰지 않으면 자바가</span></div>
+<div id="cap-superctor-3" class="clip cap" data-start="112.120" data-duration="1.810" data-track-index="2"><span>부모의 기본 생성자를 부르는데,</span></div>
+<div id="cap-superctor-4" class="clip cap" data-start="113.930" data-duration="1.670" data-track-index="2"><span>퍼슨은 생성자를 직접 만들어서</span></div>
+<div id="cap-superctor-5" class="clip cap" data-start="115.600" data-duration="2.229" data-track-index="2"><span>기본 생성자가 없기 때문이에요.</span></div>
+<div id="cap-superctor-6" class="clip cap" data-start="117.829" data-duration="1.035" data-track-index="2"><span>지난 시간에 배운,</span></div>
+<div id="cap-superctor-7" class="clip cap" data-start="118.865" data-duration="2.174" data-track-index="2"><span>생성자를 직접 만들면 기본 생성자가</span></div>
+<div id="cap-superctor-8" class="clip cap" data-start="121.038" data-duration="1.924" data-track-index="2"><span>생기지 않는다는 내용이죠.</span></div>
+<div id="cap-supermethod-0" class="clip cap" data-start="123.337" data-duration="2.052" data-track-index="2"><span>슈퍼는 메소드에도 써요.</span></div>
+<div id="cap-supermethod-1" class="clip cap" data-start="125.389" data-duration="1.772" data-track-index="2"><span>오버라이딩한 헬로 안에서 슈퍼 닷 헬로를</span></div>
+<div id="cap-supermethod-2" class="clip cap" data-start="127.162" data-duration="2.481" data-track-index="2"><span>부르면 부모 버전이 먼저 실행돼요.</span></div>
+<div id="cap-supermethod-3" class="clip cap" data-start="129.643" data-duration="2.006" data-track-index="2"><span>그다음 점수를 출력하면 민수 안녕,</span></div>
+<div id="cap-supermethod-4" class="clip cap" data-start="131.649" data-duration="1.894" data-track-index="2"><span>점수 팔십오가 나와요.</span></div>
+<div id="cap-supermethod-5" class="clip cap" data-start="133.542" data-duration="1.716" data-track-index="2"><span>생성자를 부르는 슈퍼 괄호와,</span></div>
+<div id="cap-supermethod-6" class="clip cap" data-start="135.259" data-duration="1.129" data-track-index="2"><span>메소드를 부르는 슈퍼 닷</span></div>
+<div id="cap-supermethod-7" class="clip cap" data-start="136.387" data-duration="2.262" data-track-index="2"><span>메소드는 서로 다른 쓰임이에요.</span></div>
+<div id="cap-single-0" class="clip cap" data-start="139.024" data-duration="1.511" data-track-index="2"><span>마지막 주의!</span></div>
+<div id="cap-single-1" class="clip cap" data-start="140.535" data-duration="1.259" data-track-index="2"><span>익스텐즈 뒤에는 클래스</span></div>
+<div id="cap-single-2" class="clip cap" data-start="141.795" data-duration="1.726" data-track-index="2"><span>하나만 쓸 수 있어요.</span></div>
+<div id="cap-single-3" class="clip cap" data-start="143.520" data-duration="1.838" data-track-index="2"><span>퍼슨, 티처처럼 부모를 둘 적으면</span></div>
+<div id="cap-single-4" class="clip cap" data-start="145.358" data-duration="1.763" data-track-index="2"><span>컴파일 오류가 나요.</span></div>
+<div id="cap-single-5" class="clip cap" data-start="147.121" data-duration="2.151" data-track-index="2"><span>부모 클래스는 하나만이에요.</span></div>
+<div id="cap-outro-0" class="clip cap" data-start="149.647" data-duration="2.121" data-track-index="2"><span>정리하면, 익스텐즈로 부모 클래스의</span></div>
+<div id="cap-outro-1" class="clip cap" data-start="151.768" data-duration="2.114" data-track-index="2"><span>필드와 메소드를 물려받아요.</span></div>
+<div id="cap-outro-2" class="clip cap" data-start="153.882" data-duration="1.978" data-track-index="2"><span>자식은 부모의 메소드를 바로 쓰고,</span></div>
+<div id="cap-outro-3" class="clip cap" data-start="155.860" data-duration="2.118" data-track-index="2"><span>자기 필드도 더할 수 있어요.</span></div>
+<div id="cap-outro-4" class="clip cap" data-start="157.977" data-duration="1.269" data-track-index="2"><span>오버라이딩은 같은 이름과</span></div>
+<div id="cap-outro-5" class="clip cap" data-start="159.246" data-duration="1.903" data-track-index="2"><span>매개변수로 다시 정의하는 것이고,</span></div>
+<div id="cap-outro-6" class="clip cap" data-start="161.149" data-duration="2.836" data-track-index="2"><span>슈퍼 괄호는 부모 생성자를 먼저 호출해요.</span></div>
+<div id="cap-outro-7" class="clip cap" data-start="163.985" data-duration="2.341" data-track-index="2"><span>슈퍼 닷 메소드는 부모 메소드를 호출하고,</span></div>
+<div id="cap-outro-8" class="clip cap" data-start="166.326" data-duration="2.528" data-track-index="2"><span>부모 클래스는 하나만 둘 수 있어요.</span></div>
+<div id="cap-outro-9" class="clip cap" data-start="168.854" data-duration="2.369" data-track-index="2"><span>구독과 좋아요 부탁드립니다!</span></div>
+  <div class="bar"></div>
+  <audio id="vo" src="assets/narration.mp3" data-start="0" data-duration="172.22" data-track-index="0"></audio>
+</div>
+<script>
+const tl = gsap.timeline({ paused: true });
+const SP = 1.2;
+function enter(sel, t, dur) {
+  const items = document.querySelectorAll(sel + " .in");
+  const step = Math.min(0.9 / SP, (dur * 0.5) / Math.max(1, items.length));
+  items.forEach((el, i) => {
+    const at = Math.max(0, t - 0.1 / SP) + i * step;
+    tl.fromTo(el, { opacity: 0, y: 50 }, { opacity: 1, y: 0, duration: 0.5 / SP, ease: "power3.out" }, at);
+    el.querySelectorAll(".ln").forEach((ln, j) => {
+      tl.fromTo(ln, { opacity: 0, x: -30 }, { opacity: 1, x: 0, duration: 0.35 / SP, ease: "power2.out" }, at + (0.15 + j * 0.3) / SP);
+    });
+  });
+}
+enter("#sc-hook", 0.25, 9.312);
+tl.set(".prog i", {backgroundColor: "#26324a"}, 0);
+enter("#sc-dup", 9.937, 9.96);
+tl.set(".prog i", {backgroundColor: "#26324a"}, 9.812);
+tl.set(".prog i:nth-child(1)", {backgroundColor: "#f29111"}, 9.812);
+enter("#sc-extends", 20.272, 13.368);
+tl.set(".prog i", {backgroundColor: "#26324a"}, 20.147);
+tl.set(".prog i:nth-child(1)", {backgroundColor: "#f29111"}, 20.147);
+enter("#sc-inherit", 34.015, 16.632);
+tl.set(".prog i", {backgroundColor: "#26324a"}, 33.89);
+tl.set(".prog i:nth-child(2)", {backgroundColor: "#f29111"}, 33.89);
+enter("#sc-override", 51.022, 15.6);
+tl.set(".prog i", {backgroundColor: "#26324a"}, 50.897);
+tl.set(".prog i:nth-child(3)", {backgroundColor: "#f29111"}, 50.897);
+enter("#sc-overload", 66.997, 16.248);
+tl.set(".prog i", {backgroundColor: "#26324a"}, 66.872);
+tl.set(".prog i:nth-child(3)", {backgroundColor: "#f29111"}, 66.872);
+enter("#sc-super", 83.62, 11.184);
+tl.set(".prog i", {backgroundColor: "#26324a"}, 83.495);
+tl.set(".prog i:nth-child(4)", {backgroundColor: "#f29111"}, 83.495);
+enter("#sc-superrun", 95.179, 11.016);
+tl.set(".prog i", {backgroundColor: "#26324a"}, 95.054);
+tl.set(".prog i:nth-child(4)", {backgroundColor: "#f29111"}, 95.054);
+enter("#sc-superctor", 106.57, 16.392);
+tl.set(".prog i", {backgroundColor: "#26324a"}, 106.445);
+tl.set(".prog i:nth-child(4)", {backgroundColor: "#f29111"}, 106.445);
+enter("#sc-supermethod", 123.337, 15.312);
+tl.set(".prog i", {backgroundColor: "#26324a"}, 123.212);
+tl.set(".prog i:nth-child(5)", {backgroundColor: "#f29111"}, 123.212);
+enter("#sc-single", 139.024, 10.248);
+tl.set(".prog i", {backgroundColor: "#26324a"}, 138.899);
+tl.set(".prog i:nth-child(5)", {backgroundColor: "#f29111"}, 138.899);
+enter("#sc-outro", 149.647, 21.576);
+tl.set(".prog i", {backgroundColor: "#26324a"}, 149.522);
+tl.to("#ex1", {backgroundColor: "#3a2a12", scale: 1.04, duration: 0.2}, 150.499);
+tl.to("#ex1", {backgroundColor: "#131c2e", scale: 1, duration: 0.2}, 153.882);
+tl.to("#ex2", {backgroundColor: "#3a2a12", scale: 1.04, duration: 0.2}, 153.882);
+tl.to("#ex2", {backgroundColor: "#131c2e", scale: 1, duration: 0.2}, 157.977);
+tl.to("#ex3", {backgroundColor: "#3a2a12", scale: 1.04, duration: 0.2}, 157.977);
+tl.to("#ex3", {backgroundColor: "#131c2e", scale: 1, duration: 0.2}, 161.149);
+tl.to("#ex4", {backgroundColor: "#3a2a12", scale: 1.04, duration: 0.2}, 161.149);
+tl.to("#ex4", {backgroundColor: "#131c2e", scale: 1, duration: 0.2}, 164.255);
+tl.to("#ex5", {backgroundColor: "#3a2a12", scale: 1.04, duration: 0.2}, 164.255);
+tl.to("#ex5", {backgroundColor: "#131c2e", scale: 1, duration: 0.2}, 167.11);
+tl.to("#ex6", {backgroundColor: "#3a2a12", scale: 1.04, duration: 0.2}, 167.11);
+tl.to("#ex6", {backgroundColor: "#131c2e", scale: 1, duration: 0.3}, 168.854 + 0.6);
+tl.fromTo(".bar", { scaleX: 0 }, { scaleX: 1, duration: 172.22, ease: "none" }, 0);
+window.__timelines = window.__timelines || {};
+window.__timelines["main"] = tl;
+tl.seek(0);
+</script>
+</body>
+</html>

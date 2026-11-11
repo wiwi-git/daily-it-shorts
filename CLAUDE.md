@@ -3,6 +3,10 @@
 IT·기술 정보성 유튜브 쇼츠를 매일 하나씩 만드는 저장소. 영상 1개 = 폴더 1개(HyperFrames 프로젝트).
 새 영상은 **기존 영상과 같은 디자인·제작 방식**으로 만든다.
 
+작업 흐름은 [AGENTS.md](AGENTS.md)를 따른다.
+
+@AGENTS.md
+
 ## 응답 언어
 
 - 사용자에게 하는 답변은 항상 한국어로 쓴다(코드·명령어·파일 이름은 원문 그대로)
@@ -95,3 +99,17 @@ IT·기술 정보성 유튜브 쇼츠를 매일 하나씩 만드는 저장소. �
 
 - 영상(`*.mp4`)·음성(`*.mp3`)·`output/`·`.hyperframes/`는 커밋하지 않는다(`.gitignore`)
 - 커밋·푸시는 사용자가 요청할 때만. 보통 유튜브 업로드 후 URL을 README에 넣고 함께 커밋한다
+
+## Agent skills
+
+### Issue tracker
+
+스펙·티켓은 `.scratch/<기능>/` 아래 로컬 마크다운 파일로 관리한다. See `docs/agents/issue-tracker.md`.
+
+### Triage labels
+
+기본 다섯 역할(`needs-triage`, `needs-info`, `ready-for-agent`, `ready-for-human`, `wontfix`)을 각 이슈 파일의 `Status:` 줄에 그대로 쓴다. See `docs/agents/triage-labels.md`.
+
+### Domain docs
+
+단일 컨텍스트: 루트 `GLOSSARY.md` + `docs/adr/`. See `docs/agents/domain.md`.

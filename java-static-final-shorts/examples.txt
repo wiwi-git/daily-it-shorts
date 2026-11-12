@@ -200,3 +200,85 @@ class Student {
     count++;
   }
 }
+
+// [4. final 메소드] Main.java → 컴파일 오류: hello() in Student cannot override hello() in Person
+public class Main {
+  public static void main(String[] args) {
+  }
+}
+
+class Person {
+  String name;
+  final void hello() {
+    System.out.println(
+        "안녕하세요");
+  }
+}
+
+class Student extends Person {
+  void hello() {
+    System.out.println(
+        "안녕하세요");
+  }
+}
+
+// [4-1. final 클래스] Main.java → 컴파일 오류: cannot inherit from final Person
+public class Main {
+  public static void main(String[] args) {
+  }
+}
+
+final class Person {
+  void hello() { }
+}
+
+class Student extends Person {
+}
+
+// [5. static final 상수] Main.java → 출력:
+//   true
+public class Main {
+  public static void main(String[] args) {
+    Student s = new Student(
+        "민수", 85);
+    System.out.println(
+        s.isPass());
+  }
+}
+
+class Student {
+  static final int
+      PASS_SCORE = 60;
+  String name;
+  int score;
+  Student(String name,
+          int score) {
+    this.name = name;
+    this.score = score;
+  }
+  boolean isPass() {
+    return score >= PASS_SCORE;
+  }
+}
+
+// [5-1. 상수 재대입] Main.java → 컴파일 오류: cannot assign a value to static final variable PASS_SCORE
+public class Main {
+  public static void main(String[] args) {
+    Student.PASS_SCORE = 70;
+  }
+}
+
+class Student {
+  static final int
+      PASS_SCORE = 60;
+  String name;
+  int score;
+  Student(String name,
+          int score) {
+    this.name = name;
+    this.score = score;
+  }
+  boolean isPass() {
+    return score >= PASS_SCORE;
+  }
+}

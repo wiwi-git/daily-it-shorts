@@ -239,7 +239,7 @@ CSS_EXTRA = """
 .vs .card.k1 b, .vs .card.k2 b, .vs .card.k3 b { color: inherit; }
 .vs .card.k2 b { color: var(--green); } .vs .card.k3 b { color: var(--violet); }
 .vs .card span { font-size: 38px; }
-.note small.t { font-family: var(--font); }
+.note small.t { font-family: var(--mono); }
 """
 
 EXEC = []
@@ -286,7 +286,7 @@ scenes = {
     + term(label="실행 결과")
     + jce("fref", ["s = new Student(", '    "지영", 92);'], FERR, mark=(0,), pre=["final Student s = new Student(", '    "민수", 85);'], cls=STUDENT_CLS_F, sm=True)
     + cterm()
-    + '<div class="warn in">final은 <b>화살표</b>를 고정 · 객체 내용은 변경 가능</div>',
+    + '<div class="warn in">final은 <b>변수</b>를 고정 · 객체 내용은 변경 가능</div>',
  "fmc": head("STEP 4 · final 메소드", "오버라이딩 금지", "<b>final</b> 메소드는 자식이 고칠 수 없다")
     + kc(["class Person {", "  final void hello() { … }", "}"], "k1", mark=(1,))
     + kc(["class Student extends Person {", "  void hello() { … }", "}"], "k2", mark=(1,))

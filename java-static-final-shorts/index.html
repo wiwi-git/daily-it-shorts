@@ -1,0 +1,196 @@
+<!doctype html>
+<html lang="ko" data-resolution="portrait">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=1080, height=1920" />
+<script src="https://cdn.jsdelivr.net/npm/gsap@3.14.2/dist/gsap.min.js"></script>
+<style>
+:root {
+  --ground: #0b1220; --panel: #131c2e; --ink: #f4f6fb; --mute: #9aa6bd;
+  --blue: #3fa7d6; --orange: #f29111; --red: #ff5d5d; --green: #7ee08a; --violet: #c3a6ff;
+  --font: "Pretendard", sans-serif;
+  --mono: "Menlo", "SF Mono", monospace;
+}
+@font-face { font-family: "Pretendard"; src: url("assets/fonts/PretendardVariable.woff2") format("woff2"); font-weight: 45 920; }
+* { margin: 0; padding: 0; box-sizing: border-box; }
+html, body { width: 1080px; height: 1920px; overflow: hidden; background: var(--ground); }
+#root { position: relative; width: 100%; height: 100%; font-variant-ligatures: none; font-family: var(--font); color: var(--ink); overflow: hidden;
+  background: radial-gradient(1200px 900px at 80% -10%, #16365a 0%, transparent 60%),
+              radial-gradient(900px 900px at -10% 110%, #3a2410 0%, transparent 55%), var(--ground); }
+.clip { position: absolute; inset: 0; }
+.brand { position: absolute; top: 110px; left: 70px; right: 70px; display: flex; justify-content: space-between; align-items: center;
+  font-size: 34px; font-weight: 700; color: var(--mute); letter-spacing: 0.02em; }
+.brand b { color: var(--blue); } .brand b em { color: var(--orange); font-style: normal; }
+.prog { display: flex; gap: 12px; }
+.prog i { display: block; width: 56px; height: 12px; border-radius: 6px; background: #26324a; }
+.scene { padding: 210px 70px 0; display: flex; flex-direction: column; gap: 26px; }
+.pill { align-self: flex-start; padding: 12px 26px; border-radius: 999px; background: #1d2a44; color: var(--blue);
+  font-size: 34px; font-weight: 700; }
+.hook { display: flex; flex-direction: column; gap: 50px; padding-top: 140px; }
+.big { font-size: 150px; line-height: 1.12; font-weight: 800; letter-spacing: -0.04em; }
+.big em { font-style: normal; color: var(--orange); }
+.sub { font-size: 64px; font-weight: 700; color: var(--mute); } .sub b { color: var(--ink); }
+.title { font-size: 80px; font-weight: 800; letter-spacing: -0.03em; line-height: 1.1; }
+.desc { font-size: 46px; color: var(--mute); font-weight: 600; margin-top: -8px; } .desc b { color: var(--orange); }
+.code { background: #0a0f1a; border: 2px solid #26324a; border-radius: 26px; padding: 30px 32px; font-family: var(--mono);
+  font-size: 42px; line-height: 1.5; color: #d9e1f2; white-space: pre; box-shadow: 0 30px 60px rgba(0,0,0,.35);
+  font-variant-ligatures: none; font-feature-settings: "liga" 0, "calt" 0; }
+.code.sm { font-size: 34px; padding: 26px 28px; }
+.code .ln { margin: 0 -14px; padding: 0 14px; border-radius: 10px; }
+.code .ln.mk { background: rgba(242,145,17,.13); }
+.kw { color: var(--blue); font-weight: 700; } .st { color: var(--green); } .nu { color: var(--orange); } .cm { color: #6f7d98; } .es { color: var(--orange); font-weight: 700; }
+.term { background: #05080f; border: 2px solid #26324a; border-radius: 22px; padding: 18px 32px 22px; font-family: var(--mono);
+  font-size: 40px; line-height: 1.4; color: var(--ink); white-space: pre; tab-size: 8; }
+.term i { display: block; font-style: normal; font-family: var(--font); font-size: 28px; font-weight: 700; color: var(--mute); margin-bottom: 6px; }
+.term .cmd { color: var(--blue); }
+.term.err { border-color: rgba(255,93,93,.5); color: var(--red); font-size: 34px; white-space: normal; }
+.warn small { font-size: 36px; color: var(--mute); font-weight: 600; }
+.nest > div, .nest > div div { border: 3px solid; border-radius: 22px; padding: 16px 26px 20px; display: flex; flex-direction: column; gap: 12px; }
+.nest b { font-size: 38px; font-weight: 800; font-family: var(--mono); }
+.nest .k1 { border-color: var(--orange); } .nest .k1 > b { color: var(--orange); }
+.nest .k2 { border-color: var(--green); } .nest .k2 > b { color: var(--green); }
+.nest .k3 { border-color: var(--violet); } .nest .k3 > b { color: var(--violet); }
+.chips { display: flex; flex-wrap: wrap; gap: 18px; }
+.chips span { padding: 16px 30px; background: var(--panel); border-radius: 18px; font-size: 42px; font-weight: 700; }
+.warn, .note { padding: 26px 36px; border-radius: 24px; font-size: 44px; font-weight: 700; line-height: 1.45; }
+.warn { background: rgba(255,93,93,.12); border-left: 10px solid var(--red); } .warn b { color: var(--red); }
+.note { background: rgba(63,167,214,.12); border-left: 10px solid var(--blue); } .note b { color: var(--orange); }
+.note small { font-size: 38px; color: var(--mute); font-weight: 600; font-family: var(--mono); }
+code { font-family: var(--mono); color: var(--orange); }
+.var { display: grid; grid-template-columns: 1fr 1.3fr 1fr; gap: 18px; }
+.var div { background: var(--panel); border-radius: 24px; padding: 20px 30px 24px; display: flex; flex-direction: column; gap: 4px; }
+.var small { font-size: 32px; font-weight: 700; color: var(--mute); }
+.var b { font-family: var(--mono); font-size: 64px; }
+.var .v { border: 4px dashed var(--orange); } .var .v b { color: var(--orange); }
+.tbl { align-self: flex-start; }
+.tlabel { font-size: 34px; font-weight: 700; color: var(--mute); margin-bottom: 10px; }
+.tbl table { border-collapse: collapse; font-family: var(--mono); font-size: 40px; background: var(--panel); border-radius: 18px; overflow: hidden; }
+.tbl th { color: var(--blue); text-align: left; padding: 12px 32px; background: #1a2640; }
+.tbl th u { text-decoration: none; color: var(--orange); }
+.tbl td { padding: 10px 32px; border-top: 1px solid #26324a; }
+.tbl tr.k1 td { color: var(--orange); } .tbl tr.k2 td { color: var(--green); } .tbl tr.k3 td { color: var(--violet); }
+.tbl tr.out td { color: #5b6782; text-decoration: line-through; }
+.tbl td.nl { color: var(--red) !important; font-style: italic; font-weight: 700; background: rgba(255,93,93,.12); }
+.link { align-self: flex-start; font-family: var(--mono); font-size: 38px; color: var(--mute); padding: 6px 0 6px 26px;
+  border-left: 8px solid var(--orange); }
+.link b { color: var(--orange); }
+.arrow { font-family: var(--mono); font-size: 38px; color: var(--orange); font-weight: 700; }
+.vs { display: grid; grid-template-columns: 1fr 1fr; gap: 22px; }
+.card { background: var(--panel); border-radius: 26px; padding: 26px 32px; display: flex; flex-direction: column; gap: 6px; }
+.card b { font-family: var(--mono); font-size: 52px; color: var(--blue); }
+.vs .card span { font-size: 44px; font-weight: 800; } .vs .card .ok { color: var(--green); } .vs .card .ng { color: var(--red); }
+.res { display: flex; flex-wrap: wrap; align-items: center; gap: 14px; margin-top: -6px; }
+.res i { font-style: normal; font-size: 34px; color: var(--mute); font-weight: 700; }
+.res span { padding: 8px 22px; border-radius: 14px; background: var(--panel); font-size: 40px; font-weight: 700; }
+.res span.k1 { color: var(--orange); } .res span.k2 { color: var(--green); } .res span.k3 { color: var(--violet); }
+.res span.bad { color: var(--red); background: rgba(255,93,93,.14); box-shadow: inset 0 0 0 3px var(--red); } .vs .card em { font-style: normal; color: var(--orange); }
+.list { display: flex; flex-direction: column; gap: 16px; }
+.row { display: flex; align-items: center; gap: 30px; background: var(--panel); border-radius: 22px; padding: 14px 36px; font-size: 48px;
+  transform-origin: left center; }
+.row .no { font-size: 52px; font-weight: 900; color: var(--orange); width: 50px; }
+.row b { font-family: var(--mono); color: var(--blue); }
+.cta { margin-top: 20px; font-size: 54px; font-weight: 800; text-align: center; }
+.arr { display: flex; align-items: flex-start; gap: 14px; }
+.arr .nm { font-family: var(--mono); font-size: 38px; font-weight: 700; color: var(--mute); padding-top: 34px; margin-right: 6px; }
+.arr .nm.tn { margin-left: 30px; color: var(--blue); }
+.cw { display: flex; flex-direction: column; align-items: center; gap: 6px; }
+.cw small { font-family: var(--mono); font-size: 32px; font-weight: 700; color: var(--mute); height: 40px; }
+.box { position: relative; width: 150px; height: 110px; background: var(--panel); border: 3px solid #26324a; border-radius: 18px; }
+.box b { position: absolute; inset: 0; display: flex; align-items: center; justify-content: center;
+  font-family: var(--mono); font-size: 56px; font-weight: 800; }
+.box.ghost { border: 3px dashed var(--red); background: rgba(255,93,93,.08); } .box.ghost b { color: var(--red); }
+.k1 { color: var(--orange); } .k2 { color: var(--green); } .k3 { color: var(--violet); } .z { color: var(--mute); }
+#sc-swap .arr .cw:last-child .box { border-style: dashed; border-color: var(--blue); }
+.gridw { display: flex; flex-direction: column; gap: 22px; }
+.grid { display: grid; gap: 12px; align-items: center; }
+.grid i { font-style: normal; font-family: var(--mono); font-size: 32px; font-weight: 700; color: var(--mute); text-align: center; }
+.grid b { height: 96px; background: var(--panel); border-radius: 16px; display: flex; align-items: center; justify-content: center;
+  font-family: var(--mono); font-size: 52px; font-weight: 800; }
+.grid b.k1 { box-shadow: inset 0 0 0 4px var(--orange); }
+.dims { display: flex; flex-wrap: wrap; gap: 16px; }
+.dims span { padding: 12px 26px; background: var(--panel); border-radius: 16px; font-size: 40px; font-weight: 700; }
+.dims em { font-style: normal; color: var(--orange); }
+.share { display: flex; gap: 12px; }
+.pp { width: 140px; display: flex; flex-direction: column; align-items: center; gap: 6px; }
+.pp .cd { width: 140px; height: 190px; background: var(--panel); border: 3px solid var(--orange); border-radius: 18px;
+  display: flex; flex-direction: column; align-items: center; justify-content: center; font-size: 46px; line-height: 1.15; }
+.pp.left .cd { border: 3px dashed var(--green); background: rgba(126,224,138,.08); }
+.pp small { font-size: 30px; font-weight: 700; color: var(--mute); } .pp.left small { color: var(--green); }
+.chips .gt { background: none; padding: 16px 0; color: var(--mute); }
+.cap { top: auto; bottom: 260px; height: auto; display: flex; justify-content: center; padding: 0 60px; }
+.cap span { background: rgba(0,0,0,.78); color: #fff; font-size: 48px; font-weight: 700; line-height: 1.4; padding: 16px 30px;
+  border-radius: 18px; text-align: center; word-break: keep-all; }
+.bar { position: absolute; left: 0; bottom: 0; height: 10px; width: 1080px; background: var(--orange); transform-origin: left center; }
+
+.code.k1 { border-color: var(--orange); } .code.k2 { border-color: var(--green); } .code.k3 { border-color: var(--violet); }
+.vs .card span.big2 { font-size: 52px; }
+.vs .card small { font-size: 34px; color: var(--mute); font-weight: 700; }
+.vs .card.k1 b, .vs .card.k2 b, .vs .card.k3 b { color: inherit; }
+.vs .card.k2 b { color: var(--green); } .vs .card.k3 b { color: var(--violet); }
+.vs .card span { font-size: 38px; }
+.note small.t { font-family: var(--font); }
+
+</style>
+</head>
+<body>
+<div id="root" data-composition-id="main" data-start="0" data-duration="39.78" data-width="1080" data-height="1920">
+  <div class="brand"><b>자바 <em>static·final</em> 정리</b><div class="prog"><i></i><i></i><i></i><i></i><i></i></div></div>
+  <section id="sc-hook" class="clip scene" data-start="0.000" data-duration="9.404" data-track-index="1"><div class="hook">
+   <div class="pill in">JAVA 입문 · 열한 번째</div>
+   <h1 class="big in"><em>static</em>과<br/><em>final</em></h1>
+   <div class="sub in">static · final · <b>상수</b></div>
+ </div></section>
+<section id="sc-sfield" class="clip scene" data-start="9.404" data-duration="17.727" data-track-index="1"><div class="pill in">STEP 1 · static 필드</div><h2 class="title in">객체마다? 모두 함께?</h2><p class="desc in"><b>static</b> 을 붙이면 클래스에 하나</p><div class="vs in"><div class="card k2"><b>score</b><span>인스턴스 필드</span><small>(객체마다 따로)</small></div><div class="card k2"><b>count</b><span>static 필드</span><small>클래스에 하나 · 모두 함께</small></div></div><div class="code in sm k2"><div class="ln"><span class="kw">class</span> Student {</div><div class="ln">  <span class="kw">String</span> name;</div><div class="ln">  <span class="kw">int</span> score;</div><div class="ln mk">  <span class="kw">static</span> <span class="kw">int</span> count;</div><div class="ln">  Student(<span class="kw">String</span> name,</div><div class="ln">          <span class="kw">int</span> score) {</div><div class="ln">    <span class="kw">this</span>.name = name;</div><div class="ln">    <span class="kw">this</span>.score = score;</div><div class="ln mk">    count++;</div><div class="ln">  }</div><div class="ln">}</div></div></section>
+<section id="sc-sfrun" class="clip scene" data-start="27.131" data-duration="12.649" data-track-index="1"><div class="pill in">STEP 1 · 함께 쓰는 필드</div><h2 class="title in">만들 때마다 count 증가</h2><p class="desc in">객체가 아니라 <b>클래스 이름</b>으로 사용</p><div class="code in"><div class="ln">Student s1 = <span class="kw">new</span> Student(</div><div class="ln">    <span class="st">"민수"</span>, <span class="nu">85</span>);</div><div class="ln">Student s2 = <span class="kw">new</span> Student(</div><div class="ln">    <span class="st">"지영"</span>, <span class="nu">92</span>);</div><div class="ln mk">System.out.println(</div><div class="ln mk">    Student.count);</div></div><div class="term in"><i>실행 결과</i><div>2</div></div><div class="note in"><b>Student.count</b> 처럼 클래스 이름으로</div></section>
+  <div id="cap-hook-0" class="clip cap" data-start="0.250" data-duration="1.365" data-track-index="2"><span>자바 입문 열한 번째,</span></div>
+<div id="cap-hook-1" class="clip cap" data-start="1.615" data-duration="1.666" data-track-index="2"><span>스태틱과 파이널!</span></div>
+<div id="cap-hook-2" class="clip cap" data-start="3.282" data-duration="1.577" data-track-index="2"><span>클래스에 하나만 있는 스태틱,</span></div>
+<div id="cap-hook-3" class="clip cap" data-start="4.858" data-duration="1.912" data-track-index="2"><span>값을 바꿀 수 없게 만드는 파이널,</span></div>
+<div id="cap-hook-4" class="clip cap" data-start="6.771" data-duration="2.383" data-track-index="2"><span>그리고 상수까지 정리해 드립니다.</span></div>
+<div id="cap-sfield-0" class="clip cap" data-start="9.529" data-duration="1.654" data-track-index="2"><span>지금까지 쓴 필드는 객체마다</span></div>
+<div id="cap-sfield-1" class="clip cap" data-start="11.183" data-duration="2.086" data-track-index="2"><span>따로 있는 인스턴스 필드예요.</span></div>
+<div id="cap-sfield-2" class="clip cap" data-start="13.270" data-duration="2.127" data-track-index="2"><span>스튜던트의 스코어가 그렇죠.</span></div>
+<div id="cap-sfield-3" class="clip cap" data-start="15.397" data-duration="1.856" data-track-index="2"><span>그런데 필드 앞에 스태틱을 붙이면,</span></div>
+<div id="cap-sfield-4" class="clip cap" data-start="17.253" data-duration="1.604" data-track-index="2"><span>객체마다 따로 있지 않고 클래스에</span></div>
+<div id="cap-sfield-5" class="clip cap" data-start="18.857" data-duration="2.668" data-track-index="2"><span>하나만 있어서 모든 객체가 함께 써요.</span></div>
+<div id="cap-sfield-6" class="clip cap" data-start="21.525" data-duration="2.388" data-track-index="2"><span>생성자 안에서 카운트 플러스 플러스를 하면,</span></div>
+<div id="cap-sfield-7" class="clip cap" data-start="23.913" data-duration="0.886" data-track-index="2"><span>객체를 만들 때마다</span></div>
+<div id="cap-sfield-8" class="clip cap" data-start="24.800" data-duration="2.081" data-track-index="2"><span>카운트가 하나씩 늘어나요.</span></div>
+<div id="cap-sfrun-0" class="clip cap" data-start="27.256" data-duration="2.485" data-track-index="2"><span>민수와 지영, 두 명을 만든 뒤에 스튜던트 닷</span></div>
+<div id="cap-sfrun-1" class="clip cap" data-start="29.741" data-duration="2.459" data-track-index="2"><span>카운트를 출력하면 이가 나와요.</span></div>
+<div id="cap-sfrun-2" class="clip cap" data-start="32.200" data-duration="1.371" data-track-index="2"><span>두 객체가 하나의 카운트를</span></div>
+<div id="cap-sfrun-3" class="clip cap" data-start="33.571" data-duration="1.698" data-track-index="2"><span>함께 썼기 때문이에요.</span></div>
+<div id="cap-sfrun-4" class="clip cap" data-start="35.269" data-duration="1.446" data-track-index="2"><span>스태틱 필드는 이렇게 객체가</span></div>
+<div id="cap-sfrun-5" class="clip cap" data-start="36.715" data-duration="2.061" data-track-index="2"><span>아니라 클래스 이름으로 써요.</span></div>
+  <div class="bar"></div>
+  <audio id="vo" src="assets/narration.mp3" data-start="0" data-duration="39.78" data-track-index="0"></audio>
+</div>
+<script>
+const tl = gsap.timeline({ paused: true });
+const SP = 1.2;
+function enter(sel, t, dur) {
+  const items = document.querySelectorAll(sel + " .in");
+  const step = Math.min(0.9 / SP, (dur * 0.5) / Math.max(1, items.length));
+  items.forEach((el, i) => {
+    const at = Math.max(0, t - 0.1 / SP) + i * step;
+    tl.fromTo(el, { opacity: 0, y: 50 }, { opacity: 1, y: 0, duration: 0.5 / SP, ease: "power3.out" }, at);
+    el.querySelectorAll(".ln").forEach((ln, j) => {
+      tl.fromTo(ln, { opacity: 0, x: -30 }, { opacity: 1, x: 0, duration: 0.35 / SP, ease: "power2.out" }, at + (0.15 + j * 0.3) / SP);
+    });
+  });
+}
+enter("#sc-hook", 0.25, 8.904);
+tl.set(".prog i", {backgroundColor: "#26324a"}, 0);
+enter("#sc-sfield", 9.529, 17.352);
+tl.set(".prog i", {backgroundColor: "#26324a"}, 9.404);
+tl.set(".prog i:nth-child(1)", {backgroundColor: "#f29111"}, 9.404);
+enter("#sc-sfrun", 27.256, 11.52);
+tl.set(".prog i", {backgroundColor: "#26324a"}, 27.131);
+tl.set(".prog i:nth-child(1)", {backgroundColor: "#f29111"}, 27.131);
+tl.fromTo(".bar", { scaleX: 0 }, { scaleX: 1, duration: 39.78, ease: "none" }, 0);
+window.__timelines = window.__timelines || {};
+window.__timelines["main"] = tl;
+tl.seek(0);
+</script>
+</body>
+</html>

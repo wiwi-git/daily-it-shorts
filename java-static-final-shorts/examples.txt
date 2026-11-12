@@ -1,0 +1,49 @@
+// 영상에 나오는 예제 프로그램 (build.py가 생성 · 직접 고치지 말 것)
+// 각 예제를 파일 이름대로 저장한 뒤: javac -encoding UTF-8 Main.java && java Main
+
+// [1. static 필드] Main.java → 출력 없음 (컴파일·실행 성공)
+public class Main {
+  public static void main(String[] args) {
+    Student s1 = new Student(
+        "민수", 85);
+    Student s2 = new Student(
+        "지영", 92);
+  }
+}
+
+class Student {
+  String name;
+  int score;
+  static int count;
+  Student(String name,
+          int score) {
+    this.name = name;
+    this.score = score;
+    count++;
+  }
+}
+
+// [1. 함께 쓰는 필드] Main.java → 출력:
+//   2
+public class Main {
+  public static void main(String[] args) {
+    Student s1 = new Student(
+        "민수", 85);
+    Student s2 = new Student(
+        "지영", 92);
+    System.out.println(
+        Student.count);
+  }
+}
+
+class Student {
+  String name;
+  int score;
+  static int count;
+  Student(String name,
+          int score) {
+    this.name = name;
+    this.score = score;
+    count++;
+  }
+}

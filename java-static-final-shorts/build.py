@@ -203,7 +203,7 @@ def kc(lines, k, mark=()):
     return code(lines, mark, True).replace('class="code in sm"', f'class="code in sm {k}"')
 
 # --- example data: Student 민수 85 · 지영 92 (k2) ---
-BRAND = "자바 <em>static·final</em> 정리"
+BRAND = "자바 입문 <em>static·final</em> 정리"
 STUDENT_CLS = ["class Student {", "  String name;", "  int score;", "  static int count;",
                "  Student(String name,", "          int score) {", "    this.name = name;",
                "    this.score = score;", "    count++;", "  }", "}"]

@@ -96,6 +96,7 @@ def run(src, fname="Main.java"):
     open(os.path.join(d, fname), "w").write(src)
     c = subprocess.run(["javac", "-J-Duser.language=en", "-encoding", "UTF-8", fname], cwd=d, capture_output=True, text=True)
     if c.returncode:
+        LAST["ce2"] = [l.strip() for l in c.stderr.split("\n")[1:]]
         return None, re.search(r"error: (.*)", c.stderr).group(1), None
     r = subprocess.run(["java", "-Duser.language=en", "-cp", d, "Main"], capture_output=True, text=True)
     return r.stdout, None, (r.stderr.split("\n")[0] if r.returncode else None)
@@ -158,7 +159,8 @@ def jce(sid, lines, error, mark=(), pre=(), cls=None, sm=False):
 
 def cterm():
     """The last jce() block's compile error."""
-    return f'<div class="term err in"><i>컴파일 오류</i><div>{html.escape(LAST["ce"])}</div></div>'
+    extra = f'<div>{html.escape(LAST["cd"])}</div>' if LAST.get("cd") else ""
+    return f'<div class="term err in"><i>컴파일 오류</i><div>{html.escape(LAST["ce"])}</div>{extra}</div>'
 
 def jcomp(sid, lines, why, mark=(), pre=()):
     """Code block that compiles but is not run (it would never stop): `why` says so in examples.txt."""
@@ -177,14 +179,21 @@ def table(cols, rows, label):
     body = "".join(f'<tr class="{k}">' + "".join(f"<td>{html.escape(v)}</td>" for v in cells) + "</tr>" for k, cells in rows)
     return f'<div class="tbl in">{lab(label)}<table><tr>{head_}</tr>{body}</table></div>'
 
-def cerr(sid, error, cls, main, shown, mark=()):
-    """Code block (class code shown) whose full program must NOT compile: javac's first error contains `error`."""
+def cexpect(sid, error, cls, main, detail=""):
+    """Full program (main + class code) must NOT compile: javac's first error contains `error`,
+    and, if given, its second line contains `detail` (shown by cterm())."""
     src = wrap(main, cls)
     out, ce, rt = run(src)
     if ce is None or error not in ce:
         raise ValueError(f"{sid}: expected compile error {error!r}, got {ce!r} / output {out!r}")
-    LAST["ce"] = ce
+    if detail and detail not in LAST["ce2"]:  # javac's detail line, e.g. "overridden method is final"
+        raise ValueError(f"{sid}: expected error detail {detail!r}, got {LAST['ce2']!r}")
+    LAST["ce"], LAST["cd"] = ce, detail
     EXAMPLES.append((sid, "Main.java", src, "", f"컴파일 오류: {ce}"))
+
+def cerr(sid, error, cls, main, shown, mark=()):
+    """Code block (class code shown) whose full program must NOT compile: javac's first error contains `error`."""
+    cexpect(sid, error, cls, main)
     return code(shown, mark, True)
 
 def ok(sid, main, cls, expect=""):
@@ -216,9 +225,9 @@ STUDENT_CLS3 = STUDENT_CLS[:-1] + ["  " + l for l in GETSCORE] + ["}"]
 S_NEW = ["Student s1 = new Student(", '    "민수", 85);', "Student s2 = new Student(", '    "지영", 92);']
 
 # --- STEP 4~5: Person (k1) · Student (k2) ---
-def cfail(sid, error, cls, main=()):
+def cfail(sid, error, cls, main=(), detail=""):
     """Checked program that must NOT compile (javac's first error contains `error`); nothing drawn, cterm() shows the error."""
-    cerr(sid, error, cls, list(main), ["x"])
+    cexpect(sid, error, cls, list(main), detail)
     return ""
 
 HELLO_PRINT = ["    System.out.println(", '        "안녕하세요");']
@@ -226,11 +235,10 @@ P_FINAL = ["class Person {", "  String name;", "  final void hello() {"] + HELLO
 S_OVR = ["class Student extends Person {", "  void hello() {"] + HELLO_PRINT + ["  }", "}"]
 P_FCLS = ["final class Person {", "  void hello() { }", "}"]
 S_EXT = ["class Student extends Person {", "}"]
-PASS_CLS = ["class Student {", "  static final int", "      PASS_SCORE = 60;", "  String name;", "  int score;",
-            "  Student(String name,", "          int score) {", "    this.name = name;", "    this.score = score;", "  }",
-            "  boolean isPass() {", "    return score >= PASS_SCORE;", "  }", "}"]
-PASS_SHOW = ["class Student {", "  static final int", "      PASS_SCORE = 60;", "  int score;", "  boolean isPass() {",
-             "    return score >= PASS_SCORE;", "  }", "}"]
+PASS_CONST = ["  static final int", "      PASS_SCORE = 60;"]
+ISPASS = ["  boolean isPass() {", "    return score >= PASS_SCORE;", "  }"]
+PASS_CLS = ["class Student {"] + PASS_CONST + STUDENT_CLS_F[1:-1] + ["  " + l for l in GETCOUNT] + ISPASS + ["}"]  # STEP 3 Student + 상수·isPass
+PASS_SHOW = ["class Student {"] + PASS_CONST + [l for l in STUDENT_CLS_F if l == "  int score;"] + ISPASS + ["}"]
 
 CSS_EXTRA = """
 .code.k1 { border-color: var(--orange); } .code.k2 { border-color: var(--green); } .code.k3 { border-color: var(--violet); }
@@ -290,7 +298,7 @@ scenes = {
  "fmc": head("STEP 4 · final 메소드", "오버라이딩 금지", "<b>final</b> 메소드는 자식이 고칠 수 없다")
     + kc(["class Person {", "  final void hello() { … }", "}"], "k1", mark=(1,))
     + kc(["class Student extends Person {", "  void hello() { … }", "}"], "k2", mark=(1,))
-    + cfail("fmc", "hello() in Student cannot override hello() in Person", C(P_FINAL, S_OVR))
+    + cfail("fmc", "hello() in Student cannot override hello() in Person", C(P_FINAL, S_OVR), detail="overridden method is final")
     + cterm()
     + '<div class="note in"><b>부모 클래스</b>의 final 메소드는 <b>오버라이딩</b> 불가</div>',
  "fcls": head("STEP 4-1 · final 클래스", "상속 금지", "<b>final</b> 클래스는 상속할 수 없다")
@@ -301,6 +309,7 @@ scenes = {
     + '<div class="note in">자바의 <b>String</b> 도 final 클래스<br/><small class="t">public final class String</small></div>',
  "const": head("STEP 5 · static final 상수", "60을 이름으로", "<b>static final</b> 로 상수를 만든다")
     + kc(PASS_SHOW, "k2", mark=(1, 2, 5))
+    + '<div class="note in"><s>score &gt;= 60</s> → <b>score &gt;= PASS_SCORE</b></div>'
     + ok("const", ["Student s = new Student(", '    "민수", 85);', "System.out.println(", "    s.isPass());"], PASS_CLS, "true\n")
     + term(label="민수(85) 의 isPass() 결과")
     + '<div class="note in">상수 이름은 <b>대문자와 _</b> 로 쓴다</div>',
@@ -394,14 +403,14 @@ for s in vo:
         caps.append(f'<div id="cap-{s["id"]}-{j}" class="clip cap" data-start="{a:.3f}" data-duration="{d:.3f}" data-track-index="2"><span>{html.escape(txt)}</span></div>')
 
 # outro: light up each processing step as the narration names it
-after = S["outro"]["start"] if "outro" in S else 0
+after = S["outro"]["start"]
 for i, token in enumerate(EXEC_SAID, 1):
     at = word_time("outro", token, after)
     after = at
     if i > 1:
         js.append(f'tl.to("#ex{i - 1}", {{backgroundColor: "#131c2e", scale: 1, duration: 0.2}}, {at});')
     js.append(f'tl.to("#ex{i}", {{backgroundColor: "#3a2a12", scale: 1.04, duration: 0.2}}, {at});')
-if EXEC: js.append(f'tl.to("#ex{len(EXEC)}", {{backgroundColor: "#131c2e", scale: 1, duration: 0.3}}, {word_time("outro", EXEC_END)} + 0.6);')
+js.append(f'tl.to("#ex{len(EXEC)}", {{backgroundColor: "#131c2e", scale: 1, duration: 0.3}}, {word_time("outro", EXEC_END)} + 0.6);')
 
 page = f'''<!doctype html>
 <html lang="ko" data-resolution="portrait">

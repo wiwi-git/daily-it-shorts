@@ -249,12 +249,17 @@ public class Main {
 class Student {
   static final int
       PASS_SCORE = 60;
-  String name;
+  final String name;
   int score;
+  static int count;
   Student(String name,
           int score) {
     this.name = name;
     this.score = score;
+    count++;
+  }
+  static int getCount() {
+    return count;
   }
   boolean isPass() {
     return score >= PASS_SCORE;
@@ -271,12 +276,17 @@ public class Main {
 class Student {
   static final int
       PASS_SCORE = 60;
-  String name;
+  final String name;
   int score;
+  static int count;
   Student(String name,
           int score) {
     this.name = name;
     this.score = score;
+    count++;
+  }
+  static int getCount() {
+    return count;
   }
   boolean isPass() {
     return score >= PASS_SCORE;

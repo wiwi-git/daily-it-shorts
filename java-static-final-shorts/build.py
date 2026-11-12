@@ -39,7 +39,7 @@ def word_time(sid, token, after=0.0):
 
 # --- Java highlighting ---
 KW = ("public class static void String int double boolean new if else switch case default break "
-      "for while do continue true false null this return extends super").split()
+      "for while do continue true false null this return extends super final").split()
 TOK = re.compile(r'"(?:\\.|[^"\\])*"|\'(?:\\.|[^\'\\])*\'|//.*|\d+(?:\.\d+)?[LfF]?\b|@\w+|\w+|.')
 def hl(line):
     out = []

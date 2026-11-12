@@ -146,7 +146,7 @@ def rterm():
     msg = LAST["rt"].replace(' java.lang.', '\njava.lang.').replace('Exception: ', 'Exception:\n')
     return '<div class="term err in"><i>실행 오류</i>' + "".join(f"<div>{html.escape(l)}</div>" for l in msg.split("\n")) + "</div>"
 
-def jce(sid, lines, error, mark=(), pre=(), cls=None):
+def jce(sid, lines, error, mark=(), pre=(), cls=None, sm=False):
     """Code block that must NOT compile: javac's first error has to contain `error`."""
     src = wrap(list(pre) + list(lines), cls)
     out, ce, rt = run(src)
@@ -154,7 +154,7 @@ def jce(sid, lines, error, mark=(), pre=(), cls=None):
         raise ValueError(f"{sid}: expected compile error {error!r}, got {ce!r} / output {out!r}")
     LAST["ce"] = ce
     EXAMPLES.append((sid, "Main.java", src, "", f"컴파일 오류: {ce}"))
-    return code(lines, mark)
+    return code(lines, mark, sm)
 
 def cterm():
     """The last jce() block's compile error."""
@@ -207,6 +207,8 @@ BRAND = "자바 입문 <em>static·final</em> 정리"
 STUDENT_CLS = ["class Student {", "  String name;", "  int score;", "  static int count;",
                "  Student(String name,", "          int score) {", "    this.name = name;",
                "    this.score = score;", "    count++;", "  }", "}"]
+STUDENT_CLS_F = [l.replace("  String name;", "  final String name;") for l in STUDENT_CLS]  # STEP 3부터: name은 final
+FERR = "cannot assign a value to final variable"
 GETCOUNT = ["static int getCount() {", "  return count;", "}"]
 GETSCORE = ["static int getScore() {", "  return score;", "}"]
 STUDENT_CLS2 = STUDENT_CLS[:-1] + ["  " + l for l in GETCOUNT] + ["}"]
@@ -251,8 +253,25 @@ scenes = {
     + cerr("sme", "non-static variable score cannot be referenced from a static context", STUDENT_CLS3, [], GETSCORE, mark=(1,))
     + cterm()
     + '<div class="note in"><b>main</b> 도 static이라<br/>객체를 만들어 점으로 사용</div>',
+
+ "fvar": head("STEP 3 · final 변수", "한 번 넣으면 끝", "<b>final</b> 변수는 다시 대입할 수 없다")
+    + jce("fvar", ["final int x = 10;", "x = 20;"], FERR, mark=(1,))
+    + cterm()
+    + '<div class="note in">값을 <b>한 번만</b> 넣을 수 있다</div>',
+ "ffield": head("STEP 3 · final 필드", "생성자에서 한 번만", "<b>final</b> 필드는 한 번만 대입")
+    + ok("ffield", S_NEW, STUDENT_CLS_F)
+    + kc([l for l in STUDENT_CLS_F if "count" not in l], "k2", mark=(1, 5))
+    + cerr("ffield", FERR, STUDENT_CLS_F, S_NEW + ['s1.name = "철수";'], ['s1.name = "철수";'], mark=(0,))
+    + cterm()
+    + '<div class="note in">이름은 <b>그대로</b> · 점수는 계속 변함</div>',
+ "fref": head("STEP 3-1 · 주의", "final Student s", "<b>변수</b>를 막을 뿐, 객체는 막지 않는다")
+    + jcode("fref", ["final Student s = new Student(", '    "민수", 85);', "s.score = 100;", "System.out.println(s.score);"], "100\n", mark=(2,), cls=STUDENT_CLS_F, sm=True)
+    + term(label="실행 결과")
+    + jce("fref", ["s = new Student(", '    "지영", 92);'], FERR, mark=(0,), pre=["final Student s = new Student(", '    "민수", 85);'], cls=STUDENT_CLS_F, sm=True)
+    + cterm()
+    + '<div class="warn in">final은 <b>화살표</b>를 고정 · 객체 내용은 변경 가능</div>',
 }
-PROG = {"sfield": 1, "sfrun": 1, "smethod": 2, "sme": 2}
+PROG = {"sfield": 1, "sfrun": 1, "smethod": 2, "sme": 2, "fvar": 3, "ffield": 3, "fref": 3}
 
 
 SECTION = {s["id"]: s["section"] for s in json.load(open("script.json"))}

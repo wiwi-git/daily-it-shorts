@@ -99,3 +99,104 @@ class Student {
     return score;
   }
 }
+
+// [3. final 변수] Main.java → 컴파일 오류: cannot assign a value to final variable x
+public class Main {
+  public static void main(String[] args) {
+    final int x = 10;
+    x = 20;
+  }
+}
+
+class Student {
+}
+
+// [3. final 필드] Main.java → 출력 없음 (컴파일·실행 성공)
+public class Main {
+  public static void main(String[] args) {
+    Student s1 = new Student(
+        "민수", 85);
+    Student s2 = new Student(
+        "지영", 92);
+  }
+}
+
+class Student {
+  final String name;
+  int score;
+  static int count;
+  Student(String name,
+          int score) {
+    this.name = name;
+    this.score = score;
+    count++;
+  }
+}
+
+// [3. final 필드] Main.java → 컴파일 오류: cannot assign a value to final variable name
+public class Main {
+  public static void main(String[] args) {
+    Student s1 = new Student(
+        "민수", 85);
+    Student s2 = new Student(
+        "지영", 92);
+    s1.name = "철수";
+  }
+}
+
+class Student {
+  final String name;
+  int score;
+  static int count;
+  Student(String name,
+          int score) {
+    this.name = name;
+    this.score = score;
+    count++;
+  }
+}
+
+// [3-1. final 주의] Main.java → 출력:
+//   100
+public class Main {
+  public static void main(String[] args) {
+    final Student s = new Student(
+        "민수", 85);
+    s.score = 100;
+    System.out.println(s.score);
+  }
+}
+
+class Student {
+  final String name;
+  int score;
+  static int count;
+  Student(String name,
+          int score) {
+    this.name = name;
+    this.score = score;
+    count++;
+  }
+}
+
+// [3-1. final 주의] Main.java → 컴파일 오류: cannot assign a value to final variable s
+public class Main {
+  public static void main(String[] args) {
+    final Student s = new Student(
+        "민수", 85);
+    s = new Student(
+        "지영", 92);
+  }
+}
+
+class Student {
+  final String name;
+  int score;
+  static int count;
+  Student(String name,
+          int score) {
+    this.name = name;
+    this.score = score;
+    count++;
+  }
+}

@@ -8,10 +8,14 @@
 
 **Blocked by:** 01
 
-**Status:** ready-for-agent
+**Status:** resolved
 
-- [ ] smethod 예제가 빌드 중 실행되고, 출력 `0`, `2` 두 줄과 대조되어 통과한다
-- [ ] sme 예제가 빌드 중 컴파일되고, 오류에 `non-static variable score cannot be referenced from a static context`가 포함되어야 통과한다
-- [ ] 나레이션에서 말한 "main도 static" 내용이 화면 메모로 보인다
-- [ ] 나레이션 문장의 결과("처음엔 영, 두 명을 만든 뒤엔 이")가 화면 결과와 같은지 직접 확인한다
-- [ ] `hyperframes check` 오류 0건이고, snapshot으로 새 장면을 확인한다
+- [x] smethod 예제가 빌드 중 실행되고, 출력 `0`, `2` 두 줄과 대조되어 통과한다
+- [x] sme 예제가 빌드 중 컴파일되고, 오류에 `non-static variable score cannot be referenced from a static context`가 포함되어야 통과한다
+- [x] 나레이션에서 말한 "main도 static" 내용이 화면 메모로 보인다
+- [x] 나레이션 문장의 결과("처음엔 영, 두 명을 만든 뒤엔 이")가 화면 결과와 같은지 직접 확인한다
+- [x] `hyperframes check` 오류 0건이고, snapshot으로 새 장면을 확인한다
+
+## Comments
+
+- 2026-11-12: 병합(682571b, 32a771f). 대본의 `int`를 "인트"로 수정 후 통과.

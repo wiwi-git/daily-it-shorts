@@ -13,13 +13,17 @@
 
 **Blocked by:** 04
 
-**Status:** ready-for-agent
+**Status:** resolved
 
-- [ ] 정리 장면의 줄 강조 시점이 나레이션의 해당 단어 시점(`word_time()`)과 맞는다
-- [ ] 전체 빌드에서 모든 예제(출력 대조 4건, 컴파일 오류 대조 7건)가 통과하고, 예제 목록 파일이 생성된다
-- [ ] `hyperframes check` 오류 0건, 레이아웃 겹침·넘침이 없다(`line_unread` 경고는 허용)
-- [ ] snapshot으로 모든 장면을 확인하고, 가장 빽빽한 장면을 390px 폭으로 확인한다
-- [ ] 대사 중 자막이 없는 시간이 0초다
-- [ ] 영상 길이가 3분 이하다
-- [ ] `output/`에 렌더링한 뒤 `ffprobe`로 1080×1920과 오디오 트랙 존재를 확인한다
-- [ ] README 영상 목록에 "자바 입문: static과 final (static 필드 · static 메소드 · final 변수·필드 · final 메소드·클래스 · static final 상수)" 행을 추가하고, URL은 업로드 후 넣도록 비워 둔다
+- [x] 정리 장면의 줄 강조 시점이 나레이션의 해당 단어 시점(`word_time()`)과 맞는다
+- [x] 전체 빌드에서 모든 예제(출력 대조 4건, 컴파일 오류 대조 7건)가 통과하고, 예제 목록 파일이 생성된다
+- [x] `hyperframes check` 오류 0건, 레이아웃 겹침·넘침이 없다(`line_unread` 경고는 허용)
+- [x] snapshot으로 모든 장면을 확인하고, 가장 빽빽한 장면을 390px 폭으로 확인한다
+- [x] 대사 중 자막이 없는 시간이 0초다
+- [x] 영상 길이가 3분 이하다
+- [x] `output/`에 렌더링한 뒤 `ffprobe`로 1080×1920과 오디오 트랙 존재를 확인한다
+- [x] README 영상 목록에 "자바 입문: static과 final (static 필드 · static 메소드 · final 변수·필드 · final 메소드·클래스 · static final 상수)" 행을 추가하고, URL은 업로드 후 넣도록 비워 둔다
+
+## Comments
+
+- 2026-11-12: 병합(a56c9ef, 5b9b245). 정리 장면 6줄을 한 줄씩으로 줄임. 렌더링 2:34.5, 1080×1920·오디오 확인. 코드 리뷰 수정(22c8ae2)에서 fmc 오류 둘째 줄과 const의 60→PASS_SCORE 표시 추가.

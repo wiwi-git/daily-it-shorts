@@ -1,6 +1,6 @@
 # 스펙: 자바 입문 열한 번째 — static과 final
 
-Status: ready-for-agent
+Status: resolved
 
 ## Problem Statement
 
@@ -99,7 +99,8 @@ Status: ready-for-agent
   - const: `true`이고, 상수에 다시 대입하는 블록은 컴파일 오류다.
   - 컴파일 오류 예제와 javac 오류 문구(대조 기준):
     - sme: `non-static variable score cannot be referenced from a static context`
-    - fvar·ffield·fref·const: `cannot assign a value to final variable`
+    - fvar·ffield·fref: `cannot assign a value to final variable`
+    - const(상수 재대입): `cannot assign a value to static final variable`
     - fmc: `hello() in Student cannot override hello() in Person`(메소드, 다음 줄에 `overridden method is final`), `cannot inherit from final Person`(클래스)
   - 위 문구는 기획 단계에서 로컬 javac로 확인했다.
 - **장면 구성 요소**

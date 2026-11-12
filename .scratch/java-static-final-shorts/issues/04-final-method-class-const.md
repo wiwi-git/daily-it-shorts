@@ -6,12 +6,16 @@
 
 **Blocked by:** 03
 
-**Status:** ready-for-agent
+**Status:** resolved
 
-- [ ] final 메소드 예제가 빌드 중 컴파일되고, 오류에 `hello() in Student cannot override hello() in Person`이 포함되어야 통과한다
-- [ ] final 클래스 예제가 빌드 중 컴파일되고, 오류에 `cannot inherit from final Person`이 포함되어야 통과한다
-- [ ] const 예제가 빌드 중 실행되고, 출력 `true`와 대조되어 통과한다
-- [ ] 상수 재대입 예제는 오류에 `cannot assign a value to final variable`이 포함되어야 통과한다
-- [ ] 나레이션에서 말한 `String` 내용이 화면 메모로 보인다
-- [ ] fmc 장면을 390px 폭으로 줄여 모바일 가독성을 확인한다
-- [ ] `hyperframes check` 오류 0건이고, snapshot으로 새 장면을 확인한다
+- [x] final 메소드 예제가 빌드 중 컴파일되고, 오류에 `hello() in Student cannot override hello() in Person`이 포함되어야 통과한다
+- [x] final 클래스 예제가 빌드 중 컴파일되고, 오류에 `cannot inherit from final Person`이 포함되어야 통과한다
+- [x] const 예제가 빌드 중 실행되고, 출력 `true`와 대조되어 통과한다
+- [x] 상수 재대입 예제는 오류에 `cannot assign a value to static final variable`이 포함되어야 통과한다
+- [x] 나레이션에서 말한 `String` 내용이 화면 메모로 보인다
+- [x] fmc 장면을 390px 폭으로 줄여 모바일 가독성을 확인한다
+- [x] `hyperframes check` 오류 0건이고, snapshot으로 새 장면을 확인한다
+
+## Comments
+
+- 2026-11-12: 병합(be085f7, 1b59919, 6d89ff2). 장면을 fmc·fcls, const·cre로 나눔. 상수 재대입 오류는 실제 javac 문구(`static final variable`)로 대조. 길이 조정을 위해 전 장면 나레이션을 줄임.

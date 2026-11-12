@@ -242,7 +242,7 @@ CSS_EXTRA = """
 .note small.t { font-family: var(--mono); }
 """
 
-EXEC = ["static 필드 = 모든 객체가 함께 쓰는 하나", "static 메소드 = 객체 없이 클래스이름.메소드()", "static 메소드에서 인스턴스 필드 사용 불가", "final 변수·필드 = 한 번만 대입", "final 메소드 = 오버라이딩 금지 · final 클래스 = 상속 금지", "static final = 상수 (이름은 대문자)"]
+EXEC = ["static 필드 = 모두가 함께 하나", "static 메소드 = 객체 없이 호출", "static에서 인스턴스 필드 ✕", "final 변수·필드 = 한 번만 대입", "final 메소드·클래스 = 변경 금지", "static final = 상수 (대문자)"]
 EXEC_SAID = ["스태틱", "메소드는", "메소드에서는", "파이널", "메소드는", "스태틱"]
 EXEC_END = "구독과"
 

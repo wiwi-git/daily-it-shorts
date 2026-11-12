@@ -133,7 +133,7 @@ code { font-family: var(--mono); color: var(--orange); }
 </style>
 </head>
 <body>
-<div id="root" data-composition-id="main" data-start="0" data-duration="131.01" data-width="1080" data-height="1920">
+<div id="root" data-composition-id="main" data-start="0" data-duration="154.5" data-width="1080" data-height="1920">
   <div class="brand"><b>자바 입문 <em>static·final</em> 정리</b><div class="prog"><i></i><i></i><i></i><i></i><i></i></div></div>
   <section id="sc-hook" class="clip scene" data-start="0.000" data-duration="7.124" data-track-index="1"><div class="hook">
    <div class="pill in">JAVA 입문 · 열한 번째</div>
@@ -150,7 +150,8 @@ code { font-family: var(--mono); color: var(--orange); }
 <section id="sc-fmc" class="clip scene" data-start="92.093" data-duration="9.975" data-track-index="1"><div class="pill in">STEP 4 · final 메소드</div><h2 class="title in">오버라이딩 금지</h2><p class="desc in"><b>final</b> 메소드는 자식이 고칠 수 없다</p><div class="code in sm k1"><div class="ln"><span class="kw">class</span> Person {</div><div class="ln mk">  <span class="kw">final</span> <span class="kw">void</span> hello() { … }</div><div class="ln">}</div></div><div class="code in sm k2"><div class="ln"><span class="kw">class</span> Student <span class="kw">extends</span> Person {</div><div class="ln mk">  <span class="kw">void</span> hello() { … }</div><div class="ln">}</div></div><div class="term err in"><i>컴파일 오류</i><div>hello() in Student cannot override hello() in Person</div></div><div class="note in"><b>부모 클래스</b>의 final 메소드는 <b>오버라이딩</b> 불가</div></section>
 <section id="sc-fcls" class="clip scene" data-start="102.068" data-duration="9.807" data-track-index="1"><div class="pill in">STEP 4-1 · final 클래스</div><h2 class="title in">상속 금지</h2><p class="desc in"><b>final</b> 클래스는 상속할 수 없다</p><div class="code in sm k1"><div class="ln mk"><span class="kw">final</span> <span class="kw">class</span> Person { … }</div></div><div class="code in sm k2"><div class="ln mk"><span class="kw">class</span> Student <span class="kw">extends</span> Person {</div><div class="ln">}</div></div><div class="term err in"><i>컴파일 오류</i><div>cannot inherit from final Person</div></div><div class="note in">자바의 <b>String</b> 도 final 클래스<br/><small class="t">public final class String</small></div></section>
 <section id="sc-const" class="clip scene" data-start="111.875" data-duration="11.415" data-track-index="1"><div class="pill in">STEP 5 · static final 상수</div><h2 class="title in">60을 이름으로</h2><p class="desc in"><b>static final</b> 로 상수를 만든다</p><div class="code in sm k2"><div class="ln"><span class="kw">class</span> Student {</div><div class="ln mk">  <span class="kw">static</span> <span class="kw">final</span> <span class="kw">int</span></div><div class="ln mk">      PASS_SCORE = <span class="nu">60</span>;</div><div class="ln">  <span class="kw">int</span> score;</div><div class="ln">  <span class="kw">boolean</span> isPass() {</div><div class="ln mk">    <span class="kw">return</span> score &gt;= PASS_SCORE;</div><div class="ln">  }</div><div class="ln">}</div></div><div class="term in"><i>민수(85) 의 isPass() 결과</i><div>true</div></div><div class="note in">상수 이름은 <b>대문자와 _</b> 로 쓴다</div></section>
-<section id="sc-cre" class="clip scene" data-start="123.290" data-duration="7.72" data-track-index="1"><div class="pill in">STEP 5-1 · 상수 재대입</div><h2 class="title in">상수는 못 바꾼다</h2><p class="desc in"><b>final</b> 이라 다시 대입하면 오류</p><div class="code in"><div class="ln mk">Student.PASS_SCORE = <span class="nu">70</span>;</div></div><div class="term err in"><i>컴파일 오류</i><div>cannot assign a value to static final variable PASS_SCORE</div></div><div class="note in">기준 점수는 <b>한 곳</b>에서만 정한다</div></section>
+<section id="sc-cre" class="clip scene" data-start="123.290" data-duration="6.975" data-track-index="1"><div class="pill in">STEP 5-1 · 상수 재대입</div><h2 class="title in">상수는 못 바꾼다</h2><p class="desc in"><b>final</b> 이라 다시 대입하면 오류</p><div class="code in"><div class="ln mk">Student.PASS_SCORE = <span class="nu">70</span>;</div></div><div class="term err in"><i>컴파일 오류</i><div>cannot assign a value to static final variable PASS_SCORE</div></div><div class="note in">기준 점수는 <b>한 곳</b>에서만 정한다</div></section>
+<section id="sc-outro" class="clip scene" data-start="130.265" data-duration="24.235" data-track-index="1"><div class="pill in">정리</div><h2 class="title in">static · final 6가지</h2><div class="list in"><div class="row" id="ex1"><span class="no">1</span><b>static 필드 = 모든 객체가 함께 쓰는 하나</b></div><div class="row" id="ex2"><span class="no">2</span><b>static 메소드 = 객체 없이 클래스이름.메소드()</b></div><div class="row" id="ex3"><span class="no">3</span><b>static 메소드에서 인스턴스 필드 사용 불가</b></div><div class="row" id="ex4"><span class="no">4</span><b>final 변수·필드 = 한 번만 대입</b></div><div class="row" id="ex5"><span class="no">5</span><b>final 메소드 = 오버라이딩 금지 · final 클래스 = 상속 금지</b></div><div class="row" id="ex6"><span class="no">6</span><b>static final = 상수 (이름은 대문자)</b></div></div><div class="cta in">👍 구독 · 좋아요</div></section>
   <div id="cap-hook-0" class="clip cap" data-start="0.250" data-duration="1.365" data-track-index="2"><span>자바 입문 열한 번째,</span></div>
 <div id="cap-hook-1" class="clip cap" data-start="1.615" data-duration="1.666" data-track-index="2"><span>스태틱과 파이널!</span></div>
 <div id="cap-hook-2" class="clip cap" data-start="3.282" data-duration="1.278" data-track-index="2"><span>스태틱, 파이널,</span></div>
@@ -215,8 +216,20 @@ code { font-family: var(--mono); color: var(--orange); }
 <div id="cap-cre-0" class="clip cap" data-start="123.415" data-duration="1.822" data-track-index="2"><span>스튜던트 닷 패스 스코어에 칠십을</span></div>
 <div id="cap-cre-1" class="clip cap" data-start="125.237" data-duration="2.469" data-track-index="2"><span>다시 대입하면 컴파일 오류가 나요.</span></div>
 <div id="cap-cre-2" class="clip cap" data-start="127.706" data-duration="2.309" data-track-index="2"><span>기준 점수는 한 곳에서만 정해요.</span></div>
+<div id="cap-outro-0" class="clip cap" data-start="130.390" data-duration="2.196" data-track-index="2"><span>정리하면, 스태틱 필드는 모든 객체가</span></div>
+<div id="cap-outro-1" class="clip cap" data-start="132.586" data-duration="1.638" data-track-index="2"><span>함께 쓰는 하나예요.</span></div>
+<div id="cap-outro-2" class="clip cap" data-start="134.224" data-duration="1.511" data-track-index="2"><span>스태틱 메소드는 객체 없이</span></div>
+<div id="cap-outro-3" class="clip cap" data-start="135.735" data-duration="1.791" data-track-index="2"><span>클래스 이름으로 불러요.</span></div>
+<div id="cap-outro-4" class="clip cap" data-start="137.526" data-duration="1.651" data-track-index="2"><span>스태틱 메소드에서는 인스턴스</span></div>
+<div id="cap-outro-5" class="clip cap" data-start="139.177" data-duration="1.791" data-track-index="2"><span>필드를 쓸 수 없어요.</span></div>
+<div id="cap-outro-6" class="clip cap" data-start="140.968" data-duration="2.742" data-track-index="2"><span>파이널 변수와 필드는 한 번만 대입해요.</span></div>
+<div id="cap-outro-7" class="clip cap" data-start="143.711" data-duration="1.679" data-track-index="2"><span>파이널 메소드는 오버라이딩,</span></div>
+<div id="cap-outro-8" class="clip cap" data-start="145.390" data-duration="2.491" data-track-index="2"><span>파이널 클래스는 상속이 금지예요.</span></div>
+<div id="cap-outro-9" class="clip cap" data-start="147.881" data-duration="1.399" data-track-index="2"><span>스태틱 파이널은 상수고,</span></div>
+<div id="cap-outro-10" class="clip cap" data-start="149.280" data-duration="1.838" data-track-index="2"><span>이름은 대문자로 써요.</span></div>
+<div id="cap-outro-11" class="clip cap" data-start="151.118" data-duration="2.384" data-track-index="2"><span>구독과 좋아요 부탁드립니다!</span></div>
   <div class="bar"></div>
-  <audio id="vo" src="assets/narration.mp3" data-start="0" data-duration="131.01" data-track-index="0"></audio>
+  <audio id="vo" src="assets/narration.mp3" data-start="0" data-duration="154.5" data-track-index="0"></audio>
 </div>
 <script>
 const tl = gsap.timeline({ paused: true });
@@ -267,7 +280,21 @@ tl.set(".prog i:nth-child(5)", {backgroundColor: "#f29111"}, 111.875);
 enter("#sc-cre", 123.415, 6.6);
 tl.set(".prog i", {backgroundColor: "#26324a"}, 123.29);
 tl.set(".prog i:nth-child(5)", {backgroundColor: "#f29111"}, 123.29);
-tl.fromTo(".bar", { scaleX: 0 }, { scaleX: 1, duration: 131.01, ease: "none" }, 0);
+enter("#sc-outro", 130.39, 23.112);
+tl.set(".prog i", {backgroundColor: "#26324a"}, 130.265);
+tl.to("#ex1", {backgroundColor: "#3a2a12", scale: 1.04, duration: 0.2}, 131.224);
+tl.to("#ex1", {backgroundColor: "#131c2e", scale: 1, duration: 0.2}, 134.588);
+tl.to("#ex2", {backgroundColor: "#3a2a12", scale: 1.04, duration: 0.2}, 134.588);
+tl.to("#ex2", {backgroundColor: "#131c2e", scale: 1, duration: 0.2}, 137.871);
+tl.to("#ex3", {backgroundColor: "#3a2a12", scale: 1.04, duration: 0.2}, 137.871);
+tl.to("#ex3", {backgroundColor: "#131c2e", scale: 1, duration: 0.2}, 140.968);
+tl.to("#ex4", {backgroundColor: "#3a2a12", scale: 1.04, duration: 0.2}, 140.968);
+tl.to("#ex4", {backgroundColor: "#131c2e", scale: 1, duration: 0.2}, 144.037);
+tl.to("#ex5", {backgroundColor: "#3a2a12", scale: 1.04, duration: 0.2}, 144.037);
+tl.to("#ex5", {backgroundColor: "#131c2e", scale: 1, duration: 0.2}, 147.881);
+tl.to("#ex6", {backgroundColor: "#3a2a12", scale: 1.04, duration: 0.2}, 147.881);
+tl.to("#ex6", {backgroundColor: "#131c2e", scale: 1, duration: 0.3}, 151.118 + 0.6);
+tl.fromTo(".bar", { scaleX: 0 }, { scaleX: 1, duration: 154.5, ease: "none" }, 0);
 window.__timelines = window.__timelines || {};
 window.__timelines["main"] = tl;
 tl.seek(0);

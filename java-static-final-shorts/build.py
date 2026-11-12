@@ -242,8 +242,8 @@ CSS_EXTRA = """
 .note small.t { font-family: var(--mono); }
 """
 
-EXEC = []
-EXEC_SAID = []
+EXEC = ["static 필드 = 모든 객체가 함께 쓰는 하나", "static 메소드 = 객체 없이 클래스이름.메소드()", "static 메소드에서 인스턴스 필드 사용 불가", "final 변수·필드 = 한 번만 대입", "final 메소드 = 오버라이딩 금지 · final 클래스 = 상속 금지", "static final = 상수 (이름은 대문자)"]
+EXEC_SAID = ["스태틱", "메소드는", "메소드에서는", "파이널", "메소드는", "스태틱"]
 EXEC_END = "구독과"
 
 scenes = {
@@ -308,6 +308,9 @@ scenes = {
     + jce("cre", ["Student.PASS_SCORE = 70;"], "cannot assign a value to static final variable PASS_SCORE", mark=(0,), cls=PASS_CLS)
     + cterm()
     + '<div class="note in">기준 점수는 <b>한 곳</b>에서만 정한다</div>',
+ "outro": '<div class="pill in">정리</div><h2 class="title in">static · final 6가지</h2><div class="list in">'
+    + "".join(f'<div class="row" id="ex{i}"><span class="no">{i}</span><b>{html.escape(c)}</b></div>' for i, c in enumerate(EXEC, 1))
+    + '</div><div class="cta in">👍 구독 · 좋아요</div>',
 }
 PROG = {"sfield": 1, "sfrun": 1, "smethod": 2, "sme": 2, "fvar": 3, "ffield": 3, "fref": 3, "fmc": 4, "fcls": 4, "const": 5, "cre": 5}
 

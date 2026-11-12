@@ -133,85 +133,90 @@ code { font-family: var(--mono); color: var(--orange); }
 </style>
 </head>
 <body>
-<div id="root" data-composition-id="main" data-start="0" data-duration="120.77" data-width="1080" data-height="1920">
+<div id="root" data-composition-id="main" data-start="0" data-duration="131.01" data-width="1080" data-height="1920">
   <div class="brand"><b>자바 입문 <em>static·final</em> 정리</b><div class="prog"><i></i><i></i><i></i><i></i><i></i></div></div>
   <section id="sc-hook" class="clip scene" data-start="0.000" data-duration="7.124" data-track-index="1"><div class="hook">
    <div class="pill in">JAVA 입문 · 열한 번째</div>
    <h1 class="big in"><em>static</em>과<br/><em>final</em></h1>
    <div class="sub in">static · final · <b>상수</b></div>
  </div></section>
-<section id="sc-sfield" class="clip scene" data-start="7.124" data-duration="11.007" data-track-index="1"><div class="pill in">STEP 1 · static 필드</div><h2 class="title in">객체마다? 모두 함께?</h2><p class="desc in"><b>static</b> 을 붙이면 클래스에 하나</p><div class="vs in"><div class="card k2"><b>score</b><span>인스턴스 필드</span><small>(객체마다 따로)</small></div><div class="card k2"><b>count</b><span>static 필드</span><small>클래스에 하나 · 모두 함께</small></div></div><div class="code in sm k2"><div class="ln"><span class="kw">class</span> Student {</div><div class="ln">  <span class="kw">String</span> name;</div><div class="ln">  <span class="kw">int</span> score;</div><div class="ln mk">  <span class="kw">static</span> <span class="kw">int</span> count;</div><div class="ln">  Student(<span class="kw">String</span> name,</div><div class="ln">          <span class="kw">int</span> score) {</div><div class="ln">    <span class="kw">this</span>.name = name;</div><div class="ln">    <span class="kw">this</span>.score = score;</div><div class="ln mk">    count++;</div><div class="ln">  }</div><div class="ln">}</div></div></section>
-<section id="sc-sfrun" class="clip scene" data-start="18.131" data-duration="7.191" data-track-index="1"><div class="pill in">STEP 1 · 함께 쓰는 필드</div><h2 class="title in">만들 때마다 count 증가</h2><p class="desc in">객체가 아니라 <b>클래스 이름</b>으로 사용</p><div class="code in"><div class="ln">Student s1 = <span class="kw">new</span> Student(</div><div class="ln">    <span class="st">"민수"</span>, <span class="nu">85</span>);</div><div class="ln">Student s2 = <span class="kw">new</span> Student(</div><div class="ln">    <span class="st">"지영"</span>, <span class="nu">92</span>);</div><div class="ln mk">System.out.println(</div><div class="ln mk">    Student.count);</div></div><div class="term in"><i>실행 결과</i><div>2</div></div><div class="note in"><b>Student.count</b> 처럼 클래스 이름으로</div></section>
-<section id="sc-smethod" class="clip scene" data-start="25.322" data-duration="8.631" data-track-index="1"><div class="pill in">STEP 2 · static 메소드</div><h2 class="title in">객체 없이 호출</h2><p class="desc in"><b>static</b> 메소드는 클래스 이름으로 부른다</p><div class="code in"><div class="ln mk"><span class="kw">static</span> <span class="kw">int</span> getCount() {</div><div class="ln">  <span class="kw">return</span> count;</div><div class="ln">}</div></div><div class="code in sm"><div class="ln mk">System.out.println(</div><div class="ln mk">    Student.getCount());</div><div class="ln">Student s1 = <span class="kw">new</span> Student(</div><div class="ln">    <span class="st">"민수"</span>, <span class="nu">85</span>);</div><div class="ln">Student s2 = <span class="kw">new</span> Student(</div><div class="ln">    <span class="st">"지영"</span>, <span class="nu">92</span>);</div><div class="ln mk">System.out.println(</div><div class="ln mk">    Student.getCount());</div></div><div class="term in"><i>실행 결과 (객체를 만들기 전 · 만든 후)</i><div>0</div><div>2</div></div></section>
-<section id="sc-sme" class="clip scene" data-start="33.953" data-duration="12.255" data-track-index="1"><div class="pill in">STEP 2-1 · 주의</div><h2 class="title in">static에서는 score 불가</h2><p class="desc in">객체 없이 실행되니 <b>누구의 score?</b></p><div class="code in sm"><div class="ln"><span class="kw">static</span> <span class="kw">int</span> getScore() {</div><div class="ln mk">  <span class="kw">return</span> score;</div><div class="ln">}</div></div><div class="term err in"><i>컴파일 오류</i><div>non-static variable score cannot be referenced from a static context</div></div><div class="note in"><b>main</b> 도 static이라<br/>객체를 만들어 점으로 사용</div></section>
-<section id="sc-fvar" class="clip scene" data-start="46.208" data-duration="9.807" data-track-index="1"><div class="pill in">STEP 3 · final 변수</div><h2 class="title in">한 번 넣으면 끝</h2><p class="desc in"><b>final</b> 변수는 다시 대입할 수 없다</p><div class="code in"><div class="ln"><span class="kw">final</span> <span class="kw">int</span> x = <span class="nu">10</span>;</div><div class="ln mk">x = <span class="nu">20</span>;</div></div><div class="term err in"><i>컴파일 오류</i><div>cannot assign a value to final variable x</div></div><div class="note in">값을 <b>한 번만</b> 넣을 수 있다</div></section>
-<section id="sc-ffield" class="clip scene" data-start="56.015" data-duration="12.879" data-track-index="1"><div class="pill in">STEP 3 · final 필드</div><h2 class="title in">생성자에서 한 번만</h2><p class="desc in"><b>final</b> 필드는 한 번만 대입</p><div class="code in sm k2"><div class="ln"><span class="kw">class</span> Student {</div><div class="ln mk">  <span class="kw">final</span> <span class="kw">String</span> name;</div><div class="ln">  <span class="kw">int</span> score;</div><div class="ln">  Student(<span class="kw">String</span> name,</div><div class="ln">          <span class="kw">int</span> score) {</div><div class="ln mk">    <span class="kw">this</span>.name = name;</div><div class="ln">    <span class="kw">this</span>.score = score;</div><div class="ln">  }</div><div class="ln">}</div></div><div class="code in sm"><div class="ln mk">s1.name = <span class="st">"철수"</span>;</div></div><div class="term err in"><i>컴파일 오류</i><div>cannot assign a value to final variable name</div></div><div class="note in">이름은 <b>그대로</b> · 점수는 계속 변함</div></section>
-<section id="sc-fref" class="clip scene" data-start="68.894" data-duration="12.495" data-track-index="1"><div class="pill in">STEP 3-1 · 주의</div><h2 class="title in">final Student s</h2><p class="desc in"><b>변수</b>를 막을 뿐, 객체는 막지 않는다</p><div class="code in sm"><div class="ln"><span class="kw">final</span> Student s = <span class="kw">new</span> Student(</div><div class="ln">    <span class="st">"민수"</span>, <span class="nu">85</span>);</div><div class="ln mk">s.score = <span class="nu">100</span>;</div><div class="ln">System.out.println(s.score);</div></div><div class="term in"><i>실행 결과</i><div>100</div></div><div class="code in sm"><div class="ln mk">s = <span class="kw">new</span> Student(</div><div class="ln">    <span class="st">"지영"</span>, <span class="nu">92</span>);</div></div><div class="term err in"><i>컴파일 오류</i><div>cannot assign a value to final variable s</div></div><div class="warn in">final은 <b>변수</b>를 고정 · 객체 내용은 변경 가능</div></section>
-<section id="sc-fmc" class="clip scene" data-start="81.389" data-duration="9.975" data-track-index="1"><div class="pill in">STEP 4 · final 메소드</div><h2 class="title in">오버라이딩 금지</h2><p class="desc in"><b>final</b> 메소드는 자식이 고칠 수 없다</p><div class="code in sm k1"><div class="ln"><span class="kw">class</span> Person {</div><div class="ln mk">  <span class="kw">final</span> <span class="kw">void</span> hello() { … }</div><div class="ln">}</div></div><div class="code in sm k2"><div class="ln"><span class="kw">class</span> Student <span class="kw">extends</span> Person {</div><div class="ln mk">  <span class="kw">void</span> hello() { … }</div><div class="ln">}</div></div><div class="term err in"><i>컴파일 오류</i><div>hello() in Student cannot override hello() in Person</div></div><div class="note in"><b>부모 클래스</b>의 final 메소드는 <b>오버라이딩</b> 불가</div></section>
-<section id="sc-fcls" class="clip scene" data-start="91.364" data-duration="9.807" data-track-index="1"><div class="pill in">STEP 4-1 · final 클래스</div><h2 class="title in">상속 금지</h2><p class="desc in"><b>final</b> 클래스는 상속할 수 없다</p><div class="code in sm k1"><div class="ln mk"><span class="kw">final</span> <span class="kw">class</span> Person { … }</div></div><div class="code in sm k2"><div class="ln mk"><span class="kw">class</span> Student <span class="kw">extends</span> Person {</div><div class="ln">}</div></div><div class="term err in"><i>컴파일 오류</i><div>cannot inherit from final Person</div></div><div class="note in">자바의 <b>String</b> 도 final 클래스<br/><small class="t">public final class String</small></div></section>
-<section id="sc-const" class="clip scene" data-start="101.171" data-duration="11.415" data-track-index="1"><div class="pill in">STEP 5 · static final 상수</div><h2 class="title in">60을 이름으로</h2><p class="desc in"><b>static final</b> 로 상수를 만든다</p><div class="code in sm k2"><div class="ln"><span class="kw">class</span> Student {</div><div class="ln mk">  <span class="kw">static</span> <span class="kw">final</span> <span class="kw">int</span></div><div class="ln mk">      PASS_SCORE = <span class="nu">60</span>;</div><div class="ln">  <span class="kw">int</span> score;</div><div class="ln">  <span class="kw">boolean</span> isPass() {</div><div class="ln mk">    <span class="kw">return</span> score &gt;= PASS_SCORE;</div><div class="ln">  }</div><div class="ln">}</div></div><div class="term in"><i>민수(85) 의 isPass() 결과</i><div>true</div></div><div class="note in">상수 이름은 <b>대문자와 _</b> 로 쓴다</div></section>
-<section id="sc-cre" class="clip scene" data-start="112.586" data-duration="8.184" data-track-index="1"><div class="pill in">STEP 5-1 · 상수 재대입</div><h2 class="title in">상수는 못 바꾼다</h2><p class="desc in"><b>final</b> 이라 다시 대입하면 오류</p><div class="code in"><div class="ln mk">Student.PASS_SCORE = <span class="nu">70</span>;</div></div><div class="term err in"><i>컴파일 오류</i><div>cannot assign a value to static final variable PASS_SCORE</div></div><div class="note in">기준 점수는 <b>한 곳</b>에서만 정한다</div></section>
+<section id="sc-sfield" class="clip scene" data-start="7.124" data-duration="14.679" data-track-index="1"><div class="pill in">STEP 1 · static 필드</div><h2 class="title in">객체마다? 모두 함께?</h2><p class="desc in"><b>static</b> 을 붙이면 클래스에 하나</p><div class="vs in"><div class="card k2"><b>score</b><span>인스턴스 필드</span><small>(객체마다 따로)</small></div><div class="card k2"><b>count</b><span>static 필드</span><small>클래스에 하나 · 모두 함께</small></div></div><div class="code in sm k2"><div class="ln"><span class="kw">class</span> Student {</div><div class="ln">  <span class="kw">String</span> name;</div><div class="ln">  <span class="kw">int</span> score;</div><div class="ln mk">  <span class="kw">static</span> <span class="kw">int</span> count;</div><div class="ln">  Student(<span class="kw">String</span> name,</div><div class="ln">          <span class="kw">int</span> score) {</div><div class="ln">    <span class="kw">this</span>.name = name;</div><div class="ln">    <span class="kw">this</span>.score = score;</div><div class="ln mk">    count++;</div><div class="ln">  }</div><div class="ln">}</div></div></section>
+<section id="sc-sfrun" class="clip scene" data-start="21.803" data-duration="7.191" data-track-index="1"><div class="pill in">STEP 1 · 함께 쓰는 필드</div><h2 class="title in">만들 때마다 count 증가</h2><p class="desc in">객체가 아니라 <b>클래스 이름</b>으로 사용</p><div class="code in"><div class="ln">Student s1 = <span class="kw">new</span> Student(</div><div class="ln">    <span class="st">"민수"</span>, <span class="nu">85</span>);</div><div class="ln">Student s2 = <span class="kw">new</span> Student(</div><div class="ln">    <span class="st">"지영"</span>, <span class="nu">92</span>);</div><div class="ln mk">System.out.println(</div><div class="ln mk">    Student.count);</div></div><div class="term in"><i>실행 결과</i><div>2</div></div><div class="note in"><b>Student.count</b> 처럼 클래스 이름으로</div></section>
+<section id="sc-smethod" class="clip scene" data-start="28.994" data-duration="11.895" data-track-index="1"><div class="pill in">STEP 2 · static 메소드</div><h2 class="title in">객체 없이 호출</h2><p class="desc in"><b>static</b> 메소드는 클래스 이름으로 부른다</p><div class="code in"><div class="ln mk"><span class="kw">static</span> <span class="kw">int</span> getCount() {</div><div class="ln">  <span class="kw">return</span> count;</div><div class="ln">}</div></div><div class="code in sm"><div class="ln mk">System.out.println(</div><div class="ln mk">    Student.getCount());</div><div class="ln">Student s1 = <span class="kw">new</span> Student(</div><div class="ln">    <span class="st">"민수"</span>, <span class="nu">85</span>);</div><div class="ln">Student s2 = <span class="kw">new</span> Student(</div><div class="ln">    <span class="st">"지영"</span>, <span class="nu">92</span>);</div><div class="ln mk">System.out.println(</div><div class="ln mk">    Student.getCount());</div></div><div class="term in"><i>실행 결과 (객체를 만들기 전 · 만든 후)</i><div>0</div><div>2</div></div></section>
+<section id="sc-sme" class="clip scene" data-start="40.889" data-duration="12.591" data-track-index="1"><div class="pill in">STEP 2-1 · 주의</div><h2 class="title in">static에서는 score 불가</h2><p class="desc in">객체 없이 실행되니 <b>누구의 score?</b></p><div class="code in sm"><div class="ln"><span class="kw">static</span> <span class="kw">int</span> getScore() {</div><div class="ln mk">  <span class="kw">return</span> score;</div><div class="ln">}</div></div><div class="term err in"><i>컴파일 오류</i><div>non-static variable score cannot be referenced from a static context</div></div><div class="note in"><b>main</b> 도 static이라<br/>객체를 만들어 점으로 사용</div></section>
+<section id="sc-fvar" class="clip scene" data-start="53.480" data-duration="9.807" data-track-index="1"><div class="pill in">STEP 3 · final 변수</div><h2 class="title in">한 번 넣으면 끝</h2><p class="desc in"><b>final</b> 변수는 다시 대입할 수 없다</p><div class="code in"><div class="ln"><span class="kw">final</span> <span class="kw">int</span> x = <span class="nu">10</span>;</div><div class="ln mk">x = <span class="nu">20</span>;</div></div><div class="term err in"><i>컴파일 오류</i><div>cannot assign a value to final variable x</div></div><div class="note in">값을 <b>한 번만</b> 넣을 수 있다</div></section>
+<section id="sc-ffield" class="clip scene" data-start="63.287" data-duration="13.719" data-track-index="1"><div class="pill in">STEP 3 · final 필드</div><h2 class="title in">생성자에서 한 번만</h2><p class="desc in"><b>final</b> 필드는 한 번만 대입</p><div class="code in sm k2"><div class="ln"><span class="kw">class</span> Student {</div><div class="ln mk">  <span class="kw">final</span> <span class="kw">String</span> name;</div><div class="ln">  <span class="kw">int</span> score;</div><div class="ln">  Student(<span class="kw">String</span> name,</div><div class="ln">          <span class="kw">int</span> score) {</div><div class="ln mk">    <span class="kw">this</span>.name = name;</div><div class="ln">    <span class="kw">this</span>.score = score;</div><div class="ln">  }</div><div class="ln">}</div></div><div class="code in sm"><div class="ln mk">s1.name = <span class="st">"철수"</span>;</div></div><div class="term err in"><i>컴파일 오류</i><div>cannot assign a value to final variable name</div></div><div class="note in">이름은 <b>그대로</b> · 점수는 계속 변함</div></section>
+<section id="sc-fref" class="clip scene" data-start="77.006" data-duration="15.087" data-track-index="1"><div class="pill in">STEP 3-1 · 주의</div><h2 class="title in">final Student s</h2><p class="desc in"><b>변수</b>를 막을 뿐, 객체는 막지 않는다</p><div class="code in sm"><div class="ln"><span class="kw">final</span> Student s = <span class="kw">new</span> Student(</div><div class="ln">    <span class="st">"민수"</span>, <span class="nu">85</span>);</div><div class="ln mk">s.score = <span class="nu">100</span>;</div><div class="ln">System.out.println(s.score);</div></div><div class="term in"><i>실행 결과</i><div>100</div></div><div class="code in sm"><div class="ln mk">s = <span class="kw">new</span> Student(</div><div class="ln">    <span class="st">"지영"</span>, <span class="nu">92</span>);</div></div><div class="term err in"><i>컴파일 오류</i><div>cannot assign a value to final variable s</div></div><div class="warn in">final은 <b>변수</b>를 고정 · 객체 내용은 변경 가능</div></section>
+<section id="sc-fmc" class="clip scene" data-start="92.093" data-duration="9.975" data-track-index="1"><div class="pill in">STEP 4 · final 메소드</div><h2 class="title in">오버라이딩 금지</h2><p class="desc in"><b>final</b> 메소드는 자식이 고칠 수 없다</p><div class="code in sm k1"><div class="ln"><span class="kw">class</span> Person {</div><div class="ln mk">  <span class="kw">final</span> <span class="kw">void</span> hello() { … }</div><div class="ln">}</div></div><div class="code in sm k2"><div class="ln"><span class="kw">class</span> Student <span class="kw">extends</span> Person {</div><div class="ln mk">  <span class="kw">void</span> hello() { … }</div><div class="ln">}</div></div><div class="term err in"><i>컴파일 오류</i><div>hello() in Student cannot override hello() in Person</div></div><div class="note in"><b>부모 클래스</b>의 final 메소드는 <b>오버라이딩</b> 불가</div></section>
+<section id="sc-fcls" class="clip scene" data-start="102.068" data-duration="9.807" data-track-index="1"><div class="pill in">STEP 4-1 · final 클래스</div><h2 class="title in">상속 금지</h2><p class="desc in"><b>final</b> 클래스는 상속할 수 없다</p><div class="code in sm k1"><div class="ln mk"><span class="kw">final</span> <span class="kw">class</span> Person { … }</div></div><div class="code in sm k2"><div class="ln mk"><span class="kw">class</span> Student <span class="kw">extends</span> Person {</div><div class="ln">}</div></div><div class="term err in"><i>컴파일 오류</i><div>cannot inherit from final Person</div></div><div class="note in">자바의 <b>String</b> 도 final 클래스<br/><small class="t">public final class String</small></div></section>
+<section id="sc-const" class="clip scene" data-start="111.875" data-duration="11.415" data-track-index="1"><div class="pill in">STEP 5 · static final 상수</div><h2 class="title in">60을 이름으로</h2><p class="desc in"><b>static final</b> 로 상수를 만든다</p><div class="code in sm k2"><div class="ln"><span class="kw">class</span> Student {</div><div class="ln mk">  <span class="kw">static</span> <span class="kw">final</span> <span class="kw">int</span></div><div class="ln mk">      PASS_SCORE = <span class="nu">60</span>;</div><div class="ln">  <span class="kw">int</span> score;</div><div class="ln">  <span class="kw">boolean</span> isPass() {</div><div class="ln mk">    <span class="kw">return</span> score &gt;= PASS_SCORE;</div><div class="ln">  }</div><div class="ln">}</div></div><div class="term in"><i>민수(85) 의 isPass() 결과</i><div>true</div></div><div class="note in">상수 이름은 <b>대문자와 _</b> 로 쓴다</div></section>
+<section id="sc-cre" class="clip scene" data-start="123.290" data-duration="7.72" data-track-index="1"><div class="pill in">STEP 5-1 · 상수 재대입</div><h2 class="title in">상수는 못 바꾼다</h2><p class="desc in"><b>final</b> 이라 다시 대입하면 오류</p><div class="code in"><div class="ln mk">Student.PASS_SCORE = <span class="nu">70</span>;</div></div><div class="term err in"><i>컴파일 오류</i><div>cannot assign a value to static final variable PASS_SCORE</div></div><div class="note in">기준 점수는 <b>한 곳</b>에서만 정한다</div></section>
   <div id="cap-hook-0" class="clip cap" data-start="0.250" data-duration="1.365" data-track-index="2"><span>자바 입문 열한 번째,</span></div>
 <div id="cap-hook-1" class="clip cap" data-start="1.615" data-duration="1.666" data-track-index="2"><span>스태틱과 파이널!</span></div>
 <div id="cap-hook-2" class="clip cap" data-start="3.282" data-duration="1.278" data-track-index="2"><span>스태틱, 파이널,</span></div>
 <div id="cap-hook-3" class="clip cap" data-start="4.560" data-duration="2.314" data-track-index="2"><span>그리고 상수까지 정리해 드립니다.</span></div>
-<div id="cap-sfield-0" class="clip cap" data-start="7.249" data-duration="1.636" data-track-index="2"><span>필드 앞에 스태틱을 붙이면,</span></div>
-<div id="cap-sfield-1" class="clip cap" data-start="8.885" data-duration="1.567" data-track-index="2"><span>객체마다 따로 있지 않고 클래스에</span></div>
-<div id="cap-sfield-2" class="clip cap" data-start="10.452" data-duration="2.637" data-track-index="2"><span>하나만 있어서 모든 객체가 함께 써요.</span></div>
-<div id="cap-sfield-3" class="clip cap" data-start="13.089" data-duration="2.313" data-track-index="2"><span>생성자에서 카운트 플러스 플러스를 하면,</span></div>
-<div id="cap-sfield-4" class="clip cap" data-start="15.402" data-duration="2.479" data-track-index="2"><span>객체를 만들 때마다 하나씩 늘어나요.</span></div>
-<div id="cap-sfrun-0" class="clip cap" data-start="18.256" data-duration="1.701" data-track-index="2"><span>민수와 지영을 만든 뒤 스튜던트</span></div>
-<div id="cap-sfrun-1" class="clip cap" data-start="19.957" data-duration="2.553" data-track-index="2"><span>닷 카운트를 출력하면 이가 나와요.</span></div>
-<div id="cap-sfrun-2" class="clip cap" data-start="22.510" data-duration="2.562" data-track-index="2"><span>스태틱 필드는 클래스 이름으로 써요.</span></div>
-<div id="cap-smethod-0" class="clip cap" data-start="25.447" data-duration="1.599" data-track-index="2"><span>스태틱 메소드는 객체 없이</span></div>
-<div id="cap-smethod-1" class="clip cap" data-start="27.046" data-duration="1.778" data-track-index="2"><span>클래스 이름으로 불러요.</span></div>
-<div id="cap-smethod-2" class="clip cap" data-start="28.824" data-duration="1.287" data-track-index="2"><span>객체를 만들기 전 스튜던트</span></div>
-<div id="cap-smethod-3" class="clip cap" data-start="30.111" data-duration="1.297" data-track-index="2"><span>닷 겟카운트는 영,</span></div>
-<div id="cap-smethod-4" class="clip cap" data-start="31.408" data-duration="2.295" data-track-index="2"><span>민수와 지영을 만든 뒤에는 이예요.</span></div>
-<div id="cap-sme-0" class="clip cap" data-start="34.078" data-duration="1.119" data-track-index="2"><span>주의!</span></div>
-<div id="cap-sme-1" class="clip cap" data-start="35.197" data-duration="1.800" data-track-index="2"><span>스태틱 메소드 안에서는 인스턴스</span></div>
-<div id="cap-sme-2" class="clip cap" data-start="36.998" data-duration="2.136" data-track-index="2"><span>필드인 스코어를 쓸 수 없어요.</span></div>
-<div id="cap-sme-3" class="clip cap" data-start="39.134" data-duration="1.119" data-track-index="2"><span>누구의 스코어인지 알 수</span></div>
-<div id="cap-sme-4" class="clip cap" data-start="40.253" data-duration="2.090" data-track-index="2"><span>없어서 컴파일 오류가 나요.</span></div>
-<div id="cap-sme-5" class="clip cap" data-start="42.343" data-duration="1.306" data-track-index="2"><span>메인도 스태틱이라서,</span></div>
-<div id="cap-sme-6" class="clip cap" data-start="43.649" data-duration="2.309" data-track-index="2"><span>객체를 만들어 점으로 썼던 거예요.</span></div>
-<div id="cap-fvar-0" class="clip cap" data-start="46.333" data-duration="1.782" data-track-index="2"><span>이번엔 파이널이에요.</span></div>
-<div id="cap-fvar-1" class="clip cap" data-start="48.115" data-duration="1.502" data-track-index="2"><span>변수 앞에 파이널을 붙이면,</span></div>
-<div id="cap-fvar-2" class="clip cap" data-start="49.617" data-duration="2.425" data-track-index="2"><span>한 번 넣은 값을 바꿀 수 없어요.</span></div>
-<div id="cap-fvar-3" class="clip cap" data-start="52.042" data-duration="1.604" data-track-index="2"><span>엑스에 십을 넣은 뒤 이십을 다시</span></div>
-<div id="cap-fvar-4" class="clip cap" data-start="53.646" data-duration="2.119" data-track-index="2"><span>넣으면 컴파일 오류가 나요.</span></div>
-<div id="cap-ffield-0" class="clip cap" data-start="56.140" data-duration="1.996" data-track-index="2"><span>필드에도 붙일 수 있어요.</span></div>
-<div id="cap-ffield-1" class="clip cap" data-start="58.136" data-duration="2.621" data-track-index="2"><span>스튜던트의 네임을 파이널로 바꿨어요.</span></div>
-<div id="cap-ffield-2" class="clip cap" data-start="60.758" data-duration="1.866" data-track-index="2"><span>생성자에서 한 번 넣는 건 되지만,</span></div>
-<div id="cap-ffield-3" class="clip cap" data-start="62.623" data-duration="1.157" data-track-index="2"><span>나중에 에스 원 닷 네임을</span></div>
-<div id="cap-ffield-4" class="clip cap" data-start="63.780" data-duration="2.118" data-track-index="2"><span>바꾸면 컴파일 오류가 나요.</span></div>
-<div id="cap-ffield-5" class="clip cap" data-start="65.897" data-duration="2.747" data-track-index="2"><span>점수는 바뀌는 값이라 네임만 파이널이에요.</span></div>
-<div id="cap-fref-0" class="clip cap" data-start="69.019" data-duration="1.119" data-track-index="2"><span>주의!</span></div>
-<div id="cap-fref-1" class="clip cap" data-start="70.138" data-duration="1.455" data-track-index="2"><span>파이널 스튜던트 에스라도,</span></div>
-<div id="cap-fref-2" class="clip cap" data-start="71.594" data-duration="1.194" data-track-index="2"><span>에스 닷 스코어에 백을 넣는</span></div>
-<div id="cap-fref-3" class="clip cap" data-start="72.788" data-duration="2.024" data-track-index="2"><span>건 되고 출력도 백이에요.</span></div>
-<div id="cap-fref-4" class="clip cap" data-start="74.812" data-duration="2.780" data-track-index="2"><span>파이널은 객체가 아니라 변수를 막거든요.</span></div>
-<div id="cap-fref-5" class="clip cap" data-start="77.592" data-duration="1.269" data-track-index="2"><span>에스에 다른 객체를 새로</span></div>
-<div id="cap-fref-6" class="clip cap" data-start="78.860" data-duration="2.279" data-track-index="2"><span>대입하면 컴파일 오류가 나요.</span></div>
-<div id="cap-fmc-0" class="clip cap" data-start="81.514" data-duration="2.108" data-track-index="2"><span>다음은 파이널 메소드예요.</span></div>
-<div id="cap-fmc-1" class="clip cap" data-start="83.622" data-duration="2.034" data-track-index="2"><span>부모 클래스 퍼슨의 헬로가 파이널이면,</span></div>
-<div id="cap-fmc-2" class="clip cap" data-start="85.656" data-duration="1.166" data-track-index="2"><span>자식 클래스 스튜던트가</span></div>
-<div id="cap-fmc-3" class="clip cap" data-start="86.822" data-duration="1.800" data-track-index="2"><span>오버라이딩할 수 없어요.</span></div>
-<div id="cap-fmc-4" class="clip cap" data-start="88.622" data-duration="2.492" data-track-index="2"><span>다시 정의하면 컴파일 오류가 나요.</span></div>
-<div id="cap-fcls-0" class="clip cap" data-start="91.489" data-duration="2.621" data-track-index="2"><span>클래스에도 파이널을 붙일 수 있어요.</span></div>
-<div id="cap-fcls-1" class="clip cap" data-start="94.110" data-duration="1.856" data-track-index="2"><span>상속할 수 없어서 스튜던트가 퍼슨을</span></div>
-<div id="cap-fcls-2" class="clip cap" data-start="95.967" data-duration="2.435" data-track-index="2"><span>익스텐즈하면 컴파일 오류가 나요.</span></div>
-<div id="cap-fcls-3" class="clip cap" data-start="98.401" data-duration="2.520" data-track-index="2"><span>자바의 스트링도 파이널 클래스예요.</span></div>
-<div id="cap-const-0" class="clip cap" data-start="101.296" data-duration="1.577" data-track-index="2"><span>이제 상수예요.</span></div>
-<div id="cap-const-1" class="clip cap" data-start="102.873" data-duration="1.642" data-track-index="2"><span>이즈 패스의 육십을 스태틱 파이널</span></div>
-<div id="cap-const-2" class="clip cap" data-start="104.514" data-duration="2.136" data-track-index="2"><span>인트 패스 스코어로 바꿨어요.</span></div>
-<div id="cap-const-3" class="clip cap" data-start="106.650" data-duration="2.994" data-track-index="2"><span>민수의 팔십오는 육십 이상이라 트루가 나와요.</span></div>
-<div id="cap-const-4" class="clip cap" data-start="109.645" data-duration="2.691" data-track-index="2"><span>상수 이름은 대문자와 밑줄로 지어요.</span></div>
-<div id="cap-cre-0" class="clip cap" data-start="112.711" data-duration="2.252" data-track-index="2"><span>상수에 스튜던트 닷 패스 스코어로 칠십을</span></div>
-<div id="cap-cre-1" class="clip cap" data-start="114.963" data-duration="2.497" data-track-index="2"><span>다시 대입하면 컴파일 오류가 나요.</span></div>
-<div id="cap-cre-2" class="clip cap" data-start="117.459" data-duration="2.308" data-track-index="2"><span>기준 점수는 한 곳에서만 정해요.</span></div>
+<div id="cap-sfield-0" class="clip cap" data-start="7.249" data-duration="1.654" data-track-index="2"><span>지금까지 쓴 필드는 객체마다</span></div>
+<div id="cap-sfield-1" class="clip cap" data-start="8.903" data-duration="2.086" data-track-index="2"><span>따로 있는 인스턴스 필드예요.</span></div>
+<div id="cap-sfield-2" class="clip cap" data-start="10.990" data-duration="1.548" data-track-index="2"><span>필드 앞에 스태틱을 붙이면,</span></div>
+<div id="cap-sfield-3" class="clip cap" data-start="12.538" data-duration="1.567" data-track-index="2"><span>객체마다 따로 있지 않고 클래스에</span></div>
+<div id="cap-sfield-4" class="clip cap" data-start="14.105" data-duration="2.649" data-track-index="2"><span>하나만 있어서 모든 객체가 함께 써요.</span></div>
+<div id="cap-sfield-5" class="clip cap" data-start="16.755" data-duration="2.313" data-track-index="2"><span>생성자에서 카운트 플러스 플러스를 하면,</span></div>
+<div id="cap-sfield-6" class="clip cap" data-start="19.068" data-duration="2.485" data-track-index="2"><span>객체를 만들 때마다 하나씩 늘어나요.</span></div>
+<div id="cap-sfrun-0" class="clip cap" data-start="21.928" data-duration="1.701" data-track-index="2"><span>민수와 지영을 만든 뒤 스튜던트</span></div>
+<div id="cap-sfrun-1" class="clip cap" data-start="23.629" data-duration="2.553" data-track-index="2"><span>닷 카운트를 출력하면 이가 나와요.</span></div>
+<div id="cap-sfrun-2" class="clip cap" data-start="26.182" data-duration="2.562" data-track-index="2"><span>스태틱 필드는 클래스 이름으로 써요.</span></div>
+<div id="cap-smethod-0" class="clip cap" data-start="29.119" data-duration="1.431" data-track-index="2"><span>겟카운트처럼 메소드에도</span></div>
+<div id="cap-smethod-1" class="clip cap" data-start="30.550" data-duration="1.909" data-track-index="2"><span>스태틱을 붙일 수 있어요.</span></div>
+<div id="cap-smethod-2" class="clip cap" data-start="32.459" data-duration="1.511" data-track-index="2"><span>스태틱 메소드는 객체 없이</span></div>
+<div id="cap-smethod-3" class="clip cap" data-start="33.970" data-duration="1.791" data-track-index="2"><span>클래스 이름으로 불러요.</span></div>
+<div id="cap-smethod-4" class="clip cap" data-start="35.761" data-duration="1.287" data-track-index="2"><span>객체를 만들기 전 스튜던트</span></div>
+<div id="cap-smethod-5" class="clip cap" data-start="37.048" data-duration="1.297" data-track-index="2"><span>닷 겟카운트는 영,</span></div>
+<div id="cap-smethod-6" class="clip cap" data-start="38.345" data-duration="2.294" data-track-index="2"><span>민수와 지영을 만든 뒤에는 이예요.</span></div>
+<div id="cap-sme-0" class="clip cap" data-start="41.014" data-duration="1.446" data-track-index="2"><span>주의할 점!</span></div>
+<div id="cap-sme-1" class="clip cap" data-start="42.460" data-duration="1.800" data-track-index="2"><span>스태틱 메소드 안에서는 인스턴스</span></div>
+<div id="cap-sme-2" class="clip cap" data-start="44.260" data-duration="2.136" data-track-index="2"><span>필드인 스코어를 쓸 수 없어요.</span></div>
+<div id="cap-sme-3" class="clip cap" data-start="46.396" data-duration="1.119" data-track-index="2"><span>누구의 스코어인지 알 수</span></div>
+<div id="cap-sme-4" class="clip cap" data-start="47.516" data-duration="2.090" data-track-index="2"><span>없어서 컴파일 오류가 나요.</span></div>
+<div id="cap-sme-5" class="clip cap" data-start="49.605" data-duration="1.306" data-track-index="2"><span>메인도 스태틱이라서,</span></div>
+<div id="cap-sme-6" class="clip cap" data-start="50.911" data-duration="2.319" data-track-index="2"><span>객체를 만들어 점으로 썼던 거예요.</span></div>
+<div id="cap-fvar-0" class="clip cap" data-start="53.605" data-duration="1.782" data-track-index="2"><span>이번엔 파이널이에요.</span></div>
+<div id="cap-fvar-1" class="clip cap" data-start="55.387" data-duration="1.502" data-track-index="2"><span>변수 앞에 파이널을 붙이면,</span></div>
+<div id="cap-fvar-2" class="clip cap" data-start="56.889" data-duration="2.425" data-track-index="2"><span>한 번 넣은 값을 바꿀 수 없어요.</span></div>
+<div id="cap-fvar-3" class="clip cap" data-start="59.314" data-duration="1.604" data-track-index="2"><span>엑스에 십을 넣은 뒤 이십을 다시</span></div>
+<div id="cap-fvar-4" class="clip cap" data-start="60.918" data-duration="2.119" data-track-index="2"><span>넣으면 컴파일 오류가 나요.</span></div>
+<div id="cap-ffield-0" class="clip cap" data-start="63.412" data-duration="1.996" data-track-index="2"><span>필드에도 붙일 수 있어요.</span></div>
+<div id="cap-ffield-1" class="clip cap" data-start="65.408" data-duration="2.621" data-track-index="2"><span>스튜던트의 네임을 파이널로 바꿨어요.</span></div>
+<div id="cap-ffield-2" class="clip cap" data-start="68.030" data-duration="1.866" data-track-index="2"><span>생성자에서 한 번 넣는 건 되지만,</span></div>
+<div id="cap-ffield-3" class="clip cap" data-start="69.895" data-duration="1.157" data-track-index="2"><span>나중에 에스 원 닷 네임을</span></div>
+<div id="cap-ffield-4" class="clip cap" data-start="71.052" data-duration="2.118" data-track-index="2"><span>바꾸면 컴파일 오류가 나요.</span></div>
+<div id="cap-ffield-5" class="clip cap" data-start="73.169" data-duration="3.587" data-track-index="2"><span>이름은 그대로, 점수는 바뀌는 값이라 네임만 파이널이에요.</span></div>
+<div id="cap-fref-0" class="clip cap" data-start="77.131" data-duration="1.446" data-track-index="2"><span>주의할 점!</span></div>
+<div id="cap-fref-1" class="clip cap" data-start="78.577" data-duration="1.455" data-track-index="2"><span>파이널 스튜던트 에스라도,</span></div>
+<div id="cap-fref-2" class="clip cap" data-start="80.032" data-duration="1.194" data-track-index="2"><span>에스 닷 스코어에 백을 넣는</span></div>
+<div id="cap-fref-3" class="clip cap" data-start="81.226" data-duration="2.024" data-track-index="2"><span>건 되고 출력도 백이에요.</span></div>
+<div id="cap-fref-4" class="clip cap" data-start="83.250" data-duration="2.780" data-track-index="2"><span>파이널은 객체가 아니라 변수를 막거든요.</span></div>
+<div id="cap-fref-5" class="clip cap" data-start="86.030" data-duration="2.267" data-track-index="2"><span>클래스 편에서 본 참조처럼요.</span></div>
+<div id="cap-fref-6" class="clip cap" data-start="88.297" data-duration="1.269" data-track-index="2"><span>에스에 다른 객체를 새로</span></div>
+<div id="cap-fref-7" class="clip cap" data-start="89.566" data-duration="2.277" data-track-index="2"><span>대입하면 컴파일 오류가 나요.</span></div>
+<div id="cap-fmc-0" class="clip cap" data-start="92.218" data-duration="2.108" data-track-index="2"><span>다음은 파이널 메소드예요.</span></div>
+<div id="cap-fmc-1" class="clip cap" data-start="94.326" data-duration="2.034" data-track-index="2"><span>부모 클래스 퍼슨의 헬로가 파이널이면,</span></div>
+<div id="cap-fmc-2" class="clip cap" data-start="96.360" data-duration="1.166" data-track-index="2"><span>자식 클래스 스튜던트가</span></div>
+<div id="cap-fmc-3" class="clip cap" data-start="97.526" data-duration="1.800" data-track-index="2"><span>오버라이딩할 수 없어요.</span></div>
+<div id="cap-fmc-4" class="clip cap" data-start="99.326" data-duration="2.492" data-track-index="2"><span>다시 정의하면 컴파일 오류가 나요.</span></div>
+<div id="cap-fcls-0" class="clip cap" data-start="102.193" data-duration="2.621" data-track-index="2"><span>클래스에도 파이널을 붙일 수 있어요.</span></div>
+<div id="cap-fcls-1" class="clip cap" data-start="104.814" data-duration="1.856" data-track-index="2"><span>상속할 수 없어서 스튜던트가 퍼슨을</span></div>
+<div id="cap-fcls-2" class="clip cap" data-start="106.671" data-duration="2.435" data-track-index="2"><span>익스텐즈하면 컴파일 오류가 나요.</span></div>
+<div id="cap-fcls-3" class="clip cap" data-start="109.105" data-duration="2.520" data-track-index="2"><span>자바의 스트링도 파이널 클래스예요.</span></div>
+<div id="cap-const-0" class="clip cap" data-start="112.000" data-duration="1.577" data-track-index="2"><span>이제 상수예요.</span></div>
+<div id="cap-const-1" class="clip cap" data-start="113.576" data-duration="1.642" data-track-index="2"><span>이즈 패스의 육십을 스태틱 파이널</span></div>
+<div id="cap-const-2" class="clip cap" data-start="115.218" data-duration="2.136" data-track-index="2"><span>인트 패스 스코어로 바꿨어요.</span></div>
+<div id="cap-const-3" class="clip cap" data-start="117.354" data-duration="2.994" data-track-index="2"><span>민수의 팔십오는 육십 이상이라 트루가 나와요.</span></div>
+<div id="cap-const-4" class="clip cap" data-start="120.349" data-duration="2.691" data-track-index="2"><span>상수 이름은 대문자와 밑줄로 지어요.</span></div>
+<div id="cap-cre-0" class="clip cap" data-start="123.415" data-duration="1.822" data-track-index="2"><span>스튜던트 닷 패스 스코어에 칠십을</span></div>
+<div id="cap-cre-1" class="clip cap" data-start="125.237" data-duration="2.469" data-track-index="2"><span>다시 대입하면 컴파일 오류가 나요.</span></div>
+<div id="cap-cre-2" class="clip cap" data-start="127.706" data-duration="2.309" data-track-index="2"><span>기준 점수는 한 곳에서만 정해요.</span></div>
   <div class="bar"></div>
-  <audio id="vo" src="assets/narration.mp3" data-start="0" data-duration="120.77" data-track-index="0"></audio>
+  <audio id="vo" src="assets/narration.mp3" data-start="0" data-duration="131.01" data-track-index="0"></audio>
 </div>
 <script>
 const tl = gsap.timeline({ paused: true });
@@ -229,40 +234,40 @@ function enter(sel, t, dur) {
 }
 enter("#sc-hook", 0.25, 6.624);
 tl.set(".prog i", {backgroundColor: "#26324a"}, 0);
-enter("#sc-sfield", 7.249, 10.632);
+enter("#sc-sfield", 7.249, 14.304);
 tl.set(".prog i", {backgroundColor: "#26324a"}, 7.124);
 tl.set(".prog i:nth-child(1)", {backgroundColor: "#f29111"}, 7.124);
-enter("#sc-sfrun", 18.256, 6.816);
-tl.set(".prog i", {backgroundColor: "#26324a"}, 18.131);
-tl.set(".prog i:nth-child(1)", {backgroundColor: "#f29111"}, 18.131);
-enter("#sc-smethod", 25.447, 8.256);
-tl.set(".prog i", {backgroundColor: "#26324a"}, 25.322);
-tl.set(".prog i:nth-child(2)", {backgroundColor: "#f29111"}, 25.322);
-enter("#sc-sme", 34.078, 11.88);
-tl.set(".prog i", {backgroundColor: "#26324a"}, 33.953);
-tl.set(".prog i:nth-child(2)", {backgroundColor: "#f29111"}, 33.953);
-enter("#sc-fvar", 46.333, 9.432);
-tl.set(".prog i", {backgroundColor: "#26324a"}, 46.208);
-tl.set(".prog i:nth-child(3)", {backgroundColor: "#f29111"}, 46.208);
-enter("#sc-ffield", 56.14, 12.504);
-tl.set(".prog i", {backgroundColor: "#26324a"}, 56.015);
-tl.set(".prog i:nth-child(3)", {backgroundColor: "#f29111"}, 56.015);
-enter("#sc-fref", 69.019, 12.12);
-tl.set(".prog i", {backgroundColor: "#26324a"}, 68.894);
-tl.set(".prog i:nth-child(3)", {backgroundColor: "#f29111"}, 68.894);
-enter("#sc-fmc", 81.514, 9.6);
-tl.set(".prog i", {backgroundColor: "#26324a"}, 81.389);
-tl.set(".prog i:nth-child(4)", {backgroundColor: "#f29111"}, 81.389);
-enter("#sc-fcls", 91.489, 9.432);
-tl.set(".prog i", {backgroundColor: "#26324a"}, 91.364);
-tl.set(".prog i:nth-child(4)", {backgroundColor: "#f29111"}, 91.364);
-enter("#sc-const", 101.296, 11.04);
-tl.set(".prog i", {backgroundColor: "#26324a"}, 101.171);
-tl.set(".prog i:nth-child(5)", {backgroundColor: "#f29111"}, 101.171);
-enter("#sc-cre", 112.711, 7.056);
-tl.set(".prog i", {backgroundColor: "#26324a"}, 112.586);
-tl.set(".prog i:nth-child(5)", {backgroundColor: "#f29111"}, 112.586);
-tl.fromTo(".bar", { scaleX: 0 }, { scaleX: 1, duration: 120.77, ease: "none" }, 0);
+enter("#sc-sfrun", 21.928, 6.816);
+tl.set(".prog i", {backgroundColor: "#26324a"}, 21.803);
+tl.set(".prog i:nth-child(1)", {backgroundColor: "#f29111"}, 21.803);
+enter("#sc-smethod", 29.119, 11.52);
+tl.set(".prog i", {backgroundColor: "#26324a"}, 28.994);
+tl.set(".prog i:nth-child(2)", {backgroundColor: "#f29111"}, 28.994);
+enter("#sc-sme", 41.014, 12.216);
+tl.set(".prog i", {backgroundColor: "#26324a"}, 40.889);
+tl.set(".prog i:nth-child(2)", {backgroundColor: "#f29111"}, 40.889);
+enter("#sc-fvar", 53.605, 9.432);
+tl.set(".prog i", {backgroundColor: "#26324a"}, 53.48);
+tl.set(".prog i:nth-child(3)", {backgroundColor: "#f29111"}, 53.48);
+enter("#sc-ffield", 63.412, 13.344);
+tl.set(".prog i", {backgroundColor: "#26324a"}, 63.287);
+tl.set(".prog i:nth-child(3)", {backgroundColor: "#f29111"}, 63.287);
+enter("#sc-fref", 77.131, 14.712);
+tl.set(".prog i", {backgroundColor: "#26324a"}, 77.006);
+tl.set(".prog i:nth-child(3)", {backgroundColor: "#f29111"}, 77.006);
+enter("#sc-fmc", 92.218, 9.6);
+tl.set(".prog i", {backgroundColor: "#26324a"}, 92.093);
+tl.set(".prog i:nth-child(4)", {backgroundColor: "#f29111"}, 92.093);
+enter("#sc-fcls", 102.193, 9.432);
+tl.set(".prog i", {backgroundColor: "#26324a"}, 102.068);
+tl.set(".prog i:nth-child(4)", {backgroundColor: "#f29111"}, 102.068);
+enter("#sc-const", 112.0, 11.04);
+tl.set(".prog i", {backgroundColor: "#26324a"}, 111.875);
+tl.set(".prog i:nth-child(5)", {backgroundColor: "#f29111"}, 111.875);
+enter("#sc-cre", 123.415, 6.6);
+tl.set(".prog i", {backgroundColor: "#26324a"}, 123.29);
+tl.set(".prog i:nth-child(5)", {backgroundColor: "#f29111"}, 123.29);
+tl.fromTo(".bar", { scaleX: 0 }, { scaleX: 1, duration: 131.01, ease: "none" }, 0);
 window.__timelines = window.__timelines || {};
 window.__timelines["main"] = tl;
 tl.seek(0);

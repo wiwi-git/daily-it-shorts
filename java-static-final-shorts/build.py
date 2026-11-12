@@ -207,6 +207,10 @@ BRAND = "자바 입문 <em>static·final</em> 정리"
 STUDENT_CLS = ["class Student {", "  String name;", "  int score;", "  static int count;",
                "  Student(String name,", "          int score) {", "    this.name = name;",
                "    this.score = score;", "    count++;", "  }", "}"]
+GETCOUNT = ["static int getCount() {", "  return count;", "}"]
+GETSCORE = ["static int getScore() {", "  return score;", "}"]
+STUDENT_CLS2 = STUDENT_CLS[:-1] + ["  " + l for l in GETCOUNT] + ["}"]
+STUDENT_CLS3 = STUDENT_CLS[:-1] + ["  " + l for l in GETSCORE] + ["}"]
 S_NEW = ["Student s1 = new Student(", '    "민수", 85);', "Student s2 = new Student(", '    "지영", 92);']
 
 CSS_EXTRA = """
@@ -238,8 +242,17 @@ scenes = {
     + jcode("sfrun", S_NEW + ["System.out.println(", "    Student.count);"], "2\n", mark=(4, 5), cls=STUDENT_CLS)
     + term(label="실행 결과")
     + '<div class="note in"><b>Student.count</b> 처럼 클래스 이름으로</div>',
+ "smethod": head("STEP 2 · static 메소드", "객체 없이 호출", "<b>static</b> 메소드는 클래스 이름으로 부른다")
+    + code(GETCOUNT, mark=(0,))
+    + jcode("smethod", ["System.out.println(", "    Student.getCount());"] + S_NEW
+            + ["System.out.println(", "    Student.getCount());"], "0\n2\n", mark=(0, 1, 6, 7), cls=STUDENT_CLS2, sm=True)
+    + term(label="실행 결과 (객체를 만들기 전 · 만든 후)"),
+ "sme": head("STEP 2-1 · 주의", "static에서는 score 불가", "객체 없이 실행되니 <b>누구의 score?</b>")
+    + cerr("sme", "non-static variable score cannot be referenced from a static context", STUDENT_CLS3, [], GETSCORE, mark=(1,))
+    + cterm()
+    + '<div class="note in"><b>main</b> 도 static이라<br/>객체를 만들어 점으로 사용</div>',
 }
-PROG = {"sfield": 1, "sfrun": 1}
+PROG = {"sfield": 1, "sfrun": 1, "smethod": 2, "sme": 2}
 
 
 SECTION = {s["id"]: s["section"] for s in json.load(open("script.json"))}

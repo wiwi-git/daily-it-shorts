@@ -47,3 +47,55 @@ class Student {
     count++;
   }
 }
+
+// [2. static 메소드] Main.java → 출력:
+//   0
+//   2
+public class Main {
+  public static void main(String[] args) {
+    System.out.println(
+        Student.getCount());
+    Student s1 = new Student(
+        "민수", 85);
+    Student s2 = new Student(
+        "지영", 92);
+    System.out.println(
+        Student.getCount());
+  }
+}
+
+class Student {
+  String name;
+  int score;
+  static int count;
+  Student(String name,
+          int score) {
+    this.name = name;
+    this.score = score;
+    count++;
+  }
+  static int getCount() {
+    return count;
+  }
+}
+
+// [2-1. static 주의] Main.java → 컴파일 오류: non-static variable score cannot be referenced from a static context
+public class Main {
+  public static void main(String[] args) {
+  }
+}
+
+class Student {
+  String name;
+  int score;
+  static int count;
+  Student(String name,
+          int score) {
+    this.name = name;
+    this.score = score;
+    count++;
+  }
+  static int getScore() {
+    return score;
+  }
+}

@@ -33,6 +33,7 @@
 | 2026-11-10 | 자바 입문: 메소드와 생성자 (메소드 정의·호출 · 매개변수 · return · 생성자 · this · 기본 생성자 · 오버로딩) | 2:29 | [java-method-constructor-shorts](java-method-constructor-shorts) | [YouTube](https://www.youtube.com/watch?v=Uhyl_6oat3Y) |
 | 2026-11-11 | 자바 입문: 클래스의 상속 (extends · 오버라이딩 · super() · super.메소드 · 단일 상속) | 2:52 | [java-inheritance-shorts](java-inheritance-shorts) | [YouTube](https://www.youtube.com/watch?v=uKPku9x35MA) |
 | 2026-11-12 | 자바 입문: static과 final (static 필드 · static 메소드 · final 변수·필드 · final 메소드·클래스 · static final 상수) | 2:35 | [java-static-final-shorts](java-static-final-shorts) | [YouTube](https://www.youtube.com/watch?v=G1k76WxAe2E) |
+| 2026-11-13 | 자바 입문: 추상 메소드와 추상 클래스 (abstract · 몸체 없는 메소드 · new 불가 · 오버라이딩 강제 · 생성자와 일반 메소드) | 1:57 | [java-abstract-shorts](java-abstract-shorts) | [YouTube](https://www.youtube.com/watch?v=T21QWrPB7zM) |
 ## 제작 방식
 
 - **영상**: [HyperFrames](https://hyperframes.heygen.com) — HTML/CSS + GSAP 애니메이션을 MP4로 렌더링

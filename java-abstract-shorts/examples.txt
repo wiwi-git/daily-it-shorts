@@ -1,0 +1,430 @@
+// 영상에 나오는 예제 프로그램 (build.py가 생성 · 직접 고치지 말 것)
+// 각 예제를 파일 이름대로 저장한 뒤: javac -encoding UTF-8 Main.java && java Main
+
+// [1. 왜 필요할까] Main.java → 출력:
+//   서준 안녕
+public class Main {
+  public static void main(String[] args) {
+    Person p =
+        new Person("서준");
+    p.hello();
+  }
+}
+
+class Person {
+  String name;
+  Person(String name) {
+    this.name = name;
+  }
+  void hello() {
+    System.out.println(
+        name + " 안녕");
+  }
+}
+
+// [1. 추상 메소드] Main.java → 컴파일 성공 확인 (추상 메소드가 있는 추상 클래스)
+public class Main {
+  public static void main(String[] args) {
+  }
+}
+
+abstract class Person {
+  String name;
+  Person(String name) {
+    this.name = name;
+  }
+  abstract void hello();
+  void bye() {
+    System.out.println(
+        name + " 잘 가");
+  }
+}
+
+class Student extends Person {
+  int score;
+  Student(String name,
+          int score) {
+    super(name);
+    this.score = score;
+  }
+  @Override
+  void hello() {
+    System.out.println(
+        "학생 " + name + " 안녕");
+  }
+}
+
+class Teacher extends Person {
+  Teacher(String name) {
+    super(name);
+  }
+  @Override
+  void hello() {
+    System.out.println(
+        name + " 선생님 안녕");
+  }
+}
+
+// [2. 추상 클래스] Main.java → 컴파일 오류: Person is not abstract and does not override abstract method hello() in Person
+public class Main {
+  public static void main(String[] args) {
+  }
+}
+
+class Person {
+  String name;
+  Person(String name) {
+    this.name = name;
+  }
+  abstract void hello();
+  void bye() {
+    System.out.println(
+        name + " 잘 가");
+  }
+}
+
+class Student extends Person {
+  int score;
+  Student(String name,
+          int score) {
+    super(name);
+    this.score = score;
+  }
+  @Override
+  void hello() {
+    System.out.println(
+        "학생 " + name + " 안녕");
+  }
+}
+
+class Teacher extends Person {
+  Teacher(String name) {
+    super(name);
+  }
+  @Override
+  void hello() {
+    System.out.println(
+        name + " 선생님 안녕");
+  }
+}
+
+// [2. 추상 클래스] Main.java → 컴파일 성공 확인 (abstract를 붙여 고친 코드)
+public class Main {
+  public static void main(String[] args) {
+  }
+}
+
+abstract class Person {
+  String name;
+  Person(String name) {
+    this.name = name;
+  }
+  abstract void hello();
+  void bye() {
+    System.out.println(
+        name + " 잘 가");
+  }
+}
+
+class Student extends Person {
+  int score;
+  Student(String name,
+          int score) {
+    super(name);
+    this.score = score;
+  }
+  @Override
+  void hello() {
+    System.out.println(
+        "학생 " + name + " 안녕");
+  }
+}
+
+class Teacher extends Person {
+  Teacher(String name) {
+    super(name);
+  }
+  @Override
+  void hello() {
+    System.out.println(
+        name + " 선생님 안녕");
+  }
+}
+
+// [2-1. new 불가] Main.java → 컴파일 오류: Person is abstract; cannot be instantiated
+public class Main {
+  public static void main(String[] args) {
+    Person p =
+        new Person("서준");
+  }
+}
+
+abstract class Person {
+  String name;
+  Person(String name) {
+    this.name = name;
+  }
+  abstract void hello();
+  void bye() {
+    System.out.println(
+        name + " 잘 가");
+  }
+}
+
+class Student extends Person {
+  int score;
+  Student(String name,
+          int score) {
+    super(name);
+    this.score = score;
+  }
+  @Override
+  void hello() {
+    System.out.println(
+        "학생 " + name + " 안녕");
+  }
+}
+
+class Teacher extends Person {
+  Teacher(String name) {
+    super(name);
+  }
+  @Override
+  void hello() {
+    System.out.println(
+        name + " 선생님 안녕");
+  }
+}
+
+// [3. 자식이 완성] Main.java → 출력:
+//   학생 민수 안녕
+//   서준 선생님 안녕
+public class Main {
+  public static void main(String[] args) {
+    Student s = new Student(
+        "민수", 85);
+    Teacher t = new Teacher(
+        "서준");
+    s.hello();
+    t.hello();
+  }
+}
+
+abstract class Person {
+  String name;
+  Person(String name) {
+    this.name = name;
+  }
+  abstract void hello();
+  void bye() {
+    System.out.println(
+        name + " 잘 가");
+  }
+}
+
+class Student extends Person {
+  int score;
+  Student(String name,
+          int score) {
+    super(name);
+    this.score = score;
+  }
+  @Override
+  void hello() {
+    System.out.println(
+        "학생 " + name + " 안녕");
+  }
+}
+
+class Teacher extends Person {
+  Teacher(String name) {
+    super(name);
+  }
+  @Override
+  void hello() {
+    System.out.println(
+        name + " 선생님 안녕");
+  }
+}
+
+// [3-1. 빠뜨리면?] Main.java → 컴파일 오류: Teacher is not abstract and does not override abstract method hello() in Person
+public class Main {
+  public static void main(String[] args) {
+  }
+}
+
+abstract class Person {
+  String name;
+  Person(String name) {
+    this.name = name;
+  }
+  abstract void hello();
+  void bye() {
+    System.out.println(
+        name + " 잘 가");
+  }
+}
+
+class Student extends Person {
+  int score;
+  Student(String name,
+          int score) {
+    super(name);
+    this.score = score;
+  }
+  @Override
+  void hello() {
+    System.out.println(
+        "학생 " + name + " 안녕");
+  }
+}
+
+class Teacher extends Person {
+  Teacher(String name) {
+    super(name);
+  }
+}
+
+// [3-1. 빠뜨리면?] Main.java → 컴파일 성공 확인 (Teacher도 abstract로 미룬 코드)
+public class Main {
+  public static void main(String[] args) {
+  }
+}
+
+abstract class Person {
+  String name;
+  Person(String name) {
+    this.name = name;
+  }
+  abstract void hello();
+  void bye() {
+    System.out.println(
+        name + " 잘 가");
+  }
+}
+
+class Student extends Person {
+  int score;
+  Student(String name,
+          int score) {
+    super(name);
+    this.score = score;
+  }
+  @Override
+  void hello() {
+    System.out.println(
+        "학생 " + name + " 안녕");
+  }
+}
+
+abstract class Teacher extends Person {
+  Teacher(String name) {
+    super(name);
+  }
+}
+
+// [3-1. 빠뜨리면?] Main.java → 컴파일 오류: Teacher is abstract; cannot be instantiated
+public class Main {
+  public static void main(String[] args) {
+    new Teacher("서준");
+  }
+}
+
+abstract class Person {
+  String name;
+  Person(String name) {
+    this.name = name;
+  }
+  abstract void hello();
+  void bye() {
+    System.out.println(
+        name + " 잘 가");
+  }
+}
+
+class Student extends Person {
+  int score;
+  Student(String name,
+          int score) {
+    super(name);
+    this.score = score;
+  }
+  @Override
+  void hello() {
+    System.out.println(
+        "학생 " + name + " 안녕");
+  }
+}
+
+abstract class Teacher extends Person {
+  Teacher(String name) {
+    super(name);
+  }
+}
+
+// [4. 추상 클래스의 구성] Main.java → 출력:
+//   민수 잘 가
+public class Main {
+  public static void main(String[] args) {
+    Student s = new Student(
+        "민수", 85);
+    s.bye();
+  }
+}
+
+abstract class Person {
+  String name;
+  Person(String name) {
+    this.name = name;
+  }
+  abstract void hello();
+  void bye() {
+    System.out.println(
+        name + " 잘 가");
+  }
+}
+
+class Student extends Person {
+  int score;
+  Student(String name,
+          int score) {
+    super(name);
+    this.score = score;
+  }
+  @Override
+  void hello() {
+    System.out.println(
+        "학생 " + name + " 안녕");
+  }
+}
+
+class Teacher extends Person {
+  Teacher(String name) {
+    super(name);
+  }
+  @Override
+  void hello() {
+    System.out.println(
+        name + " 선생님 안녕");
+  }
+}
+
+// [5. 주의] Main.java → 컴파일 성공 확인 (추상 메소드가 없는 추상 클래스)
+public class Main {
+  public static void main(String[] args) {
+  }
+}
+
+abstract class Person {
+  String name;
+}
+
+// [5. 주의] Main.java → 컴파일 오류: illegal combination of modifiers: abstract and final
+public class Main {
+  public static void main(String[] args) {
+  }
+}
+
+abstract final class Person {
+  abstract void hello();
+}

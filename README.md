@@ -34,6 +34,8 @@
 | 2026-11-11 | 자바 입문: 클래스의 상속 (extends · 오버라이딩 · super() · super.메소드 · 단일 상속) | 2:52 | [java-inheritance-shorts](java-inheritance-shorts) | [YouTube](https://www.youtube.com/watch?v=uKPku9x35MA) |
 | 2026-11-12 | 자바 입문: static과 final (static 필드 · static 메소드 · final 변수·필드 · final 메소드·클래스 · static final 상수) | 2:35 | [java-static-final-shorts](java-static-final-shorts) | [YouTube](https://www.youtube.com/watch?v=G1k76WxAe2E) |
 | 2026-11-13 | 자바 입문: 추상 메소드와 추상 클래스 (abstract · 몸체 없는 메소드 · new 불가 · 오버라이딩 강제 · 생성자와 일반 메소드) | 1:57 | [java-abstract-shorts](java-abstract-shorts) | [YouTube](https://www.youtube.com/watch?v=T21QWrPB7zM) |
+| 2026-11-13 | 자바 입문: 인터페이스 (interface · implements · public 필수 · 여러 개 구현 · 상수 · default 메소드) | 2:01 | [java-interface-shorts](java-interface-shorts) | [YouTube](https://www.youtube.com/watch?v=BbHNpWFSaxo) |
+| 2026-11-13 | 자바 입문: 다형성 (업캐스팅 · 실제 객체의 메소드 · 배열과 매개변수 · instanceof · 다운캐스팅 · 인터페이스 타입) | 1:52 | [java-polymorphism-shorts](java-polymorphism-shorts) | [YouTube](https://www.youtube.com/watch?v=9MFcx04o4TY) |
 ## 제작 방식
 
 - **영상**: [HyperFrames](https://hyperframes.heygen.com) — HTML/CSS + GSAP 애니메이션을 MP4로 렌더링

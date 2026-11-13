@@ -1,0 +1,284 @@
+<!doctype html>
+<html lang="ko" data-resolution="portrait">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=1080, height=1920" />
+<script src="https://cdn.jsdelivr.net/npm/gsap@3.14.2/dist/gsap.min.js"></script>
+<style>
+:root {
+  --ground: #0b1220; --panel: #131c2e; --ink: #f4f6fb; --mute: #9aa6bd;
+  --blue: #3fa7d6; --orange: #f29111; --red: #ff5d5d; --green: #7ee08a; --violet: #c3a6ff;
+  --font: "Pretendard", sans-serif;
+  --mono: "Menlo", "SF Mono", monospace;
+}
+@font-face { font-family: "Pretendard"; src: url("assets/fonts/PretendardVariable.woff2") format("woff2"); font-weight: 45 920; }
+* { margin: 0; padding: 0; box-sizing: border-box; }
+html, body { width: 1080px; height: 1920px; overflow: hidden; background: var(--ground); }
+#root { position: relative; width: 100%; height: 100%; font-variant-ligatures: none; font-family: var(--font); color: var(--ink); overflow: hidden;
+  background: radial-gradient(1200px 900px at 80% -10%, #16365a 0%, transparent 60%),
+              radial-gradient(900px 900px at -10% 110%, #3a2410 0%, transparent 55%), var(--ground); }
+.clip { position: absolute; inset: 0; }
+.brand { position: absolute; top: 110px; left: 70px; right: 70px; display: flex; justify-content: space-between; align-items: center;
+  font-size: 34px; font-weight: 700; color: var(--mute); letter-spacing: 0.02em; }
+.brand b { color: var(--blue); } .brand b em { color: var(--orange); font-style: normal; }
+.prog { display: flex; gap: 12px; }
+.prog i { display: block; width: 56px; height: 12px; border-radius: 6px; background: #26324a; }
+.scene { padding: 210px 70px 0; display: flex; flex-direction: column; gap: 26px; }
+.pill { align-self: flex-start; padding: 12px 26px; border-radius: 999px; background: #1d2a44; color: var(--blue);
+  font-size: 34px; font-weight: 700; }
+.hook { display: flex; flex-direction: column; gap: 50px; padding-top: 140px; }
+.big { font-size: 150px; line-height: 1.12; font-weight: 800; letter-spacing: -0.04em; }
+.big em { font-style: normal; color: var(--orange); }
+.sub { font-size: 64px; font-weight: 700; color: var(--mute); } .sub b { color: var(--ink); }
+.title { font-size: 80px; font-weight: 800; letter-spacing: -0.03em; line-height: 1.1; }
+.desc { font-size: 46px; color: var(--mute); font-weight: 600; margin-top: -8px; } .desc b { color: var(--orange); }
+.code { background: #0a0f1a; border: 2px solid #26324a; border-radius: 26px; padding: 30px 32px; font-family: var(--mono);
+  font-size: 42px; line-height: 1.5; color: #d9e1f2; white-space: pre; box-shadow: 0 30px 60px rgba(0,0,0,.35);
+  font-variant-ligatures: none; font-feature-settings: "liga" 0, "calt" 0; }
+.code.sm { font-size: 34px; padding: 26px 28px; }
+.code .ln { margin: 0 -14px; padding: 0 14px; border-radius: 10px; }
+.code .ln.mk { background: rgba(242,145,17,.13); }
+.kw { color: var(--blue); font-weight: 700; } .st { color: var(--green); } .nu { color: var(--orange); } .cm { color: #6f7d98; } .es { color: var(--orange); font-weight: 700; }
+.term { background: #05080f; border: 2px solid #26324a; border-radius: 22px; padding: 18px 32px 22px; font-family: var(--mono);
+  font-size: 40px; line-height: 1.4; color: var(--ink); white-space: pre; tab-size: 8; }
+.term i { display: block; font-style: normal; font-family: var(--font); font-size: 28px; font-weight: 700; color: var(--mute); margin-bottom: 6px; }
+.term .cmd { color: var(--blue); }
+.term.err { border-color: rgba(255,93,93,.5); color: var(--red); font-size: 34px; white-space: normal; }
+.warn small { font-size: 36px; color: var(--mute); font-weight: 600; }
+.nest > div, .nest > div div { border: 3px solid; border-radius: 22px; padding: 16px 26px 20px; display: flex; flex-direction: column; gap: 12px; }
+.nest b { font-size: 38px; font-weight: 800; font-family: var(--mono); }
+.nest .k1 { border-color: var(--orange); } .nest .k1 > b { color: var(--orange); }
+.nest .k2 { border-color: var(--green); } .nest .k2 > b { color: var(--green); }
+.nest .k3 { border-color: var(--violet); } .nest .k3 > b { color: var(--violet); }
+.chips { display: flex; flex-wrap: wrap; gap: 18px; }
+.chips span { padding: 16px 30px; background: var(--panel); border-radius: 18px; font-size: 42px; font-weight: 700; }
+.warn, .note { padding: 26px 36px; border-radius: 24px; font-size: 44px; font-weight: 700; line-height: 1.45; }
+.warn { background: rgba(255,93,93,.12); border-left: 10px solid var(--red); } .warn b { color: var(--red); }
+.note { background: rgba(63,167,214,.12); border-left: 10px solid var(--blue); } .note b { color: var(--orange); }
+.note small { font-size: 38px; color: var(--mute); font-weight: 600; font-family: var(--mono); }
+code { font-family: var(--mono); color: var(--orange); }
+.var { display: grid; grid-template-columns: 1fr 1.3fr 1fr; gap: 18px; }
+.var div { background: var(--panel); border-radius: 24px; padding: 20px 30px 24px; display: flex; flex-direction: column; gap: 4px; }
+.var small { font-size: 32px; font-weight: 700; color: var(--mute); }
+.var b { font-family: var(--mono); font-size: 64px; }
+.var .v { border: 4px dashed var(--orange); } .var .v b { color: var(--orange); }
+.tbl { align-self: flex-start; }
+.tlabel { font-size: 34px; font-weight: 700; color: var(--mute); margin-bottom: 10px; }
+.tbl table { border-collapse: collapse; font-family: var(--mono); font-size: 40px; background: var(--panel); border-radius: 18px; overflow: hidden; }
+.tbl th { color: var(--blue); text-align: left; padding: 12px 32px; background: #1a2640; }
+.tbl th u { text-decoration: none; color: var(--orange); }
+.tbl td { padding: 10px 32px; border-top: 1px solid #26324a; }
+.tbl tr.k1 td { color: var(--orange); } .tbl tr.k2 td { color: var(--green); } .tbl tr.k3 td { color: var(--violet); }
+.tbl tr.out td { color: #5b6782; text-decoration: line-through; }
+.tbl td.nl { color: var(--red) !important; font-style: italic; font-weight: 700; background: rgba(255,93,93,.12); }
+.link { align-self: flex-start; font-family: var(--mono); font-size: 38px; color: var(--mute); padding: 6px 0 6px 26px;
+  border-left: 8px solid var(--orange); }
+.link b { color: var(--orange); }
+.arrow { font-family: var(--mono); font-size: 38px; color: var(--orange); font-weight: 700; }
+.vs { display: grid; grid-template-columns: 1fr 1fr; gap: 22px; }
+.card { background: var(--panel); border-radius: 26px; padding: 26px 32px; display: flex; flex-direction: column; gap: 6px; }
+.card b { font-family: var(--mono); font-size: 52px; color: var(--blue); }
+.vs .card span { font-size: 44px; font-weight: 800; } .vs .card .ok { color: var(--green); } .vs .card .ng { color: var(--red); }
+.res { display: flex; flex-wrap: wrap; align-items: center; gap: 14px; margin-top: -6px; }
+.res i { font-style: normal; font-size: 34px; color: var(--mute); font-weight: 700; }
+.res span { padding: 8px 22px; border-radius: 14px; background: var(--panel); font-size: 40px; font-weight: 700; }
+.res span.k1 { color: var(--orange); } .res span.k2 { color: var(--green); } .res span.k3 { color: var(--violet); }
+.res span.bad { color: var(--red); background: rgba(255,93,93,.14); box-shadow: inset 0 0 0 3px var(--red); } .vs .card em { font-style: normal; color: var(--orange); }
+.list { display: flex; flex-direction: column; gap: 16px; }
+.row { display: flex; align-items: center; gap: 30px; background: var(--panel); border-radius: 22px; padding: 14px 36px; font-size: 48px;
+  transform-origin: left center; }
+.row .no { font-size: 52px; font-weight: 900; color: var(--orange); width: 50px; }
+.row b { font-family: var(--mono); color: var(--blue); }
+.cta { margin-top: 20px; font-size: 54px; font-weight: 800; text-align: center; }
+.arr { display: flex; align-items: flex-start; gap: 14px; }
+.arr .nm { font-family: var(--mono); font-size: 38px; font-weight: 700; color: var(--mute); padding-top: 34px; margin-right: 6px; }
+.arr .nm.tn { margin-left: 30px; color: var(--blue); }
+.cw { display: flex; flex-direction: column; align-items: center; gap: 6px; }
+.cw small { font-family: var(--mono); font-size: 32px; font-weight: 700; color: var(--mute); height: 40px; }
+.box { position: relative; width: 150px; height: 110px; background: var(--panel); border: 3px solid #26324a; border-radius: 18px; }
+.box b { position: absolute; inset: 0; display: flex; align-items: center; justify-content: center;
+  font-family: var(--mono); font-size: 56px; font-weight: 800; }
+.box.ghost { border: 3px dashed var(--red); background: rgba(255,93,93,.08); } .box.ghost b { color: var(--red); }
+.k1 { color: var(--orange); } .k2 { color: var(--green); } .k3 { color: var(--violet); } .z { color: var(--mute); }
+#sc-swap .arr .cw:last-child .box { border-style: dashed; border-color: var(--blue); }
+.gridw { display: flex; flex-direction: column; gap: 22px; }
+.grid { display: grid; gap: 12px; align-items: center; }
+.grid i { font-style: normal; font-family: var(--mono); font-size: 32px; font-weight: 700; color: var(--mute); text-align: center; }
+.grid b { height: 96px; background: var(--panel); border-radius: 16px; display: flex; align-items: center; justify-content: center;
+  font-family: var(--mono); font-size: 52px; font-weight: 800; }
+.grid b.k1 { box-shadow: inset 0 0 0 4px var(--orange); }
+.dims { display: flex; flex-wrap: wrap; gap: 16px; }
+.dims span { padding: 12px 26px; background: var(--panel); border-radius: 16px; font-size: 40px; font-weight: 700; }
+.dims em { font-style: normal; color: var(--orange); }
+.share { display: flex; gap: 12px; }
+.pp { width: 140px; display: flex; flex-direction: column; align-items: center; gap: 6px; }
+.pp .cd { width: 140px; height: 190px; background: var(--panel); border: 3px solid var(--orange); border-radius: 18px;
+  display: flex; flex-direction: column; align-items: center; justify-content: center; font-size: 46px; line-height: 1.15; }
+.pp.left .cd { border: 3px dashed var(--green); background: rgba(126,224,138,.08); }
+.pp small { font-size: 30px; font-weight: 700; color: var(--mute); } .pp.left small { color: var(--green); }
+.chips .gt { background: none; padding: 16px 0; color: var(--mute); }
+.cap { top: auto; bottom: 260px; height: auto; display: flex; justify-content: center; padding: 0 60px; }
+.cap span { background: rgba(0,0,0,.78); color: #fff; font-size: 48px; font-weight: 700; line-height: 1.4; padding: 16px 30px;
+  border-radius: 18px; text-align: center; word-break: keep-all; }
+.bar { position: absolute; left: 0; bottom: 0; height: 10px; width: 1080px; background: var(--orange); transform-origin: left center; }
+
+.code.k1 { border-color: var(--orange); } .code.k2 { border-color: var(--green); } .code.k3 { border-color: var(--violet); }
+.code.ki { border-color: var(--blue); border-width: 3px; }
+.ki { color: var(--blue); }
+.vs .card span { font-size: 40px; }
+.vs .card small { font-size: 32px; color: var(--mute); font-weight: 700; }
+.vs.hdr { margin-bottom: -10px; } .vs.hdr b { font-size: 44px; font-weight: 800; text-align: center; }
+.chips em { font-style: normal; color: var(--orange); }
+.fam { display: flex; flex-direction: column; align-items: center; gap: 14px; padding: 10px 0; }
+.fam .ps { display: flex; gap: 36px; }
+.fam .ps span { padding: 22px 34px; border: 3px dashed var(--red); border-radius: 20px; font-size: 42px; font-weight: 700;
+  color: var(--mute); background: rgba(255,93,93,.06); }
+.fam .x { display: flex; gap: 300px; font-size: 56px; font-weight: 900; color: var(--red); }
+.fam .kid { padding: 22px 56px; border: 3px solid var(--violet); border-radius: 20px; font-family: var(--mono); font-size: 54px;
+  font-weight: 800; color: var(--violet); background: var(--panel); }
+
+</style>
+</head>
+<body>
+<div id="root" data-composition-id="main" data-start="0" data-duration="120.58" data-width="1080" data-height="1920">
+  <div class="brand"><b>자바 입문 <em>인터페이스</em> 정리</b><div class="prog"><i></i><i></i><i></i><i></i><i></i></div></div>
+  <section id="sc-hook" class="clip scene" data-start="0.000" data-duration="6.884" data-track-index="1"><div class="hook">
+   <div class="pill in">JAVA 입문 · 열세 번째</div>
+   <h1 class="big in"><em>인터페이스</em></h1>
+   <div class="sub in">interface · <b>implements</b></div>
+ </div></section>
+<section id="sc-why" class="clip scene" data-start="6.884" data-duration="9.855" data-track-index="1"><div class="pill in">STEP 1 · 왜 필요할까</div><h2 class="title in">부모는 하나만</h2><p class="desc in">가르치기도, 공부도 하는 <b>Teacher</b></p><div class="fam in"><div class="ps"><span>가르치는 부모</span><span>공부하는 부모</span></div><div class="x"><span>✗</span><span>✗</span></div><div class="kid">Teacher</div></div><div class="warn in"><b>extends</b> 는 하나만<br/>→ 부모 클래스 둘은 불가</div><div class="note in">능력은 <b>인터페이스</b> 로 약속한다</div></section>
+<section id="sc-decl" class="clip scene" data-start="16.739" data-duration="10.167" data-track-index="1"><div class="pill in">STEP 1 · 선언</div><h2 class="title in">약속 목록</h2><p class="desc in"><b>interface</b> = 갖춰야 할 메소드</p><div class="code in ki"><div class="ln mk"><span class="kw">interface</span> Studyable {</div><div class="ln mk">  <span class="kw">void</span> study();</div><div class="ln">}</div></div><div class="note in">몸체 없는 메소드 = 자동으로<br/><b>public abstract</b></div></section>
+<section id="sc-impl" class="clip scene" data-start="26.906" data-duration="9.687" data-track-index="1"><div class="pill in">STEP 2 · implements</div><h2 class="title in">implements 로 구현</h2><p class="desc in"><b>extends</b> 다음에 <b>implements</b></p><div class="code in sm k2"><div class="ln"><span class="kw">class</span> Student <span class="kw">extends</span> Person</div><div class="ln mk">    <span class="kw">implements</span> Studyable {</div><div class="ln">  <span class="kw">@Override</span></div><div class="ln mk">  <span class="kw">public</span> <span class="kw">void</span> study() {</div><div class="ln">    System.out.println(</div><div class="ln">        name + <span class="st">" 공부 중"</span>);</div><div class="ln">  }</div><div class="ln">}</div></div><div class="term in"><i>s.study() 실행 결과</i><div>민수 공부 중</div></div></section>
+<section id="sc-miss" class="clip scene" data-start="36.593" data-duration="8.175" data-track-index="1"><div class="pill in">STEP 2-1 · 빠뜨리면?</div><h2 class="title in">study() 가 없으면 오류</h2><p class="desc in">일반 클래스는 <b>꼭 갖춰야</b> 한다</p><div class="code in sm k2"><div class="ln"><span class="kw">class</span> Student <span class="kw">extends</span> Person</div><div class="ln">    <span class="kw">implements</span> Studyable {</div><div class="ln mk">  <span class="cm">// study() 없음</span></div><div class="ln">}</div></div><div class="term err in"><i>컴파일 오류</i><div>Student is not abstract and does not override abstract method study() in Studyable</div></div><div class="note in"><b>추상 메소드</b>와 같은 강제</div></section>
+<section id="sc-pub" class="clip scene" data-start="44.768" data-duration="9.423" data-track-index="1"><div class="pill in">STEP 2-2 · public 필수</div><h2 class="title in">public 을 빼면 오류</h2><p class="desc in">가장 <b>흔한 실수</b></p><div class="code in sm k2"><div class="ln"><span class="kw">class</span> Student <span class="kw">extends</span> Person</div><div class="ln">    <span class="kw">implements</span> Studyable {</div><div class="ln">  <span class="kw">@Override</span></div><div class="ln mk">  <span class="kw">void</span> study() { … }</div><div class="ln">}</div></div><div class="term err in"><i>컴파일 오류</i><div>study() in Student cannot implement study() in Studyable</div><div>attempting to assign weaker access privileges; was public</div></div><div class="note in">인터페이스의 추상 메소드 = 원래 <b>public</b><br/>→ 더 좁힐 수 없다</div></section>
+<section id="sc-multi" class="clip scene" data-start="54.191" data-duration="12.063" data-track-index="1"><div class="pill in">STEP 3 · 여러 개 구현</div><h2 class="title in">쉼표로 여러 개</h2><p class="desc in"><b>Teachable</b> + <b>Studyable</b></p><div class="code in sm k3"><div class="ln"><span class="kw">class</span> Teacher <span class="kw">extends</span> Person</div><div class="ln mk">    <span class="kw">implements</span> Teachable,</div><div class="ln mk">               Studyable {</div><div class="ln">  <span class="kw">public</span> <span class="kw">void</span> teach() { … }</div><div class="ln">  <span class="kw">public</span> <span class="kw">void</span> study() { … }</div><div class="ln">}</div></div><div class="term in"><i>t.teach() · t.study() 실행 결과</i><div>서준 수업 중</div><div>서준 공부 중</div></div><div class="chips in"><span>extends <em>하나</em></span><span>implements <em>여러 개</em></span></div></section>
+<section id="sc-rules" class="clip scene" data-start="66.254" data-duration="11.295" data-track-index="1"><div class="pill in">STEP 4 · 상수와 new</div><h2 class="title in">필드는 상수</h2><p class="desc in">자동으로 <b>public static final</b></p><div class="code in sm ki"><div class="ln"><span class="kw">interface</span> Studyable {</div><div class="ln mk">  <span class="kw">int</span> MAX_HOURS = <span class="nu">8</span>;</div><div class="ln">}</div></div><div class="res in"><i>Studyable.MAX_HOURS →</i><span class="k1">8</span></div><div class="code in sm"><div class="ln mk">Studyable.MAX_HOURS = <span class="nu">9</span>;</div></div><div class="term err in"><i>컴파일 오류</i><div>cannot assign a value to static final variable MAX_HOURS</div></div><div class="code in sm"><div class="ln mk"><span class="kw">new</span> Studyable();</div></div><div class="term err in"><i>컴파일 오류</i><div>Studyable is abstract; cannot be instantiated</div></div></section>
+<section id="sc-dflt" class="clip scene" data-start="77.549" data-duration="8.295" data-track-index="1"><div class="pill in">STEP 5 · default 메소드</div><h2 class="title in">몸체 있는 메소드</h2><p class="desc in"><b>default</b> = 구현 안 해도 OK</p><div class="code in sm ki"><div class="ln"><span class="kw">interface</span> Studyable {</div><div class="ln">  <span class="kw">void</span> study();</div><div class="ln mk">  <span class="kw">default</span> <span class="kw">void</span> rest() {</div><div class="ln">    System.out.println(</div><div class="ln">        <span class="st">"쉬는 중"</span>);</div><div class="ln">  }</div><div class="ln">}</div></div><div class="code in sm k2"><div class="ln"><span class="kw">class</span> Student <span class="kw">extends</span> Person</div><div class="ln">    <span class="kw">implements</span> Studyable {</div><div class="ln mk">  <span class="cm">// rest() 구현 없음</span></div><div class="ln">}</div></div><div class="term in"><i>s.rest() 실행 결과</i><div>쉬는 중</div></div></section>
+<section id="sc-vs" class="clip scene" data-start="85.844" data-duration="13.143" data-track-index="1"><div class="pill in">STEP 5-1 · 비교</div><h2 class="title in">무엇이 다를까</h2><p class="desc in"><b>추상 클래스</b> vs <b>인터페이스</b></p><div class="vs hdr in"><b class="k1">추상 클래스</b><b class="ki">인터페이스</b></div><div class="vs in"><div class="card"><small>상속</small><b>extends</b><span>하나만</span></div><div class="card"><small>구현</small><b>implements</b><span>여러 개</span></div></div><div class="vs in"><div class="card"><small>필드</small><b>일반 필드</b><span>생성자도 가능</span></div><div class="card"><small>필드</small><b>상수만</b><span>생성자 없음</span></div></div><div class="vs in"><div class="card"><small>몸체 있는 메소드</small><b>일반 메소드</b></div><div class="card"><small>몸체 있는 메소드</small><b>default</b><span>static·private도</span></div></div></section>
+<section id="sc-outro" class="clip scene" data-start="98.987" data-duration="21.593" data-track-index="1"><div class="pill in">정리</div><h2 class="title in">인터페이스 6가지</h2><div class="list in"><div class="row" id="ex1"><span class="no">1</span><b>인터페이스 = 약속 목록</b></div><div class="row" id="ex2"><span class="no">2</span><b>implements 로 구현</b></div><div class="row" id="ex3"><span class="no">3</span><b>구현 메소드는 public</b></div><div class="row" id="ex4"><span class="no">4</span><b>여러 개 구현 가능</b></div><div class="row" id="ex5"><span class="no">5</span><b>필드는 상수 · new 불가</b></div><div class="row" id="ex6"><span class="no">6</span><b>default 메소드 OK</b></div></div><div class="cta in">👍 구독 · 좋아요</div></section>
+  <div id="cap-hook-0" class="clip cap" data-start="0.250" data-duration="2.789" data-track-index="2"><span>자바 입문 열세 번째, 인터페이스!</span></div>
+<div id="cap-hook-1" class="clip cap" data-start="3.039" data-duration="1.390" data-track-index="2"><span>클래스가 지켜야 할 약속,</span></div>
+<div id="cap-hook-2" class="clip cap" data-start="4.429" data-duration="2.205" data-track-index="2"><span>인터페이스를 정리해 드립니다.</span></div>
+<div id="cap-why-0" class="clip cap" data-start="7.009" data-duration="3.116" data-track-index="2"><span>서준 선생님은 가르치기도 하고, 공부도 해요.</span></div>
+<div id="cap-why-1" class="clip cap" data-start="10.125" data-duration="2.006" data-track-index="2"><span>능력마다 부모 클래스를 두고 싶지만,</span></div>
+<div id="cap-why-2" class="clip cap" data-start="12.130" data-duration="2.211" data-track-index="2"><span>익스텐즈는 하나만 쓸 수 있죠.</span></div>
+<div id="cap-why-3" class="clip cap" data-start="14.341" data-duration="2.148" data-track-index="2"><span>이럴 때 인터페이스를 써요.</span></div>
+<div id="cap-decl-0" class="clip cap" data-start="16.864" data-duration="2.018" data-track-index="2"><span>클래스 대신 인터페이스라고 쓰고,</span></div>
+<div id="cap-decl-1" class="clip cap" data-start="18.882" data-duration="2.030" data-track-index="2"><span>몸체 없는 메소드를 적어요.</span></div>
+<div id="cap-decl-2" class="clip cap" data-start="20.913" data-duration="2.491" data-track-index="2"><span>갖춰야 할 메소드의 약속 목록이죠.</span></div>
+<div id="cap-decl-3" class="clip cap" data-start="23.403" data-duration="1.250" data-track-index="2"><span>이 메소드는 자동으로</span></div>
+<div id="cap-decl-4" class="clip cap" data-start="24.653" data-duration="2.003" data-track-index="2"><span>퍼블릭 앱스트랙트가 돼요.</span></div>
+<div id="cap-impl-0" class="clip cap" data-start="27.031" data-duration="3.200" data-track-index="2"><span>클래스는 임플리먼츠로 인터페이스를 구현해요.</span></div>
+<div id="cap-impl-1" class="clip cap" data-start="30.231" data-duration="2.593" data-track-index="2"><span>익스텐즈 다음에 임플리먼츠를 써요.</span></div>
+<div id="cap-impl-2" class="clip cap" data-start="32.824" data-duration="1.688" data-track-index="2"><span>스튜던트가 스터디를 구현하면,</span></div>
+<div id="cap-impl-3" class="clip cap" data-start="34.512" data-duration="1.831" data-track-index="2"><span>민수 공부 중이 나와요.</span></div>
+<div id="cap-miss-0" class="clip cap" data-start="36.718" data-duration="1.688" data-track-index="2"><span>스터디를 빠뜨리면?</span></div>
+<div id="cap-miss-1" class="clip cap" data-start="38.406" data-duration="1.698" data-track-index="2"><span>컴파일 오류가 나요.</span></div>
+<div id="cap-miss-2" class="clip cap" data-start="40.104" data-duration="1.129" data-track-index="2"><span>추상 메소드처럼,</span></div>
+<div id="cap-miss-3" class="clip cap" data-start="41.233" data-duration="1.343" data-track-index="2"><span>일반 클래스는 인터페이스</span></div>
+<div id="cap-miss-4" class="clip cap" data-start="42.576" data-duration="1.942" data-track-index="2"><span>메소드를 꼭 갖춰야 해요.</span></div>
+<div id="cap-pub-0" class="clip cap" data-start="44.893" data-duration="1.698" data-track-index="2"><span>가장 흔한 실수!</span></div>
+<div id="cap-pub-1" class="clip cap" data-start="46.591" data-duration="1.306" data-track-index="2"><span>구현할 때 퍼블릭을 빼면</span></div>
+<div id="cap-pub-2" class="clip cap" data-start="47.897" data-duration="1.800" data-track-index="2"><span>컴파일 오류가 나요.</span></div>
+<div id="cap-pub-3" class="clip cap" data-start="49.697" data-duration="2.388" data-track-index="2"><span>인터페이스의 추상 메소드는 원래 퍼블릭이라,</span></div>
+<div id="cap-pub-4" class="clip cap" data-start="52.085" data-duration="1.856" data-track-index="2"><span>더 좁힐 수 없거든요.</span></div>
+<div id="cap-multi-0" class="clip cap" data-start="54.316" data-duration="2.715" data-track-index="2"><span>인터페이스는 여러 개 구현할 수 있어요.</span></div>
+<div id="cap-multi-1" class="clip cap" data-start="57.031" data-duration="1.390" data-track-index="2"><span>티처는 티처블과 스터디어블을</span></div>
+<div id="cap-multi-2" class="clip cap" data-start="58.420" data-duration="1.819" data-track-index="2"><span>쉼표로 함께 구현해요.</span></div>
+<div id="cap-multi-3" class="clip cap" data-start="60.239" data-duration="2.808" data-track-index="2"><span>서준 수업 중, 서준 공부 중이 나와요.</span></div>
+<div id="cap-multi-4" class="clip cap" data-start="63.047" data-duration="1.129" data-track-index="2"><span>클래스 상속은 하나,</span></div>
+<div id="cap-multi-5" class="clip cap" data-start="64.176" data-duration="1.828" data-track-index="2"><span>인터페이스는 여러 개!</span></div>
+<div id="cap-rules-0" class="clip cap" data-start="66.379" data-duration="3.004" data-track-index="2"><span>인터페이스에 적은 필드는 자동으로 상수예요.</span></div>
+<div id="cap-rules-1" class="clip cap" data-start="69.383" data-duration="1.950" data-track-index="2"><span>스터디어블 닷 맥스 아워즈는 8이고,</span></div>
+<div id="cap-rules-2" class="clip cap" data-start="71.332" data-duration="2.435" data-track-index="2"><span>9를 대입하면 컴파일 오류가 나요.</span></div>
+<div id="cap-rules-3" class="clip cap" data-start="73.767" data-duration="1.222" data-track-index="2"><span>그리고 인터페이스 자체로는</span></div>
+<div id="cap-rules-4" class="clip cap" data-start="74.989" data-duration="2.310" data-track-index="2"><span>뉴로 객체를 만들 수 없어요.</span></div>
+<div id="cap-dflt-0" class="clip cap" data-start="77.674" data-duration="1.533" data-track-index="2"><span>디폴트를 붙이면 몸체가 있는</span></div>
+<div id="cap-dflt-1" class="clip cap" data-start="79.207" data-duration="1.881" data-track-index="2"><span>메소드도 넣을 수 있어요.</span></div>
+<div id="cap-dflt-2" class="clip cap" data-start="81.088" data-duration="2.062" data-track-index="2"><span>스튜던트가 레스트를 구현하지 않아도,</span></div>
+<div id="cap-dflt-3" class="clip cap" data-start="83.150" data-duration="2.444" data-track-index="2"><span>에스 닷 레스트는 쉬는 중이 나와요.</span></div>
+<div id="cap-vs-0" class="clip cap" data-start="85.969" data-duration="2.211" data-track-index="2"><span>추상 클래스와 비교해 볼게요.</span></div>
+<div id="cap-vs-1" class="clip cap" data-start="88.180" data-duration="1.735" data-track-index="2"><span>상속은 하나, 구현은 여러 개.</span></div>
+<div id="cap-vs-2" class="clip cap" data-start="89.915" data-duration="2.183" data-track-index="2"><span>추상 클래스는 필드와 생성자를 갖지만,</span></div>
+<div id="cap-vs-3" class="clip cap" data-start="92.098" data-duration="1.670" data-track-index="2"><span>인터페이스는 생성자가 없고,</span></div>
+<div id="cap-vs-4" class="clip cap" data-start="93.767" data-duration="1.772" data-track-index="2"><span>필드는 상수뿐이에요.</span></div>
+<div id="cap-vs-5" class="clip cap" data-start="95.540" data-duration="1.325" data-track-index="2"><span>몸체 있는 메소드는 주로</span></div>
+<div id="cap-vs-6" class="clip cap" data-start="96.865" data-duration="1.872" data-track-index="2"><span>디폴트 메소드로 써요.</span></div>
+<div id="cap-outro-0" class="clip cap" data-start="99.112" data-duration="3.899" data-track-index="2"><span>정리하면, 인터페이스는 갖출 메소드의 약속 목록이에요.</span></div>
+<div id="cap-outro-1" class="clip cap" data-start="103.011" data-duration="1.418" data-track-index="2"><span>임플리먼츠로 구현하고,</span></div>
+<div id="cap-outro-2" class="clip cap" data-start="104.429" data-duration="1.651" data-track-index="2"><span>빠뜨리면 오류예요.</span></div>
+<div id="cap-outro-3" class="clip cap" data-start="106.080" data-duration="2.435" data-track-index="2"><span>구현 메소드는 퍼블릭이 필수예요.</span></div>
+<div id="cap-outro-4" class="clip cap" data-start="108.515" data-duration="2.640" data-track-index="2"><span>인터페이스는 여러 개 구현할 수 있어요.</span></div>
+<div id="cap-outro-5" class="clip cap" data-start="111.155" data-duration="1.110" data-track-index="2"><span>필드는 상수이고,</span></div>
+<div id="cap-outro-6" class="clip cap" data-start="112.265" data-duration="2.127" data-track-index="2"><span>직접 뉴로 만들 순 없어요.</span></div>
+<div id="cap-outro-7" class="clip cap" data-start="114.392" data-duration="0.914" data-track-index="2"><span>디폴트로 몸체 있는</span></div>
+<div id="cap-outro-8" class="clip cap" data-start="115.306" data-duration="1.903" data-track-index="2"><span>메소드도 넣을 수 있어요.</span></div>
+<div id="cap-outro-9" class="clip cap" data-start="117.209" data-duration="2.375" data-track-index="2"><span>구독과 좋아요 부탁드립니다!</span></div>
+  <div class="bar"></div>
+  <audio id="vo" src="assets/narration.mp3" data-start="0" data-duration="120.58" data-track-index="0"></audio>
+</div>
+<script>
+const tl = gsap.timeline({ paused: true });
+const SP = 1.2;
+function enter(sel, t, dur) {
+  const items = document.querySelectorAll(sel + " .in");
+  const step = Math.min(0.9 / SP, (dur * 0.5) / Math.max(1, items.length));
+  items.forEach((el, i) => {
+    const at = Math.max(0, t - 0.1 / SP) + i * step;
+    tl.fromTo(el, { opacity: 0, y: 50 }, { opacity: 1, y: 0, duration: 0.5 / SP, ease: "power3.out" }, at);
+    el.querySelectorAll(".ln").forEach((ln, j) => {
+      tl.fromTo(ln, { opacity: 0, x: -30 }, { opacity: 1, x: 0, duration: 0.35 / SP, ease: "power2.out" }, at + (0.15 + j * 0.3) / SP);
+    });
+  });
+}
+enter("#sc-hook", 0.25, 6.384);
+tl.set(".prog i", {backgroundColor: "#26324a"}, 0);
+enter("#sc-why", 7.009, 9.48);
+tl.set(".prog i", {backgroundColor: "#26324a"}, 6.884);
+tl.set(".prog i:nth-child(1)", {backgroundColor: "#f29111"}, 6.884);
+enter("#sc-decl", 16.864, 9.792);
+tl.set(".prog i", {backgroundColor: "#26324a"}, 16.739);
+tl.set(".prog i:nth-child(1)", {backgroundColor: "#f29111"}, 16.739);
+enter("#sc-impl", 27.031, 9.312);
+tl.set(".prog i", {backgroundColor: "#26324a"}, 26.906);
+tl.set(".prog i:nth-child(2)", {backgroundColor: "#f29111"}, 26.906);
+enter("#sc-miss", 36.718, 7.8);
+tl.set(".prog i", {backgroundColor: "#26324a"}, 36.593);
+tl.set(".prog i:nth-child(2)", {backgroundColor: "#f29111"}, 36.593);
+enter("#sc-pub", 44.893, 9.048);
+tl.set(".prog i", {backgroundColor: "#26324a"}, 44.768);
+tl.set(".prog i:nth-child(2)", {backgroundColor: "#f29111"}, 44.768);
+enter("#sc-multi", 54.316, 11.688);
+tl.set(".prog i", {backgroundColor: "#26324a"}, 54.191);
+tl.set(".prog i:nth-child(3)", {backgroundColor: "#f29111"}, 54.191);
+enter("#sc-rules", 66.379, 10.92);
+tl.set(".prog i", {backgroundColor: "#26324a"}, 66.254);
+tl.set(".prog i:nth-child(4)", {backgroundColor: "#f29111"}, 66.254);
+enter("#sc-dflt", 77.674, 7.92);
+tl.set(".prog i", {backgroundColor: "#26324a"}, 77.549);
+tl.set(".prog i:nth-child(5)", {backgroundColor: "#f29111"}, 77.549);
+enter("#sc-vs", 85.969, 12.768);
+tl.set(".prog i", {backgroundColor: "#26324a"}, 85.844);
+tl.set(".prog i:nth-child(5)", {backgroundColor: "#f29111"}, 85.844);
+enter("#sc-outro", 99.112, 20.472);
+tl.set(".prog i", {backgroundColor: "#26324a"}, 98.987);
+tl.to("#ex1", {backgroundColor: "#3a2a12", scale: 1.04, duration: 0.2}, 99.992);
+tl.to("#ex1", {backgroundColor: "#131c2e", scale: 1, duration: 0.2}, 103.011);
+tl.to("#ex2", {backgroundColor: "#3a2a12", scale: 1.04, duration: 0.2}, 103.011);
+tl.to("#ex2", {backgroundColor: "#131c2e", scale: 1, duration: 0.2}, 106.379);
+tl.to("#ex3", {backgroundColor: "#3a2a12", scale: 1.04, duration: 0.2}, 106.379);
+tl.to("#ex3", {backgroundColor: "#131c2e", scale: 1, duration: 0.2}, 109.252);
+tl.to("#ex4", {backgroundColor: "#3a2a12", scale: 1.04, duration: 0.2}, 109.252);
+tl.to("#ex4", {backgroundColor: "#131c2e", scale: 1, duration: 0.2}, 111.155);
+tl.to("#ex5", {backgroundColor: "#3a2a12", scale: 1.04, duration: 0.2}, 111.155);
+tl.to("#ex5", {backgroundColor: "#131c2e", scale: 1, duration: 0.2}, 114.392);
+tl.to("#ex6", {backgroundColor: "#3a2a12", scale: 1.04, duration: 0.2}, 114.392);
+tl.to("#ex6", {backgroundColor: "#131c2e", scale: 1, duration: 0.3}, 117.209 + 0.6);
+tl.fromTo(".bar", { scaleX: 0 }, { scaleX: 1, duration: 120.58, ease: "none" }, 0);
+window.__timelines = window.__timelines || {};
+window.__timelines["main"] = tl;
+tl.seek(0);
+</script>
+</body>
+</html>

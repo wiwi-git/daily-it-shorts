@@ -1,0 +1,672 @@
+// 영상에 나오는 예제 프로그램 (build.py가 생성 · 직접 고치지 말 것)
+// 각 예제를 파일 이름대로 저장한 뒤: javac -encoding UTF-8 Main.java && java Main
+
+// [1. 선언] Main.java → 컴파일 성공 확인 (인터페이스 Studyable 선언)
+public class Main {
+  public static void main(String[] args) {
+  }
+}
+
+abstract class Person {
+  String name;
+  Person(String name) {
+    this.name = name;
+  }
+  abstract void hello();
+  void bye() {
+    System.out.println(
+        name + " 잘 가");
+  }
+}
+
+interface Studyable {
+  int MAX_HOURS = 8;
+  void study();
+  default void rest() {
+    System.out.println(
+        "쉬는 중");
+  }
+}
+
+interface Teachable {
+  void teach();
+}
+
+class Student extends Person
+    implements Studyable {
+  int score;
+  Student(String name,
+          int score) {
+    super(name);
+    this.score = score;
+  }
+  @Override
+  void hello() {
+    System.out.println(
+        "학생 " + name + " 안녕");
+  }
+  @Override
+  public void study() {
+    System.out.println(
+        name + " 공부 중");
+  }
+}
+
+class Teacher extends Person
+    implements Teachable, Studyable {
+  Teacher(String name) {
+    super(name);
+  }
+  @Override
+  void hello() {
+    System.out.println(
+        name + " 선생님 안녕");
+  }
+  @Override
+  public void teach() {
+    System.out.println(
+        name + " 수업 중");
+  }
+  @Override
+  public void study() {
+    System.out.println(
+        name + " 공부 중");
+  }
+}
+
+// [2. implements] Main.java → 출력:
+//   민수 공부 중
+public class Main {
+  public static void main(String[] args) {
+    Student s = new Student(
+        "민수", 85);
+    s.study();
+  }
+}
+
+abstract class Person {
+  String name;
+  Person(String name) {
+    this.name = name;
+  }
+  abstract void hello();
+  void bye() {
+    System.out.println(
+        name + " 잘 가");
+  }
+}
+
+interface Studyable {
+  int MAX_HOURS = 8;
+  void study();
+  default void rest() {
+    System.out.println(
+        "쉬는 중");
+  }
+}
+
+interface Teachable {
+  void teach();
+}
+
+class Student extends Person
+    implements Studyable {
+  int score;
+  Student(String name,
+          int score) {
+    super(name);
+    this.score = score;
+  }
+  @Override
+  void hello() {
+    System.out.println(
+        "학생 " + name + " 안녕");
+  }
+  @Override
+  public void study() {
+    System.out.println(
+        name + " 공부 중");
+  }
+}
+
+class Teacher extends Person
+    implements Teachable, Studyable {
+  Teacher(String name) {
+    super(name);
+  }
+  @Override
+  void hello() {
+    System.out.println(
+        name + " 선생님 안녕");
+  }
+  @Override
+  public void teach() {
+    System.out.println(
+        name + " 수업 중");
+  }
+  @Override
+  public void study() {
+    System.out.println(
+        name + " 공부 중");
+  }
+}
+
+// [2-1. 빠뜨리면?] Main.java → 컴파일 오류: Student is not abstract and does not override abstract method study() in Studyable
+public class Main {
+  public static void main(String[] args) {
+  }
+}
+
+abstract class Person {
+  String name;
+  Person(String name) {
+    this.name = name;
+  }
+  abstract void hello();
+  void bye() {
+    System.out.println(
+        name + " 잘 가");
+  }
+}
+
+interface Studyable {
+  int MAX_HOURS = 8;
+  void study();
+  default void rest() {
+    System.out.println(
+        "쉬는 중");
+  }
+}
+
+interface Teachable {
+  void teach();
+}
+
+class Student extends Person
+    implements Studyable {
+  int score;
+  Student(String name,
+          int score) {
+    super(name);
+    this.score = score;
+  }
+  @Override
+  void hello() {
+    System.out.println(
+        "학생 " + name + " 안녕");
+  }
+}
+
+class Teacher extends Person
+    implements Teachable, Studyable {
+  Teacher(String name) {
+    super(name);
+  }
+  @Override
+  void hello() {
+    System.out.println(
+        name + " 선생님 안녕");
+  }
+  @Override
+  public void teach() {
+    System.out.println(
+        name + " 수업 중");
+  }
+  @Override
+  public void study() {
+    System.out.println(
+        name + " 공부 중");
+  }
+}
+
+// [2-2. public 필수] Main.java → 컴파일 오류: study() in Student cannot implement study() in Studyable
+public class Main {
+  public static void main(String[] args) {
+  }
+}
+
+abstract class Person {
+  String name;
+  Person(String name) {
+    this.name = name;
+  }
+  abstract void hello();
+  void bye() {
+    System.out.println(
+        name + " 잘 가");
+  }
+}
+
+interface Studyable {
+  int MAX_HOURS = 8;
+  void study();
+  default void rest() {
+    System.out.println(
+        "쉬는 중");
+  }
+}
+
+interface Teachable {
+  void teach();
+}
+
+class Student extends Person
+    implements Studyable {
+  int score;
+  Student(String name,
+          int score) {
+    super(name);
+    this.score = score;
+  }
+  @Override
+  void hello() {
+    System.out.println(
+        "학생 " + name + " 안녕");
+  }
+  @Override
+  void study() {
+    System.out.println(
+        name + " 공부 중");
+  }
+}
+
+class Teacher extends Person
+    implements Teachable, Studyable {
+  Teacher(String name) {
+    super(name);
+  }
+  @Override
+  void hello() {
+    System.out.println(
+        name + " 선생님 안녕");
+  }
+  @Override
+  public void teach() {
+    System.out.println(
+        name + " 수업 중");
+  }
+  @Override
+  public void study() {
+    System.out.println(
+        name + " 공부 중");
+  }
+}
+
+// [3. 여러 개 구현] Main.java → 출력:
+//   서준 수업 중
+//   서준 공부 중
+public class Main {
+  public static void main(String[] args) {
+    Teacher t = new Teacher(
+        "서준");
+    t.teach();
+    t.study();
+  }
+}
+
+abstract class Person {
+  String name;
+  Person(String name) {
+    this.name = name;
+  }
+  abstract void hello();
+  void bye() {
+    System.out.println(
+        name + " 잘 가");
+  }
+}
+
+interface Studyable {
+  int MAX_HOURS = 8;
+  void study();
+  default void rest() {
+    System.out.println(
+        "쉬는 중");
+  }
+}
+
+interface Teachable {
+  void teach();
+}
+
+class Student extends Person
+    implements Studyable {
+  int score;
+  Student(String name,
+          int score) {
+    super(name);
+    this.score = score;
+  }
+  @Override
+  void hello() {
+    System.out.println(
+        "학생 " + name + " 안녕");
+  }
+  @Override
+  public void study() {
+    System.out.println(
+        name + " 공부 중");
+  }
+}
+
+class Teacher extends Person
+    implements Teachable, Studyable {
+  Teacher(String name) {
+    super(name);
+  }
+  @Override
+  void hello() {
+    System.out.println(
+        name + " 선생님 안녕");
+  }
+  @Override
+  public void teach() {
+    System.out.println(
+        name + " 수업 중");
+  }
+  @Override
+  public void study() {
+    System.out.println(
+        name + " 공부 중");
+  }
+}
+
+// [4. 상수와 new] Main.java → 출력:
+//   8
+public class Main {
+  public static void main(String[] args) {
+    System.out.println(Studyable.MAX_HOURS);
+  }
+}
+
+abstract class Person {
+  String name;
+  Person(String name) {
+    this.name = name;
+  }
+  abstract void hello();
+  void bye() {
+    System.out.println(
+        name + " 잘 가");
+  }
+}
+
+interface Studyable {
+  int MAX_HOURS = 8;
+  void study();
+  default void rest() {
+    System.out.println(
+        "쉬는 중");
+  }
+}
+
+interface Teachable {
+  void teach();
+}
+
+class Student extends Person
+    implements Studyable {
+  int score;
+  Student(String name,
+          int score) {
+    super(name);
+    this.score = score;
+  }
+  @Override
+  void hello() {
+    System.out.println(
+        "학생 " + name + " 안녕");
+  }
+  @Override
+  public void study() {
+    System.out.println(
+        name + " 공부 중");
+  }
+}
+
+class Teacher extends Person
+    implements Teachable, Studyable {
+  Teacher(String name) {
+    super(name);
+  }
+  @Override
+  void hello() {
+    System.out.println(
+        name + " 선생님 안녕");
+  }
+  @Override
+  public void teach() {
+    System.out.println(
+        name + " 수업 중");
+  }
+  @Override
+  public void study() {
+    System.out.println(
+        name + " 공부 중");
+  }
+}
+
+// [4. 상수와 new] Main.java → 컴파일 오류: cannot assign a value to static final variable MAX_HOURS
+public class Main {
+  public static void main(String[] args) {
+    Studyable.MAX_HOURS = 9;
+  }
+}
+
+abstract class Person {
+  String name;
+  Person(String name) {
+    this.name = name;
+  }
+  abstract void hello();
+  void bye() {
+    System.out.println(
+        name + " 잘 가");
+  }
+}
+
+interface Studyable {
+  int MAX_HOURS = 8;
+  void study();
+  default void rest() {
+    System.out.println(
+        "쉬는 중");
+  }
+}
+
+interface Teachable {
+  void teach();
+}
+
+class Student extends Person
+    implements Studyable {
+  int score;
+  Student(String name,
+          int score) {
+    super(name);
+    this.score = score;
+  }
+  @Override
+  void hello() {
+    System.out.println(
+        "학생 " + name + " 안녕");
+  }
+  @Override
+  public void study() {
+    System.out.println(
+        name + " 공부 중");
+  }
+}
+
+class Teacher extends Person
+    implements Teachable, Studyable {
+  Teacher(String name) {
+    super(name);
+  }
+  @Override
+  void hello() {
+    System.out.println(
+        name + " 선생님 안녕");
+  }
+  @Override
+  public void teach() {
+    System.out.println(
+        name + " 수업 중");
+  }
+  @Override
+  public void study() {
+    System.out.println(
+        name + " 공부 중");
+  }
+}
+
+// [4. 상수와 new] Main.java → 컴파일 오류: Studyable is abstract; cannot be instantiated
+public class Main {
+  public static void main(String[] args) {
+    new Studyable();
+  }
+}
+
+abstract class Person {
+  String name;
+  Person(String name) {
+    this.name = name;
+  }
+  abstract void hello();
+  void bye() {
+    System.out.println(
+        name + " 잘 가");
+  }
+}
+
+interface Studyable {
+  int MAX_HOURS = 8;
+  void study();
+  default void rest() {
+    System.out.println(
+        "쉬는 중");
+  }
+}
+
+interface Teachable {
+  void teach();
+}
+
+class Student extends Person
+    implements Studyable {
+  int score;
+  Student(String name,
+          int score) {
+    super(name);
+    this.score = score;
+  }
+  @Override
+  void hello() {
+    System.out.println(
+        "학생 " + name + " 안녕");
+  }
+  @Override
+  public void study() {
+    System.out.println(
+        name + " 공부 중");
+  }
+}
+
+class Teacher extends Person
+    implements Teachable, Studyable {
+  Teacher(String name) {
+    super(name);
+  }
+  @Override
+  void hello() {
+    System.out.println(
+        name + " 선생님 안녕");
+  }
+  @Override
+  public void teach() {
+    System.out.println(
+        name + " 수업 중");
+  }
+  @Override
+  public void study() {
+    System.out.println(
+        name + " 공부 중");
+  }
+}
+
+// [5. default 메소드] Main.java → 출력:
+//   쉬는 중
+public class Main {
+  public static void main(String[] args) {
+    Student s = new Student(
+        "민수", 85);
+    s.rest();
+  }
+}
+
+abstract class Person {
+  String name;
+  Person(String name) {
+    this.name = name;
+  }
+  abstract void hello();
+  void bye() {
+    System.out.println(
+        name + " 잘 가");
+  }
+}
+
+interface Studyable {
+  int MAX_HOURS = 8;
+  void study();
+  default void rest() {
+    System.out.println(
+        "쉬는 중");
+  }
+}
+
+interface Teachable {
+  void teach();
+}
+
+class Student extends Person
+    implements Studyable {
+  int score;
+  Student(String name,
+          int score) {
+    super(name);
+    this.score = score;
+  }
+  @Override
+  void hello() {
+    System.out.println(
+        "학생 " + name + " 안녕");
+  }
+  @Override
+  public void study() {
+    System.out.println(
+        name + " 공부 중");
+  }
+}
+
+class Teacher extends Person
+    implements Teachable, Studyable {
+  Teacher(String name) {
+    super(name);
+  }
+  @Override
+  void hello() {
+    System.out.println(
+        name + " 선생님 안녕");
+  }
+  @Override
+  public void teach() {
+    System.out.println(
+        name + " 수업 중");
+  }
+  @Override
+  public void study() {
+    System.out.println(
+        name + " 공부 중");
+  }
+}

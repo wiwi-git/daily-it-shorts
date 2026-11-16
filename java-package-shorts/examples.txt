@@ -1,0 +1,177 @@
+// 영상에 나오는 예제 프로그램 (build.py가 생성 · 직접 고치지 말 것)
+// 기본 파일(school 패키지 3개)을 폴더대로 저장하고, 예제마다 바뀐 파일을 덮어쓴 뒤:
+// javac -encoding UTF-8 -d out school/*.java app/Main.java && java -cp out app.Main
+
+// ===== 기본 파일 =====
+
+// --- school/Person.java
+package school;
+
+public abstract class Person {
+  String name;
+  public Person(String name) {
+    this.name = name;
+  }
+  public abstract void hello();
+}
+
+// --- school/Student.java
+package school;
+
+public class Student extends Person {
+  int score;
+  public Student(String name, int score) {
+    super(name);
+    this.score = score;
+  }
+  @Override
+  public void hello() {
+    System.out.println("학생 " + name + " 안녕");
+  }
+}
+
+// --- school/Teacher.java
+package school;
+
+public class Teacher extends Person {
+  public Teacher(String name) {
+    super(name);
+  }
+  @Override
+  public void hello() {
+    System.out.println(name + " 선생님 안녕");
+  }
+}
+
+// ===== [1. package 선언] → 컴파일 성공 확인 (school 패키지 3개 + app.Main)
+
+// --- app/Main.java
+package app;
+
+public class Main {
+  public static void main(String[] args) {
+  }
+}
+
+// ===== [2. 전체 이름] → 출력:
+//   학생 민수 안녕
+
+// --- app/Main.java
+package app;
+
+public class Main {
+  public static void main(String[] args) {
+    school.Student s =
+      new school.Student(
+        "민수", 85);
+    s.hello();
+  }
+}
+
+// ===== [2-1. import] → 출력:
+//   학생 민수 안녕
+
+// --- app/Main.java
+package app;
+
+import school.Student;
+
+public class Main {
+  public static void main(String[] args) {
+    Student s = new Student(
+        "민수", 85);
+    s.hello();
+  }
+}
+
+// ===== [3. public 필요] → 컴파일 오류: Student is not public in school; cannot be accessed from outside package
+
+// --- school/Student.java
+package school;
+
+class Student extends Person {
+  int score;
+  public Student(String name, int score) {
+    super(name);
+    this.score = score;
+  }
+  @Override
+  public void hello() {
+    System.out.println("학생 " + name + " 안녕");
+  }
+}
+
+// --- app/Main.java
+package app;
+
+import school.Student;
+
+public class Main {
+  public static void main(String[] args) {
+    Student s = new Student(
+        "민수", 85);
+    s.hello();
+  }
+}
+
+// ===== [4. 표준 라이브러리] → 출력:
+//   [70, 85, 90]
+
+// --- app/Main.java
+package app;
+
+import java.util.Arrays;
+
+public class Main {
+  public static void main(String[] args) {
+    int[] scores = {85, 90, 70};
+    Arrays.sort(scores);
+    System.out.println(
+        Arrays.toString(scores));
+  }
+}
+
+// ===== [4-1. java.lang] → 출력:
+//   민수
+
+// --- app/Main.java
+package app;
+
+public class Main {
+  public static void main(String[] args) {
+    java.lang.String name =
+        "민수";
+    System.out.println(name);
+  }
+}
+
+// ===== [5. 같은 이름 클래스] → 컴파일 오류: a type with the same simple name is already defined by the single-type-import of Date
+
+// --- app/Main.java
+package app;
+
+import java.util.Date;
+import java.sql.Date;
+
+public class Main {
+  public static void main(String[] args) {
+  }
+}
+
+// ===== [5. 같은 이름 클래스] → 출력:
+//   2026-11-16
+
+// --- app/Main.java
+package app;
+
+import java.util.Date;
+
+public class Main {
+  public static void main(String[] args) {
+    Date now = new Date();
+    java.sql.Date day =
+      java.sql.Date.valueOf(
+          "2026-11-16");
+    System.out.println(day);
+  }
+}

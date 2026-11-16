@@ -36,6 +36,7 @@
 | 2026-11-13 | 자바 입문: 추상 메소드와 추상 클래스 (abstract · 몸체 없는 메소드 · new 불가 · 오버라이딩 강제 · 생성자와 일반 메소드) | 1:57 | [java-abstract-shorts](java-abstract-shorts) | [YouTube](https://www.youtube.com/watch?v=T21QWrPB7zM) |
 | 2026-11-13 | 자바 입문: 인터페이스 (interface · implements · public 필수 · 여러 개 구현 · 상수 · default 메소드) | 2:01 | [java-interface-shorts](java-interface-shorts) | [YouTube](https://www.youtube.com/watch?v=BbHNpWFSaxo) |
 | 2026-11-13 | 자바 입문: 다형성 (업캐스팅 · 실제 객체의 메소드 · 배열과 매개변수 · instanceof · 다운캐스팅 · 인터페이스 타입) | 1:52 | [java-polymorphism-shorts](java-polymorphism-shorts) | [YouTube](https://www.youtube.com/watch?v=9MFcx04o4TY) |
+| 2026-11-16 | 자바 입문: 패키지 (package · import · 전체 이름 · public · java.lang · 같은 이름 클래스) | 2:11 | [java-package-shorts](java-package-shorts) | [YouTube](https://www.youtube.com/watch?v=bcuiUNsLQRc) |
 ## 제작 방식
 
 - **영상**: [HyperFrames](https://hyperframes.heygen.com) — HTML/CSS + GSAP 애니메이션을 MP4로 렌더링

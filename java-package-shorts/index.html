@@ -1,0 +1,277 @@
+<!doctype html>
+<html lang="ko" data-resolution="portrait">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=1080, height=1920" />
+<script src="https://cdn.jsdelivr.net/npm/gsap@3.14.2/dist/gsap.min.js"></script>
+<style>
+:root {
+  --ground: #0b1220; --panel: #131c2e; --ink: #f4f6fb; --mute: #9aa6bd;
+  --blue: #3fa7d6; --orange: #f29111; --red: #ff5d5d; --green: #7ee08a; --violet: #c3a6ff;
+  --font: "Pretendard", sans-serif;
+  --mono: "Menlo", "SF Mono", monospace;
+}
+@font-face { font-family: "Pretendard"; src: url("assets/fonts/PretendardVariable.woff2") format("woff2"); font-weight: 45 920; }
+* { margin: 0; padding: 0; box-sizing: border-box; }
+html, body { width: 1080px; height: 1920px; overflow: hidden; background: var(--ground); }
+#root { position: relative; width: 100%; height: 100%; font-variant-ligatures: none; font-family: var(--font); color: var(--ink); overflow: hidden;
+  background: radial-gradient(1200px 900px at 80% -10%, #16365a 0%, transparent 60%),
+              radial-gradient(900px 900px at -10% 110%, #3a2410 0%, transparent 55%), var(--ground); }
+.clip { position: absolute; inset: 0; }
+.brand { position: absolute; top: 110px; left: 70px; right: 70px; display: flex; justify-content: space-between; align-items: center;
+  font-size: 34px; font-weight: 700; color: var(--mute); letter-spacing: 0.02em; }
+.brand b { color: var(--blue); } .brand b em { color: var(--orange); font-style: normal; }
+.prog { display: flex; gap: 12px; }
+.prog i { display: block; width: 56px; height: 12px; border-radius: 6px; background: #26324a; }
+.scene { padding: 210px 70px 0; display: flex; flex-direction: column; gap: 26px; }
+.pill { align-self: flex-start; padding: 12px 26px; border-radius: 999px; background: #1d2a44; color: var(--blue);
+  font-size: 34px; font-weight: 700; }
+.hook { display: flex; flex-direction: column; gap: 50px; padding-top: 140px; }
+.big { font-size: 150px; line-height: 1.12; font-weight: 800; letter-spacing: -0.04em; }
+.big em { font-style: normal; color: var(--orange); }
+.sub { font-size: 64px; font-weight: 700; color: var(--mute); } .sub b { color: var(--ink); }
+.title { font-size: 80px; font-weight: 800; letter-spacing: -0.03em; line-height: 1.1; }
+.desc { font-size: 46px; color: var(--mute); font-weight: 600; margin-top: -8px; } .desc b { color: var(--orange); }
+.code { background: #0a0f1a; border: 2px solid #26324a; border-radius: 26px; padding: 30px 32px; font-family: var(--mono);
+  font-size: 42px; line-height: 1.5; color: #d9e1f2; white-space: pre; box-shadow: 0 30px 60px rgba(0,0,0,.35);
+  font-variant-ligatures: none; font-feature-settings: "liga" 0, "calt" 0; }
+.code.sm { font-size: 34px; padding: 26px 28px; }
+.code .ln { margin: 0 -14px; padding: 0 14px; border-radius: 10px; }
+.code .ln.mk { background: rgba(242,145,17,.13); }
+.kw { color: var(--blue); font-weight: 700; } .st { color: var(--green); } .nu { color: var(--orange); } .cm { color: #6f7d98; } .es { color: var(--orange); font-weight: 700; }
+.term { background: #05080f; border: 2px solid #26324a; border-radius: 22px; padding: 18px 32px 22px; font-family: var(--mono);
+  font-size: 40px; line-height: 1.4; color: var(--ink); white-space: pre; tab-size: 8; }
+.term i { display: block; font-style: normal; font-family: var(--font); font-size: 28px; font-weight: 700; color: var(--mute); margin-bottom: 6px; }
+.term .cmd { color: var(--blue); }
+.term.err { border-color: rgba(255,93,93,.5); color: var(--red); font-size: 34px; white-space: normal; }
+.warn small { font-size: 36px; color: var(--mute); font-weight: 600; }
+.nest > div, .nest > div div { border: 3px solid; border-radius: 22px; padding: 16px 26px 20px; display: flex; flex-direction: column; gap: 12px; }
+.nest b { font-size: 38px; font-weight: 800; font-family: var(--mono); }
+.nest .k1 { border-color: var(--orange); } .nest .k1 > b { color: var(--orange); }
+.nest .k2 { border-color: var(--green); } .nest .k2 > b { color: var(--green); }
+.nest .k3 { border-color: var(--violet); } .nest .k3 > b { color: var(--violet); }
+.chips { display: flex; flex-wrap: wrap; gap: 18px; }
+.chips span { padding: 16px 30px; background: var(--panel); border-radius: 18px; font-size: 42px; font-weight: 700; }
+.warn, .note { padding: 26px 36px; border-radius: 24px; font-size: 44px; font-weight: 700; line-height: 1.45; }
+.warn { background: rgba(255,93,93,.12); border-left: 10px solid var(--red); } .warn b { color: var(--red); }
+.note { background: rgba(63,167,214,.12); border-left: 10px solid var(--blue); } .note b { color: var(--orange); }
+.note small { font-size: 38px; color: var(--mute); font-weight: 600; font-family: var(--mono); }
+code { font-family: var(--mono); color: var(--orange); }
+.var { display: grid; grid-template-columns: 1fr 1.3fr 1fr; gap: 18px; }
+.var div { background: var(--panel); border-radius: 24px; padding: 20px 30px 24px; display: flex; flex-direction: column; gap: 4px; }
+.var small { font-size: 32px; font-weight: 700; color: var(--mute); }
+.var b { font-family: var(--mono); font-size: 64px; }
+.var .v { border: 4px dashed var(--orange); } .var .v b { color: var(--orange); }
+.tbl { align-self: flex-start; }
+.tlabel { font-size: 34px; font-weight: 700; color: var(--mute); margin-bottom: 10px; }
+.tbl table { border-collapse: collapse; font-family: var(--mono); font-size: 40px; background: var(--panel); border-radius: 18px; overflow: hidden; }
+.tbl th { color: var(--blue); text-align: left; padding: 12px 32px; background: #1a2640; }
+.tbl th u { text-decoration: none; color: var(--orange); }
+.tbl td { padding: 10px 32px; border-top: 1px solid #26324a; }
+.tbl tr.k1 td { color: var(--orange); } .tbl tr.k2 td { color: var(--green); } .tbl tr.k3 td { color: var(--violet); }
+.tbl tr.out td { color: #5b6782; text-decoration: line-through; }
+.tbl td.nl { color: var(--red) !important; font-style: italic; font-weight: 700; background: rgba(255,93,93,.12); }
+.link { align-self: flex-start; font-family: var(--mono); font-size: 38px; color: var(--mute); padding: 6px 0 6px 26px;
+  border-left: 8px solid var(--orange); }
+.link b { color: var(--orange); }
+.arrow { font-family: var(--mono); font-size: 38px; color: var(--orange); font-weight: 700; }
+.vs { display: grid; grid-template-columns: 1fr 1fr; gap: 22px; }
+.card { background: var(--panel); border-radius: 26px; padding: 26px 32px; display: flex; flex-direction: column; gap: 6px; }
+.card b { font-family: var(--mono); font-size: 52px; color: var(--blue); }
+.vs .card span { font-size: 44px; font-weight: 800; } .vs .card .ok { color: var(--green); } .vs .card .ng { color: var(--red); }
+.res { display: flex; flex-wrap: wrap; align-items: center; gap: 14px; margin-top: -6px; }
+.res i { font-style: normal; font-size: 34px; color: var(--mute); font-weight: 700; }
+.res span { padding: 8px 22px; border-radius: 14px; background: var(--panel); font-size: 40px; font-weight: 700; }
+.res span.k1 { color: var(--orange); } .res span.k2 { color: var(--green); } .res span.k3 { color: var(--violet); }
+.res span.bad { color: var(--red); background: rgba(255,93,93,.14); box-shadow: inset 0 0 0 3px var(--red); } .vs .card em { font-style: normal; color: var(--orange); }
+.list { display: flex; flex-direction: column; gap: 16px; }
+.row { display: flex; align-items: center; gap: 30px; background: var(--panel); border-radius: 22px; padding: 14px 36px; font-size: 48px;
+  transform-origin: left center; }
+.row .no { font-size: 52px; font-weight: 900; color: var(--orange); width: 50px; }
+.row b { font-family: var(--mono); color: var(--blue); }
+.cta { margin-top: 20px; font-size: 54px; font-weight: 800; text-align: center; }
+.arr { display: flex; align-items: flex-start; gap: 14px; }
+.arr .nm { font-family: var(--mono); font-size: 38px; font-weight: 700; color: var(--mute); padding-top: 34px; margin-right: 6px; }
+.arr .nm.tn { margin-left: 30px; color: var(--blue); }
+.cw { display: flex; flex-direction: column; align-items: center; gap: 6px; }
+.cw small { font-family: var(--mono); font-size: 32px; font-weight: 700; color: var(--mute); height: 40px; }
+.box { position: relative; width: 150px; height: 110px; background: var(--panel); border: 3px solid #26324a; border-radius: 18px; }
+.box b { position: absolute; inset: 0; display: flex; align-items: center; justify-content: center;
+  font-family: var(--mono); font-size: 56px; font-weight: 800; }
+.box.ghost { border: 3px dashed var(--red); background: rgba(255,93,93,.08); } .box.ghost b { color: var(--red); }
+.k1 { color: var(--orange); } .k2 { color: var(--green); } .k3 { color: var(--violet); } .z { color: var(--mute); }
+#sc-swap .arr .cw:last-child .box { border-style: dashed; border-color: var(--blue); }
+.gridw { display: flex; flex-direction: column; gap: 22px; }
+.grid { display: grid; gap: 12px; align-items: center; }
+.grid i { font-style: normal; font-family: var(--mono); font-size: 32px; font-weight: 700; color: var(--mute); text-align: center; }
+.grid b { height: 96px; background: var(--panel); border-radius: 16px; display: flex; align-items: center; justify-content: center;
+  font-family: var(--mono); font-size: 52px; font-weight: 800; }
+.grid b.k1 { box-shadow: inset 0 0 0 4px var(--orange); }
+.dims { display: flex; flex-wrap: wrap; gap: 16px; }
+.dims span { padding: 12px 26px; background: var(--panel); border-radius: 16px; font-size: 40px; font-weight: 700; }
+.dims em { font-style: normal; color: var(--orange); }
+.share { display: flex; gap: 12px; }
+.pp { width: 140px; display: flex; flex-direction: column; align-items: center; gap: 6px; }
+.pp .cd { width: 140px; height: 190px; background: var(--panel); border: 3px solid var(--orange); border-radius: 18px;
+  display: flex; flex-direction: column; align-items: center; justify-content: center; font-size: 46px; line-height: 1.15; }
+.pp.left .cd { border: 3px dashed var(--green); background: rgba(126,224,138,.08); }
+.pp small { font-size: 30px; font-weight: 700; color: var(--mute); } .pp.left small { color: var(--green); }
+.chips .gt { background: none; padding: 16px 0; color: var(--mute); }
+.cap { top: auto; bottom: 260px; height: auto; display: flex; justify-content: center; padding: 0 60px; }
+.cap span { background: rgba(0,0,0,.78); color: #fff; font-size: 48px; font-weight: 700; line-height: 1.4; padding: 16px 30px;
+  border-radius: 18px; text-align: center; word-break: keep-all; }
+.bar { position: absolute; left: 0; bottom: 0; height: 10px; width: 1080px; background: var(--orange); transform-origin: left center; }
+
+.flab { font-family: var(--mono); font-size: 32px; font-weight: 700; color: var(--mute); margin-bottom: -12px; }
+.tree { background: var(--panel); border-radius: 26px; padding: 22px 36px; font-family: var(--mono); font-size: 40px; line-height: 1.45; white-space: pre; }
+.tree b { font-weight: 700; } .tree .pk { color: var(--blue); }
+.term .k2 { color: var(--green); } .term .k3 { color: var(--violet); }
+.chips span { font-family: var(--mono); }
+.chips em { font-style: normal; color: var(--blue); }
+.note small { white-space: nowrap; }
+
+</style>
+</head>
+<body>
+<div id="root" data-composition-id="main" data-start="0" data-duration="131.45" data-width="1080" data-height="1920">
+  <div class="brand"><b>자바 입문 <em>패키지</em> 정리</b><div class="prog"><i></i><i></i><i></i><i></i><i></i></div></div>
+  <section id="sc-hook" class="clip scene" data-start="0.000" data-duration="6.524" data-track-index="1"><div class="hook">
+   <div class="pill in">JAVA 입문 · 열다섯 번째</div>
+   <h1 class="big in"><em>패키지</em></h1>
+   <div class="sub in">package · <b>import</b></div>
+ </div></section>
+<section id="sc-decl" class="clip scene" data-start="6.524" data-duration="16.815" data-track-index="1"><div class="pill in">STEP 1 · package 선언</div><h2 class="title in">클래스를 묶는 이름</h2><p class="desc in">패키지 이름 = <b>폴더</b>와 맞춘다</p><div class="flab in">📄 school/Student.java</div><div class="code in"><div class="ln mk"><span class="kw">package</span> school;</div><div class="ln">&nbsp;</div><div class="ln"><span class="kw">public</span> <span class="kw">class</span> Student</div><div class="ln">    <span class="kw">extends</span> Person { ... }</div></div><div class="tree in"><div><span class="z"></span><b class="pk">school/</b></div><div><span class="z">├─ </span><b class="k1">Person.java</b></div><div><span class="z">├─ </span><b class="k2">Student.java</b></div><div><span class="z">└─ </span><b class="k3">Teacher.java</b></div><div><span class="z"></span><b class="pk">app/</b></div><div><span class="z">└─ </span><b class="">Main.java</b></div></div><div class="note in">실무에서는 도메인을 거꾸로<br/><small>com.example.school</small></div></section>
+<section id="sc-full" class="clip scene" data-start="23.339" data-duration="11.463" data-track-index="1"><div class="pill in">STEP 2 · 전체 이름</div><h2 class="title in">school.Student</h2><p class="desc in"><b>전체 이름</b> (패키지 이름 + 클래스 이름)</p><div class="flab in">📄 app/Main.java</div><div class="code in"><div class="ln"><span class="kw">package</span> app;</div><div class="ln">&nbsp;</div><div class="ln mk">school.Student s =</div><div class="ln mk">  <span class="kw">new</span> school.Student(</div><div class="ln">    <span class="st">"민수"</span>, <span class="nu">85</span>);</div><div class="ln">s.hello();</div></div><div class="term in"><i>실행 결과</i><div class="k2">학생 민수 안녕</div></div></section>
+<section id="sc-imp" class="clip scene" data-start="34.802" data-duration="13.287" data-track-index="1"><div class="pill in">STEP 2-1 · import</div><h2 class="title in">import 로 줄여 쓰기</h2><p class="desc in">이름만 <b>줄여</b> 쓰게 해 준다</p><div class="flab in">📄 app/Main.java</div><div class="code in"><div class="ln"><span class="kw">package</span> app;</div><div class="ln mk"><span class="kw">import</span> school.Student;</div><div class="ln">&nbsp;</div><div class="ln">Student s = <span class="kw">new</span> Student(</div><div class="ln">    <span class="st">"민수"</span>, <span class="nu">85</span>);</div><div class="ln">s.hello();</div></div><div class="term in"><i>실행 결과</i><div class="k2">학생 민수 안녕</div></div><div class="note in">클래스를 <b>복사</b>하는 것이 아니다<br/>이름을 줄여 쓰게 해 줄 뿐</div></section>
+<section id="sc-pub" class="clip scene" data-start="48.089" data-duration="20.031" data-track-index="1"><div class="pill in">STEP 3 · public 필요</div><h2 class="title in">public 이 없으면?</h2><p class="desc in">다른 패키지에서 쓰려면 <b>public</b></p><div class="flab in">📄 school/Student.java</div><div class="code in sm"><div class="ln"><span class="kw">class</span> Student <span class="kw">extends</span> Person</div></div><div class="term err in"><i>컴파일 오류</i><div>Student is not public in school; cannot be accessed from outside package</div></div><div class="warn in">public 이 없으면 <b>같은 패키지</b>에서만</div><div class="code in sm"><div class="ln mk"><span class="kw">public</span> <span class="kw">class</span> Student</div><div class="ln">    <span class="kw">extends</span> Person {</div><div class="ln mk">  <span class="kw">public</span> Student(<span class="kw">String</span> name,</div><div class="ln">      <span class="kw">int</span> score) { ... }</div><div class="ln mk">  <span class="kw">public</span> <span class="kw">void</span> hello() { ... }</div><div class="ln">}</div></div><div class="note in">public 클래스 = 파일 이름 <small>.java</small></div></section>
+<section id="sc-std" class="clip scene" data-start="68.120" data-duration="17.367" data-track-index="1"><div class="pill in">STEP 4 · 표준 라이브러리</div><h2 class="title in">java.util.Arrays</h2><p class="desc in">자바가 만든 클래스도 <b>패키지</b>에</p><div class="code in"><div class="ln mk"><span class="kw">import</span> java.util.Arrays;</div><div class="ln">&nbsp;</div><div class="ln"><span class="kw">int</span>[] scores = {<span class="nu">85</span>, <span class="nu">90</span>, <span class="nu">70</span>};</div><div class="ln mk">Arrays.sort(scores);</div><div class="ln">System.out.println(</div><div class="ln">    Arrays.toString(scores));</div></div><div class="term in"><i>실행 결과</i><div>[70, 85, 90]</div></div><div class="note in"><small>import java.util.*;</small><br/>→ 그 패키지의 public 클래스 <b>모두</b><br/>하위 패키지는 <b>포함 안 됨</b></div></section>
+<section id="sc-lang" class="clip scene" data-start="85.487" data-duration="10.191" data-track-index="1"><div class="pill in">STEP 4-1 · java.lang</div><h2 class="title in">import 없이 쓰는 것</h2><p class="desc in"><b>java.lang</b> 은 자동 import</p><div class="chips in"><span><em>java.lang.</em>String</span><span><em>java.lang.</em>System</span></div><div class="code in"><div class="ln mk">java.lang.<span class="kw">String</span> name =</div><div class="ln">    <span class="st">"민수"</span>;</div><div class="ln">System.out.println(name);</div></div><div class="term in"><i>실행 결과</i><div>민수</div></div><div class="note in"><small>String</small> = <small>java.lang.String</small><br/>짧게 써도, 전체 이름으로 써도 <b>같다</b></div></section>
+<section id="sc-clash" class="clip scene" data-start="95.678" data-duration="15.183" data-track-index="1"><div class="pill in">STEP 5 · 같은 이름 클래스</div><h2 class="title in">Date 가 두 개?</h2><p class="desc in">하나는 <b>전체 이름</b>으로</p><div class="code in sm"><div class="ln mk"><span class="kw">import</span> java.util.Date;</div><div class="ln mk"><span class="kw">import</span> java.sql.Date;</div></div><div class="term err in"><i>컴파일 오류</i><div>a type with the same simple name is already defined by the single-type-import of Date</div></div><div class="code in sm"><div class="ln"><span class="kw">import</span> java.util.Date;</div><div class="ln">&nbsp;</div><div class="ln">Date now = <span class="kw">new</span> Date();</div><div class="ln mk">java.sql.Date day =</div><div class="ln mk">  java.sql.Date.valueOf(</div><div class="ln">      <span class="st">"2026-11-16"</span>);</div><div class="ln">System.out.println(day);</div></div><div class="term in"><i>실행 결과</i><div>2026-11-16</div></div></section>
+<section id="sc-outro" class="clip scene" data-start="110.861" data-duration="20.589" data-track-index="1"><div class="pill in">정리</div><h2 class="title in">패키지 6가지</h2><div class="list in"><div class="row" id="ex1"><span class="no">1</span><b>package 로 묶고 폴더와 맞춤</b></div><div class="row" id="ex2"><span class="no">2</span><b>전체 이름 = 패키지 + 클래스</b></div><div class="row" id="ex3"><span class="no">3</span><b>import 로 이름 줄여 쓰기</b></div><div class="row" id="ex4"><span class="no">4</span><b>다른 패키지 클래스 → public</b></div><div class="row" id="ex5"><span class="no">5</span><b>java.lang 은 import 없이</b></div><div class="row" id="ex6"><span class="no">6</span><b>같은 이름 → 하나는 전체 이름</b></div></div><div class="cta in">👍 구독 · 좋아요</div></section>
+  <div id="cap-hook-0" class="clip cap" data-start="0.250" data-duration="2.854" data-track-index="2"><span>자바 입문 열다섯 번째, 패키지!</span></div>
+<div id="cap-hook-1" class="clip cap" data-start="3.104" data-duration="1.147" data-track-index="2"><span>클래스를 묶는 패키지와</span></div>
+<div id="cap-hook-2" class="clip cap" data-start="4.252" data-duration="2.022" data-track-index="2"><span>임포트를 정리해 드립니다.</span></div>
+<div id="cap-decl-0" class="clip cap" data-start="6.649" data-duration="1.654" data-track-index="2"><span>파일 맨 위의 패키지 스쿨,</span></div>
+<div id="cap-decl-1" class="clip cap" data-start="8.303" data-duration="1.881" data-track-index="2"><span>이것이 패키지 선언이에요.</span></div>
+<div id="cap-decl-2" class="clip cap" data-start="10.184" data-duration="2.407" data-track-index="2"><span>패키지는 클래스를 묶는 이름이에요.</span></div>
+<div id="cap-decl-3" class="clip cap" data-start="12.591" data-duration="2.463" data-track-index="2"><span>스쿨 패키지의 클래스는 스쿨 폴더에 두듯이,</span></div>
+<div id="cap-decl-4" class="clip cap" data-start="15.054" data-duration="2.220" data-track-index="2"><span>패키지 이름과 폴더를 맞춰 둬요.</span></div>
+<div id="cap-decl-5" class="clip cap" data-start="17.274" data-duration="2.556" data-track-index="2"><span>자바가 클래스를 찾는 기준이거든요.</span></div>
+<div id="cap-decl-6" class="clip cap" data-start="19.830" data-duration="1.465" data-track-index="2"><span>실무에서는 도메인을 거꾸로</span></div>
+<div id="cap-decl-7" class="clip cap" data-start="21.295" data-duration="1.794" data-track-index="2"><span>쓴 이름을 많이 써요.</span></div>
+<div id="cap-full-0" class="clip cap" data-start="23.464" data-duration="1.403" data-track-index="2"><span>이제 앱 패키지의 메인에서</span></div>
+<div id="cap-full-1" class="clip cap" data-start="24.867" data-duration="1.778" data-track-index="2"><span>스튜던트를 써 볼게요.</span></div>
+<div id="cap-full-2" class="clip cap" data-start="26.645" data-duration="1.483" data-track-index="2"><span>스쿨 닷 스튜던트처럼 패키지</span></div>
+<div id="cap-full-3" class="clip cap" data-start="28.128" data-duration="1.875" data-track-index="2"><span>이름까지 붙여 쓰면 돼요.</span></div>
+<div id="cap-full-4" class="clip cap" data-start="30.003" data-duration="2.024" data-track-index="2"><span>이것을 전체 이름이라고 해요.</span></div>
+<div id="cap-full-5" class="clip cap" data-start="32.027" data-duration="2.525" data-track-index="2"><span>실행하면 학생 민수 안녕이 나와요.</span></div>
+<div id="cap-imp-0" class="clip cap" data-start="34.927" data-duration="2.248" data-track-index="2"><span>매번 길게 쓰긴 번거롭죠.</span></div>
+<div id="cap-imp-1" class="clip cap" data-start="37.175" data-duration="2.080" data-track-index="2"><span>위에 임포트 스쿨 닷 스튜던트를 적으면,</span></div>
+<div id="cap-imp-2" class="clip cap" data-start="39.255" data-duration="1.782" data-track-index="2"><span>스튜던트만 써도 돼요.</span></div>
+<div id="cap-imp-3" class="clip cap" data-start="41.037" data-duration="2.621" data-track-index="2"><span>결과는 똑같이 학생 민수 안녕이에요.</span></div>
+<div id="cap-imp-4" class="clip cap" data-start="43.658" data-duration="2.071" data-track-index="2"><span>임포트는 클래스를 복사하는 게 아니라,</span></div>
+<div id="cap-imp-5" class="clip cap" data-start="45.729" data-duration="2.110" data-track-index="2"><span>이름을 줄여 쓰게 해 줄 뿐이에요.</span></div>
+<div id="cap-pub-0" class="clip cap" data-start="48.214" data-duration="1.673" data-track-index="2"><span>그런데 스튜던트 클래스에 퍼블릭이</span></div>
+<div id="cap-pub-1" class="clip cap" data-start="49.887" data-duration="2.161" data-track-index="2"><span>없으면 컴파일 오류가 나요.</span></div>
+<div id="cap-pub-2" class="clip cap" data-start="52.048" data-duration="1.539" data-track-index="2"><span>퍼블릭이 없으면 같은 패키지</span></div>
+<div id="cap-pub-3" class="clip cap" data-start="53.587" data-duration="1.940" data-track-index="2"><span>안에서만 쓸 수 있거든요.</span></div>
+<div id="cap-pub-4" class="clip cap" data-start="55.527" data-duration="1.679" data-track-index="2"><span>지금처럼 다른 패키지의 메인에서</span></div>
+<div id="cap-pub-5" class="clip cap" data-start="57.207" data-duration="1.912" data-track-index="2"><span>객체를 만들고 메소드를 부르려면,</span></div>
+<div id="cap-pub-6" class="clip cap" data-start="59.119" data-duration="2.463" data-track-index="2"><span>생성자와 메소드도 퍼블릭이어야 해요.</span></div>
+<div id="cap-pub-7" class="clip cap" data-start="61.582" data-duration="1.446" data-track-index="2"><span>자세한 건 다음 편 접근</span></div>
+<div id="cap-pub-8" class="clip cap" data-start="63.027" data-duration="1.763" data-track-index="2"><span>제어자에서 다룰게요.</span></div>
+<div id="cap-pub-9" class="clip cap" data-start="64.790" data-duration="1.194" data-track-index="2"><span>그리고 퍼블릭 클래스는</span></div>
+<div id="cap-pub-10" class="clip cap" data-start="65.985" data-duration="1.885" data-track-index="2"><span>파일 이름과 같아야 해요.</span></div>
+<div id="cap-std-0" class="clip cap" data-start="68.245" data-duration="1.599" data-track-index="2"><span>자바가 미리 만들어 둔 클래스도</span></div>
+<div id="cap-std-1" class="clip cap" data-start="69.844" data-duration="1.816" data-track-index="2"><span>패키지로 묶여 있어요.</span></div>
+<div id="cap-std-2" class="clip cap" data-start="71.659" data-duration="1.446" data-track-index="2"><span>자바 유틸 패키지의 어레이즈를</span></div>
+<div id="cap-std-3" class="clip cap" data-start="73.105" data-duration="3.050" data-track-index="2"><span>임포트하고 소트로 정렬하면, 70, 85,</span></div>
+<div id="cap-std-4" class="clip cap" data-start="76.155" data-duration="1.716" data-track-index="2"><span>90 순서로 나와요.</span></div>
+<div id="cap-std-5" class="clip cap" data-start="77.872" data-duration="2.248" data-track-index="2"><span>별표를 쓰면 그 패키지의 퍼블릭 클래스를</span></div>
+<div id="cap-std-6" class="clip cap" data-start="80.120" data-duration="2.304" data-track-index="2"><span>모두 짧은 이름으로 쓸 수 있어요.</span></div>
+<div id="cap-std-7" class="clip cap" data-start="82.424" data-duration="2.813" data-track-index="2"><span>단, 하위 패키지는 포함되지 않아요.</span></div>
+<div id="cap-lang-0" class="clip cap" data-start="85.612" data-duration="1.272" data-track-index="2"><span>그럼 스트링과 시스템은</span></div>
+<div id="cap-lang-1" class="clip cap" data-start="86.884" data-duration="2.012" data-track-index="2"><span>왜 임포트 없이 썼을까요?</span></div>
+<div id="cap-lang-2" class="clip cap" data-start="88.896" data-duration="1.483" data-track-index="2"><span>자바 랭 패키지는 자동으로</span></div>
+<div id="cap-lang-3" class="clip cap" data-start="90.379" data-duration="1.744" data-track-index="2"><span>임포트되기 때문이에요.</span></div>
+<div id="cap-lang-4" class="clip cap" data-start="92.123" data-duration="1.129" data-track-index="2"><span>자바 닷 랭 닷 스트링으로</span></div>
+<div id="cap-lang-5" class="clip cap" data-start="93.252" data-duration="2.176" data-track-index="2"><span>써도 똑같이 민수가 나와요.</span></div>
+<div id="cap-clash-0" class="clip cap" data-start="95.803" data-duration="2.164" data-track-index="2"><span>이름이 같은 클래스도 있어요.</span></div>
+<div id="cap-clash-1" class="clip cap" data-start="97.967" data-duration="1.437" data-track-index="2"><span>자바 유틸과 자바 에스큐엘에</span></div>
+<div id="cap-clash-2" class="clip cap" data-start="99.404" data-duration="1.679" data-track-index="2"><span>모두 데이트가 있죠.</span></div>
+<div id="cap-clash-3" class="clip cap" data-start="101.083" data-duration="1.437" data-track-index="2"><span>두 데이트를 각각 임포트하면</span></div>
+<div id="cap-clash-4" class="clip cap" data-start="102.519" data-duration="1.744" data-track-index="2"><span>컴파일 오류가 나요.</span></div>
+<div id="cap-clash-5" class="clip cap" data-start="104.264" data-duration="1.614" data-track-index="2"><span>이럴 땐 하나만 임포트하고,</span></div>
+<div id="cap-clash-6" class="clip cap" data-start="105.878" data-duration="2.220" data-track-index="2"><span>다른 하나는 전체 이름으로 써요.</span></div>
+<div id="cap-clash-7" class="clip cap" data-start="108.098" data-duration="2.513" data-track-index="2"><span>그러면 지정한 날짜가 그대로 나와요.</span></div>
+<div id="cap-outro-0" class="clip cap" data-start="110.986" data-duration="3.582" data-track-index="2"><span>정리하면, 패키지로 클래스를 묶고 폴더와 맞춰요.</span></div>
+<div id="cap-outro-1" class="clip cap" data-start="114.568" data-duration="1.101" data-track-index="2"><span>전체 이름은 패키지</span></div>
+<div id="cap-outro-2" class="clip cap" data-start="115.669" data-duration="1.922" data-track-index="2"><span>이름과 클래스 이름이에요.</span></div>
+<div id="cap-outro-3" class="clip cap" data-start="117.590" data-duration="1.996" data-track-index="2"><span>임포트로 이름을 줄여 써요.</span></div>
+<div id="cap-outro-4" class="clip cap" data-start="119.587" data-duration="1.259" data-track-index="2"><span>다른 패키지에서 클래스를</span></div>
+<div id="cap-outro-5" class="clip cap" data-start="120.846" data-duration="2.024" data-track-index="2"><span>쓰려면 퍼블릭이 필요해요.</span></div>
+<div id="cap-outro-6" class="clip cap" data-start="122.870" data-duration="2.183" data-track-index="2"><span>자바 랭은 임포트 없이 써요.</span></div>
+<div id="cap-outro-7" class="clip cap" data-start="125.053" data-duration="1.353" data-track-index="2"><span>같은 이름 클래스는 하나를</span></div>
+<div id="cap-outro-8" class="clip cap" data-start="126.406" data-duration="1.670" data-track-index="2"><span>전체 이름으로 써요.</span></div>
+<div id="cap-outro-9" class="clip cap" data-start="128.076" data-duration="2.374" data-track-index="2"><span>구독과 좋아요 부탁드립니다!</span></div>
+  <div class="bar"></div>
+  <audio id="vo" src="assets/narration.mp3" data-start="0" data-duration="131.45" data-track-index="0"></audio>
+</div>
+<script>
+const tl = gsap.timeline({ paused: true });
+const SP = 1.2;
+function enter(sel, t, dur) {
+  const items = document.querySelectorAll(sel + " .in");
+  const step = Math.min(0.9 / SP, (dur * 0.5) / Math.max(1, items.length));
+  items.forEach((el, i) => {
+    const at = Math.max(0, t - 0.1 / SP) + i * step;
+    tl.fromTo(el, { opacity: 0, y: 50 }, { opacity: 1, y: 0, duration: 0.5 / SP, ease: "power3.out" }, at);
+    el.querySelectorAll(".ln").forEach((ln, j) => {
+      tl.fromTo(ln, { opacity: 0, x: -30 }, { opacity: 1, x: 0, duration: 0.35 / SP, ease: "power2.out" }, at + (0.15 + j * 0.3) / SP);
+    });
+  });
+}
+enter("#sc-hook", 0.25, 6.024);
+tl.set(".prog i", {backgroundColor: "#26324a"}, 0);
+enter("#sc-decl", 6.649, 16.44);
+tl.set(".prog i", {backgroundColor: "#26324a"}, 6.524);
+tl.set(".prog i:nth-child(1)", {backgroundColor: "#f29111"}, 6.524);
+enter("#sc-full", 23.464, 11.088);
+tl.set(".prog i", {backgroundColor: "#26324a"}, 23.339);
+tl.set(".prog i:nth-child(2)", {backgroundColor: "#f29111"}, 23.339);
+enter("#sc-imp", 34.927, 12.912);
+tl.set(".prog i", {backgroundColor: "#26324a"}, 34.802);
+tl.set(".prog i:nth-child(2)", {backgroundColor: "#f29111"}, 34.802);
+enter("#sc-pub", 48.214, 19.656);
+tl.set(".prog i", {backgroundColor: "#26324a"}, 48.089);
+tl.set(".prog i:nth-child(3)", {backgroundColor: "#f29111"}, 48.089);
+enter("#sc-std", 68.245, 16.992);
+tl.set(".prog i", {backgroundColor: "#26324a"}, 68.12);
+tl.set(".prog i:nth-child(4)", {backgroundColor: "#f29111"}, 68.12);
+enter("#sc-lang", 85.612, 9.816);
+tl.set(".prog i", {backgroundColor: "#26324a"}, 85.487);
+tl.set(".prog i:nth-child(4)", {backgroundColor: "#f29111"}, 85.487);
+enter("#sc-clash", 95.803, 14.808);
+tl.set(".prog i", {backgroundColor: "#26324a"}, 95.678);
+tl.set(".prog i:nth-child(5)", {backgroundColor: "#f29111"}, 95.678);
+enter("#sc-outro", 110.986, 19.464);
+tl.set(".prog i", {backgroundColor: "#26324a"}, 110.861);
+tl.to("#ex1", {backgroundColor: "#3a2a12", scale: 1.04, duration: 0.2}, 111.82);
+tl.to("#ex1", {backgroundColor: "#131c2e", scale: 1, duration: 0.2}, 114.568);
+tl.to("#ex2", {backgroundColor: "#3a2a12", scale: 1.04, duration: 0.2}, 114.568);
+tl.to("#ex2", {backgroundColor: "#131c2e", scale: 1, duration: 0.2}, 117.59);
+tl.to("#ex3", {backgroundColor: "#3a2a12", scale: 1.04, duration: 0.2}, 117.59);
+tl.to("#ex3", {backgroundColor: "#131c2e", scale: 1, duration: 0.2}, 119.587);
+tl.to("#ex4", {backgroundColor: "#3a2a12", scale: 1.04, duration: 0.2}, 119.587);
+tl.to("#ex4", {backgroundColor: "#131c2e", scale: 1, duration: 0.2}, 122.87);
+tl.to("#ex5", {backgroundColor: "#3a2a12", scale: 1.04, duration: 0.2}, 122.87);
+tl.to("#ex5", {backgroundColor: "#131c2e", scale: 1, duration: 0.2}, 125.053);
+tl.to("#ex6", {backgroundColor: "#3a2a12", scale: 1.04, duration: 0.2}, 125.053);
+tl.to("#ex6", {backgroundColor: "#131c2e", scale: 1, duration: 0.3}, 128.076 + 0.6);
+tl.fromTo(".bar", { scaleX: 0 }, { scaleX: 1, duration: 131.45, ease: "none" }, 0);
+window.__timelines = window.__timelines || {};
+window.__timelines["main"] = tl;
+tl.seek(0);
+</script>
+</body>
+</html>

@@ -1,0 +1,302 @@
+<!doctype html>
+<html lang="ko" data-resolution="portrait">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=1080, height=1920" />
+<script src="https://cdn.jsdelivr.net/npm/gsap@3.14.2/dist/gsap.min.js"></script>
+<style>
+:root {
+  --ground: #0b1220; --panel: #131c2e; --ink: #f4f6fb; --mute: #9aa6bd;
+  --blue: #3fa7d6; --orange: #f29111; --red: #ff5d5d; --green: #7ee08a; --violet: #c3a6ff;
+  --font: "Pretendard", sans-serif;
+  --mono: "Menlo", "SF Mono", monospace;
+}
+@font-face { font-family: "Pretendard"; src: url("assets/fonts/PretendardVariable.woff2") format("woff2"); font-weight: 45 920; }
+* { margin: 0; padding: 0; box-sizing: border-box; }
+html, body { width: 1080px; height: 1920px; overflow: hidden; background: var(--ground); }
+#root { position: relative; width: 100%; height: 100%; font-variant-ligatures: none; font-family: var(--font); color: var(--ink); overflow: hidden;
+  background: radial-gradient(1200px 900px at 80% -10%, #16365a 0%, transparent 60%),
+              radial-gradient(900px 900px at -10% 110%, #3a2410 0%, transparent 55%), var(--ground); }
+.clip { position: absolute; inset: 0; }
+.brand { position: absolute; top: 110px; left: 70px; right: 70px; display: flex; justify-content: space-between; align-items: center;
+  font-size: 34px; font-weight: 700; color: var(--mute); letter-spacing: 0.02em; }
+.brand b { color: var(--blue); } .brand b em { color: var(--orange); font-style: normal; }
+.prog { display: flex; gap: 12px; }
+.prog i { display: block; width: 56px; height: 12px; border-radius: 6px; background: #26324a; }
+.scene { padding: 210px 70px 0; display: flex; flex-direction: column; gap: 26px; }
+.pill { align-self: flex-start; padding: 12px 26px; border-radius: 999px; background: #1d2a44; color: var(--blue);
+  font-size: 34px; font-weight: 700; }
+.hook { display: flex; flex-direction: column; gap: 50px; padding-top: 140px; }
+.big { font-size: 150px; line-height: 1.12; font-weight: 800; letter-spacing: -0.04em; }
+.big em { font-style: normal; color: var(--orange); }
+.sub { font-size: 64px; font-weight: 700; color: var(--mute); } .sub b { color: var(--ink); }
+.title { font-size: 80px; font-weight: 800; letter-spacing: -0.03em; line-height: 1.1; }
+.desc { font-size: 46px; color: var(--mute); font-weight: 600; margin-top: -8px; } .desc b { color: var(--orange); }
+.code { background: #0a0f1a; border: 2px solid #26324a; border-radius: 26px; padding: 30px 32px; font-family: var(--mono);
+  font-size: 42px; line-height: 1.5; color: #d9e1f2; white-space: pre; box-shadow: 0 30px 60px rgba(0,0,0,.35);
+  font-variant-ligatures: none; font-feature-settings: "liga" 0, "calt" 0; }
+.code.sm { font-size: 34px; padding: 26px 28px; }
+.code .ln { margin: 0 -14px; padding: 0 14px; border-radius: 10px; }
+.code .ln.mk { background: rgba(242,145,17,.13); }
+.kw { color: var(--blue); font-weight: 700; } .st { color: var(--green); } .nu { color: var(--orange); } .cm { color: #6f7d98; } .es { color: var(--orange); font-weight: 700; }
+.term { background: #05080f; border: 2px solid #26324a; border-radius: 22px; padding: 18px 32px 22px; font-family: var(--mono);
+  font-size: 40px; line-height: 1.4; color: var(--ink); white-space: pre; tab-size: 8; }
+.term i { display: block; font-style: normal; font-family: var(--font); font-size: 28px; font-weight: 700; color: var(--mute); margin-bottom: 6px; }
+.term .cmd { color: var(--blue); }
+.term.err { border-color: rgba(255,93,93,.5); color: var(--red); font-size: 34px; white-space: normal; }
+.warn small { font-size: 36px; color: var(--mute); font-weight: 600; }
+.nest > div, .nest > div div { border: 3px solid; border-radius: 22px; padding: 16px 26px 20px; display: flex; flex-direction: column; gap: 12px; }
+.nest b { font-size: 38px; font-weight: 800; font-family: var(--mono); }
+.nest .k1 { border-color: var(--orange); } .nest .k1 > b { color: var(--orange); }
+.nest .k2 { border-color: var(--green); } .nest .k2 > b { color: var(--green); }
+.nest .k3 { border-color: var(--violet); } .nest .k3 > b { color: var(--violet); }
+.chips { display: flex; flex-wrap: wrap; gap: 18px; }
+.chips span { padding: 16px 30px; background: var(--panel); border-radius: 18px; font-size: 42px; font-weight: 700; }
+.warn, .note { padding: 26px 36px; border-radius: 24px; font-size: 44px; font-weight: 700; line-height: 1.45; }
+.warn { background: rgba(255,93,93,.12); border-left: 10px solid var(--red); } .warn b { color: var(--red); }
+.note { background: rgba(63,167,214,.12); border-left: 10px solid var(--blue); } .note b { color: var(--orange); }
+.note small { font-size: 38px; color: var(--mute); font-weight: 600; font-family: var(--mono); }
+code { font-family: var(--mono); color: var(--orange); }
+.var { display: grid; grid-template-columns: 1fr 1.3fr 1fr; gap: 18px; }
+.var div { background: var(--panel); border-radius: 24px; padding: 20px 30px 24px; display: flex; flex-direction: column; gap: 4px; }
+.var small { font-size: 32px; font-weight: 700; color: var(--mute); }
+.var b { font-family: var(--mono); font-size: 64px; }
+.var .v { border: 4px dashed var(--orange); } .var .v b { color: var(--orange); }
+.tbl { align-self: flex-start; }
+.tlabel { font-size: 34px; font-weight: 700; color: var(--mute); margin-bottom: 10px; }
+.tbl table { border-collapse: collapse; font-family: var(--mono); font-size: 40px; background: var(--panel); border-radius: 18px; overflow: hidden; }
+.tbl th { color: var(--blue); text-align: left; padding: 12px 32px; background: #1a2640; }
+.tbl th u { text-decoration: none; color: var(--orange); }
+.tbl td { padding: 10px 32px; border-top: 1px solid #26324a; }
+.tbl tr.k1 td { color: var(--orange); } .tbl tr.k2 td { color: var(--green); } .tbl tr.k3 td { color: var(--violet); }
+.tbl tr.out td { color: #5b6782; text-decoration: line-through; }
+.tbl td.nl { color: var(--red) !important; font-style: italic; font-weight: 700; background: rgba(255,93,93,.12); }
+.link { align-self: flex-start; font-family: var(--mono); font-size: 38px; color: var(--mute); padding: 6px 0 6px 26px;
+  border-left: 8px solid var(--orange); }
+.link b { color: var(--orange); }
+.arrow { font-family: var(--mono); font-size: 38px; color: var(--orange); font-weight: 700; }
+.vs { display: grid; grid-template-columns: 1fr 1fr; gap: 22px; }
+.card { background: var(--panel); border-radius: 26px; padding: 26px 32px; display: flex; flex-direction: column; gap: 6px; }
+.card b { font-family: var(--mono); font-size: 52px; color: var(--blue); }
+.vs .card span { font-size: 44px; font-weight: 800; } .vs .card .ok { color: var(--green); } .vs .card .ng { color: var(--red); }
+.res { display: flex; flex-wrap: wrap; align-items: center; gap: 14px; margin-top: -6px; }
+.res i { font-style: normal; font-size: 34px; color: var(--mute); font-weight: 700; }
+.res span { padding: 8px 22px; border-radius: 14px; background: var(--panel); font-size: 40px; font-weight: 700; }
+.res span.k1 { color: var(--orange); } .res span.k2 { color: var(--green); } .res span.k3 { color: var(--violet); }
+.res span.bad { color: var(--red); background: rgba(255,93,93,.14); box-shadow: inset 0 0 0 3px var(--red); } .vs .card em { font-style: normal; color: var(--orange); }
+.list { display: flex; flex-direction: column; gap: 16px; }
+.row { display: flex; align-items: center; gap: 30px; background: var(--panel); border-radius: 22px; padding: 14px 36px; font-size: 48px;
+  transform-origin: left center; }
+.row .no { font-size: 52px; font-weight: 900; color: var(--orange); width: 50px; }
+.row b { font-family: var(--mono); color: var(--blue); }
+.cta { margin-top: 20px; font-size: 54px; font-weight: 800; text-align: center; }
+.arr { display: flex; align-items: flex-start; gap: 14px; }
+.arr .nm { font-family: var(--mono); font-size: 38px; font-weight: 700; color: var(--mute); padding-top: 34px; margin-right: 6px; }
+.arr .nm.tn { margin-left: 30px; color: var(--blue); }
+.cw { display: flex; flex-direction: column; align-items: center; gap: 6px; }
+.cw small { font-family: var(--mono); font-size: 32px; font-weight: 700; color: var(--mute); height: 40px; }
+.box { position: relative; width: 150px; height: 110px; background: var(--panel); border: 3px solid #26324a; border-radius: 18px; }
+.box b { position: absolute; inset: 0; display: flex; align-items: center; justify-content: center;
+  font-family: var(--mono); font-size: 56px; font-weight: 800; }
+.box.ghost { border: 3px dashed var(--red); background: rgba(255,93,93,.08); } .box.ghost b { color: var(--red); }
+.k1 { color: var(--orange); } .k2 { color: var(--green); } .k3 { color: var(--violet); } .z { color: var(--mute); }
+#sc-swap .arr .cw:last-child .box { border-style: dashed; border-color: var(--blue); }
+.gridw { display: flex; flex-direction: column; gap: 22px; }
+.grid { display: grid; gap: 12px; align-items: center; }
+.grid i { font-style: normal; font-family: var(--mono); font-size: 32px; font-weight: 700; color: var(--mute); text-align: center; }
+.grid b { height: 96px; background: var(--panel); border-radius: 16px; display: flex; align-items: center; justify-content: center;
+  font-family: var(--mono); font-size: 52px; font-weight: 800; }
+.grid b.k1 { box-shadow: inset 0 0 0 4px var(--orange); }
+.dims { display: flex; flex-wrap: wrap; gap: 16px; }
+.dims span { padding: 12px 26px; background: var(--panel); border-radius: 16px; font-size: 40px; font-weight: 700; }
+.dims em { font-style: normal; color: var(--orange); }
+.share { display: flex; gap: 12px; }
+.pp { width: 140px; display: flex; flex-direction: column; align-items: center; gap: 6px; }
+.pp .cd { width: 140px; height: 190px; background: var(--panel); border: 3px solid var(--orange); border-radius: 18px;
+  display: flex; flex-direction: column; align-items: center; justify-content: center; font-size: 46px; line-height: 1.15; }
+.pp.left .cd { border: 3px dashed var(--green); background: rgba(126,224,138,.08); }
+.pp small { font-size: 30px; font-weight: 700; color: var(--mute); } .pp.left small { color: var(--green); }
+.chips .gt { background: none; padding: 16px 0; color: var(--mute); }
+.cap { top: auto; bottom: 260px; height: auto; display: flex; justify-content: center; padding: 0 60px; }
+.cap span { background: rgba(0,0,0,.78); color: #fff; font-size: 48px; font-weight: 700; line-height: 1.4; padding: 16px 30px;
+  border-radius: 18px; text-align: center; word-break: keep-all; }
+.bar { position: absolute; left: 0; bottom: 0; height: 10px; width: 1080px; background: var(--orange); transform-origin: left center; }
+
+.flab { font-family: var(--mono); font-size: 30px; font-weight: 700; color: var(--mute); margin-bottom: -14px; }
+.flab small { font-family: var(--font); font-size: 28px; color: #6f7d98; margin-left: 10px; }
+.term .k2 { color: var(--green); } .term .k3 { color: var(--violet); } .term .k4 { color: var(--blue); }
+.term.err .dt { color: #ffb0b0; font-size: 30px; margin-top: 6px; }
+.scene { gap: 20px; }
+.scope { display: grid; grid-template-columns: repeat(4, 1fr); gap: 12px; }
+.scope div { background: var(--panel); border-radius: 18px; padding: 10px 6px 12px; display: flex; flex-direction: column; align-items: center; gap: 2px; }
+.scope small { font-size: 28px; font-weight: 700; color: var(--mute); text-align: center; line-height: 1.2; }
+.scope b { font-size: 40px; }
+.scope .ok { box-shadow: inset 0 0 0 3px rgba(126,224,138,.5); } .scope .ng { opacity: .6; }
+.acc { display: grid; grid-template-columns: 1.35fr repeat(4, 1fr); gap: 10px; }
+.acc div { background: var(--panel); border-radius: 16px; display: flex; align-items: center; justify-content: center; height: 118px; font-size: 52px; }
+.acc .h { background: #1a2640; color: var(--blue); font-size: 29px; font-weight: 700; text-align: center; line-height: 1.2; height: 104px; }
+.acc .h:first-child { background: none; }
+.acc .m { font-family: var(--mono); font-size: 40px; font-weight: 800; color: var(--orange); justify-content: flex-start; padding-left: 22px; }
+.acc .ng { opacity: .55; }
+.hook .chips span { font-family: var(--mono); font-size: 44px; }
+.hook .chips span.kr { font-family: var(--font); }
+.row b { font-size: 44px; }
+
+</style>
+</head>
+<body>
+<div id="root" data-composition-id="main" data-start="0" data-duration="159.06" data-width="1080" data-height="1920">
+  <div class="brand"><b>자바 입문 <em>접근 제어자</em> 정리</b><div class="prog"><i></i><i></i><i></i><i></i><i></i></div></div>
+  <section id="sc-hook" class="clip scene" data-start="0.000" data-duration="9.62" data-track-index="1"><div class="hook">
+   <div class="pill in">JAVA 입문 · 열여섯 번째</div>
+   <h1 class="big in"><em>접근<br/>제어자</em></h1>
+   <div class="chips in"><span>public</span><span>protected</span><span class="kr">기본</span><span>private</span></div>
+ </div></section>
+<section id="sc-priv" class="clip scene" data-start="9.620" data-duration="18.855" data-track-index="1"><div class="pill in">STEP 1 · private</div><h2 class="title in">private</h2><p class="desc in"><b>같은 클래스</b> 안에서만</p><div class="flab in">📄 school/Person.java</div><div class="code in sm"><div class="ln mk"><span class="kw">private</span> <span class="kw">String</span> password;</div><div class="ln"><span class="kw">public</span> <span class="kw">boolean</span> check(<span class="kw">String</span> p) {</div><div class="ln mk">  <span class="kw">return</span> password.equals(p);</div><div class="ln">}</div></div><div class="term in"><i>s.check("1234")  · s = 민수</i><div class="">true</div></div><div class="flab in">📄 school/Student.java <small>자식 클래스</small></div><div class="code in sm"><div class="ln">System.out.println(password);</div></div><div class="term err in"><i>컴파일 오류</i><div>password has private access in Person</div></div><div class="scope in"><div class="ok"><small>같은<br/>클래스</small><b>✅</b></div><div class="ng"><small>같은<br/>패키지</small><b>❌</b></div><div class="ng"><small>다른 패키지<br/>자식</small><b>❌</b></div><div class="ng"><small>다른<br/>패키지</small><b>❌</b></div></div></section>
+<section id="sc-dflt" class="clip scene" data-start="28.475" data-duration="15.663" data-track-index="1"><div class="pill in">STEP 2 · 기본 접근</div><h2 class="title in">아무것도 안 붙이면</h2><p class="desc in">(아무것도 안 붙임 = <b>같은 패키지</b> 전용)</p><div class="flab in">📄 school/Person.java</div><div class="code in sm"><div class="ln mk"><span class="kw">String</span> phone;</div></div><div class="flab in">📄 school/Student.java <small>같은 패키지</small></div><div class="code in sm"><div class="ln">System.out.println(phone);</div></div><div class="term in"><i>s.printPhone()</i><div class="">010-1234</div></div><div class="flab in">📄 app/Main.java <small>다른 패키지</small></div><div class="code in sm"><div class="ln">System.out.println(s.phone);</div></div><div class="term err in"><i>컴파일 오류</i><div>phone is not public in Person; cannot be accessed from outside package</div></div><div class="scope in"><div class="ok"><small>같은<br/>클래스</small><b>✅</b></div><div class="ok"><small>같은<br/>패키지</small><b>✅</b></div><div class="ng"><small>다른 패키지<br/>자식</small><b>❌</b></div><div class="ng"><small>다른<br/>패키지</small><b>❌</b></div></div></section>
+<section id="sc-prot" class="clip scene" data-start="44.138" data-duration="17.919" data-track-index="1"><div class="pill in">STEP 3 · protected</div><h2 class="title in">protected</h2><p class="desc in">같은 패키지 + <b>다른 패키지의 자식</b></p><div class="flab in">📄 school/Person.java</div><div class="code in sm"><div class="ln mk"><span class="kw">protected</span> <span class="kw">int</span> age;</div></div><div class="flab in">📄 app/Tutor.java <small>다른 패키지의 자식</small></div><div class="code in sm"><div class="ln"><span class="kw">class</span> Tutor <span class="kw">extends</span> Person {</div><div class="ln mk">  ... + age + <span class="st">"살"</span>);</div></div><div class="term in"><i>new Tutor("지우").hello()</i><div class="k4">튜터 지우 20살</div></div><div class="flab in">📄 app/Main.java <small>다른 패키지 · 자식 아님</small></div><div class="code in sm"><div class="ln">System.out.println(s.age);</div></div><div class="term err in"><i>컴파일 오류</i><div>age has protected access in Person</div></div><div class="scope in"><div class="ok"><small>같은<br/>클래스</small><b>✅</b></div><div class="ok"><small>같은<br/>패키지</small><b>✅</b></div><div class="ok"><small>다른 패키지<br/>자식</small><b>✅</b></div><div class="ng"><small>다른<br/>패키지</small><b>❌</b></div></div></section>
+<section id="sc-pub" class="clip scene" data-start="62.057" data-duration="14.583" data-track-index="1"><div class="pill in">STEP 4 · public</div><h2 class="title in">public</h2><p class="desc in"><b>어디서나</b> 쓸 수 있다</p><div class="flab in">📄 school/Person.java</div><div class="code in sm"><div class="ln mk"><span class="kw">public</span> <span class="kw">String</span> name;</div></div><div class="flab in">📄 app/Main.java <small>다른 패키지</small></div><div class="code in sm"><div class="ln">System.out.println(s.name);</div></div><div class="term in"><i>실행 결과</i><div class="k2">민수</div></div><div class="note in">지난 편: 다른 패키지에서 쓰려고<br/>클래스 · 생성자 · 메소드에 붙인 <b>public</b></div><div class="scope in"><div class="ok"><small>같은<br/>클래스</small><b>✅</b></div><div class="ok"><small>같은<br/>패키지</small><b>✅</b></div><div class="ok"><small>다른 패키지<br/>자식</small><b>✅</b></div><div class="ok"><small>다른<br/>패키지</small><b>✅</b></div></div></section>
+<section id="sc-table" class="clip scene" data-start="76.640" data-duration="12.735" data-track-index="1"><div class="pill in">STEP 4-1 · 한눈에</div><h2 class="title in">네 단계 정리</h2><p class="desc in">아래로 갈수록 <b>좁아진다</b></p><div class="acc in"><div class="h"></div><div class="h">같은<br/>클래스</div><div class="h">같은<br/>패키지</div><div class="h">다른 패키지<br/>자식</div><div class="h">다른<br/>패키지</div><div class="m">public</div><div class="ok">✅</div><div class="ok">✅</div><div class="ok">✅</div><div class="ok">✅</div><div class="m">protected</div><div class="ok">✅</div><div class="ok">✅</div><div class="ok">✅</div><div class="ng">❌</div><div class="m">기본</div><div class="ok">✅</div><div class="ok">✅</div><div class="ng">❌</div><div class="ng">❌</div><div class="m">private</div><div class="ok">✅</div><div class="ng">❌</div><div class="ng">❌</div><div class="ng">❌</div></div><div class="note in">기본 = 아무것도 안 붙임</div></section>
+<section id="sc-cls" class="clip scene" data-start="89.375" data-duration="10.935" data-track-index="1"><div class="pill in">STEP 4-2 · 클래스</div><h2 class="title in">클래스에는 둘만</h2><p class="desc in">파일에 바로 쓰는 클래스: <b>public · 기본</b></p><div class="code in"><div class="ln"><span class="kw">public</span> <span class="kw">class</span> Student { }</div><div class="ln"><span class="kw">class</span> Desk { }</div><div class="ln mk"><span class="kw">private</span> <span class="kw">class</span> Club { }</div></div><div class="term err in"><i>컴파일 오류</i><div>modifier private not allowed here</div></div><div class="res in"><i>결과</i><span class="k2">public ✅</span><span class="k2">기본 ✅</span><span class="bad">private ❌</span></div></section>
+<section id="sc-enc" class="clip scene" data-start="100.310" data-duration="23.247" data-track-index="1"><div class="pill in">STEP 5 · 캡슐화</div><h2 class="title in">왜 private 으로 숨길까?</h2><p class="desc in">잘못된 값을 <b>막는다</b></p><div class="flab in">📄 school/Student.java</div><div class="code in sm"><div class="ln mk"><span class="kw">private</span> <span class="kw">int</span> score;</div><div class="ln"><span class="kw">public</span> <span class="kw">int</span> getScore() { ... }</div><div class="ln"><span class="kw">public</span> <span class="kw">void</span> setScore(<span class="kw">int</span> v) {</div><div class="ln mk">  <span class="kw">if</span> (v &gt;= <span class="nu">0</span> &amp;&amp; v &lt;= <span class="nu">100</span>)</div><div class="ln">    score = v;</div><div class="ln">}</div></div><div class="term in"><i>s.setScore(-5) → s.getScore()</i><div class="k2">85</div></div><div class="flab in">📄 app/Main.java</div><div class="code in sm"><div class="ln">s.score = -<span class="nu">5</span>;</div></div><div class="term err in"><i>컴파일 오류</i><div>score has private access in Student</div></div><div class="note in"><b>캡슐화</b> = private + getter · setter</div></section>
+<section id="sc-ovr" class="clip scene" data-start="123.557" data-duration="15.519" data-track-index="1"><div class="pill in">STEP 5-1 · 오버라이딩</div><h2 class="title in">범위를 좁힐 수 없다</h2><p class="desc in">public → 기본 <b>오류</b> · 넓히기는 OK</p><div class="flab in">📄 school/Teacher.java</div><div class="code in sm"><div class="ln"><span class="kw">public</span> <span class="kw">class</span> Teacher</div><div class="ln">    <span class="kw">extends</span> Person {</div><div class="ln">  <span class="kw">@Override</span></div><div class="ln mk">  <span class="kw">void</span> hello() { ... }</div><div class="ln">}</div></div><div class="term err in"><i>컴파일 오류</i><div>hello() in Teacher cannot override hello() in Person</div><div class="dt">attempting to assign weaker access privileges; was public</div></div><div class="res in"><i>좁히기</i><span class="bad">public → 기본 ❌</span></div><div class="res in"><i>넓히기</i><span class="k2">protected → public ✅</span></div><div class="note in">그래서 인터페이스 메소드를 구현할 때<br/><b>public</b> 이 필수였다 <small>(13편)</small></div></section>
+<section id="sc-outro" class="clip scene" data-start="139.076" data-duration="19.984" data-track-index="1"><div class="pill in">정리</div><h2 class="title in">접근 제어자 6가지</h2><div class="list in"><div class="row" id="ex1"><span class="no">1</span><b>private → 같은 클래스만</b></div><div class="row" id="ex2"><span class="no">2</span><b>기본 → 같은 패키지까지</b></div><div class="row" id="ex3"><span class="no">3</span><b>protected → +다른 패키지 자식</b></div><div class="row" id="ex4"><span class="no">4</span><b>public → 어디서나</b></div><div class="row" id="ex5"><span class="no">5</span><b>필드는 private + getter·setter</b></div><div class="row" id="ex6"><span class="no">6</span><b>오버라이딩: 범위 좁히기 ❌</b></div></div><div class="cta in">👍 구독 · 좋아요</div></section>
+  <div id="cap-hook-0" class="clip cap" data-start="0.250" data-duration="2.920" data-track-index="2"><span>자바 입문 열여섯 번째, 접근 제어자!</span></div>
+<div id="cap-hook-1" class="clip cap" data-start="3.170" data-duration="3.498" data-track-index="2"><span>퍼블릭, 프로텍티드, 기본 접근, 프라이빗.</span></div>
+<div id="cap-hook-2" class="clip cap" data-start="6.668" data-duration="2.702" data-track-index="2"><span>어디까지 쓸 수 있는지 정리해 드립니다.</span></div>
+<div id="cap-priv-0" class="clip cap" data-start="9.745" data-duration="2.360" data-track-index="2"><span>먼저 가장 좁은 프라이빗이에요.</span></div>
+<div id="cap-priv-1" class="clip cap" data-start="12.105" data-duration="2.882" data-track-index="2"><span>퍼슨의 패스워드 필드에 프라이빗을 붙였어요.</span></div>
+<div id="cap-priv-2" class="clip cap" data-start="14.988" data-duration="3.666" data-track-index="2"><span>퍼슨 안의 체크 메소드에서는 쓸 수 있어서, 트루가 나와요.</span></div>
+<div id="cap-priv-3" class="clip cap" data-start="18.654" data-duration="1.772" data-track-index="2"><span>하지만 자식 클래스인 스튜던트에서</span></div>
+<div id="cap-priv-4" class="clip cap" data-start="20.426" data-duration="2.547" data-track-index="2"><span>패스워드를 쓰면 컴파일 오류가 나요.</span></div>
+<div id="cap-priv-5" class="clip cap" data-start="22.973" data-duration="1.213" data-track-index="2"><span>프라이빗은 같은 클래스</span></div>
+<div id="cap-priv-6" class="clip cap" data-start="24.185" data-duration="1.810" data-track-index="2"><span>안에서만 쓸 수 있어요.</span></div>
+<div id="cap-priv-7" class="clip cap" data-start="25.995" data-duration="2.230" data-track-index="2"><span>자식 클래스도 예외가 아니에요.</span></div>
+<div id="cap-dflt-0" class="clip cap" data-start="28.600" data-duration="2.808" data-track-index="2"><span>다음은 아무것도 안 붙인 기본 접근이에요.</span></div>
+<div id="cap-dflt-1" class="clip cap" data-start="31.408" data-duration="2.453" data-track-index="2"><span>폰 필드에는 접근 제어자가 없죠.</span></div>
+<div id="cap-dflt-2" class="clip cap" data-start="33.861" data-duration="0.858" data-track-index="2"><span>같은 스쿨 패키지의</span></div>
+<div id="cap-dflt-3" class="clip cap" data-start="34.719" data-duration="1.670" data-track-index="2"><span>스튜던트에서는 쓸 수 있어서,</span></div>
+<div id="cap-dflt-4" class="clip cap" data-start="36.389" data-duration="1.651" data-track-index="2"><span>전화번호가 나와요.</span></div>
+<div id="cap-dflt-5" class="clip cap" data-start="38.040" data-duration="1.306" data-track-index="2"><span>하지만 앱 패키지의 메인에서</span></div>
+<div id="cap-dflt-6" class="clip cap" data-start="39.346" data-duration="2.080" data-track-index="2"><span>쓰면 컴파일 오류가 나요.</span></div>
+<div id="cap-dflt-7" class="clip cap" data-start="41.427" data-duration="2.462" data-track-index="2"><span>기본 접근은 같은 패키지까지예요.</span></div>
+<div id="cap-prot-0" class="clip cap" data-start="44.263" data-duration="2.146" data-track-index="2"><span>세 번째는 프로텍티드예요.</span></div>
+<div id="cap-prot-1" class="clip cap" data-start="46.409" data-duration="2.481" data-track-index="2"><span>나이 필드에 프로텍티드를 붙였어요.</span></div>
+<div id="cap-prot-2" class="clip cap" data-start="48.890" data-duration="1.782" data-track-index="2"><span>다른 패키지에 있는 자식 클래스,</span></div>
+<div id="cap-prot-3" class="clip cap" data-start="50.672" data-duration="1.548" data-track-index="2"><span>튜터 안에서는 쓸 수 있어서,</span></div>
+<div id="cap-prot-4" class="clip cap" data-start="52.220" data-duration="1.968" data-track-index="2"><span>튜터 지우 스무 살이 나와요.</span></div>
+<div id="cap-prot-5" class="clip cap" data-start="54.188" data-duration="1.278" data-track-index="2"><span>하지만 자식이 아닌 메인에서</span></div>
+<div id="cap-prot-6" class="clip cap" data-start="55.466" data-duration="2.052" data-track-index="2"><span>쓰면 컴파일 오류가 나요.</span></div>
+<div id="cap-prot-7" class="clip cap" data-start="57.519" data-duration="1.483" data-track-index="2"><span>프로텍티드는 같은 패키지,</span></div>
+<div id="cap-prot-8" class="clip cap" data-start="59.002" data-duration="2.805" data-track-index="2"><span>그리고 다른 패키지의 자식까지 열려 있어요.</span></div>
+<div id="cap-pub-0" class="clip cap" data-start="62.182" data-duration="2.528" data-track-index="2"><span>마지막으로 가장 넓은 퍼블릭이에요.</span></div>
+<div id="cap-pub-1" class="clip cap" data-start="64.710" data-duration="1.362" data-track-index="2"><span>이름 필드는 퍼블릭이라,</span></div>
+<div id="cap-pub-2" class="clip cap" data-start="66.072" data-duration="1.250" data-track-index="2"><span>다른 패키지의 메인에서도</span></div>
+<div id="cap-pub-3" class="clip cap" data-start="67.322" data-duration="1.763" data-track-index="2"><span>바로 쓸 수 있어요.</span></div>
+<div id="cap-pub-4" class="clip cap" data-start="69.085" data-duration="2.780" data-track-index="2"><span>에스 닷 네임을 출력하면 민수가 나와요.</span></div>
+<div id="cap-pub-5" class="clip cap" data-start="71.865" data-duration="1.782" data-track-index="2"><span>지난 편에서 클래스와 생성자,</span></div>
+<div id="cap-pub-6" class="clip cap" data-start="73.647" data-duration="2.743" data-track-index="2"><span>메소드에 붙였던 바로 그 퍼블릭이에요.</span></div>
+<div id="cap-table-0" class="clip cap" data-start="76.765" data-duration="2.257" data-track-index="2"><span>네 가지를 표로 정리해 볼게요.</span></div>
+<div id="cap-table-1" class="clip cap" data-start="79.022" data-duration="1.213" data-track-index="2"><span>퍼블릭은 어디서나,</span></div>
+<div id="cap-table-2" class="clip cap" data-start="80.235" data-duration="2.211" data-track-index="2"><span>프로텍티드는 다른 패키지의 자식까지,</span></div>
+<div id="cap-table-3" class="clip cap" data-start="82.446" data-duration="1.735" data-track-index="2"><span>기본 접근은 같은 패키지까지,</span></div>
+<div id="cap-table-4" class="clip cap" data-start="84.181" data-duration="1.101" data-track-index="2"><span>프라이빗은 같은 클래스</span></div>
+<div id="cap-table-5" class="clip cap" data-start="85.282" data-duration="1.866" data-track-index="2"><span>안에서만 쓸 수 있어요.</span></div>
+<div id="cap-table-6" class="clip cap" data-start="87.147" data-duration="1.978" data-track-index="2"><span>아래로 갈수록 좁아져요.</span></div>
+<div id="cap-cls-0" class="clip cap" data-start="89.500" data-duration="2.631" data-track-index="2"><span>클래스에도 접근 제어자를 붙이죠.</span></div>
+<div id="cap-cls-1" class="clip cap" data-start="92.131" data-duration="1.194" data-track-index="2"><span>그런데 파일에 바로 쓰는</span></div>
+<div id="cap-cls-2" class="clip cap" data-start="93.325" data-duration="1.940" data-track-index="2"><span>클래스에는 퍼블릭과 기본 접근,</span></div>
+<div id="cap-cls-3" class="clip cap" data-start="95.265" data-duration="1.856" data-track-index="2"><span>두 가지만 쓸 수 있어요.</span></div>
+<div id="cap-cls-4" class="clip cap" data-start="97.121" data-duration="1.203" data-track-index="2"><span>프라이빗 클래스라고 쓰면</span></div>
+<div id="cap-cls-5" class="clip cap" data-start="98.325" data-duration="1.735" data-track-index="2"><span>컴파일 오류가 나요.</span></div>
+<div id="cap-enc-0" class="clip cap" data-start="100.435" data-duration="2.761" data-track-index="2"><span>그럼 필드는 왜 프라이빗으로 숨길까요?</span></div>
+<div id="cap-enc-1" class="clip cap" data-start="103.196" data-duration="1.614" data-track-index="2"><span>점수를 프라이빗으로 숨기고,</span></div>
+<div id="cap-enc-2" class="clip cap" data-start="104.810" data-duration="2.360" data-track-index="2"><span>게터와 세터로만 다루게 해 볼게요.</span></div>
+<div id="cap-enc-3" class="clip cap" data-start="107.170" data-duration="2.649" data-track-index="2"><span>세터는 영부터 백까지의 값만 받아요.</span></div>
+<div id="cap-enc-4" class="clip cap" data-start="109.819" data-duration="1.651" data-track-index="2"><span>셋스코어에 마이너스 오를 넣어도,</span></div>
+<div id="cap-enc-5" class="clip cap" data-start="111.470" data-duration="2.080" data-track-index="2"><span>점수는 그대로 팔십오예요.</span></div>
+<div id="cap-enc-6" class="clip cap" data-start="113.551" data-duration="1.371" data-track-index="2"><span>에스 닷 스코어에 직접 넣으려</span></div>
+<div id="cap-enc-7" class="clip cap" data-start="114.922" data-duration="2.024" data-track-index="2"><span>하면 컴파일 오류가 나요.</span></div>
+<div id="cap-enc-8" class="clip cap" data-start="116.946" data-duration="1.688" data-track-index="2"><span>이렇게 필드를 숨기고 메소드로만</span></div>
+<div id="cap-enc-9" class="clip cap" data-start="118.635" data-duration="2.201" data-track-index="2"><span>다루게 하는 것을 캡슐화라고 해요.</span></div>
+<div id="cap-enc-10" class="clip cap" data-start="120.836" data-duration="2.471" data-track-index="2"><span>덕분에 잘못된 값을 막을 수 있죠.</span></div>
+<div id="cap-ovr-0" class="clip cap" data-start="123.682" data-duration="2.659" data-track-index="2"><span>끝으로 오버라이딩할 때 주의할 점이에요.</span></div>
+<div id="cap-ovr-1" class="clip cap" data-start="126.341" data-duration="1.259" data-track-index="2"><span>티처의 헬로에서 퍼블릭을</span></div>
+<div id="cap-ovr-2" class="clip cap" data-start="127.600" data-duration="2.090" data-track-index="2"><span>빼면 컴파일 오류가 나요.</span></div>
+<div id="cap-ovr-3" class="clip cap" data-start="129.689" data-duration="1.269" data-track-index="2"><span>오버라이딩할 때 접근</span></div>
+<div id="cap-ovr-4" class="clip cap" data-start="130.958" data-duration="2.071" data-track-index="2"><span>범위를 좁힐 수는 없거든요.</span></div>
+<div id="cap-ovr-5" class="clip cap" data-start="133.029" data-duration="1.866" data-track-index="2"><span>넓히는 건 괜찮아요.</span></div>
+<div id="cap-ovr-6" class="clip cap" data-start="134.895" data-duration="1.521" data-track-index="2"><span>그래서 인터페이스 메소드를 구현할</span></div>
+<div id="cap-ovr-7" class="clip cap" data-start="136.415" data-duration="2.411" data-track-index="2"><span>때 퍼블릭이 꼭 필요했던 거예요.</span></div>
+<div id="cap-outro-0" class="clip cap" data-start="139.201" data-duration="3.237" data-track-index="2"><span>정리하면, 프라이빗은 같은 클래스 안에서만.</span></div>
+<div id="cap-outro-1" class="clip cap" data-start="142.438" data-duration="2.379" data-track-index="2"><span>기본 접근은 같은 패키지까지.</span></div>
+<div id="cap-outro-2" class="clip cap" data-start="144.817" data-duration="2.724" data-track-index="2"><span>프로텍티드는 다른 패키지의 자식까지.</span></div>
+<div id="cap-outro-3" class="clip cap" data-start="147.541" data-duration="2.341" data-track-index="2"><span>퍼블릭은 어디서나 쓸 수 있어요.</span></div>
+<div id="cap-outro-4" class="clip cap" data-start="149.882" data-duration="1.381" data-track-index="2"><span>필드는 프라이빗으로 숨기고</span></div>
+<div id="cap-outro-5" class="clip cap" data-start="151.263" data-duration="1.875" data-track-index="2"><span>게터와 세터로 다뤄요.</span></div>
+<div id="cap-outro-6" class="clip cap" data-start="153.138" data-duration="2.556" data-track-index="2"><span>오버라이딩은 범위를 좁힐 수 없어요.</span></div>
+<div id="cap-outro-7" class="clip cap" data-start="155.694" data-duration="2.371" data-track-index="2"><span>구독과 좋아요 부탁드립니다!</span></div>
+  <div class="bar"></div>
+  <audio id="vo" src="assets/narration.mp3" data-start="0" data-duration="159.06" data-track-index="0"></audio>
+</div>
+<script>
+const tl = gsap.timeline({ paused: true });
+const SP = 1.2;
+function enter(sel, t, dur) {
+  const items = document.querySelectorAll(sel + " .in");
+  const step = Math.min(0.9 / SP, (dur * 0.5) / Math.max(1, items.length));
+  items.forEach((el, i) => {
+    const at = Math.max(0, t - 0.1 / SP) + i * step;
+    tl.fromTo(el, { opacity: 0, y: 50 }, { opacity: 1, y: 0, duration: 0.5 / SP, ease: "power3.out" }, at);
+    el.querySelectorAll(".ln").forEach((ln, j) => {
+      tl.fromTo(ln, { opacity: 0, x: -30 }, { opacity: 1, x: 0, duration: 0.35 / SP, ease: "power2.out" }, at + (0.15 + j * 0.3) / SP);
+    });
+  });
+}
+enter("#sc-hook", 0.25, 9.12);
+tl.set(".prog i", {backgroundColor: "#26324a"}, 0);
+enter("#sc-priv", 9.745, 18.48);
+tl.set(".prog i", {backgroundColor: "#26324a"}, 9.62);
+tl.set(".prog i:nth-child(1)", {backgroundColor: "#f29111"}, 9.62);
+enter("#sc-dflt", 28.6, 15.288);
+tl.set(".prog i", {backgroundColor: "#26324a"}, 28.475);
+tl.set(".prog i:nth-child(2)", {backgroundColor: "#f29111"}, 28.475);
+enter("#sc-prot", 44.263, 17.544);
+tl.set(".prog i", {backgroundColor: "#26324a"}, 44.138);
+tl.set(".prog i:nth-child(3)", {backgroundColor: "#f29111"}, 44.138);
+enter("#sc-pub", 62.182, 14.208);
+tl.set(".prog i", {backgroundColor: "#26324a"}, 62.057);
+tl.set(".prog i:nth-child(4)", {backgroundColor: "#f29111"}, 62.057);
+enter("#sc-table", 76.765, 12.36);
+tl.set(".prog i", {backgroundColor: "#26324a"}, 76.64);
+tl.set(".prog i:nth-child(4)", {backgroundColor: "#f29111"}, 76.64);
+enter("#sc-cls", 89.5, 10.56);
+tl.set(".prog i", {backgroundColor: "#26324a"}, 89.375);
+tl.set(".prog i:nth-child(4)", {backgroundColor: "#f29111"}, 89.375);
+enter("#sc-enc", 100.435, 22.872);
+tl.set(".prog i", {backgroundColor: "#26324a"}, 100.31);
+tl.set(".prog i:nth-child(5)", {backgroundColor: "#f29111"}, 100.31);
+enter("#sc-ovr", 123.682, 15.144);
+tl.set(".prog i", {backgroundColor: "#26324a"}, 123.557);
+tl.set(".prog i:nth-child(5)", {backgroundColor: "#f29111"}, 123.557);
+enter("#sc-outro", 139.201, 18.864);
+tl.set(".prog i", {backgroundColor: "#26324a"}, 139.076);
+tl.to("#ex1", {backgroundColor: "#3a2a12", scale: 1.04, duration: 0.2}, 140.035);
+tl.to("#ex1", {backgroundColor: "#131c2e", scale: 1, duration: 0.2}, 142.438);
+tl.to("#ex2", {backgroundColor: "#3a2a12", scale: 1.04, duration: 0.2}, 142.438);
+tl.to("#ex2", {backgroundColor: "#131c2e", scale: 1, duration: 0.2}, 144.817);
+tl.to("#ex3", {backgroundColor: "#3a2a12", scale: 1.04, duration: 0.2}, 144.817);
+tl.to("#ex3", {backgroundColor: "#131c2e", scale: 1, duration: 0.2}, 147.541);
+tl.to("#ex4", {backgroundColor: "#3a2a12", scale: 1.04, duration: 0.2}, 147.541);
+tl.to("#ex4", {backgroundColor: "#131c2e", scale: 1, duration: 0.2}, 149.882);
+tl.to("#ex5", {backgroundColor: "#3a2a12", scale: 1.04, duration: 0.2}, 149.882);
+tl.to("#ex5", {backgroundColor: "#131c2e", scale: 1, duration: 0.2}, 153.138);
+tl.to("#ex6", {backgroundColor: "#3a2a12", scale: 1.04, duration: 0.2}, 153.138);
+tl.to("#ex6", {backgroundColor: "#131c2e", scale: 1, duration: 0.3}, 155.694 + 0.6);
+tl.fromTo(".bar", { scaleX: 0 }, { scaleX: 1, duration: 159.06, ease: "none" }, 0);
+window.__timelines = window.__timelines || {};
+window.__timelines["main"] = tl;
+tl.seek(0);
+</script>
+</body>
+</html>

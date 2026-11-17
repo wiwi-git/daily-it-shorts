@@ -1,0 +1,355 @@
+// 영상에 나오는 예제 프로그램 (build.py가 생성 · 직접 고치지 말 것)
+// 기본 파일(school 패키지 3개 + app/Tutor.java)을 폴더대로 저장하고, 예제마다 바뀐 파일을 덮어쓴 뒤:
+// javac -encoding UTF-8 -d out school/*.java app/*.java && java -cp out app.Main
+
+// ===== 기본 파일 =====
+
+// --- school/Person.java
+package school;
+
+public abstract class Person {
+  public String name;
+  protected int age;
+  String phone;
+  private String password;
+  public Person(String name, int age,
+      String phone, String password) {
+    this.name = name;
+    this.age = age;
+    this.phone = phone;
+    this.password = password;
+  }
+  public boolean check(String p) {
+    return password.equals(p);
+  }
+  public abstract void hello();
+}
+
+// --- school/Student.java
+package school;
+
+public class Student extends Person {
+  private int score;
+  public Student(String name, int score) {
+    super(name, 17, "010-1234", "1234");
+    this.score = score;
+  }
+  public int getScore() { return score; }
+  public void setScore(int v) {
+    if (v >= 0 && v <= 100)
+      score = v;
+  }
+  public void printPhone() {
+    System.out.println(phone);
+  }
+  @Override
+  public void hello() {
+    System.out.println("학생 " + name + " 안녕");
+  }
+}
+
+// --- school/Teacher.java
+package school;
+
+public class Teacher extends Person {
+  public Teacher(String name) {
+    super(name, 40, "010-0000", "0000");
+  }
+  @Override
+  public void hello() {
+    System.out.println(name + " 선생님 안녕");
+  }
+}
+
+// --- app/Tutor.java
+package app;
+
+import school.Person;
+
+public class Tutor extends Person {
+  public Tutor(String name) {
+    super(name, 20, "010-5678", "5678");
+  }
+  @Override
+  public void hello() {
+    System.out.println("튜터 " + name + " " + age + "살");
+  }
+}
+
+// ===== [4-1. 한눈에 표] → 접근 표 (필드를 같은 클래스 · school의 다른 클래스 · app.Tutor · app.Main 에서 사용, 실제 컴파일):
+//   public    O O O O
+//   protected O O O X
+//   기본        O O X X
+//   private   O X X X
+
+// ===== [1. private] → 출력:
+//   true
+
+// --- app/Main.java
+package app;
+
+import school.Student;
+
+public class Main {
+  public static void main(String[] args) {
+    Student s = new Student("민수", 85);
+    System.out.println(s.check("1234"));
+  }
+}
+
+// ===== [1. private] → 컴파일 오류: password has private access in Person
+
+// --- school/Student.java
+package school;
+
+public class Student extends Person {
+  private int score;
+  public Student(String name, int score) {
+    super(name, 17, "010-1234", "1234");
+    this.score = score;
+  }
+  public int getScore() { return score; }
+  public void setScore(int v) {
+    if (v >= 0 && v <= 100)
+      score = v;
+  }
+  public void printPhone() {
+    System.out.println(phone);
+  }
+  @Override
+  public void hello() {
+    System.out.println("학생 " + name + " 안녕");
+  }
+  public void leak() {
+    System.out.println(password);
+  }
+}
+
+// --- app/Main.java
+package app;
+
+import school.Student;
+
+public class Main {
+  public static void main(String[] args) {
+    Student s = new Student("민수", 85);
+  }
+}
+
+// ===== [2. 기본 접근] → 출력:
+//   010-1234
+
+// --- app/Main.java
+package app;
+
+import school.Student;
+
+public class Main {
+  public static void main(String[] args) {
+    Student s = new Student("민수", 85);
+    s.printPhone();
+  }
+}
+
+// ===== [2. 기본 접근] → 컴파일 오류: phone is not public in Person; cannot be accessed from outside package
+
+// --- app/Main.java
+package app;
+
+import school.Student;
+
+public class Main {
+  public static void main(String[] args) {
+    Student s = new Student("민수", 85);
+    System.out.println(s.phone);
+  }
+}
+
+// ===== [3. protected] → 출력:
+//   튜터 지우 20살
+
+// --- app/Main.java
+package app;
+
+import school.Student;
+
+public class Main {
+  public static void main(String[] args) {
+    Student s = new Student("민수", 85);
+    new Tutor("지우").hello();
+  }
+}
+
+// ===== [3. protected] → 컴파일 오류: age has protected access in Person
+
+// --- app/Main.java
+package app;
+
+import school.Student;
+
+public class Main {
+  public static void main(String[] args) {
+    Student s = new Student("민수", 85);
+    System.out.println(s.age);
+  }
+}
+
+// ===== [4. public] → 출력:
+//   민수
+
+// --- app/Main.java
+package app;
+
+import school.Student;
+
+public class Main {
+  public static void main(String[] args) {
+    Student s = new Student("민수", 85);
+    System.out.println(s.name);
+  }
+}
+
+// ===== [4-2. 클래스에는 둘만] → 컴파일 성공 확인 (public class Student · class Desk)
+
+// --- school/Desk.java
+package school;
+
+class Desk {
+}
+
+// --- app/Main.java
+package app;
+
+import school.Student;
+
+public class Main {
+  public static void main(String[] args) {
+    Student s = new Student("민수", 85);
+  }
+}
+
+// ===== [4-2. 클래스에는 둘만] → 컴파일 오류: modifier private not allowed here
+
+// --- school/Club.java
+package school;
+
+private class Club {
+}
+
+// --- app/Main.java
+package app;
+
+import school.Student;
+
+public class Main {
+  public static void main(String[] args) {
+    Student s = new Student("민수", 85);
+  }
+}
+
+// ===== [5. 캡슐화] → 출력:
+//   85
+
+// --- app/Main.java
+package app;
+
+import school.Student;
+
+public class Main {
+  public static void main(String[] args) {
+    Student s = new Student("민수", 85);
+    s.setScore(-5);
+    System.out.println(s.getScore());
+  }
+}
+
+// ===== [5. 캡슐화] → 컴파일 오류: score has private access in Student
+
+// --- app/Main.java
+package app;
+
+import school.Student;
+
+public class Main {
+  public static void main(String[] args) {
+    Student s = new Student("민수", 85);
+    s.score = -5;
+  }
+}
+
+// ===== [5-1. 오버라이딩과 접근 범위] → 컴파일 오류: hello() in Teacher cannot override hello() in Person
+//   attempting to assign weaker access privileges; was public
+
+// --- school/Teacher.java
+package school;
+
+public class Teacher extends Person {
+  public Teacher(String name) {
+    super(name, 40, "010-0000", "0000");
+  }
+  @Override
+  void hello() {
+    System.out.println(name + " 선생님 안녕");
+  }
+}
+
+// --- app/Main.java
+package app;
+
+import school.Student;
+
+public class Main {
+  public static void main(String[] args) {
+    Student s = new Student("민수", 85);
+  }
+}
+
+// ===== [5-1. 오버라이딩과 접근 범위] → 컴파일 성공 확인 (protected → public 으로 넓히기)
+
+// --- school/Person.java
+package school;
+
+public abstract class Person {
+  public String name;
+  protected int age;
+  String phone;
+  private String password;
+  public Person(String name, int age,
+      String phone, String password) {
+    this.name = name;
+    this.age = age;
+    this.phone = phone;
+    this.password = password;
+  }
+  public boolean check(String p) {
+    return password.equals(p);
+  }
+  public abstract void hello();
+  protected void rest() { }
+}
+
+// --- school/Teacher.java
+package school;
+
+public class Teacher extends Person {
+  public Teacher(String name) {
+    super(name, 40, "010-0000", "0000");
+  }
+  @Override
+  public void hello() {
+    System.out.println(name + " 선생님 안녕");
+  }
+  @Override
+  public void rest() { }
+}
+
+// --- app/Main.java
+package app;
+
+import school.Student;
+
+public class Main {
+  public static void main(String[] args) {
+    Student s = new Student("민수", 85);
+  }
+}

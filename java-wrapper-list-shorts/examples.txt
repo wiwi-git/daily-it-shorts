@@ -1,0 +1,181 @@
+// 영상에 나오는 예제 프로그램 (build.py가 생성 · 직접 고치지 말 것)
+// 각 예제를 파일 이름대로 저장한 뒤: javac -g -encoding UTF-8 Main.java && java Main
+
+// [1. 래퍼 클래스] Main.java → 출력:
+//   85 A 3.5 true
+import java.util.ArrayList;
+import java.util.List;
+
+public class Main {
+  public static void main(String[] args) {
+    Integer a = 85;
+    Character c = 'A';
+    Double d = 3.5;
+    Boolean b = true;
+    System.out.println(a + " " + c + " " + d + " " + b);
+  }
+}
+
+
+// [2. 오토박싱·언박싱] Main.java → 출력:
+//   86
+//   93
+import java.util.ArrayList;
+import java.util.List;
+
+public class Main {
+  public static void main(String[] args) {
+    Integer n = 85;  // 오토박싱
+    int m = n + 1;   // 언박싱
+    System.out.println(m);
+    int k = Integer.parseInt("92");
+    System.out.println(k + 1);
+  }
+}
+
+
+// [2-1. null 언박싱] Main.java → 실행 오류: Exception in thread "main" java.lang.NullPointerException: Cannot invoke "java.lang.Integer.intValue()" because "n" is null
+import java.util.ArrayList;
+import java.util.List;
+
+public class Main {
+  public static void main(String[] args) {
+    Integer n = null;  // OK
+    int m = n;  // 언박싱
+  }
+}
+
+
+// [3. ArrayList 기본] Main.java → 출력:
+//   [민수, 서준, 지우]
+//   3
+//   민수
+import java.util.ArrayList;
+import java.util.List;
+
+public class Main {
+  public static void main(String[] args) {
+    ArrayList<String> names =
+        new ArrayList<>();
+    names.add("민수");
+    names.add("서준");
+    names.add("지우");
+    System.out.println(names);
+    System.out.println(names.size());
+    System.out.println(names.get(0));
+  }
+}
+
+
+// [3-1. 범위 밖] Main.java → 실행 오류: Exception in thread "main" java.lang.IndexOutOfBoundsException: Index 3 out of bounds for length 3
+import java.util.ArrayList;
+import java.util.List;
+
+public class Main {
+  public static void main(String[] args) {
+    ArrayList<String> names =
+        new ArrayList<>();
+    names.add("민수");
+    names.add("서준");
+    names.add("지우");
+    names.get(3);
+  }
+}
+
+
+// [4. set·remove·contains] Main.java → 출력:
+//   [민수, 서준, 지우, 하은]
+//   [서준, 지우, 하은]
+//   서준
+//   false
+//   [민수, 지우, 하은]
+import java.util.ArrayList;
+import java.util.List;
+
+public class Main {
+  public static void main(String[] args) {
+    ArrayList<String> names =
+        new ArrayList<>();
+    names.add("민수");
+    names.add("서준");
+    names.add("지우");
+    names.add("하은");
+    System.out.println(names);
+    names.remove(0);
+    System.out.println(names);
+    System.out.println(names.get(0));
+    System.out.println(names.contains("민수"));
+    names.set(0, "민수");
+    System.out.println(names);
+  }
+}
+
+
+// [5. List<Integer>로 점수 모으기] Main.java → 컴파일 오류: unexpected type / required: reference
+import java.util.ArrayList;
+import java.util.List;
+
+public class Main {
+  public static void main(String[] args) {
+    ArrayList<int> scores;
+  }
+}
+
+
+// [5. List<Integer>로 점수 모으기] Main.java → 출력:
+//   255
+import java.util.ArrayList;
+import java.util.List;
+
+public class Main {
+  public static void main(String[] args) {
+    List<Integer> scores =
+        new ArrayList<>();
+    scores.add(85);
+    scores.add(92);
+    scores.add(78);
+    int sum = 0;
+    for (int s : scores) sum += s;
+    System.out.println(sum);
+  }
+}
+
+
+// [5-1. remove(1)의 함정] Main.java → 출력:
+//   [85, 92, 78]
+//   [85, 78]
+import java.util.ArrayList;
+import java.util.List;
+
+public class Main {
+  public static void main(String[] args) {
+    List<Integer> scores =
+        new ArrayList<>();
+    scores.add(85);
+    scores.add(92);
+    scores.add(78);
+    System.out.println(scores);
+    scores.remove(1);
+    System.out.println(scores);
+  }
+}
+
+
+// [5-1. remove(1)의 함정] Main.java → 출력:
+//   [92, 78]
+import java.util.ArrayList;
+import java.util.List;
+
+public class Main {
+  public static void main(String[] args) {
+    List<Integer> scores =
+        new ArrayList<>();
+    scores.add(85);
+    scores.add(92);
+    scores.add(78);
+    scores.remove(
+        Integer.valueOf(85));
+    System.out.println(scores);
+  }
+}
+

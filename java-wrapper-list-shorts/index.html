@@ -1,0 +1,309 @@
+<!doctype html>
+<html lang="ko" data-resolution="portrait">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=1080, height=1920" />
+<script src="https://cdn.jsdelivr.net/npm/gsap@3.14.2/dist/gsap.min.js"></script>
+<style>
+:root {
+  --ground: #0b1220; --panel: #131c2e; --ink: #f4f6fb; --mute: #9aa6bd;
+  --blue: #3fa7d6; --orange: #f29111; --red: #ff5d5d; --green: #7ee08a; --violet: #c3a6ff;
+  --font: "Pretendard", sans-serif;
+  --mono: "Menlo", "SF Mono", monospace;
+}
+@font-face { font-family: "Pretendard"; src: url("assets/fonts/PretendardVariable.woff2") format("woff2"); font-weight: 45 920; }
+* { margin: 0; padding: 0; box-sizing: border-box; }
+html, body { width: 1080px; height: 1920px; overflow: hidden; background: var(--ground); }
+#root { position: relative; width: 100%; height: 100%; font-variant-ligatures: none; font-family: var(--font); color: var(--ink); overflow: hidden;
+  background: radial-gradient(1200px 900px at 80% -10%, #16365a 0%, transparent 60%),
+              radial-gradient(900px 900px at -10% 110%, #3a2410 0%, transparent 55%), var(--ground); }
+.clip { position: absolute; inset: 0; }
+.brand { position: absolute; top: 110px; left: 70px; right: 70px; display: flex; justify-content: space-between; align-items: center;
+  font-size: 34px; font-weight: 700; color: var(--mute); letter-spacing: 0.02em; }
+.brand b { color: var(--blue); } .brand b em { color: var(--orange); font-style: normal; }
+.prog { display: flex; gap: 12px; }
+.prog i { display: block; width: 56px; height: 12px; border-radius: 6px; background: #26324a; }
+.scene { padding: 210px 70px 0; display: flex; flex-direction: column; gap: 26px; }
+.pill { align-self: flex-start; padding: 12px 26px; border-radius: 999px; background: #1d2a44; color: var(--blue);
+  font-size: 34px; font-weight: 700; }
+.hook { display: flex; flex-direction: column; gap: 50px; padding-top: 140px; }
+.big { font-size: 150px; line-height: 1.12; font-weight: 800; letter-spacing: -0.04em; }
+.big em { font-style: normal; color: var(--orange); }
+.sub { font-size: 64px; font-weight: 700; color: var(--mute); } .sub b { color: var(--ink); }
+.title { font-size: 80px; font-weight: 800; letter-spacing: -0.03em; line-height: 1.1; }
+.desc { font-size: 46px; color: var(--mute); font-weight: 600; margin-top: -8px; } .desc b { color: var(--orange); }
+.code { background: #0a0f1a; border: 2px solid #26324a; border-radius: 26px; padding: 30px 32px; font-family: var(--mono);
+  font-size: 42px; line-height: 1.5; color: #d9e1f2; white-space: pre; box-shadow: 0 30px 60px rgba(0,0,0,.35);
+  font-variant-ligatures: none; font-feature-settings: "liga" 0, "calt" 0; }
+.code.sm { font-size: 34px; padding: 26px 28px; }
+.code .ln { margin: 0 -14px; padding: 0 14px; border-radius: 10px; }
+.code .ln.mk { background: rgba(242,145,17,.13); }
+.kw { color: var(--blue); font-weight: 700; } .st { color: var(--green); } .nu { color: var(--orange); } .cm { color: #6f7d98; } .es { color: var(--orange); font-weight: 700; }
+.term { background: #05080f; border: 2px solid #26324a; border-radius: 22px; padding: 18px 32px 22px; font-family: var(--mono);
+  font-size: 40px; line-height: 1.4; color: var(--ink); white-space: pre; tab-size: 8; }
+.term i { display: block; font-style: normal; font-family: var(--font); font-size: 28px; font-weight: 700; color: var(--mute); margin-bottom: 6px; }
+.term .cmd { color: var(--blue); }
+.term.err { border-color: rgba(255,93,93,.5); color: var(--red); font-size: 34px; white-space: normal; }
+.warn small { font-size: 36px; color: var(--mute); font-weight: 600; }
+.nest > div, .nest > div div { border: 3px solid; border-radius: 22px; padding: 16px 26px 20px; display: flex; flex-direction: column; gap: 12px; }
+.nest b { font-size: 38px; font-weight: 800; font-family: var(--mono); }
+.nest .k1 { border-color: var(--orange); } .nest .k1 > b { color: var(--orange); }
+.nest .k2 { border-color: var(--green); } .nest .k2 > b { color: var(--green); }
+.nest .k3 { border-color: var(--violet); } .nest .k3 > b { color: var(--violet); }
+.chips { display: flex; flex-wrap: wrap; gap: 18px; }
+.chips span { padding: 16px 30px; background: var(--panel); border-radius: 18px; font-size: 42px; font-weight: 700; }
+.warn, .note { padding: 26px 36px; border-radius: 24px; font-size: 44px; font-weight: 700; line-height: 1.45; }
+.warn { background: rgba(255,93,93,.12); border-left: 10px solid var(--red); } .warn b { color: var(--red); }
+.note { background: rgba(63,167,214,.12); border-left: 10px solid var(--blue); } .note b { color: var(--orange); }
+.note small { font-size: 38px; color: var(--mute); font-weight: 600; font-family: var(--mono); }
+code { font-family: var(--mono); color: var(--orange); }
+.var { display: grid; grid-template-columns: 1fr 1.3fr 1fr; gap: 18px; }
+.var div { background: var(--panel); border-radius: 24px; padding: 20px 30px 24px; display: flex; flex-direction: column; gap: 4px; }
+.var small { font-size: 32px; font-weight: 700; color: var(--mute); }
+.var b { font-family: var(--mono); font-size: 64px; }
+.var .v { border: 4px dashed var(--orange); } .var .v b { color: var(--orange); }
+.tbl { align-self: flex-start; }
+.tlabel { font-size: 34px; font-weight: 700; color: var(--mute); margin-bottom: 10px; }
+.tbl table { border-collapse: collapse; font-family: var(--mono); font-size: 40px; background: var(--panel); border-radius: 18px; overflow: hidden; }
+.tbl th { color: var(--blue); text-align: left; padding: 12px 32px; background: #1a2640; }
+.tbl th u { text-decoration: none; color: var(--orange); }
+.tbl td { padding: 10px 32px; border-top: 1px solid #26324a; }
+.tbl tr.k1 td { color: var(--orange); } .tbl tr.k2 td { color: var(--green); } .tbl tr.k3 td { color: var(--violet); }
+.tbl tr.out td { color: #5b6782; text-decoration: line-through; }
+.tbl td.nl { color: var(--red) !important; font-style: italic; font-weight: 700; background: rgba(255,93,93,.12); }
+.link { align-self: flex-start; font-family: var(--mono); font-size: 38px; color: var(--mute); padding: 6px 0 6px 26px;
+  border-left: 8px solid var(--orange); }
+.link b { color: var(--orange); }
+.arrow { font-family: var(--mono); font-size: 38px; color: var(--orange); font-weight: 700; }
+.vs { display: grid; grid-template-columns: 1fr 1fr; gap: 22px; }
+.card { background: var(--panel); border-radius: 26px; padding: 26px 32px; display: flex; flex-direction: column; gap: 6px; }
+.card b { font-family: var(--mono); font-size: 52px; color: var(--blue); }
+.vs .card span { font-size: 44px; font-weight: 800; } .vs .card .ok { color: var(--green); } .vs .card .ng { color: var(--red); }
+.res { display: flex; flex-wrap: wrap; align-items: center; gap: 14px; margin-top: -6px; }
+.res i { font-style: normal; font-size: 34px; color: var(--mute); font-weight: 700; }
+.res span { padding: 8px 22px; border-radius: 14px; background: var(--panel); font-size: 40px; font-weight: 700; }
+.res span.k1 { color: var(--orange); } .res span.k2 { color: var(--green); } .res span.k3 { color: var(--violet); }
+.res span.bad { color: var(--red); background: rgba(255,93,93,.14); box-shadow: inset 0 0 0 3px var(--red); } .vs .card em { font-style: normal; color: var(--orange); }
+.list { display: flex; flex-direction: column; gap: 16px; }
+.row { display: flex; align-items: center; gap: 30px; background: var(--panel); border-radius: 22px; padding: 14px 36px; font-size: 48px;
+  transform-origin: left center; }
+.row .no { font-size: 52px; font-weight: 900; color: var(--orange); width: 50px; }
+.row b { font-family: var(--mono); color: var(--blue); }
+.cta { margin-top: 20px; font-size: 54px; font-weight: 800; text-align: center; }
+.arr { display: flex; align-items: flex-start; gap: 14px; }
+.arr .nm { font-family: var(--mono); font-size: 38px; font-weight: 700; color: var(--mute); padding-top: 34px; margin-right: 6px; }
+.arr .nm.tn { margin-left: 30px; color: var(--blue); }
+.cw { display: flex; flex-direction: column; align-items: center; gap: 6px; }
+.cw small { font-family: var(--mono); font-size: 32px; font-weight: 700; color: var(--mute); height: 40px; }
+.box { position: relative; width: 150px; height: 110px; background: var(--panel); border: 3px solid #26324a; border-radius: 18px; }
+.box b { position: absolute; inset: 0; display: flex; align-items: center; justify-content: center;
+  font-family: var(--mono); font-size: 56px; font-weight: 800; }
+.box.ghost { border: 3px dashed var(--red); background: rgba(255,93,93,.08); } .box.ghost b { color: var(--red); }
+.k1 { color: var(--orange); } .k2 { color: var(--green); } .k3 { color: var(--violet); } .z { color: var(--mute); }
+#sc-swap .arr .cw:last-child .box { border-style: dashed; border-color: var(--blue); }
+.gridw { display: flex; flex-direction: column; gap: 22px; }
+.grid { display: grid; gap: 12px; align-items: center; }
+.grid i { font-style: normal; font-family: var(--mono); font-size: 32px; font-weight: 700; color: var(--mute); text-align: center; }
+.grid b { height: 96px; background: var(--panel); border-radius: 16px; display: flex; align-items: center; justify-content: center;
+  font-family: var(--mono); font-size: 52px; font-weight: 800; }
+.grid b.k1 { box-shadow: inset 0 0 0 4px var(--orange); }
+.dims { display: flex; flex-wrap: wrap; gap: 16px; }
+.dims span { padding: 12px 26px; background: var(--panel); border-radius: 16px; font-size: 40px; font-weight: 700; }
+.dims em { font-style: normal; color: var(--orange); }
+.share { display: flex; gap: 12px; }
+.pp { width: 140px; display: flex; flex-direction: column; align-items: center; gap: 6px; }
+.pp .cd { width: 140px; height: 190px; background: var(--panel); border: 3px solid var(--orange); border-radius: 18px;
+  display: flex; flex-direction: column; align-items: center; justify-content: center; font-size: 46px; line-height: 1.15; }
+.pp.left .cd { border: 3px dashed var(--green); background: rgba(126,224,138,.08); }
+.pp small { font-size: 30px; font-weight: 700; color: var(--mute); } .pp.left small { color: var(--green); }
+.chips .gt { background: none; padding: 16px 0; color: var(--mute); }
+.cap { top: auto; bottom: 260px; height: auto; display: flex; justify-content: center; padding: 0 60px; }
+.cap span { background: rgba(0,0,0,.78); color: #fff; font-size: 48px; font-weight: 700; line-height: 1.4; padding: 16px 30px;
+  border-radius: 18px; text-align: center; word-break: keep-all; }
+.bar { position: absolute; left: 0; bottom: 0; height: 10px; width: 1080px; background: var(--orange); transform-origin: left center; }
+
+.chips em { font-style: normal; color: var(--orange); }
+.chips .k1 { color: var(--orange); font-family: var(--mono); } .chips .k2 { color: var(--green); font-family: var(--mono); }
+.chips .r { color: var(--red); }
+.vs .card small { font-size: 32px; color: var(--mute); font-weight: 700; }
+.vs .card span { font-family: var(--mono); font-size: 44px; color: var(--blue); font-weight: 800; }
+.vs .card.on b, .vs .card.on span { color: var(--orange); }
+.flow { display: flex; flex-direction: column; gap: 14px; }
+.flow div { display: flex; align-items: center; gap: 18px; font-size: 40px; font-weight: 700; }
+.flow code { background: var(--panel); padding: 8px 20px; border-radius: 14px; }
+.flow em { font-style: normal; color: var(--mute); }
+.ig { display: grid; gap: 10px; align-items: center; }
+.ig i { font-style: normal; font-family: var(--mono); font-size: 32px; font-weight: 700; color: var(--mute); text-align: center; }
+.ig b { height: 92px; background: var(--panel); border-radius: 16px; display: flex; align-items: center; justify-content: center;
+  font-size: 44px; font-weight: 800; }
+.ig b.out { color: #5b6782; text-decoration: line-through; box-shadow: inset 0 0 0 3px var(--red); }
+.ig b.z { background: none; border: 3px dashed #26324a; }
+.k0 { color: var(--ink); }
+.tbl tr.hi td { color: var(--orange); }
+
+</style>
+</head>
+<body>
+<div id="root" data-composition-id="main" data-start="0" data-duration="165.23" data-width="1080" data-height="1920">
+  <div class="brand"><b>자바 입문 <em>래퍼 클래스와 List</em> 정리</b><div class="prog"><i></i><i></i><i></i><i></i><i></i></div></div>
+  <section id="sc-hook" class="clip scene" data-start="0.000" data-duration="12.956" data-track-index="1"><div class="hook">
+   <div class="pill in">JAVA 입문 · 열일곱 번째</div>
+   <h1 class="big in">래퍼 클래스와<br/><em>List</em></h1>
+   <div class="chips in"><span>배열은 <em>크기 고정</em></span><span><code>&lt;int&gt;</code> 는 <em class="r">안 됨</em></span></div>
+ </div></section>
+<section id="sc-wrap" class="clip scene" data-start="12.956" data-duration="12.711" data-track-index="1"><div class="pill in">STEP 1 · 래퍼 클래스</div><h2 class="title in">기본 타입을 객체로</h2><p class="desc in">기본 타입 값을 <b>감싼 클래스</b></p><div class="tbl in"><div class="tlabel in">이름이 바뀌는 건 둘뿐</div><table><tr><th>기본 타입</th><th>래퍼 클래스</th></tr><tr class="hi"><td>int</td><td>Integer</td></tr><tr class="hi"><td>char</td><td>Character</td></tr><tr class=""><td>double</td><td>Double</td></tr><tr class=""><td>boolean</td><td>Boolean</td></tr><tr class=""><td>long …</td><td>Long … (첫 글자 대문자)</td></tr></table></div><div class="code in sm"><div class="ln">Integer a = <span class="nu">85</span>;</div><div class="ln">Character c = <span class="st">'A'</span>;</div><div class="ln">Double d = <span class="nu">3.5</span>;</div><div class="ln">Boolean b = <span class="kw">true</span>;</div></div><div class="term in"><i>네 값 출력</i><div>85 A 3.5 true</div></div></section>
+<section id="sc-box" class="clip scene" data-start="25.667" data-duration="17.895" data-track-index="1"><div class="pill in">STEP 2 · 오토박싱·언박싱</div><h2 class="title in">자동으로 바뀐다</h2><p class="desc in">넣을 때 감싸고, 쓸 때 풀고</p><div class="code in sm"><div class="ln mk">Integer n = <span class="nu">85</span>;  <span class="cm">// 오토박싱</span></div><div class="ln mk"><span class="kw">int</span> m = n + <span class="nu">1</span>;   <span class="cm">// 언박싱</span></div><div class="ln">System.out.println(m);</div><div class="ln mk"><span class="kw">int</span> k = Integer.parseInt(<span class="st">"92"</span>);</div><div class="ln">System.out.println(k + <span class="nu">1</span>);</div></div><div class="term in"><i>실행 결과</i><div>86</div><div>93</div></div><div class="flow in"><div><code>int</code><em>→</em><code>Integer</code> <b class="k1">오토박싱</b></div><div><code>Integer</code><em>→</em><code>int</code> <b class="k1">언박싱</b></div></div><div class="note in"><b>parseInt</b> : 문자열 → 숫자</div></section>
+<section id="sc-npe" class="clip scene" data-start="43.562" data-duration="10.455" data-track-index="1"><div class="pill in">STEP 2-1 · null 언박싱</div><h2 class="title in">null 은 풀 수 없다</h2><p class="desc in">래퍼는 객체라서 <b>null</b> 가능</p><div class="code in"><div class="ln">Integer n = <span class="kw">null</span>;  <span class="cm">// OK</span></div><div class="ln mk"><span class="kw">int</span> m = n;  <span class="cm">// 언박싱</span></div></div><div class="term err in"><i>실행 오류</i><div>java.lang.NullPointerException:</div><div>Cannot invoke &quot;java.lang.Integer.intValue()&quot; because &quot;n&quot; is null</div></div><div class="warn in">컴파일은 되고 <b>실행 중 오류</b><br/>null 이 들어올 수 있으면 조심!</div></section>
+<section id="sc-list" class="clip scene" data-start="54.017" data-duration="21.159" data-track-index="1"><div class="pill in">STEP 3 · ArrayList</div><h2 class="title in">크기를 안 정한다</h2><p class="desc in">꺾쇠로 <b>담을 타입</b> 정하기 = 제네릭</p><div class="tlabel in">// 뒤 주석 = 그 줄을 실행한 결과 값</div><div class="code in"><div class="ln">import java.util.ArrayList;</div><div class="ln mk">ArrayList&lt;<span class="kw">String</span>&gt; names =</div><div class="ln">    <span class="kw">new</span> ArrayList&lt;&gt;();</div><div class="ln">names.add(<span class="st">"민수"</span>);</div><div class="ln">names.add(<span class="st">"서준"</span>);</div><div class="ln">names.add(<span class="st">"지우"</span>);</div><div class="ln"><span class="cm">// names → [민수, 서준, 지우]</span></div><div class="ln mk">names.size();   <span class="cm">// 3</span></div><div class="ln mk">names.get(<span class="nu">0</span>);   <span class="cm">// 민수</span></div></div><div class="note in"><b>&lt;String&gt;</b> → 문자열만 들어간다<br/><small>오른쪽 &lt;&gt; 는 비워도 OK</small></div></section>
+<section id="sc-idx" class="clip scene" data-start="75.176" data-duration="11.247" data-track-index="1"><div class="pill in">STEP 3-1 · 범위 밖</div><h2 class="title in">인덱스는 0부터</h2><p class="desc in">배열과 같다 → <b>get(3)</b> 은 오류</p><div class="code in"><div class="ln mk">names.get(<span class="nu">3</span>);</div></div><div class="term err in"><i>실행 오류</i><div>java.lang.IndexOutOfBoundsException:</div><div>Index 3 out of bounds for length 3</div></div><div class="vs in"><div class="card"><small>배열</small><b>arr[0]</b><span>arr.length</span></div><div class="card on"><small>ArrayList</small><b>get(0)</b><span>size()</span></div></div></section>
+<section id="sc-edit" class="clip scene" data-start="86.423" data-duration="17.319" data-track-index="1"><div class="pill in">STEP 4 · set · remove · contains</div><h2 class="title in">지우면 당겨진다</h2><p class="desc in">뒤 칸이 <b>한 칸씩 앞으로</b></p><div class="code in sm"><div class="ln">names.add(<span class="st">"하은"</span>);</div><div class="ln"><span class="cm">// names → [민수, 서준, 지우, 하은]</span></div><div class="ln mk">names.remove(<span class="nu">0</span>);</div><div class="ln"><span class="cm">// names → [서준, 지우, 하은]</span></div><div class="ln mk">names.get(<span class="nu">0</span>);  <span class="cm">// 서준</span></div><div class="ln">names.contains(<span class="st">"민수"</span>); <span class="cm">// false</span></div><div class="ln mk">names.set(<span class="nu">0</span>, <span class="st">"민수"</span>);</div><div class="ln"><span class="cm">// names → [민수, 지우, 하은]</span></div></div><div class="ig in" style="grid-template-columns: 170px repeat(4, 1fr)"><i></i><i>[0]</i><i>[1]</i><i>[2]</i><i>[3]</i><i>remove 전</i><b class="k1 out">민수</b><b class="k2">서준</b><b class="k3">지우</b><b class="k0">하은</b><i>remove 후</i><b class="k2">서준</b><b class="k3">지우</b><b class="k0">하은</b><b class="z"></b></div><div class="note in"><b>set</b> = 덮어쓰기 (서준 → 민수)<br/><small>끼워 넣는 게 아님</small></div></section>
+<section id="sc-nums" class="clip scene" data-start="103.742" data-duration="19.695" data-track-index="1"><div class="pill in">STEP 5 · List&lt;Integer&gt;</div><h2 class="title in">점수는 Integer 로</h2><p class="desc in">&lt; &gt; 안엔 <b>기본 타입 ✗</b></p><div class="code in sm"><div class="ln">ArrayList&lt;<span class="kw">int</span>&gt; scores;</div></div><div class="term err in"><i>컴파일 오류</i><div>unexpected type</div><div class="z">required: reference</div></div><div class="code in sm"><div class="ln">import java.util.List;</div><div class="ln mk">List&lt;Integer&gt; scores =</div><div class="ln">    <span class="kw">new</span> ArrayList&lt;&gt;();</div><div class="ln">scores.add(<span class="nu">85</span>);</div><div class="ln">scores.add(<span class="nu">92</span>);</div><div class="ln">scores.add(<span class="nu">78</span>);</div><div class="ln"><span class="kw">int</span> sum = <span class="nu">0</span>;</div><div class="ln mk"><span class="kw">for</span> (<span class="kw">int</span> s : scores) sum += s;</div><div class="ln"><span class="cm">// sum → 255</span></div></div><div class="note in">변수는 <b>List</b> 타입 <small>(업캐스팅)</small></div></section>
+<section id="sc-rm" class="clip scene" data-start="123.437" data-duration="15.879" data-track-index="1"><div class="pill in">STEP 5-1 · remove(1) 의 함정</div><h2 class="title in">1 은 값? 칸?</h2><p class="desc in"><b>인덱스</b>를 받는 remove 가 먼저</p><div class="code in sm"><div class="ln"><span class="cm">// scores → [85, 92, 78]</span></div><div class="ln mk">scores.remove(<span class="nu">1</span>);</div><div class="ln"><span class="cm">// scores → [85, 78]</span></div></div><div class="warn in">값 1 이 아니라 <b>1번 칸</b>(92)을 지운다</div><div class="code in sm"><div class="ln mk">scores.remove(</div><div class="ln mk">    Integer.valueOf(<span class="nu">85</span>));</div><div class="ln"><span class="cm">// scores → [92, 78]</span></div></div></section>
+<section id="sc-outro" class="clip scene" data-start="139.316" data-duration="25.914" data-track-index="1"><div class="pill in">정리</div><h2 class="title in">래퍼 클래스와 List</h2><div class="list in"><div class="row" id="ex1"><span class="no">1</span><b>래퍼 = 기본 타입을 객체로</b></div><div class="row" id="ex2"><span class="no">2</span><b>오토박싱·언박싱 (null 주의)</b></div><div class="row" id="ex3"><span class="no">3</span><b>add · get · size()</b></div><div class="row" id="ex4"><span class="no">4</span><b>remove → 뒤 칸이 당겨짐</b></div><div class="row" id="ex5"><span class="no">5</span><b>&lt; &gt; 안엔 기본 타입 ✗ → Integer</b></div><div class="row" id="ex6"><span class="no">6</span><b>변수는 기본적으로 List 타입</b></div><div class="row" id="ex7"><span class="no">7</span><b>remove(1) = 1번 칸</b></div></div><div class="cta in">👍 구독 · 좋아요</div></section>
+  <div id="cap-hook-0" class="clip cap" data-start="0.250" data-duration="1.496" data-track-index="2"><span>자바 입문 열일곱 번째,</span></div>
+<div id="cap-hook-1" class="clip cap" data-start="1.746" data-duration="1.862" data-track-index="2"><span>래퍼 클래스와 리스트!</span></div>
+<div id="cap-hook-2" class="clip cap" data-start="3.608" data-duration="1.493" data-track-index="2"><span>학생 점수를 모으고 싶은데,</span></div>
+<div id="cap-hook-3" class="clip cap" data-start="5.101" data-duration="2.444" data-track-index="2"><span>몇 명일지 모른다면 어떻게 할까요?</span></div>
+<div id="cap-hook-4" class="clip cap" data-start="7.545" data-duration="2.369" data-track-index="2"><span>배열은 크기가 고정이라 곤란하죠.</span></div>
+<div id="cap-hook-5" class="clip cap" data-start="9.914" data-duration="2.792" data-track-index="2"><span>오늘 래퍼 클래스와 리스트로 해결해 볼게요.</span></div>
+<div id="cap-wrap-0" class="clip cap" data-start="13.081" data-duration="1.682" data-track-index="2"><span>래퍼 클래스는 기본 타입 값을</span></div>
+<div id="cap-wrap-1" class="clip cap" data-start="14.763" data-duration="1.984" data-track-index="2"><span>객체로 감싼 클래스예요.</span></div>
+<div id="cap-wrap-2" class="clip cap" data-start="16.747" data-duration="2.752" data-track-index="2"><span>인트는 인티저, 차는 캐릭터로 이름이 바뀌고,</span></div>
+<div id="cap-wrap-3" class="clip cap" data-start="19.499" data-duration="3.778" data-track-index="2"><span>나머지는 더블, 불리언처럼 첫 글자만 대문자로 쓰면 돼요.</span></div>
+<div id="cap-wrap-4" class="clip cap" data-start="23.277" data-duration="2.140" data-track-index="2"><span>값은 그대로 담을 수 있어요.</span></div>
+<div id="cap-box-0" class="clip cap" data-start="25.792" data-duration="1.766" data-track-index="2"><span>인티저 엔에 팔십오를 바로 넣으면,</span></div>
+<div id="cap-box-1" class="clip cap" data-start="27.558" data-duration="2.263" data-track-index="2"><span>자바가 알아서 객체로 감싸 줘요.</span></div>
+<div id="cap-box-2" class="clip cap" data-start="29.822" data-duration="1.688" data-track-index="2"><span>이게 오토박싱이에요.</span></div>
+<div id="cap-box-3" class="clip cap" data-start="31.510" data-duration="1.091" data-track-index="2"><span>반대로 엔 더하기 일처럼</span></div>
+<div id="cap-box-4" class="clip cap" data-start="32.602" data-duration="1.931" data-track-index="2"><span>계산하면 다시 인트로 풀리는데,</span></div>
+<div id="cap-box-5" class="clip cap" data-start="34.533" data-duration="1.670" data-track-index="2"><span>이건 언박싱이에요.</span></div>
+<div id="cap-box-6" class="clip cap" data-start="36.202" data-duration="1.931" data-track-index="2"><span>그래서 팔십육이 나와요.</span></div>
+<div id="cap-box-7" class="clip cap" data-start="38.133" data-duration="1.586" data-track-index="2"><span>인티저 닷 파스인트는 문자열</span></div>
+<div id="cap-box-8" class="clip cap" data-start="39.719" data-duration="1.520" data-track-index="2"><span>구십이를 숫자로 바꿔 줘서,</span></div>
+<div id="cap-box-9" class="clip cap" data-start="41.240" data-duration="2.072" data-track-index="2"><span>더하기 일 하면 구십삼이에요.</span></div>
+<div id="cap-npe-0" class="clip cap" data-start="43.687" data-duration="2.724" data-track-index="2"><span>래퍼는 객체라서 널도 담을 수 있어요.</span></div>
+<div id="cap-npe-1" class="clip cap" data-start="46.411" data-duration="1.381" data-track-index="2"><span>그런데 널을 인트에 넣으면,</span></div>
+<div id="cap-npe-2" class="clip cap" data-start="47.791" data-duration="1.567" data-track-index="2"><span>풀어낼 값이 없어서 실행 중에</span></div>
+<div id="cap-npe-3" class="clip cap" data-start="49.359" data-duration="1.968" data-track-index="2"><span>널 포인터 익셉션이 나요.</span></div>
+<div id="cap-npe-4" class="clip cap" data-start="51.327" data-duration="2.440" data-track-index="2"><span>컴파일은 되니까 더 조심해야 해요.</span></div>
+<div id="cap-list-0" class="clip cap" data-start="54.142" data-duration="1.614" data-track-index="2"><span>이제 리스트예요.</span></div>
+<div id="cap-list-1" class="clip cap" data-start="55.756" data-duration="2.108" data-track-index="2"><span>자바 유틸의 어레이리스트를 임포트하고,</span></div>
+<div id="cap-list-2" class="clip cap" data-start="57.864" data-duration="2.183" data-track-index="2"><span>꺾쇠 안에 담을 타입을 적어요.</span></div>
+<div id="cap-list-3" class="clip cap" data-start="60.047" data-duration="0.914" data-track-index="2"><span>이렇게 타입을 정하는</span></div>
+<div id="cap-list-4" class="clip cap" data-start="60.961" data-duration="1.530" data-track-index="2"><span>문법을 제네릭이라고 하는데,</span></div>
+<div id="cap-list-5" class="clip cap" data-start="62.491" data-duration="0.896" data-track-index="2"><span>스트링으로 정했으니</span></div>
+<div id="cap-list-6" class="clip cap" data-start="63.386" data-duration="1.968" data-track-index="2"><span>문자열만 넣을 수 있어요.</span></div>
+<div id="cap-list-7" class="clip cap" data-start="65.355" data-duration="1.735" data-track-index="2"><span>오른쪽 꺾쇠는 비워 둬도 되고,</span></div>
+<div id="cap-list-8" class="clip cap" data-start="67.090" data-duration="1.763" data-track-index="2"><span>크기는 정하지 않아요.</span></div>
+<div id="cap-list-9" class="clip cap" data-start="68.853" data-duration="1.558" data-track-index="2"><span>애드로 민수, 서준,</span></div>
+<div id="cap-list-10" class="clip cap" data-start="70.411" data-duration="2.892" data-track-index="2"><span>지우를 넣으면 순서대로 담기고, 사이즈는 삼,</span></div>
+<div id="cap-list-11" class="clip cap" data-start="73.302" data-duration="1.624" data-track-index="2"><span>겟 영은 민수예요.</span></div>
+<div id="cap-idx-0" class="clip cap" data-start="75.301" data-duration="2.687" data-track-index="2"><span>인덱스가 영부터인 건 배열과 같아요.</span></div>
+<div id="cap-idx-1" class="clip cap" data-start="77.988" data-duration="1.632" data-track-index="2"><span>그래서 겟 삼은 범위를 벗어나,</span></div>
+<div id="cap-idx-2" class="clip cap" data-start="79.620" data-duration="2.575" data-track-index="2"><span>인덱스 아웃 오브 바운즈 익셉션이 나요.</span></div>
+<div id="cap-idx-3" class="clip cap" data-start="82.195" data-duration="1.539" data-track-index="2"><span>배열의 대괄호 영은 겟 영,</span></div>
+<div id="cap-idx-4" class="clip cap" data-start="83.734" data-duration="2.439" data-track-index="2"><span>닷 렝스는 사이즈로 바꿔 쓰면 돼요.</span></div>
+<div id="cap-edit-0" class="clip cap" data-start="86.548" data-duration="2.267" data-track-index="2"><span>하은을 애드하면 네 명이 되죠.</span></div>
+<div id="cap-edit-1" class="clip cap" data-start="88.815" data-duration="1.828" data-track-index="2"><span>크기가 알아서 늘어나요.</span></div>
+<div id="cap-edit-2" class="clip cap" data-start="90.643" data-duration="1.856" data-track-index="2"><span>이제 리무브 영으로 민수를 지우면,</span></div>
+<div id="cap-edit-3" class="clip cap" data-start="92.499" data-duration="2.192" data-track-index="2"><span>뒤에 있던 칸이 한 칸씩 앞으로 당겨져서,</span></div>
+<div id="cap-edit-4" class="clip cap" data-start="94.692" data-duration="1.651" data-track-index="2"><span>겟 영은 서준이 돼요.</span></div>
+<div id="cap-edit-5" class="clip cap" data-start="96.343" data-duration="2.127" data-track-index="2"><span>컨테인즈로 민수가 있는지 물으면 폴스,</span></div>
+<div id="cap-edit-6" class="clip cap" data-start="98.470" data-duration="2.817" data-track-index="2"><span>셋 영은 영번 칸의 서준을 민수로 바꿔요.</span></div>
+<div id="cap-edit-7" class="clip cap" data-start="101.287" data-duration="2.205" data-track-index="2"><span>끼워 넣는 게 아니라 덮어써요.</span></div>
+<div id="cap-nums-0" class="clip cap" data-start="103.867" data-duration="1.996" data-track-index="2"><span>이제 점수를 모아 볼게요.</span></div>
+<div id="cap-nums-1" class="clip cap" data-start="105.863" data-duration="2.155" data-track-index="2"><span>꺾쇠 안에는 기본 타입을 쓸 수 없어서,</span></div>
+<div id="cap-nums-2" class="clip cap" data-start="108.018" data-duration="2.463" data-track-index="2"><span>어레이리스트 인트는 컴파일 오류예요.</span></div>
+<div id="cap-nums-3" class="clip cap" data-start="110.481" data-duration="1.744" data-track-index="2"><span>그래서 인티저를 써요.</span></div>
+<div id="cap-nums-4" class="clip cap" data-start="112.225" data-duration="2.379" data-track-index="2"><span>애드 팔십오처럼 인트를 넣어도 오토박싱되고,</span></div>
+<div id="cap-nums-5" class="clip cap" data-start="114.604" data-duration="1.157" data-track-index="2"><span>향상된 포문으로 꺼내면</span></div>
+<div id="cap-nums-6" class="clip cap" data-start="115.761" data-duration="2.472" data-track-index="2"><span>언박싱돼서 합계는 이백오십오예요.</span></div>
+<div id="cap-nums-7" class="clip cap" data-start="118.233" data-duration="1.278" data-track-index="2"><span>변수 타입은 기본적으로</span></div>
+<div id="cap-nums-8" class="clip cap" data-start="119.511" data-duration="2.220" data-track-index="2"><span>인터페이스인 리스트로 받아요.</span></div>
+<div id="cap-nums-9" class="clip cap" data-start="121.731" data-duration="1.456" data-track-index="2"><span>업캐스팅이죠.</span></div>
+<div id="cap-rm-0" class="clip cap" data-start="123.562" data-duration="2.528" data-track-index="2"><span>숫자 리스트에는 함정이 하나 있어요.</span></div>
+<div id="cap-rm-1" class="clip cap" data-start="126.090" data-duration="0.989" data-track-index="2"><span>리무브 일은 값 일이</span></div>
+<div id="cap-rm-2" class="clip cap" data-start="127.079" data-duration="2.015" data-track-index="2"><span>아니라 일번 칸을 지워요.</span></div>
+<div id="cap-rm-3" class="clip cap" data-start="129.094" data-duration="2.957" data-track-index="2"><span>인덱스를 받는 리무브가 먼저 선택되거든요.</span></div>
+<div id="cap-rm-4" class="clip cap" data-start="132.051" data-duration="1.950" data-track-index="2"><span>그래서 구십이가 지워져요.</span></div>
+<div id="cap-rm-5" class="clip cap" data-start="134.000" data-duration="1.586" data-track-index="2"><span>값으로 지우려면 인티저 닷</span></div>
+<div id="cap-rm-6" class="clip cap" data-start="135.586" data-duration="1.763" data-track-index="2"><span>밸류오브로 객체를 만들어 넘기면,</span></div>
+<div id="cap-rm-7" class="clip cap" data-start="137.349" data-duration="1.717" data-track-index="2"><span>팔십오가 지워져요.</span></div>
+<div id="cap-outro-0" class="clip cap" data-start="139.441" data-duration="1.493" data-track-index="2"><span>정리할게요.</span></div>
+<div id="cap-outro-1" class="clip cap" data-start="140.934" data-duration="2.929" data-track-index="2"><span>래퍼 클래스는 기본 타입을 객체로 감싸요.</span></div>
+<div id="cap-outro-2" class="clip cap" data-start="143.863" data-duration="1.875" data-track-index="2"><span>오토박싱과 언박싱은 자동이지만,</span></div>
+<div id="cap-outro-3" class="clip cap" data-start="145.738" data-duration="1.493" data-track-index="2"><span>널은 조심하세요.</span></div>
+<div id="cap-outro-4" class="clip cap" data-start="147.230" data-duration="2.528" data-track-index="2"><span>어레이리스트는 애드, 겟, 사이즈로 쓰고,</span></div>
+<div id="cap-outro-5" class="clip cap" data-start="149.758" data-duration="2.276" data-track-index="2"><span>리무브하면 뒤 칸이 당겨져요.</span></div>
+<div id="cap-outro-6" class="clip cap" data-start="152.034" data-duration="1.213" data-track-index="2"><span>꺾쇠 안에는 기본 타입을</span></div>
+<div id="cap-outro-7" class="clip cap" data-start="153.247" data-duration="1.399" data-track-index="2"><span>못 써서 인티저를 쓰고,</span></div>
+<div id="cap-outro-8" class="clip cap" data-start="154.646" data-duration="2.780" data-track-index="2"><span>변수는 기본적으로 리스트 타입으로 받아요.</span></div>
+<div id="cap-outro-9" class="clip cap" data-start="157.426" data-duration="2.817" data-track-index="2"><span>마지막으로, 리무브 일은 일번 칸이에요.</span></div>
+<div id="cap-outro-10" class="clip cap" data-start="160.243" data-duration="1.856" data-track-index="2"><span>다음 편은 람다식이에요.</span></div>
+<div id="cap-outro-11" class="clip cap" data-start="162.100" data-duration="2.133" data-track-index="2"><span>구독과 좋아요 부탁드려요!</span></div>
+  <div class="bar"></div>
+  <audio id="vo" src="assets/narration.mp3" data-start="0" data-duration="165.23" data-track-index="0"></audio>
+</div>
+<script>
+const tl = gsap.timeline({ paused: true });
+const SP = 1.2;
+function enter(sel, t, dur) {
+  const items = document.querySelectorAll(sel + " .in");
+  const step = Math.min(0.9 / SP, (dur * 0.5) / Math.max(1, items.length));
+  items.forEach((el, i) => {
+    const at = Math.max(0, t - 0.1 / SP) + i * step;
+    tl.fromTo(el, { opacity: 0, y: 50 }, { opacity: 1, y: 0, duration: 0.5 / SP, ease: "power3.out" }, at);
+    el.querySelectorAll(".ln").forEach((ln, j) => {
+      tl.fromTo(ln, { opacity: 0, x: -30 }, { opacity: 1, x: 0, duration: 0.35 / SP, ease: "power2.out" }, at + (0.15 + j * 0.3) / SP);
+    });
+  });
+}
+enter("#sc-hook", 0.25, 12.456);
+tl.set(".prog i", {backgroundColor: "#26324a"}, 0);
+enter("#sc-wrap", 13.081, 12.336);
+tl.set(".prog i", {backgroundColor: "#26324a"}, 12.956);
+tl.set(".prog i:nth-child(1)", {backgroundColor: "#f29111"}, 12.956);
+enter("#sc-box", 25.792, 17.52);
+tl.set(".prog i", {backgroundColor: "#26324a"}, 25.667);
+tl.set(".prog i:nth-child(2)", {backgroundColor: "#f29111"}, 25.667);
+enter("#sc-npe", 43.687, 10.08);
+tl.set(".prog i", {backgroundColor: "#26324a"}, 43.562);
+tl.set(".prog i:nth-child(2)", {backgroundColor: "#f29111"}, 43.562);
+enter("#sc-list", 54.142, 20.784);
+tl.set(".prog i", {backgroundColor: "#26324a"}, 54.017);
+tl.set(".prog i:nth-child(3)", {backgroundColor: "#f29111"}, 54.017);
+enter("#sc-idx", 75.301, 10.872);
+tl.set(".prog i", {backgroundColor: "#26324a"}, 75.176);
+tl.set(".prog i:nth-child(3)", {backgroundColor: "#f29111"}, 75.176);
+enter("#sc-edit", 86.548, 16.944);
+tl.set(".prog i", {backgroundColor: "#26324a"}, 86.423);
+tl.set(".prog i:nth-child(4)", {backgroundColor: "#f29111"}, 86.423);
+enter("#sc-nums", 103.867, 19.32);
+tl.set(".prog i", {backgroundColor: "#26324a"}, 103.742);
+tl.set(".prog i:nth-child(5)", {backgroundColor: "#f29111"}, 103.742);
+enter("#sc-rm", 123.562, 15.504);
+tl.set(".prog i", {backgroundColor: "#26324a"}, 123.437);
+tl.set(".prog i:nth-child(5)", {backgroundColor: "#f29111"}, 123.437);
+enter("#sc-outro", 139.441, 24.792);
+tl.set(".prog i", {backgroundColor: "#26324a"}, 139.316);
+tl.to("#ex1", {backgroundColor: "#3a2a12", scale: 1.04, duration: 0.2}, 140.934);
+tl.to("#ex1", {backgroundColor: "#131c2e", scale: 1, duration: 0.2}, 143.863);
+tl.to("#ex2", {backgroundColor: "#3a2a12", scale: 1.04, duration: 0.2}, 143.863);
+tl.to("#ex2", {backgroundColor: "#131c2e", scale: 1, duration: 0.2}, 147.23);
+tl.to("#ex3", {backgroundColor: "#3a2a12", scale: 1.04, duration: 0.2}, 147.23);
+tl.to("#ex3", {backgroundColor: "#131c2e", scale: 1, duration: 0.2}, 149.758);
+tl.to("#ex4", {backgroundColor: "#3a2a12", scale: 1.04, duration: 0.2}, 149.758);
+tl.to("#ex4", {backgroundColor: "#131c2e", scale: 1, duration: 0.2}, 152.034);
+tl.to("#ex5", {backgroundColor: "#3a2a12", scale: 1.04, duration: 0.2}, 152.034);
+tl.to("#ex5", {backgroundColor: "#131c2e", scale: 1, duration: 0.2}, 154.646);
+tl.to("#ex6", {backgroundColor: "#3a2a12", scale: 1.04, duration: 0.2}, 154.646);
+tl.to("#ex6", {backgroundColor: "#131c2e", scale: 1, duration: 0.2}, 157.426);
+tl.to("#ex7", {backgroundColor: "#3a2a12", scale: 1.04, duration: 0.2}, 157.426);
+tl.to("#ex7", {backgroundColor: "#131c2e", scale: 1, duration: 0.3}, 162.1 + 0.6);
+tl.fromTo(".bar", { scaleX: 0 }, { scaleX: 1, duration: 165.23, ease: "none" }, 0);
+window.__timelines = window.__timelines || {};
+window.__timelines["main"] = tl;
+tl.seek(0);
+</script>
+</body>
+</html>

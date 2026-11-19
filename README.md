@@ -39,6 +39,7 @@
 | 2026-11-16 | 자바 입문: 패키지 (package · import · 전체 이름 · public · java.lang · 같은 이름 클래스) | 2:11 | [java-package-shorts](java-package-shorts) | [YouTube](https://www.youtube.com/watch?v=bcuiUNsLQRc) |
 | 2026-11-17 | 자바 입문: 접근 제어자 (private · 기본 · protected · public · 클래스 접근 · 캡슐화 · 오버라이딩) | 2:39 | [java-access-shorts](java-access-shorts) | [YouTube](https://www.youtube.com/watch?v=GqTT-0rZgdw) |
 | 2026-11-18 | 자바 입문: 래퍼 클래스와 List (Integer · 오토박싱 · 언박싱 · ArrayList · add · get · set · remove · List 타입) | 2:45 | [java-wrapper-list-shorts](java-wrapper-list-shorts) | [YouTube](https://www.youtube.com/watch?v=H43kV0D4Fpc) |
+| 2026-11-19 | 자바 입문: 람다식 (화살표 · 함수형 인터페이스 · Predicate · forEach · removeIf · sort · 사실상 final · 메소드 참조) | 2:39 | [java-lambda-shorts](java-lambda-shorts) | [YouTube](https://www.youtube.com/watch?v=OpctSCXJw1g) |
 ## 제작 방식
 
 - **영상**: [HyperFrames](https://hyperframes.heygen.com) — HTML/CSS + GSAP 애니메이션을 MP4로 렌더링

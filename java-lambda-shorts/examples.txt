@@ -1,0 +1,396 @@
+// 영상에 나오는 예제 프로그램 (build.py가 생성 · 직접 고치지 말 것)
+// 각 예제를 파일 이름대로 저장한 뒤: javac -g -encoding UTF-8 Main.java && java Main
+
+// [도입] Main.java → 컴파일 확인 (출력 없음)
+import java.util.ArrayList;
+import java.util.List;
+import java.util.function.Predicate;
+
+interface Checker {
+  boolean check(int s);
+}
+
+public class Main {
+  public static void main(String[] args) {
+    Checker c = s -> s >= 80;
+  }
+}
+
+
+// [2. 문법] Main.java → 컴파일 확인 (출력 없음)
+import java.util.ArrayList;
+import java.util.List;
+import java.util.function.Predicate;
+
+interface Checker {
+  boolean check(int s);
+}
+
+public class Main {
+  public static void main(String[] args) {
+    Checker c = (int s) -> { return s >= 80; };
+  }
+}
+
+
+// [2-1. 줄여 쓰기] Main.java → 컴파일 확인 (출력 없음)
+import java.util.ArrayList;
+import java.util.List;
+import java.util.function.Predicate;
+
+interface Checker {
+  boolean check(int s);
+}
+
+public class Main {
+  public static void main(String[] args) {
+    Checker c0 = (int s) -> { return s >= 80; };
+  }
+}
+
+
+// [2-1. 줄여 쓰기] Main.java → 컴파일 확인 (출력 없음)
+import java.util.ArrayList;
+import java.util.List;
+import java.util.function.Predicate;
+
+interface Checker {
+  boolean check(int s);
+}
+
+public class Main {
+  public static void main(String[] args) {
+    Checker c1 = (s) -> { return s >= 80; };
+  }
+}
+
+
+// [2-1. 줄여 쓰기] Main.java → 컴파일 확인 (출력 없음)
+import java.util.ArrayList;
+import java.util.List;
+import java.util.function.Predicate;
+
+interface Checker {
+  boolean check(int s);
+}
+
+public class Main {
+  public static void main(String[] args) {
+    Checker c2 = s -> { return s >= 80; };
+  }
+}
+
+
+// [2-1. 줄여 쓰기] Main.java → 컴파일 확인 (출력 없음)
+import java.util.ArrayList;
+import java.util.List;
+import java.util.function.Predicate;
+
+interface Checker {
+  boolean check(int s);
+}
+
+public class Main {
+  public static void main(String[] args) {
+    Checker c3 = s -> s >= 80;
+  }
+}
+
+
+// [2-1. 줄여 쓰기] Main.java → 컴파일 확인 (출력 없음)
+import java.util.ArrayList;
+import java.util.List;
+import java.util.function.Predicate;
+
+public class Main {
+  public static void main(String[] args) {
+    java.util.function.Supplier<Integer> z = () -> 80;
+    java.util.Comparator<Integer> t = (a, b) -> b - a;
+  }
+}
+
+
+// [4-2. sort] Main.java → 출력:
+//   [78, 85, 92]
+import java.util.ArrayList;
+import java.util.List;
+import java.util.function.Predicate;
+
+public class Main {
+  public static void main(String[] args) {
+    List<Integer> scores =
+        new ArrayList<>();
+    scores.add(85);
+    scores.add(92);
+    scores.add(78);
+    scores.sort((a, b) -> a - b);
+    System.out.println(scores);
+  }
+}
+
+
+// [4-2. sort] Main.java → 출력:
+//   [92, 85, 78]
+import java.util.ArrayList;
+import java.util.List;
+import java.util.function.Predicate;
+
+public class Main {
+  public static void main(String[] args) {
+    List<Integer> scores =
+        new ArrayList<>();
+    scores.add(85);
+    scores.add(92);
+    scores.add(78);
+    scores.sort((a, b) -> Integer.compare(b, a));
+    System.out.println(scores);
+  }
+}
+
+
+// [5. 사실상 final] Main.java → 컴파일 확인 (출력 없음)
+import java.util.ArrayList;
+import java.util.List;
+import java.util.function.Predicate;
+
+interface Checker {
+  boolean check(int s);
+}
+
+public class Main {
+  public static void main(String[] args) {
+    int pass = 80;
+    Checker c = s -> s >= pass;
+  }
+}
+
+
+// [1. 왜 필요한가] Main.java → 출력:
+//   true false
+import java.util.ArrayList;
+import java.util.List;
+import java.util.function.Predicate;
+
+interface Checker {
+  boolean check(int s);
+}
+
+public class Main {
+  public static void main(String[] args) {
+    class Pass implements Checker {
+      public boolean check(int s) {
+        return s >= 80;
+      }
+    }
+    Checker c = new Pass();
+    System.out.println(c.check(85) + " " + c.check(78));
+  }
+}
+
+
+// [1. 왜 필요한가] Main.java → 출력:
+//   true false
+import java.util.ArrayList;
+import java.util.List;
+import java.util.function.Predicate;
+
+interface Checker {
+  boolean check(int s);
+}
+
+public class Main {
+  public static void main(String[] args) {
+    Checker c = s -> s >= 80;
+    System.out.println(c.check(85) + " " + c.check(78));
+  }
+}
+
+
+// [3. 함수형 인터페이스] Main.java → 컴파일 오류: incompatible types: Checker is not a functional interface / multiple non-overriding abstract methods found in interface Checker
+import java.util.ArrayList;
+import java.util.List;
+import java.util.function.Predicate;
+
+interface Checker {
+  boolean check(int s);
+  boolean ok(int s);  // 추가
+}
+
+public class Main {
+  public static void main(String[] args) {
+    Checker c = s -> s >= 80;
+  }
+}
+
+
+// [3. 함수형 인터페이스] Main.java → 컴파일 오류: Unexpected @FunctionalInterface annotation / Checker is not a functional interface
+import java.util.ArrayList;
+import java.util.List;
+import java.util.function.Predicate;
+
+@FunctionalInterface
+interface Checker {
+  boolean check(int s);
+  boolean ok(int s);  // 추가
+}
+
+public class Main {
+  public static void main(String[] args) {
+  }
+}
+
+
+// [3-1. Predicate] Main.java → 출력:
+//   true
+import java.util.ArrayList;
+import java.util.List;
+import java.util.function.Predicate;
+
+public class Main {
+  public static void main(String[] args) {
+    Predicate<Integer> p =
+        s -> s >= 80;
+    System.out.println(p.test(85));
+  }
+}
+
+
+// [4. forEach] Main.java → 출력:
+//   민수
+//   서준
+//   지우
+import java.util.ArrayList;
+import java.util.List;
+import java.util.function.Predicate;
+
+public class Main {
+  public static void main(String[] args) {
+    List<String> names =
+        new ArrayList<>();
+    names.add("민수");
+    names.add("서준");
+    names.add("지우");
+    names.forEach(n ->
+        System.out.println(n));
+  }
+}
+
+
+// [4-1. removeIf] Main.java → 출력:
+//   [85, 92]
+import java.util.ArrayList;
+import java.util.List;
+import java.util.function.Predicate;
+
+public class Main {
+  public static void main(String[] args) {
+    List<Integer> scores =
+        new ArrayList<>();
+    scores.add(85);
+    scores.add(92);
+    scores.add(78);
+    scores.removeIf(s -> s < 80);
+    System.out.println(scores);
+  }
+}
+
+
+// [4-2. sort] Main.java → 출력:
+//   [92, 85, 78]
+import java.util.ArrayList;
+import java.util.List;
+import java.util.function.Predicate;
+
+public class Main {
+  public static void main(String[] args) {
+    List<Integer> scores =
+        new ArrayList<>();
+    scores.add(85);
+    scores.add(92);
+    scores.add(78);
+    scores.sort((a, b) -> b - a);
+    System.out.println(scores);
+  }
+}
+
+
+// [5. 사실상 final] Main.java → 컴파일 오류: local variables referenced from a lambda expression must be final or effectively final
+import java.util.ArrayList;
+import java.util.List;
+import java.util.function.Predicate;
+
+public class Main {
+  public static void main(String[] args) {
+    List<Integer> scores =
+        new ArrayList<>();
+    scores.add(85);
+    scores.add(92);
+    scores.add(78);
+    // scores = [85, 92, 78]
+    int sum = 0;
+    scores.forEach(s -> sum += s);
+  }
+}
+
+
+// [5. 사실상 final] Main.java → 출력:
+//   255
+import java.util.ArrayList;
+import java.util.List;
+import java.util.function.Predicate;
+
+public class Main {
+  public static void main(String[] args) {
+    List<Integer> scores =
+        new ArrayList<>();
+    scores.add(85);
+    scores.add(92);
+    scores.add(78);
+    int sum = 0;
+    for (int s : scores) sum += s;
+    System.out.println(sum);
+  }
+}
+
+
+// [5-1. 메소드 참조] Main.java → 출력:
+//   민수
+//   서준
+//   지우
+import java.util.ArrayList;
+import java.util.List;
+import java.util.function.Predicate;
+
+public class Main {
+  public static void main(String[] args) {
+    List<String> names =
+        new ArrayList<>();
+    names.add("민수");
+    names.add("서준");
+    names.add("지우");
+    names.forEach(n ->
+        System.out.println(n));
+  }
+}
+
+
+// [5-1. 메소드 참조] Main.java → 출력:
+//   민수
+//   서준
+//   지우
+import java.util.ArrayList;
+import java.util.List;
+import java.util.function.Predicate;
+
+public class Main {
+  public static void main(String[] args) {
+    List<String> names =
+        new ArrayList<>();
+    names.add("민수");
+    names.add("서준");
+    names.add("지우");
+    names.forEach(
+        System.out::println);
+  }
+}
+

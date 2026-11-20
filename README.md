@@ -41,6 +41,8 @@
 | 2026-11-18 | 자바 입문: 래퍼 클래스와 List (Integer · 오토박싱 · 언박싱 · ArrayList · add · get · set · remove · List 타입) | 2:45 | [java-wrapper-list-shorts](java-wrapper-list-shorts) | [YouTube](https://www.youtube.com/watch?v=H43kV0D4Fpc) |
 | 2026-11-19 | 자바 입문: 람다식 (화살표 · 함수형 인터페이스 · Predicate · forEach · removeIf · sort · 사실상 final · 메소드 참조) | 2:39 | [java-lambda-shorts](java-lambda-shorts) | [YouTube](https://www.youtube.com/watch?v=OpctSCXJw1g) |
 | 2026-11-20 | 자바 입문: 스트림 (stream · filter · map · toList · 중간 연산 · 최종 연산 · sorted · count · sum) | 2:01 | [java-stream-shorts](java-stream-shorts) | [YouTube](https://www.youtube.com/watch?v=Lz9beT5WavY) |
+| 2026-11-20 | 자바 입문: 예외 (try-catch · 여러 catch · finally · throw · throws · 체크 예외 · 커스텀 예외) | 2:21 | [java-exception-shorts](java-exception-shorts) | [YouTube](https://www.youtube.com/watch?v=Gh-nby3uVLY) |
+| 2026-11-20 | 자바 입문: 텍스트 파일 읽기·쓰기 (BufferedWriter · try-with-resources · 이어쓰기 · BufferedReader · readLine · IOException · Files) | 2:15 | [java-file-io-shorts](java-file-io-shorts) | [YouTube](https://www.youtube.com/watch?v=rCFVsPcNPmk) |
 ## 제작 방식
 
 - **영상**: [HyperFrames](https://hyperframes.heygen.com) — HTML/CSS + GSAP 애니메이션을 MP4로 렌더링

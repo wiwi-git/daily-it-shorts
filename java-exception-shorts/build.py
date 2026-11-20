@@ -5,9 +5,7 @@ import json, re, subprocess, html, os, tempfile
 SPEED = 1.2
 LEAD, GAP, TAIL = round(0.3 / SPEED, 3), round(0.45 / SPEED, 3), 1.0
 XF = round(0.15 / SPEED, 3)  # scene change this long before the next narration
-# scenes built so far: each ticket adds its scene ids, and the last one removes this filter
-READY = {"hook", "trycatch", "kinds", "order", "finally", "throw", "throws", "custom"}
-vo = [s for s in json.load(open("vo.json")) if s["id"] in READY]
+vo = json.load(open("vo.json"))
 
 # --- timing + concatenated narration ---
 t = LEAD
@@ -236,7 +234,7 @@ CSS_EXTRA = """
 """
 
 EXEC = ["try-catch 로 잡으면 계속 실행", "catch 는 구체적인 예외부터", "finally 는 항상 실행",
-        "throw 던지기 · throws 넘기기", "체크 예외는 처리 필수", "커스텀 예외 · RuntimeException"]
+        "throw 던지기 · throws 넘기기", "체크 예외는 처리 필수", "커스텀: extends Exception\n강제 안 하면 RuntimeException"]
 EXEC_SAID = ["트라이", "캐치는", "파이널리는", "쓰로우는", "체크", "커스텀"]
 EXEC_END = "구독과"
 
@@ -356,6 +354,9 @@ scenes = {
  "throw": throw_scene(),
  "throws": throws_scene(),
  "custom": custom_scene(),
+ "outro": '<div class="pill in">정리</div><h2 class="title in">예외</h2><div class="list in">'
+    + "".join(f'<div class="row" id="ex{i}"><span class="no">{i}</span><b>{html.escape(c)}</b></div>' for i, c in enumerate(EXEC, 1))
+    + '</div><div class="cta in">👍 구독 · 좋아요</div>',
 }
 PROG = {"trycatch": 1, "kinds": 2, "order": 2, "finally": 3, "throw": 4, "throws": 4, "custom": 5}
 
@@ -463,15 +464,14 @@ for s in vo:
         caps.append(f'<div id="cap-{s["id"]}-{j}" class="clip cap" data-start="{a:.3f}" data-duration="{d:.3f}" data-track-index="2"><span>{html.escape(txt)}</span></div>')
 
 # outro: light up each summary line as the narration names it
-if "outro" in S:
-    after = S["outro"]["start"]
-    for i, token in enumerate(EXEC_SAID, 1):
-        at = word_time("outro", token, after)
-        after = at
-        if i > 1:
-            js.append(f'tl.to("#ex{i - 1}", {{backgroundColor: "#131c2e", scale: 1, duration: 0.2}}, {at});')
-        js.append(f'tl.to("#ex{i}", {{backgroundColor: "#3a2a12", scale: 1.04, duration: 0.2}}, {at});')
-    js.append(f'tl.to("#ex{len(EXEC)}", {{backgroundColor: "#131c2e", scale: 1, duration: 0.3}}, {word_time("outro", EXEC_END)} + 0.6);')
+after = S["outro"]["start"]
+for i, token in enumerate(EXEC_SAID, 1):
+    at = word_time("outro", token, after)
+    after = at
+    if i > 1:
+        js.append(f'tl.to("#ex{i - 1}", {{backgroundColor: "#131c2e", scale: 1, duration: 0.2}}, {at});')
+    js.append(f'tl.to("#ex{i}", {{backgroundColor: "#3a2a12", scale: 1.04, duration: 0.2}}, {at});')
+js.append(f'tl.to("#ex{len(EXEC)}", {{backgroundColor: "#131c2e", scale: 1, duration: 0.3}}, {word_time("outro", EXEC_END)} + 0.6);')
 
 page = f'''<!doctype html>
 <html lang="ko" data-resolution="portrait">
@@ -563,7 +563,7 @@ code {{ font-family: var(--mono); color: var(--orange); }}
 .row {{ display: flex; align-items: center; gap: 30px; background: var(--panel); border-radius: 22px; padding: 14px 36px; font-size: 48px;
   transform-origin: left center; }}
 .row .no {{ font-size: 52px; font-weight: 900; color: var(--orange); width: 50px; }}
-.row b {{ font-family: var(--mono); color: var(--blue); }}
+.row b {{ font-family: var(--mono); color: var(--blue); white-space: pre-line; }}
 .cta {{ margin-top: 20px; font-size: 54px; font-weight: 800; text-align: center; }}
 .arr {{ display: flex; align-items: flex-start; gap: 14px; }}
 .arr .nm {{ font-family: var(--mono); font-size: 38px; font-weight: 700; color: var(--mute); padding-top: 34px; margin-right: 6px; }}

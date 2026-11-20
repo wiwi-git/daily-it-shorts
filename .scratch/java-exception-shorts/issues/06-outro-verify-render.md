@@ -7,13 +7,13 @@
 
 **Blocked by:** 02, 03, 04, 05
 
-**Status:** ready-for-agent
+**Status:** resolved
 
-- [ ] outro 줄 강조가 나레이션 단어 시점과 맞는다
-- [ ] 빌드가 모든 대조(실행 중 예외 1, 출력 여러 건, 컴파일 오류 2)를 통과한다
-- [ ] `npx hyperframes check` 오류 0건, 레이아웃 겹침·넘침 없음(`line_unread` 경고만 허용)
-- [ ] snapshot으로 모든 장면을 확인하고, 가장 빽빽한 장면(throws 또는 custom)을 390px 폭으로 확인했다
-- [ ] 대사 중 자막 없는 시간이 0초다
-- [ ] `output/`에 렌더링했고 ffprobe로 1080×1920, 오디오 트랙 존재를 확인했다
-- [ ] 영상 길이가 3분 이하다
-- [ ] README 영상 목록에 넣을 행(URL은 업로드 후)과 유튜브 제목 "자바 입문 20편: 예외 | try-catch · finally · throw · throws · 커스텀 예외"를 준비했다
+- [x] outro 줄 강조가 나레이션 단어 시점과 맞는다
+- [x] 빌드가 모든 대조(실행 중 예외 1, 출력 여러 건, 컴파일 오류 2)를 통과한다
+- [x] `npx hyperframes check` 오류 0건, 레이아웃 겹침·넘침 없음(`line_unread` 경고만 허용)
+- [x] snapshot으로 모든 장면을 확인하고, 가장 빽빽한 장면(throws 또는 custom)을 390px 폭으로 확인했다
+- [x] 대사 중 자막 없는 시간이 0초다
+- [x] `output/`에 렌더링했고 ffprobe로 1080×1920, 오디오 트랙 존재를 확인했다
+- [x] 영상 길이가 3분 이하다
+- [x] README 영상 목록에 넣을 행(URL은 업로드 후)과 유튜브 제목 "자바 입문 20편: 예외 | try-catch · finally · throw · throws · 커스텀 예외"를 준비했다

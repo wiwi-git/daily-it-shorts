@@ -25,3 +25,213 @@ public class Main {
   }
 }
 
+
+// [1-1. 이어쓰기] Main.java → 출력 없음 (컴파일·실행 성공)
+// 실행 뒤 scores.txt:
+//   민수,85
+//   서준,92
+//   지우,78
+import java.io.*;
+import java.nio.file.*;
+import java.util.*;
+
+public class Main {
+  public static void main(String[] args) throws IOException {
+    try (BufferedWriter w =
+      new BufferedWriter(
+        new FileWriter(
+          "scores.txt"))) {
+      w.write("민수,85");
+      w.newLine();
+      w.write("서준,92");
+      w.newLine();
+    }
+    try (BufferedWriter w =
+      new BufferedWriter(
+        new FileWriter(
+          "scores.txt", true))) {
+      w.write("지우,78");
+      w.newLine();
+    }
+  }
+}
+
+
+// [1-1. 이어쓰기] Main.java → 컴파일 확인 (출력 없음)
+// 실행 뒤 scores.txt:
+//   지우,78
+import java.io.*;
+import java.nio.file.*;
+import java.util.*;
+
+public class Main {
+  public static void main(String[] args) throws IOException {
+    try (BufferedWriter w =
+      new BufferedWriter(
+        new FileWriter(
+          "scores.txt"))) {
+      w.write("민수,85");
+      w.newLine();
+      w.write("서준,92");
+      w.newLine();
+    }
+    try (BufferedWriter w =
+      new BufferedWriter(
+        new FileWriter(
+          "scores.txt"))) {
+      w.write("지우,78");
+      w.newLine();
+    }
+  }
+}
+
+
+// [2. 읽기] Main.java → 출력:
+//   민수,85
+//   서준,92
+//   지우,78
+// 실행 뒤 scores.txt:
+//   민수,85
+//   서준,92
+//   지우,78
+import java.io.*;
+import java.nio.file.*;
+import java.util.*;
+
+public class Main {
+  public static void main(String[] args) throws IOException {
+    try (BufferedWriter w =
+      new BufferedWriter(
+        new FileWriter(
+          "scores.txt"))) {
+      w.write("민수,85");
+      w.newLine();
+      w.write("서준,92");
+      w.newLine();
+    }
+    try (BufferedWriter w =
+      new BufferedWriter(
+        new FileWriter(
+          "scores.txt", true))) {
+      w.write("지우,78");
+      w.newLine();
+    }
+    try (BufferedReader r =
+      new BufferedReader(
+        new FileReader(
+          "scores.txt"))) {
+      String line;
+      while ((line = r.readLine())
+             != null) {
+        System.out.println(line);
+      }
+    }
+  }
+}
+
+
+// [3. 읽어서 계산] Main.java → 출력:
+//   255
+// 실행 뒤 scores.txt:
+//   민수,85
+//   서준,92
+//   지우,78
+import java.io.*;
+import java.nio.file.*;
+import java.util.*;
+
+public class Main {
+  public static void main(String[] args) throws IOException {
+    try (BufferedWriter w =
+      new BufferedWriter(
+        new FileWriter(
+          "scores.txt"))) {
+      w.write("민수,85");
+      w.newLine();
+      w.write("서준,92");
+      w.newLine();
+    }
+    try (BufferedWriter w =
+      new BufferedWriter(
+        new FileWriter(
+          "scores.txt", true))) {
+      w.write("지우,78");
+      w.newLine();
+    }
+    int sum = 0;
+    try (BufferedReader r =
+      new BufferedReader(
+        new FileReader(
+          "scores.txt"))) {
+      String line;
+      while ((line = r.readLine())
+             != null) {
+        String[] p = line.split(",");
+        sum += Integer.parseInt(
+          p[1]);
+      }
+    }
+    System.out.println(sum);
+  }
+}
+
+
+// [4. 파일 예외] Main.java → 출력:
+//   java.io.FileNotFoundException: score.txt (No such file or directory)
+import java.io.*;
+import java.nio.file.*;
+import java.util.*;
+
+public class Main {
+  public static void main(String[] args) throws IOException {
+    try (BufferedReader r =
+      new BufferedReader(
+        new FileReader(
+          "score.txt"))) {
+      System.out.println(
+        r.readLine());
+    } catch (IOException e) {
+      System.out.println(e);
+    }
+  }
+}
+
+
+// [4. 파일 예외] Main.java → 컴파일 오류: unreported exception FileNotFoundException; must be caught or declared to be thrown
+import java.io.*;
+import java.nio.file.*;
+import java.util.*;
+
+public class Main {
+  public static void main(String[] args) {
+    try (BufferedReader r =
+      new BufferedReader(
+        new FileReader(
+          "scores.txt"))) {
+      System.out.println(
+        r.readLine());
+    }
+  }
+}
+
+
+// [5. 짧게 쓰기] Main.java → 출력:
+//   [민수,85, 서준,92, 지우,78]
+// 실행 뒤 scores.txt:
+//   민수,85
+//   서준,92
+//   지우,78
+import java.io.*;
+import java.nio.file.*;
+import java.util.*;
+
+public class Main {
+  public static void main(String[] args) throws IOException {
+    Path p = Path.of("scores.txt");
+    Files.writeString(p,
+      "민수,85\n서준,92\n지우,78\n");
+    System.out.println(
+      Files.readAllLines(p));
+  }
+}
+

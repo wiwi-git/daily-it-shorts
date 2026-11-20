@@ -5,9 +5,7 @@ import json, re, subprocess, html, os, tempfile, shutil
 SPEED = 1.2
 LEAD, GAP, TAIL = round(0.3 / SPEED, 3), round(0.45 / SPEED, 3), 1.0
 XF = round(0.15 / SPEED, 3)  # scene change this long before the next narration
-# scenes built so far: each ticket adds its scene ids, and the last one removes this filter
-READY = {"hook", "write"}
-vo = [s for s in json.load(open("vo.json")) if s["id"] in READY]
+vo = json.load(open("vo.json"))
 
 # --- timing + concatenated narration ---
 t = LEAD
@@ -266,7 +264,7 @@ CSS_EXTRA = """
 .warn small, .note small { white-space: pre-wrap; }
 """
 
-EXEC = ["BufferedWriter 로 쓰기 · newLine()", "try-with-resources 자동 닫기", "true 이어쓰기 · 없으면 덮어쓰기",
+EXEC = ["BufferedWriter · newLine()", "try-with-resources 자동 닫기", "true 이어쓰기 · 없으면 덮어쓰기",
         "readLine() 끝이면 null", "IOException 처리 필수", "짧게: Files"]
 EXEC_SAID = ["버퍼드", "트라이", "트루를", "리드", "파일", "짧게"]
 EXEC_END = "구독과"
@@ -304,12 +302,84 @@ def write_scene():
             + '<div class="stack"><div class="note"><b>try-with-resources</b><br/><small>블록 끝 → 자동으로 닫힘</small></div>'
             '<div class="note">이름만 쓰면<br/><small>→ 실행한 폴더에 생김</small></div></div></div>')
 
+APPEND = open_writer("true") + put("지우,78") + ["}"]  # STEP 1-1; read/sum reuse it as `pre=`
+THREE = "민수,85\n서준,92\n지우,78\n"
+
+def append_scene():
+    block = jcode("append", APPEND, "", mark=(3,), sm=True, pre=WRITE, file=THREE)
+    ok = fterm(label="scores.txt · true", cls="term file")
+    jok("append-trap", open_writer() + put("지우,78") + ["}"], pre=WRITE, file="지우,78\n")
+    bad = fterm(label="scores.txt · true 없음", cls="term file bad")
+    return (head("STEP 1-1 · 이어쓰기", "뒤에 덧붙이기", "<b>FileWriter</b>에 <b>true</b> → 이어쓰기")
+            + block
+            + '<div class="duo in">' + ok + bad + "</div>"
+            + '<div class="warn in">함정! <code>true</code>를 빼면 <b>덮어쓰기</b><br/>'
+              "<small>기존 두 줄이 지워지고 지우만 남음 · 덮어쓰기가 기본</small></div>")
+
+def reader(name="scores.txt"):
+    return ["try (BufferedReader r =", "  new BufferedReader(", "    new FileReader(", f'      "{name}"))) {{']
+
+LOOP = ["  String line;", "  while ((line = r.readLine())", "         != null) {"]
+READ = reader() + LOOP + ["    System.out.println(line);", "  }", "}"]
+
+def read_scene():
+    block = jcode("read", READ, THREE, mark=(5, 6), sm=True, pre=WRITE + APPEND, file=THREE)
+    return (head("STEP 2 · 읽기", "한 줄씩 읽기", "<b>readLine()</b> · 끝이면 <b>null</b>")
+            + block
+            + '<div class="duo in">' + fterm(cls="term file") + term(cls="term") + "</div>")
+
+SUM = (["int sum = 0;"] + reader() + LOOP
+       + ['    String[] p = line.split(",");', "    sum += Integer.parseInt(", "      p[1]);", "  }", "}",
+          "System.out.println(sum);"])
+
+def sum_scene():
+    block = jcode("sum", SUM, "255\n", mark=(8, 9, 10), sm=True, pre=WRITE + APPEND, file=THREE)
+    return (head("STEP 3 · 읽어서 계산", "합계 구하기", "<b>split</b>으로 나누고 <b>parseInt</b>로 숫자로")
+            + block
+            + '<div class="duo in"><div class="note split"><code>"민수,85"</code><br/><small>.split(",")</small><br/><small>→ [민수, 85]</small></div>'
+            + term(cls="term") + "</div>")
+
+EXCEPT = reader("score.txt") + ["  System.out.println(", "    r.readLine());", "} catch (IOException e) {",
+                                "  System.out.println(e);", "}"]
+
+def except_scene():
+    global MAIN_THROWS
+    block = jcode("except", EXCEPT, "java.io.FileNotFoundException: score.txt (No such file or directory)\n",
+                  mark=(3, 6), sm=True)
+    out = term(cls="term wrap")
+    MAIN_THROWS = ""  # without try-catch or throws, file code does not even compile
+    jce("except-unhandled", reader() + ["  System.out.println(", "    r.readLine());", "}"],
+        "unreported exception FileNotFoundException")
+    MAIN_THROWS = "IOException"
+    return (head("STEP 4 · 파일 예외", "없는 파일 읽기", "<b>IOException</b>으로 잡기")
+            + block + out
+            + '<div class="warn in">IOException = <b>체크 예외</b> (처리 강제)<br/>'
+              "<small>try-catch 또는 throws 없으면 → 컴파일 오류</small></div>")
+
+FILES = ['Path p = Path.of("scores.txt");', "Files.writeString(p,", '  "민수,85\\n서준,92\\n지우,78\\n");',
+         "System.out.println(", "  Files.readAllLines(p));"]
+
+def files_scene():
+    LAST["out"], _ = check("files", wrap(FILES), "[민수,85, 서준,92, 지우,78]\n", file=THREE)
+    shown_ = (["public static void main(", "    String[] args)", "    throws IOException {"]
+              + ["  " + l for l in FILES] + ["}"])
+    return (head("STEP 5 · 짧게 쓰기", "Files 한 줄", "<b>writeString</b>으로 쓰고 <b>readAllLines</b>로 읽기")
+            + code(shown_, mark=(2, 5, 8), sm=True)
+            + '<div class="duo in">' + fterm(cls="term file")
+            + '<div class="note">readAllLines<br/><small>→ 모든 줄을 List로</small></div></div>'
+            + term())
+
 scenes = {
  "hook": hook_scene(),
  "write": write_scene(),
+ "append": append_scene(),
+ "read": read_scene(),
+ "sum": sum_scene(),
+ "except": except_scene(),
+ "files": files_scene(),
  "outro": '<div class="pill in">정리</div><h2 class="title in">파일 읽기·쓰기</h2><div class="list in">'
     + "".join(f'<div class="row" id="ex{i}"><span class="no">{i}</span><b>{html.escape(c)}</b></div>' for i, c in enumerate(EXEC, 1))
-    + '</div><div class="cta in">👍 구독 · 좋아요</div>',
+    + '</div><div class="note in">한글이 깨지면 → <b>UTF-8</b> 확인</div><div class="cta in">👍 구독 · 좋아요</div>',
 }
 PROG = {"write": 1, "append": 1, "read": 2, "sum": 3, "except": 4, "files": 5}
 
@@ -328,6 +398,10 @@ CSS_EXTRA += """
 .stack { display: flex; flex-direction: column; gap: 22px; }
 .stack .note { font-size: 36px; padding: 20px 28px; }
 .stack .note small { font-size: 32px; font-family: var(--font); }
+.term.file.bad { border-color: rgba(255,93,93,.5); }
+.term.wrap { white-space: normal; font-size: 34px; word-break: break-all; }
+.warn code { font-size: 40px; }
+.note.split small { white-space: nowrap; }
 """
 
 JDK = subprocess.run(["java", "-version"], capture_output=True, text=True).stderr.split("\n")[0]
@@ -341,7 +415,7 @@ with open("examples.txt", "w") as f:
         res = (rt if rt.startswith("컴파일") else f"실행 오류: {rt}") if rt else "출력 없음 (컴파일·실행 성공)" if not out else "출력:\n" + "".join(f"//   {l}\n" for l in out.rstrip("\n").split("\n"))
         if fc is not None:
             res = res.rstrip() + f"\n// 실행 뒤 {FILE}:\n" + "".join(f"//   {l}\n" for l in fc.rstrip("\n").split("\n"))
-        f.write(f"\n// [{SECTION[sid]}] {fname} → {res.rstrip()}\n{src}\n")
+        f.write(f"\n// [{SECTION[sid.split("-")[0]]}] {fname} → {res.rstrip()}\n{src}\n")
 shutil.rmtree(TMP)
 for d in (".", ".."):  # every example ran in its own temp folder: none may have written into the repo
     if os.path.exists(os.path.join(d, FILE)):
@@ -418,7 +492,7 @@ for s in vo:
         caps.append(f'<div id="cap-{s["id"]}-{j}" class="clip cap" data-start="{a:.3f}" data-duration="{d:.3f}" data-track-index="2"><span>{html.escape(txt)}</span></div>')
 
 # outro: light up each summary line as the narration names it
-if "outro" in S:  # READY filter: the outro is built in a later ticket
+if True:
     after = S["outro"]["start"]
     for i, token in enumerate(EXEC_SAID, 1):
         at = word_time("outro", token, after)

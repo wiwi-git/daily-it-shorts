@@ -6,7 +6,7 @@ SPEED = 1.2
 LEAD, GAP, TAIL = round(0.3 / SPEED, 3), round(0.45 / SPEED, 3), 1.0
 XF = round(0.15 / SPEED, 3)  # scene change this long before the next narration
 # scenes built so far: each ticket adds its scene ids, and the last one removes this filter
-READY = {"hook", "trycatch", "kinds", "order"}
+READY = {"hook", "trycatch", "kinds", "order", "finally"}
 vo = [s for s in json.load(open("vo.json")) if s["id"] in READY]
 
 # --- timing + concatenated narration ---
@@ -272,11 +272,26 @@ def order_scene():
             + cterm()
             + '<div class="warn in"><b>Exception</b> = 예외 클래스들의 부모<br/><small>구체적인 예외부터 위에</small></div>')
 
+FIN = ["try {", "  int n = Integer.parseInt(s);", "  System.out.println(n);",
+       "} catch (", "  NumberFormatException e) {", '  System.out.println("숫자 아님");',
+       "} finally {", '  System.out.println("끝");', "}"]
+
+def finally_scene():
+    """The same try-catch-finally run twice: "85" converts, "abc" throws; both print 끝 last."""
+    shown = jcode("finally", FIN, "85\n끝\n", mark=(6, 7), pre=['String s = "85";'])
+    ok = term(label='s = "85"', cls="term")
+    jcode("finally", FIN, "숫자 아님\n끝\n", pre=['String s = "abc";'])
+    ng = term(label='s = "abc"', cls="term")
+    return (head("STEP 3 · finally", "항상 실행", "예외가 나든 안 나든 <b>finally</b>")
+            + shown + f'<div class="duo in">{ok}{ng}</div>'
+            + '<div class="note in">두 번 모두 마지막에 <b>끝</b></div>')
+
 scenes = {
  "hook": hook_scene(),
  "trycatch": trycatch_scene(),
  "kinds": kinds_scene(),
  "order": order_scene(),
+ "finally": finally_scene(),
 }
 PROG = {"trycatch": 1, "kinds": 2, "order": 2, "finally": 3, "throw": 4, "throws": 4, "custom": 5}
 
@@ -286,6 +301,9 @@ CSS_EXTRA += """
 .hook .chips span { font-size: 52px; }
 .chips code { color: var(--blue); }
 .note code { font-size: 40px; }
+.duo { display: grid; grid-template-columns: 1fr 1fr; gap: 22px; }
+.duo .term { font-size: 40px; }
+.note b { color: var(--orange); }
 """
 
 JDK = subprocess.run(["java", "-version"], capture_output=True, text=True).stderr.split("\n")[0]

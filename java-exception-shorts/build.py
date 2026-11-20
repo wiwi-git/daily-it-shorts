@@ -6,7 +6,7 @@ SPEED = 1.2
 LEAD, GAP, TAIL = round(0.3 / SPEED, 3), round(0.45 / SPEED, 3), 1.0
 XF = round(0.15 / SPEED, 3)  # scene change this long before the next narration
 # scenes built so far: each ticket adds its scene ids, and the last one removes this filter
-READY = {"hook", "trycatch"}
+READY = {"hook", "trycatch", "throw", "throws"}
 vo = [s for s in json.load(open("vo.json")) if s["id"] in READY]
 
 # --- timing + concatenated narration ---
@@ -57,6 +57,8 @@ def hl(line):
             out.append(f'<span class="cm">{html.escape(x)}</span>')
         elif x[0].isdigit():
             out.append(f'<span class="nu">{x}</span>')
+        elif x == "throws":  # the one letter that tells it from throw
+            out.append('<span class="kw">throw<span class="s">s</span></span>')
         elif x in KW or x[0] == "@":
             out.append(f'<span class="kw">{x}</span>')
         else:
@@ -90,13 +92,19 @@ HELLO = ["public class Main {",
          "  }",
          "}"]
 
-def wrap(lines, top=()):
-    """Statements shown alone run inside main of a Main.java; `top` (e.g. a class) goes above class Main."""
-    return "\n".join(IMPORTS + list(top) + ([""] if top else []) + HELLO[:2] + ["    " + l for l in lines] + HELLO[3:] + [""])
+def wrap(lines, top=(), members=()):
+    """Statements shown alone run inside main of a Main.java; `top` (e.g. a class) goes above class Main,
+    `members` (e.g. a static method) inside class Main, above main."""
+    return "\n".join(IMPORTS + list(top) + ([""] if top else []) + HELLO[:1] + ["  " + l for l in members]
+                     + ([""] if members else []) + HELLO[1:2] + ["    " + l for l in lines] + HELLO[3:] + [""])
 
-def jok(sid, lines, top=(), pre=()):
+def shown(lines, top, members, show_top, show_members):
+    """What a code block draws: the shown declarations (`top`, then `members`) above the statements."""
+    return (list(top) if show_top else []) + (list(members) if show_members else []) + list(lines)
+
+def jok(sid, lines, top=(), pre=(), members=()):
     """Snippet that has to compile (and run without output or error); nothing is drawn."""
-    check(sid, wrap(list(pre) + list(lines), top), "", label="컴파일 확인 (출력 없음)")
+    check(sid, wrap(list(pre) + list(lines), top, members), "", label="컴파일 확인 (출력 없음)")
 
 def run(src, fname="Main.java"):
     """(stdout, javac's first error or None, first line of the runtime error or None)."""
@@ -121,14 +129,16 @@ def check(sid, src, expect=None, runtime=None, fname="Main.java", label=None):
     EXAMPLES.append((sid, fname, src, out, rt or label))
     return out, rt
 
-def jcode(sid, lines, expect, mark=(), hidden=(), pre=(), sm=False, top=()):
+def jcode(sid, lines, expect, mark=(), hidden=(), pre=(), sm=False, top=(), members=(),
+          show_top=False, show_members=False):
     """Code block; the statements (between invisible `pre` setup and `hidden` prints, run inside main)
-    must print `expect`."""
-    LAST["out"], _ = check(sid, wrap(list(pre) + list(lines) + list(hidden), top), expect)
-    return code(lines, mark, sm)
+    must print `expect`. `show_top`/`show_members` draw those declarations above the statements
+    (marks count from the first drawn line)."""
+    LAST["out"], _ = check(sid, wrap(list(pre) + list(lines) + list(hidden), top, members), expect)
+    return code(shown(lines, top, members, show_top, show_members), mark, sm)
 
 SHOW = re.compile(r"^// (\w+) → (.*)$")
-def jshow(sid, lines, mark=(), pre=(), sm=False, top=()):
+def jshow(sid, lines, mark=(), pre=(), sm=False, top=(), members=()):
     """Code block whose `// …` comments are the results, each checked where it stands:
     `x.get(0);  // 민수` prints that call, and a whole line `// names → [...]` prints `names`."""
     run_, want = [], []
@@ -141,12 +151,12 @@ def jshow(sid, lines, mark=(), pre=(), sm=False, top=()):
             run_.append(f"System.out.println({stmt.strip().rstrip(';')});"); want.append(res.strip())
         elif not l.startswith("import "):  # imports are already at the top of every program
             run_.append(l)
-    LAST["out"], _ = check(sid, wrap(list(pre) + run_, top), "".join(w + "\n" for w in want))
+    LAST["out"], _ = check(sid, wrap(list(pre) + run_, top, members), "".join(w + "\n" for w in want))
     return code(lines, mark, sm)
 
-def jrt(sid, lines, runtime, before="", mark=(), pre=(), sm=False):
+def jrt(sid, lines, runtime, before="", mark=(), pre=(), sm=False, top=(), members=()):
     """Code block that compiles, prints `before`, then stops at run time with an error containing `runtime`."""
-    LAST["out"], LAST["rt"] = check(sid, wrap(list(pre) + list(lines)), runtime=runtime)
+    LAST["out"], LAST["rt"] = check(sid, wrap(list(pre) + list(lines), top, members), runtime=runtime)
     if LAST["out"] != before:
         raise ValueError(f"{sid}: prints {LAST['out']!r} before the error, but the script expects {before!r}")
     return code(lines, mark, sm)
@@ -166,11 +176,13 @@ def rterm():
     msg = LAST["rt"].replace('Exception in thread "main" ', "").replace("Exception: ", "Exception:\n")
     return '<div class="term err in"><i>실행 오류</i>' + "".join(f"<div>{html.escape(l)}</div>" for l in msg.split("\n")) + "</div>"
 
-def jce(sid, lines, error, detail="", mark=(), pre=(), sm=False, top=(), show_top=False):
+def jce(sid, lines, error, detail="", mark=(), pre=(), sm=False, top=(), show_top=False, members=(),
+        show_members=False):
     """Code block that must NOT compile: javac's first error has to contain `error`, and, if given,
     one of the lines under it (the caret's explanation) has to contain `detail`. With `show_top`
-    the `top` declarations are drawn above the statements (marks count from the first drawn line)."""
-    src = wrap(list(pre) + list(lines), top)
+    the `top` declarations are drawn above the statements, with `show_members` the `members` (marks
+    count from the first drawn line)."""
+    src = wrap(list(pre) + list(lines), top, members)
     out, ce, rt = run(src)
     if ce is None or error not in ce:
         raise ValueError(f"{sid}: expected compile error {error!r}, got {ce!r} / output {out!r}")
@@ -178,7 +190,7 @@ def jce(sid, lines, error, detail="", mark=(), pre=(), sm=False, top=(), show_to
         raise ValueError(f"{sid}: expected error detail {detail!r}, got {LAST['ce2']!r}")
     LAST["ce"], LAST["cd"] = ce, detail
     EXAMPLES.append((sid, "Main.java", src, "", f"컴파일 오류: {ce}" + (f" / {detail}" if detail else "")))
-    return code((list(top) if show_top else []) + list(lines), mark, sm)
+    return code(shown(lines, top, members, show_top, show_members), mark, sm)
 
 def cterm():
     """The last jce() block's compile error."""
@@ -253,9 +265,41 @@ def trycatch_scene():
             + '<div class="note in"><code>catch (ArithmeticException e)</code><br/><small>괄호 안 타입 = 잡을 예외\n'
             '예외가 난 줄 아래는 건너뜀</small></div>')
 
+# STEP 4: one checkScore grows across the scenes (static method inside Main, via `members=`)
+RANGE = "  if (score < 0 || score > 100)"
+MSG = '        "점수 오류: " + score);'
+CHECK_THROW = ["static void checkScore(", "    int score) {", RANGE,
+               "    throw new", "      IllegalArgumentException(", MSG, "}"]
+def check_ex(decl):  # throws scene: the same method throwing Exception, `decl` = its declaration lines
+    return decl + [RANGE, "    throw new Exception(", MSG, "}"]
+DECL = "static void checkScore(int score)"
+CALL = lambda catch: ["try {", "  checkScore(120);", "} catch (", f"  {catch} e) {{",
+                      "  System.out.println(", "      e.getMessage());", "}"]
+
+def throw_scene():
+    return (head("STEP 4 · throw", "예외 던지기", "<b>throw</b>로 직접 던지기")
+            + jcode("throw", [""] + CALL("IllegalArgumentException"), "점수 오류: 120\n", members=CHECK_THROW,
+                    show_members=True, mark=(3, 4, 9), sm=True)
+            + '<div class="duo in">' + term(label="실행 결과", cls="term")
+            + '<div class="note"><code>throw<span class="s">s</span></code> 없이도<br/>컴파일 OK</div></div>')
+
+def throws_scene():
+    vs = ('<div class="vs in">'
+          '<div class="card on"><b>체크 예외</b><small>(처리 강제)</small><span>IOException</span></div>'
+          '<div class="card"><b>언체크 예외</b><small>(처리 선택)</small><span>ArithmeticException</span></div></div>')
+    jce("throws", CALL("Exception"), "unreported exception Exception; must be caught or declared to be thrown", members=check_ex([DECL + " {"]))
+    return (head("STEP 4 · throw<em>s</em>", "처리 넘기기 throw<em>s</em>", "<b>try-catch</b>로 잡거나 <b>throw<span class=\"s\">s</span></b>로 넘기기")
+            + cterm().replace("<i>컴파일 오류</i>", "<i>Exception을 던지면 · throws 없음 → 컴파일 오류</i>")
+            + jcode("throws", [], "점수 오류: 120\n", hidden=CALL("Exception"), members=check_ex([DECL, "    throws Exception {"]),
+                    show_members=True, mark=(1, 3), sm=True)
+            + term(label='부르는 쪽 <code>catch (Exception e)</code> → 실행 결과')
+            + vs)
+
 scenes = {
  "hook": hook_scene(),
  "trycatch": trycatch_scene(),
+ "throw": throw_scene(),
+ "throws": throws_scene(),
 }
 PROG = {"trycatch": 1, "kinds": 2, "order": 2, "finally": 3, "throw": 4, "throws": 4, "custom": 5}
 
@@ -265,6 +309,13 @@ CSS_EXTRA += """
 .hook .chips span { font-size: 52px; }
 .chips code { color: var(--blue); }
 .note code { font-size: 40px; }
+.s, .kw .s { color: var(--orange); font-weight: 800; }
+.pill em, .title em { font-style: normal; color: var(--orange); }
+.term i code { font-size: 28px; }
+#sc-throws .vs .card small { font-size: 34px; color: var(--ink); }
+#sc-throws .vs .card span { font-size: 32px; }
+#sc-throws .vs .card b { font-family: var(--font); font-weight: 800; }
+.duo { display: grid; grid-template-columns: 1fr 1fr; gap: 22px; align-items: stretch; }
 """
 
 JDK = subprocess.run(["java", "-version"], capture_output=True, text=True).stderr.split("\n")[0]

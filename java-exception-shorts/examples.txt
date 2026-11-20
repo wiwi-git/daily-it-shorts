@@ -28,3 +28,69 @@ public class Main {
   }
 }
 
+
+// [4. throw] Main.java → 출력:
+//   점수 오류: 120
+public class Main {
+  static void checkScore(
+      int score) {
+    if (score < 0 || score > 100)
+      throw new
+        IllegalArgumentException(
+          "점수 오류: " + score);
+  }
+
+  public static void main(String[] args) {
+    
+    try {
+      checkScore(120);
+    } catch (
+      IllegalArgumentException e) {
+      System.out.println(
+          e.getMessage());
+    }
+  }
+}
+
+
+// [4-1. throws · 체크 예외] Main.java → 컴파일 오류: unreported exception Exception; must be caught or declared to be thrown
+public class Main {
+  static void checkScore(int score) {
+    if (score < 0 || score > 100)
+      throw new Exception(
+          "점수 오류: " + score);
+  }
+
+  public static void main(String[] args) {
+    try {
+      checkScore(120);
+    } catch (
+      Exception e) {
+      System.out.println(
+          e.getMessage());
+    }
+  }
+}
+
+
+// [4-1. throws · 체크 예외] Main.java → 출력:
+//   점수 오류: 120
+public class Main {
+  static void checkScore(int score)
+      throws Exception {
+    if (score < 0 || score > 100)
+      throw new Exception(
+          "점수 오류: " + score);
+  }
+
+  public static void main(String[] args) {
+    try {
+      checkScore(120);
+    } catch (
+      Exception e) {
+      System.out.println(
+          e.getMessage());
+    }
+  }
+}
+

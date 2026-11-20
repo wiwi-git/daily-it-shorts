@@ -1,0 +1,30 @@
+// 영상에 나오는 예제 프로그램 (build.py가 생성 · 직접 고치지 말 것)
+// 각 예제를 파일 이름대로 저장한 뒤: javac -g -encoding UTF-8 Main.java && java Main
+// 확인한 JDK: openjdk version "25.0.4.1" 2026-08-18
+
+// [도입] Main.java → 실행 오류: Exception in thread "main" java.lang.ArithmeticException: / by zero
+public class Main {
+  public static void main(String[] args) {
+    int a = 10 / 0;
+    System.out.println(a);
+    System.out.println("끝");
+  }
+}
+
+
+// [1. try-catch] Main.java → 출력:
+//   0으로 나눌 수 없어요
+//   끝
+public class Main {
+  public static void main(String[] args) {
+    try {
+      int a = 10 / 0;
+      System.out.println(a);
+    } catch (ArithmeticException e) {
+      System.out.println(
+          "0으로 나눌 수 없어요");
+    }
+    System.out.println("끝");
+  }
+}
+

@@ -1,0 +1,311 @@
+// 영상에 나오는 예제 프로그램 (build.py가 생성 · 직접 고치지 말 것)
+// 각 예제를 파일 이름대로 저장한 뒤: javac -g -encoding UTF-8 Main.java && java Main
+// 자바 16 이상 필요 (Stream.toList()) · 확인한 JDK: openjdk version "25.0.4.1" 2026-08-18
+
+// [2. 스트림 3단계] Main.java → 출력:
+//   [85, 92]
+import java.util.ArrayList;
+import java.util.List;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
+
+public class Main {
+  public static void main(String[] args) {
+    List<Integer> scores =
+        new ArrayList<>();
+    scores.add(85);
+    scores.add(92);
+    scores.add(78);
+    System.out.println(scores.stream()
+      .filter(s -> s >= 80)
+      .toList());
+  }
+}
+
+
+// [2. 스트림 3단계] Main.java → 출력:
+//   [85, 92]
+import java.util.ArrayList;
+import java.util.List;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
+
+public class Main {
+  public static void main(String[] args) {
+    List<Integer> scores =
+        new ArrayList<>();
+    scores.add(85);
+    scores.add(92);
+    scores.add(78);
+    System.out.println(scores.stream()
+      .filter(s -> s >= 80)
+      .collect(Collectors.toList()));
+  }
+}
+
+
+// [3-1. sorted] Main.java → 출력:
+//   [92, 85, 78]
+import java.util.ArrayList;
+import java.util.List;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
+
+public class Main {
+  public static void main(String[] args) {
+    List<Integer> scores =
+        new ArrayList<>();
+    scores.add(85);
+    scores.add(92);
+    scores.add(78);
+    System.out.println(scores.stream()
+      .sorted((a, b) -> Integer.compare(b, a))
+      .toList());
+  }
+}
+
+
+// [도입] Main.java → 컴파일 확인 (출력 없음)
+import java.util.ArrayList;
+import java.util.List;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
+
+public class Main {
+  public static void main(String[] args) {
+    List<Integer> scores =
+        new ArrayList<>();
+    scores.add(85);
+    scores.add(92);
+    scores.add(78);
+    List<Integer> r = scores.stream().filter(s -> s >= 80).map(s -> s + 5).toList();
+  }
+}
+
+
+// [1. 원본은 그대로] Main.java → 출력:
+//   [85, 92]
+import java.util.ArrayList;
+import java.util.List;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
+
+public class Main {
+  public static void main(String[] args) {
+    List<Integer> scores =
+        new ArrayList<>();
+    scores.add(85);
+    scores.add(92);
+    scores.add(78);
+    scores.removeIf(s -> s < 80);
+    System.out.println(scores);
+  }
+}
+
+
+// [1. 원본은 그대로] Main.java → 출력:
+//   [85, 92]
+//   [85, 92, 78]
+import java.util.ArrayList;
+import java.util.List;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
+
+public class Main {
+  public static void main(String[] args) {
+    List<Integer> scores =
+        new ArrayList<>();
+    scores.add(85);
+    scores.add(92);
+    scores.add(78);
+    List<Integer> pass =
+        scores.stream()
+          .filter(s -> s >= 80)
+          .toList();
+    System.out.println(pass);
+    System.out.println(scores);
+  }
+}
+
+
+// [2-1. map] Main.java → 출력:
+//   [민수님, 서준님, 지우님]
+import java.util.ArrayList;
+import java.util.List;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
+
+public class Main {
+  public static void main(String[] args) {
+    List<String> names =
+        new ArrayList<>();
+    names.add("민수");
+    names.add("서준");
+    names.add("지우");
+    List<String> result =
+        names.stream()
+          .map(n -> n + "님")
+          .toList();
+    System.out.println(result);
+  }
+}
+
+
+// [3. 이어 붙이기] Main.java → 출력:
+//   [90, 97]
+import java.util.ArrayList;
+import java.util.List;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
+
+public class Main {
+  public static void main(String[] args) {
+    List<Integer> scores =
+        new ArrayList<>();
+    scores.add(85);
+    scores.add(92);
+    scores.add(78);
+    List<Integer> bonus =
+        scores.stream()
+          .filter(s -> s >= 80)
+          .map(s -> s + 5)
+          .toList();
+    System.out.println(bonus);
+  }
+}
+
+
+// [3-1. sorted] Main.java → 출력:
+//   [78, 85, 92]
+import java.util.ArrayList;
+import java.util.List;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
+
+public class Main {
+  public static void main(String[] args) {
+    List<Integer> scores =
+        new ArrayList<>();
+    scores.add(85);
+    scores.add(92);
+    scores.add(78);
+    List<Integer> asc =
+        scores.stream()
+          .sorted()
+          .toList();
+    System.out.println(asc);
+  }
+}
+
+
+// [3-1. sorted] Main.java → 출력:
+//   [92, 85, 78]
+import java.util.ArrayList;
+import java.util.List;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
+
+public class Main {
+  public static void main(String[] args) {
+    List<Integer> scores =
+        new ArrayList<>();
+    scores.add(85);
+    scores.add(92);
+    scores.add(78);
+    List<Integer> desc =
+        scores.stream()
+          .sorted((a, b) -> b - a)
+          .toList();
+    System.out.println(desc);
+  }
+}
+
+
+// [4. count · sum] Main.java → 출력:
+//   2
+import java.util.ArrayList;
+import java.util.List;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
+
+public class Main {
+  public static void main(String[] args) {
+    List<Integer> scores =
+        new ArrayList<>();
+    scores.add(85);
+    scores.add(92);
+    scores.add(78);
+    long cnt =
+        scores.stream()
+          .filter(s -> s >= 80)
+          .count();
+    System.out.println(cnt);
+  }
+}
+
+
+// [4. count · sum] Main.java → 출력:
+//   255
+import java.util.ArrayList;
+import java.util.List;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
+
+public class Main {
+  public static void main(String[] args) {
+    List<Integer> scores =
+        new ArrayList<>();
+    scores.add(85);
+    scores.add(92);
+    scores.add(78);
+    int sum =
+        scores.stream()
+          .mapToInt(s -> s)
+          .sum();
+    System.out.println(sum);
+  }
+}
+
+
+// [5. 한 번만 쓴다] Main.java → 실행 오류: Exception in thread "main" java.lang.IllegalStateException: stream has already been operated upon or closed
+import java.util.ArrayList;
+import java.util.List;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
+
+public class Main {
+  public static void main(String[] args) {
+    List<Integer> scores =
+        new ArrayList<>();
+    scores.add(85);
+    scores.add(92);
+    scores.add(78);
+    Stream<Integer> st =
+        scores.stream();
+    System.out.println(st.count());
+    System.out.println(st.count());
+  }
+}
+
+
+// [5. 한 번만 쓴다] Main.java → 출력:
+//   3
+import java.util.ArrayList;
+import java.util.List;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
+
+public class Main {
+  public static void main(String[] args) {
+    List<Integer> scores =
+        new ArrayList<>();
+    scores.add(85);
+    scores.add(92);
+    scores.add(78);
+    Stream<Integer> st = scores.stream();
+    st.count();
+    st = scores.stream();
+    System.out.println(st.count());
+  }
+}
+

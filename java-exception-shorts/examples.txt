@@ -28,3 +28,42 @@ public class Main {
   }
 }
 
+
+// [2. 여러 catch] Main.java → 출력:
+//   For input string: "abc"
+//   Index 3 out of bounds for length 3
+public class Main {
+  public static void main(String[] args) {
+    int[] scores = {85, 92, 78};
+    try {
+      Integer.parseInt("abc");
+    } catch (
+      NumberFormatException e) {
+      System.out.println(
+        e.getMessage());
+    }
+    try {
+      int n = scores[3];
+    } catch (
+      ArrayIndexOutOfBoundsException
+        e) {
+      System.out.println(
+        e.getMessage());
+    }
+  }
+}
+
+
+// [2-1. catch 순서 함정] Main.java → 컴파일 오류: exception ArithmeticException has already been caught
+public class Main {
+  public static void main(String[] args) {
+    try {
+      int a = 10 / 0;
+    } catch (Exception e) {
+      System.out.println("예외");
+    } catch (ArithmeticException e) {
+      System.out.println("0 나누기");
+    }
+  }
+}
+

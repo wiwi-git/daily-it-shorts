@@ -6,7 +6,7 @@ SPEED = 1.2
 LEAD, GAP, TAIL = round(0.3 / SPEED, 3), round(0.45 / SPEED, 3), 1.0
 XF = round(0.15 / SPEED, 3)  # scene change this long before the next narration
 # scenes built so far: each ticket adds its scene ids, and the last one removes this filter
-READY = {"hook", "trycatch"}
+READY = {"hook", "trycatch", "kinds", "order"}
 vo = [s for s in json.load(open("vo.json")) if s["id"] in READY]
 
 # --- timing + concatenated narration ---
@@ -253,9 +253,30 @@ def trycatch_scene():
             + '<div class="note in"><code>catch (ArithmeticException e)</code><br/><small>괄호 안 타입 = 잡을 예외\n'
             '예외가 난 줄 아래는 건너뜀</small></div>')
 
+SCORES = ["int[] scores = {85, 92, 78};"]
+MSG = ["  System.out.println(", "    e.getMessage());", "}"]
+
+def kinds_scene():
+    lines = (["try {", '  Integer.parseInt("abc");', "} catch (", "  NumberFormatException e) {"] + MSG
+             + ["try {", "  int n = scores[3];", "} catch (", "  ArrayIndexOutOfBoundsException", "    e) {"] + MSG)
+    return (head("STEP 2 · 여러 catch", "예외 종류별로 잡기", "종류마다 <b>catch</b> · <code>scores = {85, 92, 78}</code>")
+            + jcode("kinds", lines, 'For input string: "abc"\nIndex 3 out of bounds for length 3\n',
+                    mark=(1, 3, 8, 10), pre=SCORES, sm=True)
+            + term(label="실행 결과 · e.getMessage()"))
+
+def order_scene():
+    lines = (["try {", "  " + DIV[0], "} catch (Exception e) {", '  System.out.println("예외");',
+              "} catch (ArithmeticException e) {", '  System.out.println("0 나누기");', "}"])
+    return (head("STEP 2 · catch 순서", "catch 순서 함정", "<b>Exception</b>을 위에 쓰면 컴파일 오류")
+            + jce("order", lines, "exception ArithmeticException has already been caught", mark=(2, 4))
+            + cterm()
+            + '<div class="warn in"><b>Exception</b> = 예외 클래스들의 부모<br/><small>구체적인 예외부터 위에</small></div>')
+
 scenes = {
  "hook": hook_scene(),
  "trycatch": trycatch_scene(),
+ "kinds": kinds_scene(),
+ "order": order_scene(),
 }
 PROG = {"trycatch": 1, "kinds": 2, "order": 2, "finally": 3, "throw": 4, "throws": 4, "custom": 5}
 

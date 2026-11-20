@@ -29,6 +29,83 @@ public class Main {
 }
 
 
+// [2. 여러 catch] Main.java → 출력:
+//   For input string: "abc"
+//   Index 3 out of bounds for length 3
+public class Main {
+  public static void main(String[] args) {
+    int[] scores = {85, 92, 78};
+    try {
+      Integer.parseInt("abc");
+    } catch (
+      NumberFormatException e) {
+      System.out.println(
+        e.getMessage());
+    }
+    try {
+      int n = scores[3];
+    } catch (
+      ArrayIndexOutOfBoundsException
+        e) {
+      System.out.println(
+        e.getMessage());
+    }
+  }
+}
+
+
+// [2-1. catch 순서 함정] Main.java → 컴파일 오류: exception ArithmeticException has already been caught
+public class Main {
+  public static void main(String[] args) {
+    try {
+      int a = 10 / 0;
+    } catch (Exception e) {
+      System.out.println("예외");
+    } catch (ArithmeticException e) {
+      System.out.println("0 나누기");
+    }
+  }
+}
+
+
+// [3. finally] Main.java → 출력:
+//   85
+//   끝
+public class Main {
+  public static void main(String[] args) {
+    String s = "85";
+    try {
+      int n = Integer.parseInt(s);
+      System.out.println(n);
+    } catch (
+      NumberFormatException e) {
+      System.out.println("숫자 아님");
+    } finally {
+      System.out.println("끝");
+    }
+  }
+}
+
+
+// [3. finally] Main.java → 출력:
+//   숫자 아님
+//   끝
+public class Main {
+  public static void main(String[] args) {
+    String s = "abc";
+    try {
+      int n = Integer.parseInt(s);
+      System.out.println(n);
+    } catch (
+      NumberFormatException e) {
+      System.out.println("숫자 아님");
+    } finally {
+      System.out.println("끝");
+    }
+  }
+}
+
+
 // [4. throw] Main.java → 출력:
 //   점수 오류: 120
 public class Main {

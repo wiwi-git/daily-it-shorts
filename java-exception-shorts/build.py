@@ -6,7 +6,7 @@ SPEED = 1.2
 LEAD, GAP, TAIL = round(0.3 / SPEED, 3), round(0.45 / SPEED, 3), 1.0
 XF = round(0.15 / SPEED, 3)  # scene change this long before the next narration
 # scenes built so far: each ticket adds its scene ids, and the last one removes this filter
-READY = {"hook", "trycatch", "throw", "throws"}
+READY = {"hook", "trycatch", "kinds", "order", "finally", "throw", "throws"}
 vo = [s for s in json.load(open("vo.json")) if s["id"] in READY]
 
 # --- timing + concatenated narration ---
@@ -265,13 +265,46 @@ def trycatch_scene():
             + '<div class="note in"><code>catch (ArithmeticException e)</code><br/><small>괄호 안 타입 = 잡을 예외\n'
             '예외가 난 줄 아래는 건너뜀</small></div>')
 
+SCORES = ["int[] scores = {85, 92, 78};"]
+MSG = ["  System.out.println(", "    e.getMessage());", "}"]
+
+def kinds_scene():
+    lines = (["try {", '  Integer.parseInt("abc");', "} catch (", "  NumberFormatException e) {"] + MSG
+             + ["try {", "  int n = scores[3];", "} catch (", "  ArrayIndexOutOfBoundsException", "    e) {"] + MSG)
+    return (head("STEP 2 · 여러 catch", "예외 종류별로 잡기", "종류마다 <b>catch</b> · <code>scores = {85, 92, 78}</code>")
+            + jcode("kinds", lines, 'For input string: "abc"\nIndex 3 out of bounds for length 3\n',
+                    mark=(1, 3, 8, 10), pre=SCORES, sm=True)
+            + term(label="실행 결과 · e.getMessage()"))
+
+def order_scene():
+    lines = (["try {", "  " + DIV[0], "} catch (Exception e) {", '  System.out.println("예외");',
+              "} catch (ArithmeticException e) {", '  System.out.println("0 나누기");', "}"])
+    return (head("STEP 2 · catch 순서", "catch 순서 함정", "<b>Exception</b>을 위에 쓰면 컴파일 오류")
+            + jce("order", lines, "exception ArithmeticException has already been caught", mark=(2, 4))
+            + cterm()
+            + '<div class="warn in"><b>Exception</b> = 예외 클래스들의 부모<br/><small>구체적인 예외부터 위에</small></div>')
+
+FIN = ["try {", "  int n = Integer.parseInt(s);", "  System.out.println(n);",
+       "} catch (", "  NumberFormatException e) {", '  System.out.println("숫자 아님");',
+       "} finally {", '  System.out.println("끝");', "}"]
+
+def finally_scene():
+    """The same try-catch-finally run twice: "85" converts, "abc" throws; both print 끝 last."""
+    shown = jcode("finally", FIN, "85\n끝\n", mark=(6, 7), pre=['String s = "85";'])
+    ok = term(label='s = "85"', cls="term")
+    jcode("finally", FIN, "숫자 아님\n끝\n", pre=['String s = "abc";'])
+    ng = term(label='s = "abc"', cls="term")
+    return (head("STEP 3 · finally", "항상 실행", "예외가 나든 안 나든 <b>finally</b>")
+            + shown + f'<div class="duo in">{ok}{ng}</div>'
+            + '<div class="note in">두 번 모두 마지막에 <b>끝</b></div>')
+
 # STEP 4: one checkScore grows across the scenes (static method inside Main, via `members=`)
 RANGE = "  if (score < 0 || score > 100)"
-MSG = '        "점수 오류: " + score);'
+SCORE_MSG = '        "점수 오류: " + score);'
 CHECK_THROW = ["static void checkScore(", "    int score) {", RANGE,
-               "    throw new", "      IllegalArgumentException(", MSG, "}"]
+               "    throw new", "      IllegalArgumentException(", SCORE_MSG, "}"]
 def check_ex(decl):  # throws scene: the same method throwing Exception, `decl` = its declaration lines
-    return decl + [RANGE, "    throw new Exception(", MSG, "}"]
+    return decl + [RANGE, "    throw new Exception(", SCORE_MSG, "}"]
 DECL = "static void checkScore(int score)"
 CALL = lambda catch: ["try {", "  checkScore(120);", "} catch (", f"  {catch} e) {{",
                       "  System.out.println(", "      e.getMessage());", "}"]
@@ -298,6 +331,9 @@ def throws_scene():
 scenes = {
  "hook": hook_scene(),
  "trycatch": trycatch_scene(),
+ "kinds": kinds_scene(),
+ "order": order_scene(),
+ "finally": finally_scene(),
  "throw": throw_scene(),
  "throws": throws_scene(),
 }
@@ -315,7 +351,9 @@ CSS_EXTRA += """
 #sc-throws .vs .card small { font-size: 34px; color: var(--ink); }
 #sc-throws .vs .card span { font-size: 32px; }
 #sc-throws .vs .card b { font-family: var(--font); font-weight: 800; }
-.duo { display: grid; grid-template-columns: 1fr 1fr; gap: 22px; align-items: stretch; }
+.duo { display: grid; grid-template-columns: 1fr 1fr; gap: 22px; }
+.duo .term { font-size: 40px; }
+.note b { color: var(--orange); }
 """
 
 JDK = subprocess.run(["java", "-version"], capture_output=True, text=True).stderr.split("\n")[0]

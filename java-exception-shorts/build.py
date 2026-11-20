@@ -6,7 +6,7 @@ SPEED = 1.2
 LEAD, GAP, TAIL = round(0.3 / SPEED, 3), round(0.45 / SPEED, 3), 1.0
 XF = round(0.15 / SPEED, 3)  # scene change this long before the next narration
 # scenes built so far: each ticket adds its scene ids, and the last one removes this filter
-READY = {"hook", "trycatch", "kinds", "order", "finally", "throw", "throws"}
+READY = {"hook", "trycatch", "kinds", "order", "finally", "throw", "throws", "custom"}
 vo = [s for s in json.load(open("vo.json")) if s["id"] in READY]
 
 # --- timing + concatenated narration ---
@@ -299,20 +299,20 @@ def finally_scene():
             + '<div class="note in">두 번 모두 마지막에 <b>끝</b></div>')
 
 # STEP 4: one checkScore grows across the scenes (static method inside Main, via `members=`)
-RANGE = "  if (score < 0 || score > 100)"
-SCORE_MSG = '        "점수 오류: " + score);'
-CHECK_THROW = ["static void checkScore(", "    int score) {", RANGE,
+DECL = "static void checkScore(int s)"  # first line identical in throw · throws · custom
+RANGE = "  if (s < 0 || s > 100)"
+SCORE_MSG = '        "점수 오류: " + s);'
+CHECK_THROW = [DECL + " {", RANGE,
                "    throw new", "      IllegalArgumentException(", SCORE_MSG, "}"]
-def check_ex(decl):  # throws scene: the same method throwing Exception, `decl` = its declaration lines
-    return decl + [RANGE, "    throw new Exception(", SCORE_MSG, "}"]
-DECL = "static void checkScore(int score)"
+def check_ex(decl, ex="Exception"):  # throws/custom: the same method throwing `ex`, `decl` = its declaration lines
+    return decl + [RANGE, f"    throw new {ex}(", SCORE_MSG, "}"]
 CALL = lambda catch: ["try {", "  checkScore(120);", "} catch (", f"  {catch} e) {{",
                       "  System.out.println(", "      e.getMessage());", "}"]
 
 def throw_scene():
     return (head("STEP 4 · throw", "예외 던지기", "<b>throw</b>로 직접 던지기")
             + jcode("throw", [""] + CALL("IllegalArgumentException"), "점수 오류: 120\n", members=CHECK_THROW,
-                    show_members=True, mark=(3, 4, 9), sm=True)
+                    show_members=True, mark=(2, 3, 8), sm=True)
             + '<div class="duo in">' + term(label="실행 결과", cls="term")
             + '<div class="note"><code>throw<span class="s">s</span></code> 없이도<br/>컴파일 OK</div></div>')
 
@@ -328,6 +328,25 @@ def throws_scene():
             + term(label='부르는 쪽 <code>catch (Exception e)</code> → 실행 결과')
             + vs)
 
+# STEP 5: checkScore now throws a class of its own; ScoreException sits above class Main (`top=`)
+SCORE_EX = ["class ScoreException", "    extends Exception {", "  ScoreException(", "      String message) {",
+            "    super(message);", "  }", "}"]
+CUSTOM_CALL = ["try {", "  checkScore(120);", "} catch (ScoreException e) {", "  System.out.println(",
+               "      e.getMessage());", "}"]
+
+def custom_scene():
+    """Class, method and call on one screen: the whole program is compiled and run as one, then drawn as
+    two blocks (class + method, then the call beside its result) so it fits above the captions.
+    super(message) and e.getMessage() are marked on both ends."""
+    method = check_ex([DECL, "    throws ScoreException {"], "ScoreException")
+    jcode("custom", CUSTOM_CALL, "점수 오류: 120\n", top=SCORE_EX, members=method)
+    gap = lambda h: h.replace('<div class="ln">&nbsp;</div>', '<div class="ln gap"></div>')
+    return (head("STEP 5 · 커스텀 예외", "예외 클래스 만들기", "<b>커스텀 예외</b> (직접 만든 예외 클래스)")
+            + gap(code(SCORE_EX + [""] + method, mark=(1, 4, 11), sm=True))
+            + '<div class="pair">' + code(CUSTOM_CALL, mark=(2, 4), sm=True)
+            + '<div class="side in">' + term(label="실행 결과", cls="term")
+            + '<div class="note"><code>super(message)</code><br/>→ <code>getMessage()</code></div></div></div>')
+
 scenes = {
  "hook": hook_scene(),
  "trycatch": trycatch_scene(),
@@ -336,6 +355,7 @@ scenes = {
  "finally": finally_scene(),
  "throw": throw_scene(),
  "throws": throws_scene(),
+ "custom": custom_scene(),
 }
 PROG = {"trycatch": 1, "kinds": 2, "order": 2, "finally": 3, "throw": 4, "throws": 4, "custom": 5}
 
@@ -351,6 +371,12 @@ CSS_EXTRA += """
 #sc-throws .vs .card small { font-size: 34px; color: var(--ink); }
 #sc-throws .vs .card span { font-size: 32px; }
 #sc-throws .vs .card b { font-family: var(--font); font-weight: 800; }
+#sc-custom .code.sm { font-size: 30px; padding: 22px 26px; }
+#sc-custom .code .ln.gap { height: 16px; }
+#sc-custom .pair { display: flex; gap: 22px; align-items: stretch; }
+#sc-custom .side { flex: 1; min-width: 0; display: flex; flex-direction: column; gap: 22px; }
+#sc-custom .side .term { font-size: 32px; }
+#sc-custom .side .note code { font-size: 28px; }
 .duo { display: grid; grid-template-columns: 1fr 1fr; gap: 22px; }
 .duo .term { font-size: 40px; }
 .note b { color: var(--orange); }

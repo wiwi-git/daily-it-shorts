@@ -15,8 +15,8 @@ IT·기술 정보성 유튜브 쇼츠를 매일 하나씩 만드는 저장소. �
 
 - 세로 9:16, 1080×1920, 길이 3분 이하(지금까지 2분 30초 안팎)
 - 한국어 나레이션: Edge TTS `ko-KR-SunHiNeural`, rate `+34%`
-- 템포: `java-method-constructor-shorts`부터 1.2배(이전 rate `+12%` × 1.2). 새 영상은 이 폴더의
-  `gen_vo.py`·`build.py`(`SPEED = 1.2`)를 기반으로 복사한다 — 장면 간격·전환·등장 모션이 `SPEED`로 함께 줄어든다
+- 템포: `java-method-constructor-shorts`부터 1.2배(이전 rate `+12%` × 1.2). 새 자바 영상은 가장 최근 자바 영상의
+  `gen_vo.py`·`build.py`(`J.load(speed=1.2)`)를 복사해 장면만 바꾼다 — 장면 간격·전환·등장 모션이 `SPEED`로 함께 줄어든다
 - 한국어 자막 필수, 나레이션과 단어 단위로 동기화
 - 렌더링 결과는 `output/<영상이름>.mp4` (git 제외)
 
@@ -25,10 +25,10 @@ IT·기술 정보성 유튜브 쇼츠를 매일 하나씩 만드는 저장소. �
 1. **내용 구성**: 장면 목록(도입 → STEP 1… → 정리)과 각 장면에서 보여줄 코드·표를 먼저 정한다
 2. **대본**: `script.json`에 `{id, section, text}`로 장면별 나레이션 작성
 3. **음성**: `../.venv/bin/python gen_vo.py` → `assets/vo/*.mp3`, `vo.json`(단어 타이밍 포함)
-4. **화면**: `build.py`의 `scenes`, `PROG` 수정 → `python3 build.py` → `index.html`, `assets/narration.mp3`, `queries.sql`
-   (빌드가 예제 쿼리를 실제로 실행해 대본의 기대 결과와 다르면 멈춘다)
-5. **검증**: `npx hyperframes check` 통과 → `npx hyperframes snapshot`으로 모든 장면 확인 → 렌더링
-6. **기록**: README의 "영상 목록"에 행 추가(URL은 업로드 후 `watch?v=` 형식으로)
+4. **화면**: `build.py`의 `scenes`, `PROG` 수정 → `python3 build.py` → `index.html`, `assets/narration.mp3`, 예제 기록
+   (빌드가 화면의 예제를 실제로 실행해 대본의 기대 결과와 다르면 멈춘다)
+5. **검증**: `tools/verify-video.sh <영상폴더>` — 아래 검증 기준을 순서대로 실행하고 어기면 멈춘다. 출력된 snapshot 시트는 직접 열어 본다
+6. **기록**: 업로드용 제목·설명은 [docs/youtube-upload.md](docs/youtube-upload.md). 업로드 후 README "영상 목록"에 행 추가
 
 ## 디자인 컨셉 (바꾸지 말 것)
 
@@ -54,20 +54,9 @@ IT·기술 정보성 유튜브 쇼츠를 매일 하나씩 만드는 저장소. �
 - 맨 아래: 주황 진행 막대(영상 전체 길이)
 - 하단 약 300px은 쇼츠 UI에 가려지므로 본문을 두지 않는다
 
-**구성 요소** (`build.py` 헬퍼)
+**구성 요소** (`build.py` 헬퍼): 자바 영상은 [docs/java-helpers.md](docs/java-helpers.md)(공용 모듈 `tools/javashorts.py`),
+SQL 영상은 [docs/sql-helpers.md](docs/sql-helpers.md). 공통 화면 요소:
 
-- `head(step, title, desc)`: STEP 라벨 + 제목 + 설명(`<b>`는 주황 강조)
-- `code(lines, mark=())`: 42px 코드 블록, `mark`로 그 장면의 핵심 줄에 주황 배경
-- `qcode(sid, lines, *expect, mark=())`: 실행되는 예제 쿼리용 `code()`. 각 문장을 예시 데이터 `P`에 실행해
-  `expect`(나레이션이 말하는 결과 id 목록)와 다르면 빌드 중단, `queries.sql`에 기록. `WHERE`만 보여줘도 됨.
-  결과 표·칩은 id를 직접 쓰지 말고 `got()`(직전 쿼리의 실제 결과)로 그린다
-- `qsql(sid, lines, expect, check=, user=)` / `setup(sid, sql)`: SELECT 결과로 확인할 수 없는 주제(DDL·TCL·DCL)용.
-  `../tools/mysql-sandbox.sh start`로 띄운 임시 MySQL에서 코드를 `user` 계정으로 실행하고, 이어서 보이지 않는
-  `check` 쿼리의 결과 행(또는 코드가 낸 `ERROR nnnn`)을 `expect`와 대조. 기준 구현은 `ddl-shorts`·`tcl-shorts`·`dcl-shorts`.
-  앞 블록에서 이어지는 트랜잭션은 `pre=`로 같은 세션에서 실행하고, 두 세션 예제는 `two_sessions()`처럼
-  A가 자기 값을 읽은 뒤에 B를 조회하게 동기화한다(고정 sleep 금지). 트랜잭션 예제는 COMMIT/ROLLBACK으로 닫는다
-- `res(ids, bad=())`: 결과를 한 줄 칩으로(공간이 좁은 두 쿼리 비교 장면용), `bad`는 빨간 ⚠ 표시
-- `table(cols, rows, label)`: 40px 결과 표. 행 클래스 `k1`/`k2`/`k3`은 대상별 색, `out`은 제외(취소선), 값 `None`은 빨간 NULL
 - `.warn`(빨간 경고) · `.note`(파란 메모) · `.chips`(키워드 칩) · `.vs`(두 개념 비교 카드) · `.list/.row`(번호 목록)
 - 도입 장면: `.hook` + 150px `.big` 제목(핵심 단어 `<em>` 주황)
 - 정리 장면: 목록 전체를 먼저 보여주고, 나레이션이 항목을 말하는 순간 `word_time()`으로 그 줄을 강조. 마지막에 "👍 구독 · 좋아요"
@@ -78,8 +67,8 @@ IT·기술 정보성 유튜브 쇼츠를 매일 하나씩 만드는 저장소. �
 
 ## 내용·대본 원칙
 
-- 대본 작성 후 제작 전에 사실 검토: 결과가 있는 예제 쿼리는 모두 `qcode()`로 넣어 빌드가 실행·대조하게 한다.
-  자동 대조는 쿼리 결과까지만이므로, 나레이션 문장("네 개가 남아요")이 `expect`와 같은지는 직접 확인한다
+- 대본 작성 후 제작 전에 사실 검토: 결과가 있는 예제는 모두 빌드가 실행·대조하는 헬퍼로 넣는다.
+  자동 대조는 예제 결과까지만이므로, 나레이션 문장("네 개가 남아요")이 기대 결과와 같은지는 직접 확인한다
 
 - 예시 데이터는 영상 전체에서 하나로 통일하고, 같은 대상은 모든 표에서 같은 색(k1/k2/k3)을 쓴다
 - 나레이션에서 말한 것은 화면에도 보여준다(말로만 나오는 함수·조건 금지). 예제 결과는 실제 데이터로 계산해 맞춘다

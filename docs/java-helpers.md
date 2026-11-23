@@ -28,11 +28,14 @@ J.build(scenes, PROG, BRAND, CSS, outro=(EXEC, EXEC_SAID, EXEC_END))
 | `jrt(sid, lines, runtime, before=)` | 실행 중 예외 문구에 `runtime`이 들어 있음 |
 | `jce(sid, lines, error, detail=)` | 컴파일 오류 문구에 `error`가 들어 있음 |
 | `jok(sid, lines)` | 컴파일·실행만 되면 됨 (그리지 않음) |
+| `jmulti(sid, lines, shown_out, each=, all_=, runs=20, label=, note=)` | 실행할 때마다 다른 출력(스레드). 한 번 컴파일해 `runs`번 실행하고, 매 출력이 `each(out)`, 전체 목록이 `all_(outs)`를 만족해야 함. 화면 상자는 고정 예시 `shown_out`(그 자체도 `each` 통과 필수) |
+
+- `jmulti`: 순서만 다른 출력은 `each=same_lines("민수 85", "서준 92", "main 끝")`. 다음 `term()`의 라벨은 `label`(기본 "실행 결과 예시")이 되고, 다른 헬퍼를 부르면 "실행 결과"로 돌아간다. `examples.txt`에는 고정 예시와 "실행할 때마다 다를 수 있음" 주석이 남는다(관찰한 출력은 남기지 않아 다시 빌드해도 같다)
 
 - 코드는 `main` 안에서 실행된다. `top=`은 `class Main` 위(다른 클래스), `members=`는 `Main` 안(`static` 메소드). `show_top`·`show_members`로 화면에 그릴지 정한다
 - `file=`: 실행 뒤 `J.FILE` 내용이 정확히 이 문자열이어야 한다. 예제마다 임시 폴더에서 실행되므로 앞 장면의 파일 상태는 `pre=`로 다시 만든다
 - 결과 상자: `term()`(출력), `fterm()`(파일 내용), `rterm()`(실행 중 예외), `cterm()`(컴파일 오류)
-- 예제 id에 `-`를 붙이면(`append-trap`) `examples.txt`에서 앞부분 장면의 섹션 이름을 쓴다
+- 예제 id에 `-`를 붙이면(`append-trap`) `examples.txt`에서 그 앞부분과 같은 장면 id 중 가장 긴 것의 섹션 이름을 쓴다(장면 id에도 `-`가 들어갈 수 있다: `run-trap-run` → `run-trap`)
 
 ## 화면 조각
 

@@ -131,26 +131,41 @@ def jok(sid, lines, top=(), pre=(), members=(), file=None):
     """Snippet that has to compile (and run without output or error); nothing is drawn."""
     check(sid, wrap(list(pre) + list(lines), top, members), "", label="컴파일 확인 (출력 없음)", file=file)
 
-def run(src, fname="Main.java"):
-    """(stdout, javac's first error or None, first line of the runtime error or None); the program
-    runs inside its own temp folder, and that folder's scores.txt ends up in LAST["file"]."""
+def compile_(src, fname="Main.java"):
+    """(temp folder holding the compiled program, javac's first error or None)."""
     d = tempfile.mkdtemp(dir=TMP)
     open(os.path.join(d, fname), "w").write(src)
-    LAST["file"] = None
     c = subprocess.run(["javac", "-g", "-J-Duser.language=en", "-encoding", "UTF-8", fname], cwd=d, capture_output=True, text=True)
     if c.returncode:
         LAST["ce2"] = [l.strip() for l in c.stderr.split("\n")[1:]]
-        return None, re.search(r"error: (.*)", c.stderr).group(1), None
+        return d, re.search(r"error: (.*)", c.stderr).group(1)
+    return d, None
+
+def exec_(d):
+    """(stdout, first line of the runtime error or None) of the program compiled in `d`; that folder's
+    scores.txt ends up in LAST["file"]."""
+    LAST["file"] = None
     r = subprocess.run(["java", "-Duser.language=en", "-Dfile.encoding=UTF-8", "-cp", ".", "Main"], cwd=d,
                        capture_output=True, text=True)
     p = os.path.join(d, FILE) if FILE else None
     if p and os.path.exists(p):
         LAST["file"] = open(p, encoding="utf-8").read()
-    return r.stdout, None, (r.stderr.split("\n")[0] if r.returncode else None)
+    return r.stdout, (r.stderr.split("\n")[0] if r.returncode else None)
+
+def run(src, fname="Main.java"):
+    """(stdout, javac's first error or None, first line of the runtime error or None); the program
+    runs inside its own temp folder, and that folder's scores.txt ends up in LAST["file"]."""
+    LAST["file"] = None
+    d, ce = compile_(src, fname)
+    if ce is not None:
+        return None, ce, None
+    out, rt = exec_(d)
+    return out, None, rt
 
 def check(sid, src, expect=None, runtime=None, fname="Main.java", label=None, file=None):
     """Runs `src`; stops the build unless it prints `expect` (or stops with `runtime`) and, when `file`
     is given, leaves exactly that text in scores.txt."""
+    LAST["label"] = None
     out, ce, rt = run(src, fname)
     if ce is not None:
         raise ValueError(f"{sid}: does not compile: {ce}")
@@ -196,8 +211,42 @@ def jrt(sid, lines, runtime, before="", mark=(), pre=(), sm=False, top=(), membe
         raise ValueError(f"{sid}: prints {LAST['out']!r} before the error, but the script expects {before!r}")
     return code(lines, mark, sm)
 
-def term(cmds=(), label="실행 결과", out=None, cls="term in"):
-    """Console box: optional shell commands, then what the last jcode() printed (or `out`)."""
+def jmulti(sid, lines, shown_out, each=None, all_=None, runs=20, label="실행 결과 예시", mark=(), hidden=(),
+           pre=(), sm=False, top=(), members=(), show_top=False, show_members=False, note=None):
+    """Code block whose output may differ from run to run (threads): compiled once, run `runs` times.
+    `each(out)` must hold for every run's output and `all_(outs)` for the list of all of them; any
+    runtime error stops the build too. The console box (term()) draws the fixed example `shown_out`
+    under `label`, never a run's output, so a rebuild draws the same page; `shown_out` itself must
+    pass `each`. `note` replaces the examples.txt heading (e.g. when every run must print the same)."""
+    src = wrap(list(pre) + list(lines) + list(hidden), top, members)
+    d, ce = compile_(src)
+    if ce is not None:
+        raise ValueError(f"{sid}: does not compile: {ce}")
+    outs = []
+    for _ in range(runs):
+        out, rt = exec_(d)
+        if rt:
+            raise ValueError(f"{sid}: stops with {rt!r} after printing {out!r}")
+        if each and not each(out):
+            raise ValueError(f"{sid}: a run printed {out!r}, which the script's check rejects")
+        outs.append(out)
+    if all_ and not all_(outs):
+        raise ValueError(f"{sid}: {runs} runs printed {sorted(set(outs))!r}, which the script's check rejects")
+    if each and not each(shown_out):
+        raise ValueError(f"{sid}: the example drawn on screen, {shown_out!r}, fails the script's own check")
+    LAST["out"], LAST["label"] = shown_out, label
+    EXAMPLES.append((sid, "Main.java", src, shown_out, None, None,
+                     note or f"출력 예시 ({runs}회 실행해 확인 · 실행할 때마다 순서·값이 다를 수 있음):"))
+    return code(shown(lines, top, members, show_top, show_members), mark, sm)
+
+def same_lines(*want):
+    """each= check for jmulti: the run printed exactly these lines, in any order."""
+    return lambda out: sorted(out.rstrip("\n").split("\n")) == sorted(want) and out.endswith("\n")
+
+def term(cmds=(), label=None, out=None, cls="term in"):
+    """Console box: optional shell commands, then what the last jcode() printed (or `out`); after a
+    jmulti() the label is that example's ("실행 결과 예시")."""
+    label = label or LAST.get("label") or "실행 결과"
     out = LAST["out"] if out is None else out
     body = "".join(f'<div class="cmd">$ {html.escape(c)}</div>' for c in cmds)
     if out:
@@ -230,6 +279,7 @@ def jce(sid, lines, error, detail="", mark=(), pre=(), sm=False, top=(), show_to
     the `top` declarations are drawn above the statements, with `show_members` the `members` (marks
     count from the first drawn line)."""
     src = wrap(list(pre) + list(lines), top, members)
+    LAST["label"] = None
     out, ce, rt = run(src)
     if ce is None or error not in ce:
         raise ValueError(f"{sid}: expected compile error {error!r}, got {ce!r} / output {out!r}")
@@ -347,11 +397,13 @@ def build(scenes, PROG, BRAND, css="", outro=None, examples_header=DEFAULT_HEADE
     with open("examples.txt", "w") as f:
         f.write("// 영상에 나오는 예제 프로그램 (build.py가 생성 · 직접 고치지 말 것)\n"
                 + "".join(f"// {l}\n" for l in examples_header) + "// 확인한 JDK: " + JDK + "\n")
-        for sid, fname, src, out, rt, fc in EXAMPLES:
-            res = (rt if rt.startswith("컴파일") else f"실행 오류: {rt}") if rt else "출력 없음 (컴파일·실행 성공)" if not out else "출력:\n" + "".join(f"//   {l}\n" for l in out.rstrip("\n").split("\n"))
+        for sid, fname, src, out, rt, fc, *multi in EXAMPLES:
+            res = (rt if rt.startswith("컴파일") else f"실행 오류: {rt}") if rt else "출력 없음 (컴파일·실행 성공)" if not out else (multi[0] if multi else "출력:") + "\n" + "".join(f"//   {l}\n" for l in out.rstrip("\n").split("\n"))
             if fc is not None:
                 res = res.rstrip() + f"\n// 실행 뒤 {FILE}:\n" + "".join(f"//   {l}\n" for l in fc.rstrip("\n").split("\n"))
-            f.write(f"\n// [{SECTION.get(sid) or SECTION[sid.split("-")[0]]}] {fname} → {res.rstrip()}\n{src}\n")
+            parts = sid.split("-")  # `append-trap` → section of `append`; scene ids may hold `-` too (`run-trap-run`)
+            sec = next(SECTION[k] for k in ("-".join(parts[:n]) for n in range(len(parts), 0, -1)) if k in SECTION)
+            f.write(f"\n// [{sec}] {fname} → {res.rstrip()}\n{src}\n")
     shutil.rmtree(TMP)
     for d in (".", ".."):  # every example ran in its own temp folder: none may have written into the repo
         if FILE and os.path.exists(os.path.join(d, FILE)):

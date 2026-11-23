@@ -1,0 +1,310 @@
+<!doctype html>
+<html lang="ko" data-resolution="portrait">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=1080, height=1920" />
+<script src="https://cdn.jsdelivr.net/npm/gsap@3.14.2/dist/gsap.min.js"></script>
+<style>
+:root {
+  --ground: #0b1220; --panel: #131c2e; --ink: #f4f6fb; --mute: #9aa6bd;
+  --blue: #3fa7d6; --orange: #f29111; --red: #ff5d5d; --green: #7ee08a; --violet: #c3a6ff;
+  --font: "Pretendard", sans-serif;
+  --mono: "Menlo", "SF Mono", monospace;
+}
+@font-face { font-family: "Pretendard"; src: url("assets/fonts/PretendardVariable.woff2") format("woff2"); font-weight: 45 920; }
+* { margin: 0; padding: 0; box-sizing: border-box; }
+html, body { width: 1080px; height: 1920px; overflow: hidden; background: var(--ground); }
+#root { position: relative; width: 100%; height: 100%; font-variant-ligatures: none; font-family: var(--font); color: var(--ink); overflow: hidden;
+  background: radial-gradient(1200px 900px at 80% -10%, #16365a 0%, transparent 60%),
+              radial-gradient(900px 900px at -10% 110%, #3a2410 0%, transparent 55%), var(--ground); }
+.clip { position: absolute; inset: 0; }
+.brand { position: absolute; top: 110px; left: 70px; right: 70px; display: flex; justify-content: space-between; align-items: center;
+  font-size: 34px; font-weight: 700; color: var(--mute); letter-spacing: 0.02em; }
+.brand b { color: var(--blue); } .brand b em { color: var(--orange); font-style: normal; }
+.prog { display: flex; gap: 12px; }
+.prog i { display: block; width: 56px; height: 12px; border-radius: 6px; background: #26324a; }
+.scene { padding: 210px 70px 0; display: flex; flex-direction: column; gap: 26px; }
+.pill { align-self: flex-start; padding: 12px 26px; border-radius: 999px; background: #1d2a44; color: var(--blue);
+  font-size: 34px; font-weight: 700; }
+.hook { display: flex; flex-direction: column; gap: 50px; padding-top: 140px; }
+.big { font-size: 150px; line-height: 1.12; font-weight: 800; letter-spacing: -0.04em; }
+.big em { font-style: normal; color: var(--orange); }
+.sub { font-size: 64px; font-weight: 700; color: var(--mute); } .sub b { color: var(--ink); }
+.title { font-size: 80px; font-weight: 800; letter-spacing: -0.03em; line-height: 1.1; }
+.desc { font-size: 46px; color: var(--mute); font-weight: 600; margin-top: -8px; } .desc b { color: var(--orange); }
+.code { background: #0a0f1a; border: 2px solid #26324a; border-radius: 26px; padding: 30px 32px; font-family: var(--mono);
+  font-size: 42px; line-height: 1.5; color: #d9e1f2; white-space: pre; box-shadow: 0 30px 60px rgba(0,0,0,.35);
+  font-variant-ligatures: none; font-feature-settings: "liga" 0, "calt" 0; }
+.code.sm { font-size: 34px; padding: 26px 28px; }
+.code .ln { margin: 0 -14px; padding: 0 14px; border-radius: 10px; }
+.code .ln.mk { background: rgba(242,145,17,.13); }
+.kw { color: var(--blue); font-weight: 700; } .st { color: var(--green); } .nu { color: var(--orange); } .cm { color: #6f7d98; } .es { color: var(--orange); font-weight: 700; }
+.term { background: #05080f; border: 2px solid #26324a; border-radius: 22px; padding: 18px 32px 22px; font-family: var(--mono);
+  font-size: 40px; line-height: 1.4; color: var(--ink); white-space: pre; tab-size: 8; }
+.term i { display: block; font-style: normal; font-family: var(--font); font-size: 28px; font-weight: 700; color: var(--mute); margin-bottom: 6px; }
+.term .cmd { color: var(--blue); }
+.term.err { border-color: rgba(255,93,93,.5); color: var(--red); font-size: 34px; white-space: normal; }
+.warn small { font-size: 36px; color: var(--mute); font-weight: 600; }
+.nest > div, .nest > div div { border: 3px solid; border-radius: 22px; padding: 16px 26px 20px; display: flex; flex-direction: column; gap: 12px; }
+.nest b { font-size: 38px; font-weight: 800; font-family: var(--mono); }
+.nest .k1 { border-color: var(--orange); } .nest .k1 > b { color: var(--orange); }
+.nest .k2 { border-color: var(--green); } .nest .k2 > b { color: var(--green); }
+.nest .k3 { border-color: var(--violet); } .nest .k3 > b { color: var(--violet); }
+.chips { display: flex; flex-wrap: wrap; gap: 18px; }
+.chips span { padding: 16px 30px; background: var(--panel); border-radius: 18px; font-size: 42px; font-weight: 700; }
+.warn, .note { padding: 26px 36px; border-radius: 24px; font-size: 44px; font-weight: 700; line-height: 1.45; }
+.warn { background: rgba(255,93,93,.12); border-left: 10px solid var(--red); } .warn b { color: var(--red); }
+.note { background: rgba(63,167,214,.12); border-left: 10px solid var(--blue); } .note b { color: var(--orange); }
+.note small { font-size: 38px; color: var(--mute); font-weight: 600; font-family: var(--mono); }
+code { font-family: var(--mono); color: var(--orange); }
+.var { display: grid; grid-template-columns: 1fr 1.3fr 1fr; gap: 18px; }
+.var div { background: var(--panel); border-radius: 24px; padding: 20px 30px 24px; display: flex; flex-direction: column; gap: 4px; }
+.var small { font-size: 32px; font-weight: 700; color: var(--mute); }
+.var b { font-family: var(--mono); font-size: 64px; }
+.var .v { border: 4px dashed var(--orange); } .var .v b { color: var(--orange); }
+.tbl { align-self: flex-start; }
+.tlabel { font-size: 34px; font-weight: 700; color: var(--mute); margin-bottom: 10px; }
+.tbl table { border-collapse: collapse; font-family: var(--mono); font-size: 40px; background: var(--panel); border-radius: 18px; overflow: hidden; }
+.tbl th { color: var(--blue); text-align: left; padding: 12px 32px; background: #1a2640; }
+.tbl th u { text-decoration: none; color: var(--orange); }
+.tbl td { padding: 10px 32px; border-top: 1px solid #26324a; }
+.tbl tr.k1 td { color: var(--orange); } .tbl tr.k2 td { color: var(--green); } .tbl tr.k3 td { color: var(--violet); }
+.tbl tr.out td { color: #5b6782; text-decoration: line-through; }
+.tbl td.nl { color: var(--red) !important; font-style: italic; font-weight: 700; background: rgba(255,93,93,.12); }
+.link { align-self: flex-start; font-family: var(--mono); font-size: 38px; color: var(--mute); padding: 6px 0 6px 26px;
+  border-left: 8px solid var(--orange); }
+.link b { color: var(--orange); }
+.arrow { font-family: var(--mono); font-size: 38px; color: var(--orange); font-weight: 700; }
+.vs { display: grid; grid-template-columns: 1fr 1fr; gap: 22px; }
+.card { background: var(--panel); border-radius: 26px; padding: 26px 32px; display: flex; flex-direction: column; gap: 6px; }
+.card b { font-family: var(--mono); font-size: 52px; color: var(--blue); }
+.vs .card span { font-size: 44px; font-weight: 800; } .vs .card .ok { color: var(--green); } .vs .card .ng { color: var(--red); }
+.res { display: flex; flex-wrap: wrap; align-items: center; gap: 14px; margin-top: -6px; }
+.res i { font-style: normal; font-size: 34px; color: var(--mute); font-weight: 700; }
+.res span { padding: 8px 22px; border-radius: 14px; background: var(--panel); font-size: 40px; font-weight: 700; }
+.res span.k1 { color: var(--orange); } .res span.k2 { color: var(--green); } .res span.k3 { color: var(--violet); }
+.res span.bad { color: var(--red); background: rgba(255,93,93,.14); box-shadow: inset 0 0 0 3px var(--red); } .vs .card em { font-style: normal; color: var(--orange); }
+.list { display: flex; flex-direction: column; gap: 16px; }
+.row { display: flex; align-items: center; gap: 30px; background: var(--panel); border-radius: 22px; padding: 14px 36px; font-size: 48px;
+  transform-origin: left center; }
+.row .no { font-size: 52px; font-weight: 900; color: var(--orange); width: 50px; }
+.row b { font-family: var(--mono); color: var(--blue); white-space: pre-line; }
+.cta { margin-top: 20px; font-size: 54px; font-weight: 800; text-align: center; }
+.arr { display: flex; align-items: flex-start; gap: 14px; }
+.arr .nm { font-family: var(--mono); font-size: 38px; font-weight: 700; color: var(--mute); padding-top: 34px; margin-right: 6px; }
+.arr .nm.tn { margin-left: 30px; color: var(--blue); }
+.cw { display: flex; flex-direction: column; align-items: center; gap: 6px; }
+.cw small { font-family: var(--mono); font-size: 32px; font-weight: 700; color: var(--mute); height: 40px; }
+.box { position: relative; width: 150px; height: 110px; background: var(--panel); border: 3px solid #26324a; border-radius: 18px; }
+.box b { position: absolute; inset: 0; display: flex; align-items: center; justify-content: center;
+  font-family: var(--mono); font-size: 56px; font-weight: 800; }
+.box.ghost { border: 3px dashed var(--red); background: rgba(255,93,93,.08); } .box.ghost b { color: var(--red); }
+.k1 { color: var(--orange); } .k2 { color: var(--green); } .k3 { color: var(--violet); } .z { color: var(--mute); }
+#sc-swap .arr .cw:last-child .box { border-style: dashed; border-color: var(--blue); }
+.gridw { display: flex; flex-direction: column; gap: 22px; }
+.grid { display: grid; gap: 12px; align-items: center; }
+.grid i { font-style: normal; font-family: var(--mono); font-size: 32px; font-weight: 700; color: var(--mute); text-align: center; }
+.grid b { height: 96px; background: var(--panel); border-radius: 16px; display: flex; align-items: center; justify-content: center;
+  font-family: var(--mono); font-size: 52px; font-weight: 800; }
+.grid b.k1 { box-shadow: inset 0 0 0 4px var(--orange); }
+.dims { display: flex; flex-wrap: wrap; gap: 16px; }
+.dims span { padding: 12px 26px; background: var(--panel); border-radius: 16px; font-size: 40px; font-weight: 700; }
+.dims em { font-style: normal; color: var(--orange); }
+.share { display: flex; gap: 12px; }
+.pp { width: 140px; display: flex; flex-direction: column; align-items: center; gap: 6px; }
+.pp .cd { width: 140px; height: 190px; background: var(--panel); border: 3px solid var(--orange); border-radius: 18px;
+  display: flex; flex-direction: column; align-items: center; justify-content: center; font-size: 46px; line-height: 1.15; }
+.pp.left .cd { border: 3px dashed var(--green); background: rgba(126,224,138,.08); }
+.pp small { font-size: 30px; font-weight: 700; color: var(--mute); } .pp.left small { color: var(--green); }
+.chips .gt { background: none; padding: 16px 0; color: var(--mute); }
+.cap { top: auto; bottom: 260px; height: auto; display: flex; justify-content: center; padding: 0 60px; }
+.cap span { background: rgba(0,0,0,.78); color: #fff; font-size: 48px; font-weight: 700; line-height: 1.4; padding: 16px 30px;
+  border-radius: 18px; text-align: center; word-break: keep-all; }
+.bar { position: absolute; left: 0; bottom: 0; height: 10px; width: 1080px; background: var(--orange); transform-origin: left center; }
+
+.chips em { font-style: normal; color: var(--orange); }
+.chips .k1 { color: var(--orange); font-family: var(--mono); } .chips .k2 { color: var(--green); font-family: var(--mono); }
+.chips .r { color: var(--red); }
+.vs .card small { font-size: 32px; color: var(--mute); font-weight: 700; }
+.vs .card span { font-family: var(--mono); font-size: 44px; color: var(--blue); font-weight: 800; }
+.vs .card.on b, .vs .card.on span { color: var(--orange); }
+.flow { display: flex; flex-direction: column; gap: 14px; }
+.flow div { display: flex; align-items: center; gap: 18px; font-size: 40px; font-weight: 700; }
+.flow code { background: var(--panel); padding: 8px 20px; border-radius: 14px; }
+.flow em { font-style: normal; color: var(--mute); }
+.ig { display: grid; gap: 10px; align-items: center; }
+.ig i { font-style: normal; font-family: var(--mono); font-size: 32px; font-weight: 700; color: var(--mute); text-align: center; }
+.ig b { height: 92px; background: var(--panel); border-radius: 16px; display: flex; align-items: center; justify-content: center;
+  font-size: 44px; font-weight: 800; }
+.ig b.out { color: #5b6782; text-decoration: line-through; box-shadow: inset 0 0 0 3px var(--red); }
+.ig b.z { background: none; border: 3px dashed #26324a; }
+.k0 { color: var(--ink); }
+.tbl tr.hi td { color: var(--orange); }
+.code .ar, code.ar { color: var(--orange); font-weight: 800; }
+.code.hero { font-size: 84px; align-self: flex-start; padding: 30px 50px; }
+.res span.out { color: #5b6782; text-decoration: line-through; box-shadow: inset 0 0 0 3px var(--red); }
+.parts { display: flex; gap: 18px; align-items: flex-start; }
+.parts div { display: flex; flex-direction: column; align-items: center; gap: 10px; }
+.parts code { font-size: 44px; font-weight: 800; background: var(--panel); padding: 22px 22px; border-radius: 18px; white-space: pre; }
+.parts small { font-size: 34px; font-weight: 700; color: var(--mute); }
+.warn small, .note small { white-space: pre-wrap; }
+
+.hook { gap: 44px; }
+.hook .vs .card span { font-family: var(--font); font-size: 40px; line-height: 1.3; color: var(--ink); }
+.hook .vs .card.on span { color: var(--orange); }
+.note code, .warn code { font-size: 40px; }
+.duo { display: grid; grid-template-columns: 1fr 1fr; gap: 22px; }
+.stack { display: flex; flex-direction: column; gap: 22px; }
+.stack .note, .stack .warn { font-size: 38px; padding: 20px 28px; }
+.stack small { font-size: 34px; font-family: var(--font); }
+.tlabel small { font-size: 30px; }
+.note.jn small { font-size: 32px; font-family: var(--font); }
+.term.bad { border-color: rgba(255,93,93,.5); }
+#sc-race .term.bad div, #sc-sync .term.ok div { font-size: 64px; font-weight: 800; }
+#sc-race .term.bad div { color: var(--red); } #sc-sync .term.ok div { color: var(--green); }
+.note.steps { font-size: 36px; padding: 20px 28px; white-space: pre-line; }
+.note.steps small { font-size: 32px; font-family: var(--font); }
+.term.ok { border-color: rgba(126,224,138,.5); }
+#sc-run-trap .vs .card small { font-family: var(--mono); font-size: 38px; color: var(--blue); }
+#sc-run-trap .vs .card b { font-size: 64px; }
+#sc-run-trap .vs .card span { font-family: var(--font); font-size: 36px; font-weight: 700; color: var(--mute); line-height: 1.3; }
+#sc-run-trap .vs .card.on { box-shadow: inset 0 0 0 3px var(--green); }
+#sc-run-trap .vs .card.bad { box-shadow: inset 0 0 0 3px var(--red); }
+
+</style>
+</head>
+<body>
+<div id="root" data-composition-id="main" data-start="0" data-duration="128.56" data-width="1080" data-height="1920">
+  <div class="brand"><b>자바 입문 <em>스레드</em> 정리</b><div class="prog"><i></i><i></i><i></i><i></i><i></i></div></div>
+  <section id="sc-hook" class="clip scene" data-start="0.000" data-duration="16.052" data-track-index="1"><div class="hook"><div class="pill in">JAVA 입문 · 스물두 번째</div><h1 class="big in"><em>스레드</em></h1><p class="sub in">코드를 실행하는 <b>흐름</b></p><div class="vs in"><div class="card"><b>지금까지</b><span>main 스레드<br/>하나</span></div><div class="card on"><b>오늘</b><span>스레드 여러 개<br/>→ 번갈아 실행</span></div></div></div></section>
+<section id="sc-start" class="clip scene" data-start="16.052" data-duration="21.567" data-track-index="1"><div class="pill in">STEP 1 · 스레드 만들기</div><h2 class="title in">new Thread + start()</h2><p class="desc in"><b>람다식</b>으로 할 일을 넘기고 <b>start()</b></p><div class="code in"><div class="ln mk">Thread a = <span class="kw">new</span> Thread(() <span class="ar">-&gt;</span></div><div class="ln">  System.out.println(<span class="st">"민수 85"</span>));</div><div class="ln">Thread b = <span class="kw">new</span> Thread(() <span class="ar">-&gt;</span></div><div class="ln">  System.out.println(<span class="st">"서준 92"</span>));</div><div class="ln mk">a.start();</div><div class="ln mk">b.start();</div><div class="ln">System.out.println(<span class="st">"main 끝"</span>);</div></div><div class="duo in"><div class="term"><i>실행 결과 예시</i><div class="k1">민수 85</div><div class="">main 끝</div><div class="k2">서준 92</div></div><div class="stack"><div class="note">main은<br/><small>기다리지 않음</small></div><div class="warn">출력 순서<br/><small>보장 안 됨</small></div></div></div><div class="note in">다른 방법: <code>extends Thread</code><br/><small>Thread 클래스를 물려받기</small></div></section>
+<section id="sc-run-trap" class="clip scene" data-start="37.619" data-duration="16.407" data-track-index="1"><div class="pill in">STEP 1-1 · run() 함정</div><h2 class="title in">start() 대신 run()?</h2><p class="desc in"><b>getName()</b>으로 실행 중인 스레드 이름 보기</p><div class="code in"><div class="ln">Thread t = <span class="kw">new</span> Thread(() <span class="ar">-&gt;</span></div><div class="ln">  System.out.println(</div><div class="ln mk">    Thread.currentThread()</div><div class="ln mk">      .getName()));</div></div><div class="vs in"><div class="card on"><small>t.start();</small><b class="ok">Thread-0</b><span>새 스레드에서 실행</span></div><div class="card bad"><small>t.run();</small><b class="ng">main</b><span>main 스레드가<br/>그냥 메소드 호출</span></div></div><div class="warn in">함정! <code>run()</code>은 <b>오류가 아니라</b> 그냥 메소드 호출<br/><small>새 스레드를 만들려면 반드시 start()</small></div></section>
+<section id="sc-join" class="clip scene" data-start="54.026" data-duration="22.911" data-track-index="1"><div class="pill in">STEP 2 · sleep과 join</div><h2 class="title in">끝날 때까지 기다리기</h2><p class="desc in"><b>sleep(1000)</b> 1초 쉬기 · <b>join()</b> 기다리기</p><div class="code in sm"><div class="ln">Thread t = <span class="kw">new</span> Thread(() <span class="ar">-&gt;</span> {</div><div class="ln">  <span class="kw">try</span> {</div><div class="ln mk">    Thread.sleep(<span class="nu">1000</span>);</div><div class="ln">  } <span class="kw">catch</span> (</div><div class="ln">    InterruptedException e) {}</div><div class="ln">  System.out.println(<span class="st">"민수 85"</span>);</div><div class="ln">});</div><div class="ln">t.start();</div><div class="ln mk">t.join();</div><div class="ln">System.out.println(<span class="st">"채점 끝"</span>);</div></div><div class="duo in"><div class="term"><i>join 없음</i><div class="">채점 끝</div><div class="k1">민수 85</div></div><div class="term ok"><i>t.join() 있음</i><div class="k1">민수 85</div><div class="">채점 끝</div></div></div><div class="note in jn"><b>체크 예외</b> InterruptedException<br/><small>sleep → 스레드 안 try-catch · join → main에 throws</small></div></section>
+<section id="sc-race" class="clip scene" data-start="76.937" data-duration="21.375" data-track-index="1"><div class="pill in">STEP 3 · 경쟁 조건</div><h2 class="title in">같은 변수를 함께</h2><p class="desc in">만 번씩 두 번 → <b>20000</b>이 아니다?</p><div class="code in sm"><div class="ln"><span class="kw">static</span> <span class="kw">int</span> count = <span class="nu">0</span>;</div><div class="ln"><span class="kw">static</span> <span class="kw">void</span> inc() {</div><div class="ln">  <span class="kw">for</span> (<span class="kw">int</span> i = <span class="nu">0</span>; i &lt; <span class="nu">10000</span>; i++)</div><div class="ln mk">    count++;</div><div class="ln">}</div><div class="ln">&nbsp;</div><div class="ln">Thread a = <span class="kw">new</span> Thread(Main<span class="ar">::</span>inc);</div><div class="ln">Thread b = <span class="kw">new</span> Thread(Main<span class="ar">::</span>inc);</div><div class="ln">a.start(); b.start();</div><div class="ln">a.join(); b.join();</div><div class="ln">System.out.println(count);</div></div><div class="duo in"><div class="term bad"><i>실행 결과 예시 · 매번 다름</i><div>13426</div></div><div class="note steps"><code>count++</code>
+읽기→더하기→쓰기
+<small>같은 값을 읽고 각자 쓰면
+→ 하나 사라짐</small></div></div><div class="warn in"><b>경쟁 조건</b> (레이스 컨디션)</div></section>
+<section id="sc-sync" class="clip scene" data-start="98.312" data-duration="10.887" data-track-index="1"><div class="pill in">STEP 4 · synchronized</div><h2 class="title in">한 번에 하나씩</h2><p class="desc in">메소드에 <b>synchronized</b> → 동기화</p><div class="code in sm"><div class="ln"><span class="kw">static</span> <span class="kw">int</span> count = <span class="nu">0</span>;</div><div class="ln mk"><span class="kw">static</span> synchronized <span class="kw">void</span> inc() {</div><div class="ln">  <span class="kw">for</span> (<span class="kw">int</span> i = <span class="nu">0</span>; i &lt; <span class="nu">10000</span>; i++)</div><div class="ln">    count++;</div><div class="ln">}</div><div class="ln">&nbsp;</div><div class="ln">Thread a = <span class="kw">new</span> Thread(Main<span class="ar">::</span>inc);</div><div class="ln">Thread b = <span class="kw">new</span> Thread(Main<span class="ar">::</span>inc);</div><div class="ln">a.start(); b.start();</div><div class="ln">a.join(); b.join();</div><div class="ln">System.out.println(count);</div></div><div class="duo in"><div class="term ok"><i>실행 결과 · 20회 모두</i><div>20000</div></div><div class="note">한 번에 <b>한 스레드만</b><br/><small>inc() 안에 들어감</small></div></div></section>
+<section id="sc-outro" class="clip scene" data-start="109.199" data-duration="19.361" data-track-index="1"><div class="pill in">정리</div><h2 class="title in">스레드</h2><div class="list in"><div class="row" id="ex1"><span class="no">1</span><b>new Thread(람다) · start()</b></div><div class="row" id="ex2"><span class="no">2</span><b>run()은 그냥 메소드 호출</b></div><div class="row" id="ex3"><span class="no">3</span><b>출력 순서는 보장 안 됨</b></div><div class="row" id="ex4"><span class="no">4</span><b>join() 끝날 때까지 기다리기</b></div><div class="row" id="ex5"><span class="no">5</span><b>같은 변수 → 경쟁 조건</b></div><div class="row" id="ex6"><span class="no">6</span><b>synchronized 한 번에 하나</b></div></div><div class="cta in">👍 구독 · 좋아요</div></section>
+  <div id="cap-hook-0" class="clip cap" data-start="0.250" data-duration="2.612" data-track-index="2"><span>자바 입문 스물두 번째, 스레드!</span></div>
+<div id="cap-hook-1" class="clip cap" data-start="2.862" data-duration="2.565" data-track-index="2"><span>스레드는 코드를 실행하는 흐름 하나예요.</span></div>
+<div id="cap-hook-2" class="clip cap" data-start="5.427" data-duration="1.791" data-track-index="2"><span>지금까지 만든 프로그램은 모두,</span></div>
+<div id="cap-hook-3" class="clip cap" data-start="7.218" data-duration="1.530" data-track-index="2"><span>메인 스레드 하나가 메인 메소드를</span></div>
+<div id="cap-hook-4" class="clip cap" data-start="8.748" data-duration="1.931" data-track-index="2"><span>위에서 아래로 실행했어요.</span></div>
+<div id="cap-hook-5" class="clip cap" data-start="10.679" data-duration="1.455" data-track-index="2"><span>스레드를 여러 개 만들면,</span></div>
+<div id="cap-hook-6" class="clip cap" data-start="12.134" data-duration="1.194" data-track-index="2"><span>여러 일을 동시에 실행되는</span></div>
+<div id="cap-hook-7" class="clip cap" data-start="13.328" data-duration="2.474" data-track-index="2"><span>것처럼 번갈아 처리할 수 있어요.</span></div>
+<div id="cap-start-0" class="clip cap" data-start="16.177" data-duration="1.766" data-track-index="2"><span>스레드를 만들 때는 뉴 스레드에</span></div>
+<div id="cap-start-1" class="clip cap" data-start="17.943" data-duration="1.946" data-track-index="2"><span>람다식으로 할 일을 넘겨요.</span></div>
+<div id="cap-start-2" class="clip cap" data-start="19.890" data-duration="1.894" data-track-index="2"><span>민수 팔십오를 출력하는 스레드와 서준</span></div>
+<div id="cap-start-3" class="clip cap" data-start="21.783" data-duration="1.847" data-track-index="2"><span>구십이를 출력하는 스레드를 만들고,</span></div>
+<div id="cap-start-4" class="clip cap" data-start="23.630" data-duration="2.687" data-track-index="2"><span>스타트를 부르면 각자 실행을 시작해요.</span></div>
+<div id="cap-start-5" class="clip cap" data-start="26.317" data-duration="2.957" data-track-index="2"><span>이번 실행에서는 메인 끝이 중간에 끼었어요.</span></div>
+<div id="cap-start-6" class="clip cap" data-start="29.274" data-duration="1.297" data-track-index="2"><span>메인 스레드는 다른 스레드를</span></div>
+<div id="cap-start-7" class="clip cap" data-start="30.571" data-duration="2.761" data-track-index="2"><span>기다리지 않고 자기 일을 계속하거든요.</span></div>
+<div id="cap-start-8" class="clip cap" data-start="33.332" data-duration="1.744" data-track-index="2"><span>출력 순서는 보장되지 않아서,</span></div>
+<div id="cap-start-9" class="clip cap" data-start="35.076" data-duration="2.293" data-track-index="2"><span>실행할 때마다 달라질 수 있어요.</span></div>
+<div id="cap-run-trap-0" class="clip cap" data-start="37.744" data-duration="1.446" data-track-index="2"><span>함정 하나!</span></div>
+<div id="cap-run-trap-1" class="clip cap" data-start="39.190" data-duration="2.668" data-track-index="2"><span>스타트 대신 런을 부르면 어떻게 될까요?</span></div>
+<div id="cap-run-trap-2" class="clip cap" data-start="41.858" data-duration="1.623" data-track-index="2"><span>스레드 안에서 겟 네임으로 지금</span></div>
+<div id="cap-run-trap-3" class="clip cap" data-start="43.481" data-duration="1.959" data-track-index="2"><span>실행 중인 스레드의 이름을 출력해 보면,</span></div>
+<div id="cap-run-trap-4" class="clip cap" data-start="45.440" data-duration="1.194" data-track-index="2"><span>스타트는 스레드 영,</span></div>
+<div id="cap-run-trap-5" class="clip cap" data-start="46.634" data-duration="1.623" data-track-index="2"><span>런은 메인이 나와요.</span></div>
+<div id="cap-run-trap-6" class="clip cap" data-start="48.257" data-duration="1.950" data-track-index="2"><span>런을 직접 부르면 오류는 아니지만,</span></div>
+<div id="cap-run-trap-7" class="clip cap" data-start="50.207" data-duration="1.390" data-track-index="2"><span>새 스레드 없이 메인 스레드가</span></div>
+<div id="cap-run-trap-8" class="clip cap" data-start="51.597" data-duration="2.179" data-track-index="2"><span>그냥 메소드를 호출할 뿐이에요.</span></div>
+<div id="cap-join-0" class="clip cap" data-start="54.151" data-duration="1.141" data-track-index="2"><span>스레드가 끝날 때까지</span></div>
+<div id="cap-join-1" class="clip cap" data-start="55.292" data-duration="1.844" data-track-index="2"><span>기다리려면 조인을 써요.</span></div>
+<div id="cap-join-2" class="clip cap" data-start="57.136" data-duration="2.248" data-track-index="2"><span>슬립 천은 일 초 쉬는 거예요.</span></div>
+<div id="cap-join-3" class="clip cap" data-start="59.384" data-duration="2.099" data-track-index="2"><span>조인이 없으면 채점 끝이 먼저 나오고,</span></div>
+<div id="cap-join-4" class="clip cap" data-start="61.483" data-duration="2.425" data-track-index="2"><span>일 초 뒤에 민수 팔십오가 나와요.</span></div>
+<div id="cap-join-5" class="clip cap" data-start="63.908" data-duration="1.138" data-track-index="2"><span>티 점 조인 한 줄을 넣으면</span></div>
+<div id="cap-join-6" class="clip cap" data-start="65.047" data-duration="1.455" data-track-index="2"><span>메인 스레드가 기다려서,</span></div>
+<div id="cap-join-7" class="clip cap" data-start="66.502" data-duration="2.491" data-track-index="2"><span>민수 팔십오 다음에 채점 끝이 나와요.</span></div>
+<div id="cap-join-8" class="clip cap" data-start="68.992" data-duration="1.418" data-track-index="2"><span>슬립과 조인은 체크 예외인</span></div>
+<div id="cap-join-9" class="clip cap" data-start="70.410" data-duration="2.164" data-track-index="2"><span>인터럽티드 익셉션을 던질 수 있어서,</span></div>
+<div id="cap-join-10" class="clip cap" data-start="72.575" data-duration="2.052" data-track-index="2"><span>스레드 안에서는 트라이 캐치로 감싸고,</span></div>
+<div id="cap-join-11" class="clip cap" data-start="74.627" data-duration="2.060" data-track-index="2"><span>메인에는 쓰로우즈를 붙여요.</span></div>
+<div id="cap-race-0" class="clip cap" data-start="77.062" data-duration="1.291" data-track-index="2"><span>이번엔 두 스레드가 같은</span></div>
+<div id="cap-race-1" class="clip cap" data-start="78.353" data-duration="1.732" data-track-index="2"><span>변수를 바꿔 볼게요.</span></div>
+<div id="cap-race-2" class="clip cap" data-start="80.084" data-duration="1.269" data-track-index="2"><span>각 스레드가 카운트 플러스</span></div>
+<div id="cap-race-3" class="clip cap" data-start="81.353" data-duration="1.409" data-track-index="2"><span>플러스를 만 번씩 하면,</span></div>
+<div id="cap-race-4" class="clip cap" data-start="82.762" data-duration="1.623" data-track-index="2"><span>이만이 나와야 하죠.</span></div>
+<div id="cap-race-5" class="clip cap" data-start="84.385" data-duration="1.334" data-track-index="2"><span>그런데 실행해 보면 대부분</span></div>
+<div id="cap-race-6" class="clip cap" data-start="85.719" data-duration="1.259" data-track-index="2"><span>이만보다 적게 나오고,</span></div>
+<div id="cap-race-7" class="clip cap" data-start="86.978" data-duration="1.772" data-track-index="2"><span>실행할 때마다 달라요.</span></div>
+<div id="cap-race-8" class="clip cap" data-start="88.750" data-duration="2.332" data-track-index="2"><span>카운트 플러스 플러스는 읽고, 더하고,</span></div>
+<div id="cap-race-9" class="clip cap" data-start="91.083" data-duration="1.166" data-track-index="2"><span>쓰는 세 단계라서,</span></div>
+<div id="cap-race-10" class="clip cap" data-start="92.249" data-duration="1.278" data-track-index="2"><span>두 스레드가 같은 값을 읽고</span></div>
+<div id="cap-race-11" class="clip cap" data-start="93.527" data-duration="2.164" data-track-index="2"><span>각자 쓰면 하나가 사라져요.</span></div>
+<div id="cap-race-12" class="clip cap" data-start="95.691" data-duration="2.371" data-track-index="2"><span>이런 문제를 경쟁 조건이라고 해요.</span></div>
+<div id="cap-sync-0" class="clip cap" data-start="98.437" data-duration="2.183" data-track-index="2"><span>고치는 방법은 동기화예요.</span></div>
+<div id="cap-sync-1" class="clip cap" data-start="100.620" data-duration="1.203" data-track-index="2"><span>카운트를 올리는 메소드에</span></div>
+<div id="cap-sync-2" class="clip cap" data-start="101.823" data-duration="1.390" data-track-index="2"><span>싱크로나이즈드를 붙이면,</span></div>
+<div id="cap-sync-3" class="clip cap" data-start="103.213" data-duration="0.905" data-track-index="2"><span>한 번에 한 스레드만</span></div>
+<div id="cap-sync-4" class="clip cap" data-start="104.118" data-duration="2.257" data-track-index="2"><span>그 메소드에 들어갈 수 있어요.</span></div>
+<div id="cap-sync-5" class="clip cap" data-start="106.375" data-duration="2.574" data-track-index="2"><span>이제 몇 번을 실행해도 항상 이만이에요.</span></div>
+<div id="cap-outro-0" class="clip cap" data-start="109.324" data-duration="1.493" data-track-index="2"><span>정리할게요.</span></div>
+<div id="cap-outro-1" class="clip cap" data-start="110.817" data-duration="0.942" data-track-index="2"><span>뉴 스레드에 람다를</span></div>
+<div id="cap-outro-2" class="clip cap" data-start="111.759" data-duration="1.894" data-track-index="2"><span>넘기고 스타트로 실행해요.</span></div>
+<div id="cap-outro-3" class="clip cap" data-start="113.652" data-duration="2.910" data-track-index="2"><span>런을 직접 부르면 그냥 메소드 호출이에요.</span></div>
+<div id="cap-outro-4" class="clip cap" data-start="116.563" data-duration="2.211" data-track-index="2"><span>출력 순서는 보장되지 않아요.</span></div>
+<div id="cap-outro-5" class="clip cap" data-start="118.774" data-duration="2.192" data-track-index="2"><span>조인은 끝날 때까지 기다려요.</span></div>
+<div id="cap-outro-6" class="clip cap" data-start="120.966" data-duration="2.239" data-track-index="2"><span>같은 변수를 함께 바꾸면 경쟁 조건,</span></div>
+<div id="cap-outro-7" class="clip cap" data-start="123.205" data-duration="2.229" data-track-index="2"><span>싱크로나이즈드로 한 번에 하나씩.</span></div>
+<div id="cap-outro-8" class="clip cap" data-start="125.434" data-duration="2.130" data-track-index="2"><span>구독과 좋아요 부탁드려요!</span></div>
+  <div class="bar"></div>
+  <audio id="vo" src="assets/narration.mp3" data-start="0" data-duration="128.56" data-track-index="0"></audio>
+</div>
+<script>
+const tl = gsap.timeline({ paused: true });
+const SP = 1.2;
+function enter(sel, t, dur) {
+  const items = document.querySelectorAll(sel + " .in");
+  const step = Math.min(0.9 / SP, (dur * 0.5) / Math.max(1, items.length));
+  items.forEach((el, i) => {
+    const at = Math.max(0, t - 0.1 / SP) + i * step;
+    tl.fromTo(el, { opacity: 0, y: 50 }, { opacity: 1, y: 0, duration: 0.5 / SP, ease: "power3.out" }, at);
+    el.querySelectorAll(".ln").forEach((ln, j) => {
+      tl.fromTo(ln, { opacity: 0, x: -30 }, { opacity: 1, x: 0, duration: 0.35 / SP, ease: "power2.out" }, at + (0.15 + j * 0.3) / SP);
+    });
+  });
+}
+enter("#sc-hook", 0.25, 15.552);
+tl.set(".prog i", {backgroundColor: "#26324a"}, 0);
+enter("#sc-start", 16.177, 21.192);
+tl.set(".prog i", {backgroundColor: "#26324a"}, 16.052);
+tl.set(".prog i:nth-child(1)", {backgroundColor: "#f29111"}, 16.052);
+enter("#sc-run-trap", 37.744, 16.032);
+tl.set(".prog i", {backgroundColor: "#26324a"}, 37.619);
+tl.set(".prog i:nth-child(1)", {backgroundColor: "#f29111"}, 37.619);
+enter("#sc-join", 54.151, 22.536);
+tl.set(".prog i", {backgroundColor: "#26324a"}, 54.026);
+tl.set(".prog i:nth-child(2)", {backgroundColor: "#f29111"}, 54.026);
+enter("#sc-race", 77.062, 21.0);
+tl.set(".prog i", {backgroundColor: "#26324a"}, 76.937);
+tl.set(".prog i:nth-child(3)", {backgroundColor: "#f29111"}, 76.937);
+enter("#sc-sync", 98.437, 10.512);
+tl.set(".prog i", {backgroundColor: "#26324a"}, 98.312);
+tl.set(".prog i:nth-child(4)", {backgroundColor: "#f29111"}, 98.312);
+enter("#sc-outro", 109.324, 18.24);
+tl.set(".prog i", {backgroundColor: "#26324a"}, 109.199);
+tl.to("#ex1", {backgroundColor: "#3a2a12", scale: 1.04, duration: 0.2}, 110.817);
+tl.to("#ex1", {backgroundColor: "#131c2e", scale: 1, duration: 0.2}, 113.652);
+tl.to("#ex2", {backgroundColor: "#3a2a12", scale: 1.04, duration: 0.2}, 113.652);
+tl.to("#ex2", {backgroundColor: "#131c2e", scale: 1, duration: 0.2}, 116.563);
+tl.to("#ex3", {backgroundColor: "#3a2a12", scale: 1.04, duration: 0.2}, 116.563);
+tl.to("#ex3", {backgroundColor: "#131c2e", scale: 1, duration: 0.2}, 118.774);
+tl.to("#ex4", {backgroundColor: "#3a2a12", scale: 1.04, duration: 0.2}, 118.774);
+tl.to("#ex4", {backgroundColor: "#131c2e", scale: 1, duration: 0.2}, 120.966);
+tl.to("#ex5", {backgroundColor: "#3a2a12", scale: 1.04, duration: 0.2}, 120.966);
+tl.to("#ex5", {backgroundColor: "#131c2e", scale: 1, duration: 0.2}, 123.205);
+tl.to("#ex6", {backgroundColor: "#3a2a12", scale: 1.04, duration: 0.2}, 123.205);
+tl.to("#ex6", {backgroundColor: "#131c2e", scale: 1, duration: 0.3}, 125.434 + 0.6);
+tl.fromTo(".bar", { scaleX: 0 }, { scaleX: 1, duration: 128.56, ease: "none" }, 0);
+window.__timelines = window.__timelines || {};
+window.__timelines["main"] = tl;
+tl.seek(0);
+</script>
+</body>
+</html>

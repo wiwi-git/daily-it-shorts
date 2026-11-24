@@ -30,6 +30,10 @@ J.build(scenes, PROG, BRAND, CSS, outro=(EXEC, EXEC_SAID, EXEC_END))
 | `jok(sid, lines)` | 컴파일·실행만 되면 됨 (그리지 않음) |
 | `jmulti(sid, lines, shown_out, each=, all_=, runs=20, label=, note=)` | 실행할 때마다 다른 출력(스레드). 한 번 컴파일해 `runs`번 실행하고, 매 출력이 `each(out)`, 전체 목록이 `all_(outs)`를 만족해야 함. 화면 상자는 고정 예시 `shown_out`(그 자체도 `each` 통과 필수) |
 
+| `jscode(sid, lines, expect, mark=, pre=, hidden=)` | 자바스크립트: `main.js`로 저장해 `node`로 실행한 출력이 `expect`와 같음. 던진 오류도 빌드 중단 |
+| `xshow(sid, lines, mark=, fname=)` | 실행하지 않음(React·Next.js 코드). 33자 제한·하이라이트만. `examples.txt`에 "실행하지 않음"으로 남음 |
+
+- `jscode`·`xshow`는 자바스크립트 키워드 목록(`JSKW`)과 `=>`로 칠한다(`code(js=True)`). 자바 블록의 색은 바뀌지 않는다
 - `jmulti`: 순서만 다른 출력은 `each=same_lines("민수 85", "서준 92", "main 끝")`. 다음 `term()`의 라벨은 `label`(기본 "실행 결과 예시")이 되고, 다른 헬퍼를 부르면 "실행 결과"로 돌아간다. `examples.txt`에는 고정 예시와 "실행할 때마다 다를 수 있음" 주석이 남는다(관찰한 출력은 남기지 않아 다시 빌드해도 같다)
 
 - 코드는 `main` 안에서 실행된다. `top=`은 `class Main` 위(다른 클래스), `members=`는 `Main` 안(`static` 메소드). `show_top`·`show_members`로 화면에 그릴지 정한다

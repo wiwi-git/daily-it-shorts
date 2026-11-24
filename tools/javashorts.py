@@ -57,12 +57,15 @@ def word_time(sid, token, after=0.0):
 KW = ("public class static void String int double boolean new if else switch case default break "
       "for while do continue true false null this return extends super final abstract interface implements instanceof long "
       "try catch finally throw throws").split()
-TOK = re.compile(r'"(?:\\.|[^"\\])*"|\'(?:\\.|[^\'\\])*\'|//.*|\d+(?:\.\d+)?[LfF]?\b|@\w+|->|::|\w+|.')
-def hl(line):
+TOK = re.compile(r'"(?:\\.|[^"\\])*"|\'(?:\\.|[^\'\\])*\'|//.*|\d+(?:\.\d+)?[LfF]?\b|@\w+|->|=>|::|\w+|.')
+# JavaScript/JSX lines (code(js=True)) use their own list, so Java blocks never change colour
+JSKW = ("let const var function return async await export default if else for of while new throw "
+        "true false null undefined this class import from try catch").split()
+def hl(line, js=False):
     out = []
     for m in TOK.finditer(line):
         x = m.group()
-        if x in ("->", "::"):
+        if x in ("->", "::") or (js and x == "=>"):
             out.append(f'<span class="ar">{html.escape(x)}</span>')
         elif x[0] in "\"'":
             body = re.sub(r"(\\.)", r'<span class="es">\1</span>', html.escape(x, quote=False))
@@ -73,18 +76,19 @@ def hl(line):
             out.append(f'<span class="nu">{x}</span>')
         elif x == "throws":  # the one letter that tells it from throw
             out.append('<span class="kw">throw<span class="s">s</span></span>')
-        elif x in KW or x[0] == "@":
+        elif (x in JSKW) if js else (x in KW or x[0] == "@"):
             out.append(f'<span class="kw">{x}</span>')
         else:
             out.append(html.escape(x, quote=False))
     return "".join(out)
 
-def code(lines, mark=(), sm=False):
-    """`mark`: indexes of lines to tint as the point of the scene. `sm`: smaller font for whole programs."""
+def code(lines, mark=(), sm=False, js=False):
+    """`mark`: indexes of lines to tint as the point of the scene. `sm`: smaller font for whole programs.
+    `js`: JavaScript/JSX keywords and `=>` instead of Java's."""
     for l in lines:
         assert len(l) <= 33, f"code line over 33 chars: {l!r}"
     return f'<div class="code in{" sm" if sm else ""}">' + "".join(
-        f'<div class="ln{" mk" if i in mark else ""}">{hl(l) or "&nbsp;"}</div>' for i, l in enumerate(lines)) + "</div>"
+        f'<div class="ln{" mk" if i in mark else ""}">{hl(l, js) or "&nbsp;"}</div>' for i, l in enumerate(lines)) + "</div>"
 
 def head(step, title, desc):
     return f'<div class="pill in">{step}</div><h2 class="title in">{title}</h2><p class="desc in">{desc}</p>'
@@ -238,6 +242,28 @@ def jmulti(sid, lines, shown_out, each=None, all_=None, runs=20, label="실행 �
     EXAMPLES.append((sid, "Main.java", src, shown_out, None, None,
                      note or f"출력 예시 ({runs}회 실행해 확인 · 실행할 때마다 순서·값이 다를 수 있음):"))
     return code(shown(lines, top, members, show_top, show_members), mark, sm)
+
+def jscode(sid, lines, expect, mark=(), hidden=(), pre=(), sm=False):
+    """JavaScript code block: `pre` + `lines` + `hidden` saved as main.js and run with node; it must
+    print exactly `expect` (a thrown error stops the build). term() then draws that real output."""
+    src = "\n".join(list(pre) + list(lines) + list(hidden)) + "\n"
+    d = tempfile.mkdtemp(dir=TMP)
+    open(os.path.join(d, "main.js"), "w").write(src)
+    r = subprocess.run(["node", "main.js"], cwd=d, capture_output=True, text=True)
+    if r.returncode:
+        err = next((l for l in r.stderr.split("\n") if re.match(r"\w*Error", l)), r.stderr.strip())
+        raise ValueError(f"{sid}: node stops with {err!r} after printing {r.stdout!r}")
+    if r.stdout != expect:
+        raise ValueError(f"{sid}: prints {r.stdout!r}, but the script expects {expect!r}")
+    LAST["out"], LAST["label"] = r.stdout, None
+    EXAMPLES.append((sid, "main.js", src, r.stdout, None, None))
+    return code(lines, mark, sm, js=True)
+
+def xshow(sid, lines, mark=(), sm=False, fname="page.jsx"):
+    """Code that cannot run here (React / Next.js): drawn like the rest (33 chars, JS colours) and kept
+    in examples.txt as not run."""
+    EXAMPLES.append((sid, fname, "\n".join(lines) + "\n", "", "실행하지 않음 (React·Next.js 코드)", None))
+    return code(lines, mark, sm, js=True)
 
 def same_lines(*want):
     """each= check for jmulti: the run printed exactly these lines, in any order."""
@@ -398,7 +424,7 @@ def build(scenes, PROG, BRAND, css="", outro=None, examples_header=DEFAULT_HEADE
         f.write("// 영상에 나오는 예제 프로그램 (build.py가 생성 · 직접 고치지 말 것)\n"
                 + "".join(f"// {l}\n" for l in examples_header) + "// 확인한 JDK: " + JDK + "\n")
         for sid, fname, src, out, rt, fc, *multi in EXAMPLES:
-            res = (rt if rt.startswith("컴파일") else f"실행 오류: {rt}") if rt else "출력 없음 (컴파일·실행 성공)" if not out else (multi[0] if multi else "출력:") + "\n" + "".join(f"//   {l}\n" for l in out.rstrip("\n").split("\n"))
+            res = (rt if rt.startswith(("컴파일", "실행하지")) else f"실행 오류: {rt}") if rt else "출력 없음 (컴파일·실행 성공)" if not out else (multi[0] if multi else "출력:") + "\n" + "".join(f"//   {l}\n" for l in out.rstrip("\n").split("\n"))
             if fc is not None:
                 res = res.rstrip() + f"\n// 실행 뒤 {FILE}:\n" + "".join(f"//   {l}\n" for l in fc.rstrip("\n").split("\n"))
             parts = sid.split("-")  # `append-trap` → section of `append`; scene ids may hold `-` too (`run-trap-run`)

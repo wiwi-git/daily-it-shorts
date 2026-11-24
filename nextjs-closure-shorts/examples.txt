@@ -1,0 +1,162 @@
+// 영상에 나오는 예제 프로그램 (build.py가 생성 · 직접 고치지 말 것)
+// 자바(Main.java): javac -g -encoding UTF-8 Main.java && java Main
+// 자바스크립트(main.js): node main.js  (확인한 Node.js: v24.11.1)
+// React·Next.js 코드(.jsx): 화면에만 나오고 실행하지 않음
+// 확인한 JDK: openjdk version "25.0.4.1" 2026-08-18
+
+// [1. 클로저란] main.js → 출력:
+//   1 2 1
+function makeCounter() {
+  let count = 0;
+  return () => ++count;
+}
+const c1 = makeCounter();
+const c2 = makeCounter();
+console.log(c1(), c1(), c2());
+
+
+// [2. 변수를 붙잡는다] main.js → 출력:
+//   2
+let x = 1;
+const f = () => x;
+x = 2;
+console.log(f());
+
+
+// [2. 변수를 붙잡는다] Main.java → 컴파일 오류: local variables referenced from a lambda expression must be final or effectively final
+import java.util.*;
+import java.util.function.*;
+
+public class Main {
+  public static void main(String[] args) {
+    int x = 1;
+    Supplier<Integer> f = () -> x;
+    x = 2;
+    System.out.println(f.get());
+  }
+}
+
+
+// [3. 자바는 왜?] Main.java → 컴파일 오류: local variables referenced from a lambda expression must be final or effectively final
+import java.util.*;
+import java.util.function.*;
+
+public class Main {
+  static IntSupplier
+      makeCounter() {
+    int count = 0;
+    return () -> ++count;
+  }
+
+  public static void main(String[] args) {
+  }
+}
+
+
+// [3. 자바는 왜?] Main.java → 출력:
+//   1 2 1
+import java.util.*;
+import java.util.function.*;
+
+public class Main {
+  static IntSupplier
+      makeCounter() {
+    int[] count = {0};
+    return () -> ++count[0];
+  }
+
+  public static void main(String[] args) {
+    IntSupplier c1 = makeCounter();
+    IntSupplier c2 = makeCounter();
+    System.out.println(c1.getAsInt() + " " + c1.getAsInt() + " " + c2.getAsInt());
+  }
+}
+
+
+// [4. 반복문 함정] main.js → 출력:
+//   3
+//   3
+//   3
+const a = [];
+for (var i = 0; i < 3; i++)
+  a.push(() => console.log(i));
+a.forEach(f => f());
+
+
+// [4. 반복문 함정] main.js → 출력:
+//   0
+//   1
+//   2
+const a = [];
+for (let i = 0; i < 3; i++)
+  a.push(() => console.log(i));
+a.forEach(f => f());
+
+
+// [4. 반복문 함정] Main.java → 컴파일 오류: local variables referenced from a lambda expression must be final or effectively final
+import java.util.*;
+import java.util.function.*;
+
+public class Main {
+  public static void main(String[] args) {
+    List<IntSupplier> list = new ArrayList<>();
+    for (int i = 0; i < 3; i++)
+      list.add(() -> i);
+  }
+}
+
+
+// [4. 반복문 함정] Main.java → 출력:
+//   0
+//   1
+//   2
+import java.util.*;
+import java.util.function.*;
+
+public class Main {
+  public static void main(String[] args) {
+    List<IntSupplier> list = new ArrayList<>();
+    for (int n : new int[]{0, 1, 2})
+      list.add(() -> n);
+    for (IntSupplier s : list) System.out.println(s.getAsInt());
+  }
+}
+
+
+// [5. React 스냅샷] page.jsx → 실행하지 않음 (React·Next.js 코드)
+const [number, setNumber] =
+  useState(0);
+<button onClick={() => {
+  setNumber(number + 5);
+  setTimeout(() => {
+    alert(number);
+  }, 3000);
+}}>+5</button>
+
+
+// [5. 업데이터 함수] page.jsx → 실행하지 않음 (React·Next.js 코드)
+// 클릭 한 번에 +3?
+setNumber(number + 1);
+setNumber(number + 1);
+setNumber(number + 1);
+
+
+// [5. 업데이터 함수] page.jsx → 실행하지 않음 (React·Next.js 코드)
+// n = 바로 전 값
+setNumber(n => n + 1);
+setNumber(n => n + 1);
+setNumber(n => n + 1);
+
+
+// [5. 서버 액션] app/page.jsx → 실행하지 않음 (React·Next.js 코드)
+async function Page() {
+  const version =
+    await getVersion();
+  async function publish() {
+    "use server";
+    // version 사용
+  }
+  return <button
+    formAction={publish} />;
+}
+

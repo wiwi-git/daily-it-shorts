@@ -44,6 +44,7 @@
 | 2026-11-20 | 자바 입문: 예외 (try-catch · 여러 catch · finally · throw · throws · 체크 예외 · 커스텀 예외) | 2:21 | [java-exception-shorts](java-exception-shorts) | [YouTube](https://www.youtube.com/watch?v=Gh-nby3uVLY) |
 | 2026-11-20 | 자바 입문: 텍스트 파일 읽기·쓰기 (BufferedWriter · try-with-resources · 이어쓰기 · BufferedReader · readLine · IOException · Files) | 2:15 | [java-file-io-shorts](java-file-io-shorts) | [YouTube](https://www.youtube.com/watch?v=rCFVsPcNPmk) |
 | 2026-11-23 | 자바 입문: 스레드 (new Thread · start · run 함정 · sleep · join · 경쟁 조건 · synchronized) | 2:09 | [java-thread-shorts](java-thread-shorts) | [YouTube](https://www.youtube.com/watch?v=IwnSv_-_sUo) |
+| 2026-11-24 | Next.js: 클로저 (자바스크립트 vs 자바 · 변수 붙잡기 · 람다식의 캡처 · 사실상 final · var/let 반복문 · React 스냅샷 · 업데이터 함수 · 서버 액션) | 2:51 | [nextjs-closure-shorts](nextjs-closure-shorts) | [YouTube](https://www.youtube.com/watch?v=J1rQ812Snas) |
 ## 제작 방식
 
 - **영상**: [HyperFrames](https://hyperframes.heygen.com) — HTML/CSS + GSAP 애니메이션을 MP4로 렌더링

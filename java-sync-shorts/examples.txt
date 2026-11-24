@@ -1,0 +1,113 @@
+// 영상에 나오는 예제 프로그램 (build.py가 생성 · 직접 고치지 말 것)
+// 각 예제를 파일 이름대로 저장한 뒤: javac -g -encoding UTF-8 Main.java && java Main
+// 확인한 JDK: openjdk version "25.0.4.1" 2026-08-18
+
+// [1. 메소드 전체를 잠그면] Main.java → 출력 (20회 실행해 매번 같음 확인):
+//   20000
+public class Main {
+  static int count = 0;
+  static synchronized void inc() {
+    for (int i = 0; i < 10000; i++)
+      count++;
+  }
+
+  public static void main(String[] args) throws InterruptedException {
+    Thread a = new Thread(Main::inc);
+    Thread b = new Thread(Main::inc);
+    a.start(); b.start();
+    a.join(); b.join();
+    System.out.println(count);
+  }
+}
+
+
+// [2. 동기화 블록] Main.java → 출력 (20회 실행해 매번 같음 확인):
+//   20000
+public class Main {
+  static int count = 0;
+  static final Object lock =
+      new Object();
+  static void inc() {
+    for (int i = 0; i < 10000; i++)
+      synchronized (lock) {
+        count++;
+      }
+  }
+
+  public static void main(String[] args) throws InterruptedException {
+    Thread a = new Thread(Main::inc);
+    Thread b = new Thread(Main::inc);
+    a.start(); b.start();
+    a.join(); b.join();
+    System.out.println(count);
+  }
+}
+
+
+// [3. AtomicInteger] Main.java → 출력 (20회 실행해 매번 같음 확인):
+//   20000
+import java.util.concurrent.atomic.*;
+
+public class Main {
+  static AtomicInteger count =
+      new AtomicInteger();
+  static void inc() {
+    for (int i = 0; i < 10000; i++)
+      count.incrementAndGet();
+  }
+
+  public static void main(String[] args) throws InterruptedException {
+    Thread a = new Thread(Main::inc);
+    Thread b = new Thread(Main::inc);
+    a.start(); b.start();
+    a.join(); b.join();
+    // main에서: a·b start·join 뒤
+    System.out.println(count.get());
+  }
+}
+
+
+// [4. 스레드 안전 리스트] Main.java → 출력 예시 (20회 실행해 확인 · 실행할 때마다 순서·값이 다를 수 있음):
+//   14302
+import java.util.*;
+
+public class Main {
+  static List<Integer> list =
+      new ArrayList<>();
+  static void add() {
+    for (int i = 0; i < 10000; i++)
+      list.add(i);
+  }
+
+  public static void main(String[] args) throws InterruptedException {
+    Thread a = new Thread(Main::add);
+    Thread b = new Thread(Main::add);
+    a.start(); b.start();
+    a.join(); b.join();
+    System.out.println(list.size());
+  }
+}
+
+
+// [4. 스레드 안전 리스트] Main.java → 출력 (20회 실행해 매번 같음 확인):
+//   20000
+import java.util.*;
+
+public class Main {
+  static List<Integer> list =
+      Collections.synchronizedList(
+          new ArrayList<>());
+  static void add() {
+    for (int i = 0; i < 10000; i++)
+      list.add(i);
+  }
+
+  public static void main(String[] args) throws InterruptedException {
+    Thread a = new Thread(Main::add);
+    Thread b = new Thread(Main::add);
+    a.start(); b.start();
+    a.join(); b.join();
+    System.out.println(list.size());
+  }
+}
+

@@ -7,11 +7,14 @@
 ## 제작 현황 (후속편 기획 때마다 갱신)
 
 이 파일은 스레드 후속편 기획의 출발점으로 계속 쓴다. 후속편을 기획하면 아래 표에 한 줄 추가하고, 다룬 항목의 주제 칸 앞에 표시를 붙인다.
-표시: **[23편 예정]** 기획 확정·제작 전 / **[23편 완료]** 업로드 완료 / **[23편 제외]** 그 편에서 검토했지만 뺌(다음 후보로 남김). 업로드하면 "예정"을 "완료"로 바꾼다.
+표시: **[N편 예정]** 기획 확정·제작 전 / **[N편 완료]** 업로드 완료 / **[N편 제외]** 그 편에서 검토했지만 뺌(다음 후보로 남김). 업로드하면 "예정"을 "완료"로 바꾼다.
 
 | 편 | 폴더 | 주제 | 상태 | 다룬 항목 |
 |---|---|---|---|---|
 | 23 | `java-sync-shorts` | 동기화 더 깊이 (후보 1) | 업로드 완료(2:05, [YouTube](https://www.youtube.com/watch?v=xaI4QK6Pfes)) | 22편 `synchronized` 범위 짚기(그림으로만, 시간 측정 없음) · 동기화 블록 + 잠금 객체 · `AtomicInteger.incrementAndGet()` · `ArrayList` 동시 `add` → `Collections.synchronizedList`. 썸네일 1장 |
+| 24 | `java-pool-shorts` | 스레드 풀 (후보 2) | 업로드 완료(2:10, [YouTube](https://www.youtube.com/watch?v=36VyonJ-Ks8)) | 스레드 풀 그림(실행 예제 없음) · `newFixedThreadPool(2)` + `submit` · `Future`·`get()`으로 값 돌려받기(합계 177) · try-with-resources로 닫기(`join` 대신) · 가상 스레드는 메소드 이름 비교만. 썸네일 1장 |
+
+24편에서 뺀 것: `CompletableFuture`, `invokeAll`, `shutdown()`만 쓰는 닫기, 가상 스레드 전용 장면.
 
 23편에서 뺀 것: `volatile`(별도 "멈춤 신호" 예제가 필요), `ConcurrentHashMap`, 데드락 → 다음 후보로 남김. 남은 추천: 후보 2(스레드 풀) → 후보 3.
 
@@ -37,9 +40,9 @@
 
 | 주제 | 설명 | 중요도 | 이어지는 장면 |
 |---|---|---|---|
-| `ExecutorService`·스레드 풀 | 스레드를 직접 `new`하지 않고, 미리 만든 스레드 몇 개(풀)에 작업을 `submit`해 맡긴다. 실무 코드는 대부분 이 방식이고, 다 쓰면 `shutdown()`(자바 19부터 try-with-resources로 닫기 가능 → 21편과 연결) | 높음 | `start`(스레드 직접 생성의 대안), `join`(끝날 때까지 기다리기의 대안) |
-| `Callable`·`Future` | `Runnable`은 값을 돌려줄 수 없다. `Callable`로 결과를 돌려받고 `Future.get()`으로 기다렸다가 꺼낸다. `ExecutorService`와 짝 | 높음 | `start`·`join`(결과를 "출력"만 했지 돌려받지는 못함) |
-| 가상 스레드 | 자바 21에서 정식 기능. `Thread.ofVirtual().start(...)`, `Executors.newVirtualThreadPerTaskExecutor()`. 아주 가벼워서 수천~수만 개를 만들어도 된다 | 중간 | `start`(같은 람다를 넘기는 방식이라 연결이 쉬움) |
+| **[24편 완료]** `ExecutorService`·스레드 풀 | 스레드를 직접 `new`하지 않고, 미리 만든 스레드 몇 개(풀)에 작업을 `submit`해 맡긴다. 실무 코드는 대부분 이 방식이고, 다 쓰면 `shutdown()`(자바 19부터 try-with-resources로 닫기 가능 → 21편과 연결) | 높음 | `start`(스레드 직접 생성의 대안), `join`(끝날 때까지 기다리기의 대안) |
+| **[24편 완료]** `Callable`·`Future` | `Runnable`은 값을 돌려줄 수 없다. `Callable`로 결과를 돌려받고 `Future.get()`으로 기다렸다가 꺼낸다. `ExecutorService`와 짝 | 높음 | `start`·`join`(결과를 "출력"만 했지 돌려받지는 못함) |
+| **[24편 완료]** 가상 스레드 (비교 한 줄만) | 자바 21에서 정식 기능. `Thread.ofVirtual().start(...)`, `Executors.newVirtualThreadPerTaskExecutor()`. 아주 가벼워서 수천~수만 개를 만들어도 된다 | 중간 | `start`(같은 람다를 넘기는 방식이라 연결이 쉬움) |
 | `CompletableFuture` | 비동기 작업을 이어 붙이는(`thenApply` 등) 방식. 콜백·체이닝 개념이 필요해 입문 범위를 넘는다 | 낮음 | 직접 연결되는 장면 없음(스트림 편의 메소드 체이닝과 모양만 비슷) |
 | `extends Thread` 코드 | `Thread`를 상속하고 `run()`을 오버라이딩하는 방식. 영상에는 메모 한 줄("Thread 클래스를 물려받기")만 나옴. 상속(10편)·오버라이딩과 연결되지만, 단일 상속을 써 버리므로 보통 `Runnable`/람다를 권한다 | 중간 | `start` 하단 `.note`, `run-trap`(`run()`을 오버라이딩한다는 점과 함정이 이어짐) |
 | `Runnable` 이름 | 람다가 실제로는 함수형 인터페이스 `Runnable`의 `run()`을 구현한다는 점. 영상은 "람다식으로 할 일을 넘겨요"까지만 말함 | 중간 | `start`, `run-trap`(`run()`이 어디서 왔는지), 19편 람다·함수형 인터페이스 |
@@ -87,7 +90,7 @@
 - **다룰 주제**: 22편 `sync`의 범위 문제 짚기(메소드 전체 = 순차 실행) → `synchronized (lock) { count++; }` 블록 → `AtomicInteger.incrementAndGet()` → `ArrayList`에 두 스레드가 `add`하면 생기는 문제와 `ConcurrentHashMap`/`Collections.synchronizedList`. 여유가 되면 `volatile`은 "경쟁 조건은 못 막는다" 경고 한 줄
 - **이유**: 22편의 `count` 예제를 그대로 이어 쓸 수 있어 시청자 부담이 적고, 22편에서 그대로 둔 가장 큰 단순화(`synchronized` 범위)를 바로잡는다. `race`의 "읽기→더하기→쓰기" 설명이 `AtomicInteger`의 동기가 된다. 빌드 쪽도 `jmulti`를 그대로 쓴다(race·sync와 같은 검증 방식)
 
-### 후보 2 (다음 추천): "스레드 풀과 ExecutorService: submit · Callable · Future · 가상 스레드"
+### 후보 2 **[24편 완료]**: "스레드 풀과 ExecutorService: submit · Callable · Future · 가상 스레드"
 
 - **다룰 주제**: `Executors.newFixedThreadPool(2)` + `submit` → `Callable`로 점수 돌려받기 + `Future.get()` → try-with-resources로 닫기(21편 연결) → 마지막에 `newVirtualThreadPerTaskExecutor()` 한 줄 비교
 - **이유**: 실무에서 스레드를 쓰는 표준 방법이고, 22편의 `new Thread` + `start` + `join` 세 단계를 한 번에 대체한다. 민수 85·서준 92 데이터를 "출력"이 아니라 "돌려받는" 예제로 바꾸면 22편 `start`·`join`과 자연스럽게 대비된다

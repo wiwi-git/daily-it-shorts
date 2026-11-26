@@ -1,0 +1,76 @@
+// 영상에 나오는 예제 프로그램 (build.py가 생성 · 직접 고치지 말 것)
+// 각 예제를 파일 이름대로 저장한 뒤: javac -g -encoding UTF-8 Main.java && java Main
+// 확인한 JDK: openjdk version "25.0.4.1" 2026-08-18
+
+// [2. 작업 맡기기] Main.java → 출력 예시 (20회 실행해 확인 · 실행할 때마다 순서·값이 다를 수 있음):
+//   민수 85
+//   서준 92
+import java.util.concurrent.*;
+
+public class Main {
+  public static void main(String[] args) throws Exception {
+    try (ExecutorService pool =
+      Executors.newFixedThreadPool(2)
+    ) {
+      pool.submit(() ->
+        System.out.println("민수 85"));
+      pool.submit(() ->
+        System.out.println("서준 92"));
+    }
+  }
+}
+
+
+// [3. 값 돌려받기] Main.java → 출력 (20회 실행해 매번 같음 확인):
+//   177
+import java.util.concurrent.*;
+
+public class Main {
+  public static void main(String[] args) throws Exception {
+    try (ExecutorService pool =
+      Executors.newFixedThreadPool(2)
+    ) {
+      Future<Integer> f1 =
+        pool.submit(() -> 85);
+      Future<Integer> f2 =
+        pool.submit(() -> 92);
+      int sum = f1.get() + f2.get();
+      System.out.println(sum);
+    }
+  }
+}
+
+
+// [4. 풀 닫기] Main.java → 컴파일 확인 (출력 없음)
+import java.util.concurrent.*;
+
+public class Main {
+  public static void main(String[] args) throws Exception {
+    try (ExecutorService pool =
+      Executors.newFixedThreadPool(2)
+    ) {
+      // submit · get
+    }
+  }
+}
+
+
+// [4. 풀 닫기] Main.java → 출력:
+//   177
+import java.util.concurrent.*;
+
+public class Main {
+  public static void main(String[] args) throws Exception {
+    try (ExecutorService pool =
+      Executors.newVirtualThreadPerTaskExecutor()
+    ) {
+      Future<Integer> f1 =
+        pool.submit(() -> 85);
+      Future<Integer> f2 =
+        pool.submit(() -> 92);
+      int sum = f1.get() + f2.get();
+      System.out.println(sum);
+    }
+  }
+}
+

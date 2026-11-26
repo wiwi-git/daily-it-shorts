@@ -46,6 +46,7 @@
 | 2026-11-23 | 자바 입문: 스레드 (new Thread · start · run 함정 · sleep · join · 경쟁 조건 · synchronized) | 2:09 | [java-thread-shorts](java-thread-shorts) | [YouTube](https://www.youtube.com/watch?v=IwnSv_-_sUo) |
 | 2026-11-24 | 자바 입문: 동기화 더 깊이 (synchronized 블록 · 잠금 객체 · AtomicInteger · incrementAndGet · 스레드 안전 리스트 · synchronizedList) | 2:05 | [java-sync-shorts](java-sync-shorts) | [YouTube](https://www.youtube.com/watch?v=xaI4QK6Pfes) |
 | 2026-11-24 | Next.js: 클로저 (자바스크립트 vs 자바 · 변수 붙잡기 · 람다식의 캡처 · 사실상 final · var/let 반복문 · React 스냅샷 · 업데이터 함수 · 서버 액션) | 2:51 | [nextjs-closure-shorts](nextjs-closure-shorts) | [YouTube](https://www.youtube.com/watch?v=J1rQ812Snas) |
+| 2026-11-25 | 자바 입문: 스레드 풀 (ExecutorService · newFixedThreadPool · submit · Callable · Future · get · try-with-resources · 가상 스레드) | 2:10 | [java-pool-shorts](java-pool-shorts) | [YouTube](https://www.youtube.com/watch?v=36VyonJ-Ks8) |
 ## 제작 방식
 
 - **영상**: [HyperFrames](https://hyperframes.heygen.com) — HTML/CSS + GSAP 애니메이션을 MP4로 렌더링

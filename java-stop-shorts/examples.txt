@@ -1,0 +1,168 @@
+// 영상에 나오는 예제 프로그램 (build.py가 생성 · 직접 고치지 말 것)
+// 각 예제를 파일 이름대로 저장한 뒤: javac -g -encoding UTF-8 Main.java && java Main
+// 확인한 JDK: openjdk version "25.0.4.1" 2026-08-18
+
+// [도입] Main.java → 실행 오류: Exception in thread "main" java.lang.UnsupportedOperationException
+public class Main {
+  public static void main(String[] args) throws InterruptedException {
+    Thread t = new Thread(() -> {});
+    t.stop();
+  }
+}
+
+
+// [1. 멈춤 신호] Main.java → 출력 예시 (20회 실행해 확인 · 실행할 때마다 순서·값이 다를 수 있음):
+//   작업 중
+//   작업 중
+//   작업 중
+//   작업 중
+//   작업 중
+//   작업 끝
+public class Main {
+  static volatile boolean stop;
+
+  public static void main(String[] args) throws InterruptedException {
+    Thread t = new Thread(() -> {
+      try {
+        while (!stop) {
+          System.out.println("작업 중");
+          Thread.sleep(200);
+        }
+      } catch (
+        InterruptedException e) {}
+      System.out.println("작업 끝");
+    });
+    t.start();
+    Thread.sleep(1000);
+    stop = true;
+  }
+}
+
+
+// [2. 인터럽트] Main.java → 출력 예시 (20회 실행해 확인 · 실행할 때마다 순서·값이 다를 수 있음):
+//   작업 중
+//   작업 중
+//   작업 중
+//   작업 중
+//   작업 중
+//   작업 끝
+public class Main {
+  public static void main(String[] args) throws InterruptedException {
+    Thread t = new Thread(() -> {
+      try {
+        while (true) {
+          System.out.println("작업 중");
+          Thread.sleep(200);
+        }
+      } catch (
+        InterruptedException e) {}
+      System.out.println("작업 끝");
+    });
+    t.start();
+    Thread.sleep(1000);
+    t.interrupt();
+  }
+}
+
+
+// [3. 예외 삼키지 않기] Main.java → 3초 안에 끝나지 않음 (의도 · 빌드가 강제로 종료) · 그 사이 출력 처음 몇 줄:
+//   작업 중
+//   작업 중
+//   작업 중
+//   …
+public class Main {
+  public static void main(String[] args) throws InterruptedException {
+    Thread t = new Thread(() -> {
+      while (!Thread.currentThread()
+          .isInterrupted()) {
+        System.out.println("작업 중");
+        try { Thread.sleep(200); }
+        catch (
+          InterruptedException e) {}
+      }
+      System.out.println("작업 끝");
+    });
+    t.start();
+    Thread.sleep(1000);
+    t.interrupt();
+  }
+}
+
+
+// [3. 예외 삼키지 않기] Main.java → 출력 예시 (20회 실행해 확인 · 실행할 때마다 순서·값이 다를 수 있음):
+//   작업 중
+//   작업 중
+//   작업 중
+//   작업 중
+//   작업 중
+//   작업 끝
+public class Main {
+  public static void main(String[] args) throws InterruptedException {
+    Thread t = new Thread(() -> {
+      while (!Thread.currentThread()
+          .isInterrupted()) {
+        System.out.println("작업 중");
+        try { Thread.sleep(200); }
+        catch (
+          InterruptedException e) {
+          Thread.currentThread()
+              .interrupt();
+        }
+      }
+      System.out.println("작업 끝");
+    });
+    t.start();
+    Thread.sleep(1000);
+    t.interrupt();
+  }
+}
+
+
+// [4. 데몬 스레드] Main.java → 3초 안에 끝나지 않음 (의도 · 빌드가 강제로 종료) · 그 사이 출력 처음 몇 줄:
+//   작업 중
+//   작업 중
+//   작업 중
+//   …
+public class Main {
+  public static void main(String[] args) throws InterruptedException {
+    Thread t = new Thread(() -> {
+      try {
+        while (true) {
+          System.out.println("작업 중");
+          Thread.sleep(200);
+        }
+      } catch (
+        InterruptedException e) {}
+    });
+    t.start();
+    Thread.sleep(1000);
+    System.out.println("main 끝");
+  }
+}
+
+
+// [4. 데몬 스레드] Main.java → 출력 예시 (20회 실행해 확인 · 실행할 때마다 순서·값이 다를 수 있음):
+//   작업 중
+//   작업 중
+//   작업 중
+//   작업 중
+//   작업 중
+//   main 끝
+public class Main {
+  public static void main(String[] args) throws InterruptedException {
+    Thread t = new Thread(() -> {
+      try {
+        while (true) {
+          System.out.println("작업 중");
+          Thread.sleep(200);
+        }
+      } catch (
+        InterruptedException e) {}
+    });
+    t.setDaemon(true);
+    t.start();
+    Thread.sleep(1000);
+    System.out.println("main 끝");
+  }
+}
+

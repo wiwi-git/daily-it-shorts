@@ -29,6 +29,7 @@ J.build(scenes, PROG, BRAND, CSS, outro=(EXEC, EXEC_SAID, EXEC_END))
 | `jce(sid, lines, error, detail=)` | 컴파일 오류 문구에 `error`가 들어 있음 |
 | `jok(sid, lines)` | 컴파일·실행만 되면 됨 (그리지 않음) |
 | `jmulti(sid, lines, shown_out, each=, all_=, runs=20, label=, note=)` | 실행할 때마다 다른 출력(스레드). 한 번 컴파일해 `runs`번 실행하고, 매 출력이 `each(out)`, 전체 목록이 `all_(outs)`를 만족해야 함. 화면 상자는 고정 예시 `shown_out`(그 자체도 `each` 통과 필수) |
+| `jhang(sid, lines, secs=3, each=)` | "끝나지 않는다"는 주장(멈추지 않는 스레드). 한 번 컴파일해 `secs`초 실행하고, 그때도 돌고 있으면 강제로 끝내고 통과. 그동안의 전체 출력이 `each(out)`도 만족해야 함(예: 멈춤 요청 뒤에도 계속 일했는지 — 다른 이유로 멈춰 있는 프로그램을 걸러냄). 그 안에 끝나거나 오류가 나면 빌드 중단. 결과 상자는 없음(`examples.txt`에 "끝나지 않음"과 그 사이 출력 처음 몇 줄). 반환값을 쓰지 않으면 그리지 않고 검증만. `LAST`를 바꾸지 않으므로 뒤의 `term()`은 그 앞 예제를 그린다 |
 
 | `jscode(sid, lines, expect, mark=, pre=, hidden=)` | 자바스크립트: `main.js`로 저장해 `node`로 실행한 출력이 `expect`와 같음. 던진 오류도 빌드 중단 |
 | `xshow(sid, lines, mark=, fname=)` | 실행하지 않음(React·Next.js 코드). 33자 제한·하이라이트만. `examples.txt`에 "실행하지 않음"으로 남음 |

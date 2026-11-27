@@ -13,6 +13,16 @@
 |---|---|---|---|---|
 | 23 | `java-sync-shorts` | 동기화 더 깊이 (후보 1) | 업로드 완료(2:05, [YouTube](https://www.youtube.com/watch?v=xaI4QK6Pfes)) | 22편 `synchronized` 범위 짚기(그림으로만, 시간 측정 없음) · 동기화 블록 + 잠금 객체 · `AtomicInteger.incrementAndGet()` · `ArrayList` 동시 `add` → `Collections.synchronizedList`. 썸네일 1장 |
 | 24 | `java-pool-shorts` | 스레드 풀 (후보 2) | 업로드 완료(2:10, [YouTube](https://www.youtube.com/watch?v=36VyonJ-Ks8)) | 스레드 풀 그림(실행 예제 없음) · `newFixedThreadPool(2)` + `submit` · `Future`·`get()`으로 값 돌려받기(합계 177) · try-with-resources로 닫기(`join` 대신) · 가상 스레드는 메소드 이름 비교만. 썸네일 1장 |
+| 25 | `java-stop-shorts` | 스레드 멈추기와 끝내기 (후보 3 변형) | 업로드 완료(2:16, [YouTube](https://www.youtube.com/watch?v=VGYqlPkCnmg)) | `stop()` 경고 · 멈춤 신호 + `volatile` · `interrupt()` · 빈 `catch` → `Thread.currentThread().interrupt()` · 데몬 스레드. 끝나지 않는 예제는 새 헬퍼 `jhang`으로 검증. 썸네일 1장 |
+
+25편에서 뺀 것: 데드락(후보 3에서 제외, `jhang`으로 다음에 검증 가능), `volatile`이 경쟁 조건을 못 막는다는 비교, `Thread.interrupted()`, `shutdownNow()`·`cancel(true)` 연결.
+
+25편 업로드 후 피드백(2026-11-27): **데몬 스레드의 정의와 쓰임새가 불명확함.** 장면이 "일반 스레드가 남으면 프로그램이 안 끝난다"는 *현상*과 `setDaemon(true)` 사용법만 보여 줬다. 빠진 것:
+- 정의: 데몬 스레드 = 프로그램(JVM)이 끝날 때 **기다려 주지 않는 배경용 스레드**. JVM은 일반 스레드만 기다린다
+- 쓰임새: 자동 저장·주기적 정리·상태 감시처럼 "프로그램이 살아 있는 동안만 돌면 되는" 배경 작업. JVM의 GC 스레드도 데몬
+- 주의: 끝날 때 **중간에 그냥 끊긴다**(`finally`도 보장 안 됨) → 파일 저장처럼 끝까지 마쳐야 하는 작업에는 쓰지 않는다. 영상 예제에서 `작업 끝`이 안 나온 이유이기도 함
+- 멈추기 주제와의 관계: 데몬은 "멈춰 달라고 요청하기"가 아니라 "프로그램 종료 때 기다리지 않기"다. 25편 흐름 속에 있어 멈추는 방법의 하나처럼 보일 수 있음
+다음 스레드 편 도입에서 한 장면으로 보충하거나, 고정 댓글로 바로잡는다.
 
 24편에서 뺀 것: `CompletableFuture`, `invokeAll`, `shutdown()`만 쓰는 닫기, 가상 스레드 전용 장면.
 
@@ -54,18 +64,18 @@
 | **[23편 완료]** `synchronized` 블록 | `synchronized (lock) { count++; }`처럼 메소드 전체가 아니라 필요한 부분만 잠근다. 어떤 객체를 잠금으로 쓰는지(`this`, 클래스, 별도 객체) 개념이 함께 나온다 | 높음 | `sync`(메소드 전체를 잠가 사실상 순차 실행이 된 점 — 아래 2절) |
 | **[23편 완료]** `AtomicInteger` | `count.incrementAndGet()` 한 번이 쪼개지지 않는(원자적) 연산이라 `synchronized` 없이 카운터를 안전하게 올린다. 같은 `count` 예제로 바로 비교 가능 | 높음 | `race`(읽기→더하기→쓰기가 쪼개지는 문제의 직접 해법), `sync`(다른 해법) |
 | **[23편 완료]** 스레드 안전 컬렉션 (`Collections.synchronizedList`만. `ConcurrentHashMap`은 **[23편 제외]**) | `ArrayList`·`HashMap`도 여러 스레드가 함께 바꾸면 깨진다. `ConcurrentHashMap`, `Collections.synchronizedList` 등. 스펙 Out of Scope엔 없지만 18편 List와 바로 이어짐 | 중간 | `race`(변수 대신 리스트로 같은 문제), 18편 래퍼·List |
-| **[23편 제외]** `volatile` | 한 스레드가 바꾼 값을 다른 스레드가 **보게** 해 주는 가시성 보장. `count++` 같은 경쟁 조건은 막지 못한다는 점이 흔한 오해 | 중간 | `race`(경쟁 조건과 구별), "멈춤 신호" 플래그 예제로 따로 보여야 함 |
+| **[23편 제외]** **[25편 완료]** `volatile` | 한 스레드가 바꾼 값을 다른 스레드가 **보게** 해 주는 가시성 보장. `count++` 같은 경쟁 조건은 막지 못한다는 점이 흔한 오해 | 중간 | `race`(경쟁 조건과 구별), "멈춤 신호" 플래그 예제로 따로 보여야 함 |
 | `Lock`(`ReentrantLock`) | `lock()`/`unlock()`을 직접 부르는 잠금. `finally`에서 꼭 풀어야 한다(20편 finally와 연결). `tryLock`·공정성 등 기능이 더 많다 | 낮음 | `sync`(같은 일을 하는 다른 도구) |
 | `wait`/`notify` | 조건이 될 때까지 잠금을 놓고 기다리고 깨우는 저수준 도구. 지금은 `BlockingQueue` 같은 고수준 도구를 먼저 쓰는 편 | 낮음 | `join`(기다리기의 다른 형태) |
-| **[23편 제외]** 데드락 | 두 스레드가 서로 상대가 가진 잠금을 기다리며 영원히 멈추는 문제. 잠금을 두 개 이상 쓸 때 생긴다 | 중간 | `sync`(잠금을 쓰기 시작하면 생기는 새 문제) |
+| **[23편 제외]** **[25편 제외]** 데드락 | 두 스레드가 서로 상대가 가진 잠금을 기다리며 영원히 멈추는 문제. 잠금을 두 개 이상 쓸 때 생긴다 | 중간 | `sync`(잠금을 쓰기 시작하면 생기는 새 문제) |
 
 ### 스레드의 생명주기와 제어
 
 | 주제 | 설명 | 중요도 | 이어지는 장면 |
 |---|---|---|---|
-| `interrupt()` | 다른 스레드에 "멈춰 달라"고 요청하는 협력적 종료 방법. 자고 있던(`sleep`·`join`) 스레드는 `InterruptedException`을 받는다. 영상은 이 예외를 `throws`·빈 `catch`로 넘기는 데까지만 | 중간 | `join`(빈 `catch {}` — 아래 2절), 20편 체크 예외 |
+| **[25편 완료]** `interrupt()` | 다른 스레드에 "멈춰 달라"고 요청하는 협력적 종료 방법. 자고 있던(`sleep`·`join`) 스레드는 `InterruptedException`을 받는다. 영상은 이 예외를 `throws`·빈 `catch`로 넘기는 데까지만 | 중간 | `join`(빈 `catch {}` — 아래 2절), 20편 체크 예외 |
 | 스레드 상태 | `NEW` → `RUNNABLE` → (`BLOCKED`·`WAITING`·`TIMED_WAITING`) → `TERMINATED`. `getState()`로 확인. `start()`를 두 번 부르면 `IllegalThreadStateException` | 낮음 | `start`(만들기만 하면 `NEW`), `join`(`sleep` 중 `TIMED_WAITING`), `sync`(잠금 대기 중 `BLOCKED`) |
-| 데몬 스레드 | `setDaemon(true)`인 스레드는 다른 일반 스레드가 다 끝나면 같이 끝난다. 반대로 일반 스레드가 남아 있으면 `main`이 끝나도 프로그램이 안 끝난다 — `start` 장면에서 `main 끝` 뒤에 `서준 92`가 나온 이유 | 중간 | `start`(main이 먼저 끝나도 프로그램이 계속된 이유) |
+| **[25편 완료]** 데몬 스레드 | `setDaemon(true)`인 스레드는 다른 일반 스레드가 다 끝나면 같이 끝난다. 반대로 일반 스레드가 남아 있으면 `main`이 끝나도 프로그램이 안 끝난다 — `start` 장면에서 `main 끝` 뒤에 `서준 92`가 나온 이유 | 중간 | `start`(main이 먼저 끝나도 프로그램이 계속된 이유) |
 | 우선순위 | `setPriority(1~10)`. 운영체제가 힌트로만 쓰므로 실행 순서를 보장하지 않는다 | 낮음 | `start`(순서 보장 안 됨의 연장 — "우선순위로도 순서를 못 정한다") |
 | 스레드 이름 | `new Thread(runnable, "민수")`, `setName`. `Thread-0`이라는 기본 이름이 붙는 규칙 | 낮음 | `run-trap`(`getName()` 결과 `Thread-0`) |
 | 스레드 안의 예외 | 스레드에서 잡지 않은 예외는 그 스레드만 끝내고 `main`은 계속 돈다. `main`의 `try-catch`로 잡을 수 없다 | 중간 | `join`(람다 안에서 따로 `try-catch`해야 했던 이유와 같은 뿌리), 20편 예외 |
@@ -77,7 +87,7 @@
 | 항목 | 영상에서 한 것 | 실제로는 | 중요도 | 이어지는 장면 |
 |---|---|---|---|---|
 | **[23편 완료]** `synchronized` 범위 | `count++` 한 줄이 아니라 만 번 도는 `inc()` 메소드 전체에 붙였다. 경쟁 조건 코드와 **단어 하나만** 다르게 보이려는 선택(05 티켓, 독립 검토에서도 유지) | 한 스레드가 반복 전체를 끝낼 때까지 다른 스레드가 못 들어가서 사실상 순차 실행이 된다. 스레드를 쓴 의미가 없어지는 예. 잠금 범위는 필요한 만큼만 좁히는 게 원칙 | 높음 | `sync` → 후속편에서 `synchronized` 블록·`AtomicInteger`로 비교 |
-| 빈 `catch {}` | 람다 안 `catch (InterruptedException e) {}`로 예외를 삼켰다(`Runnable.run()`은 체크 예외를 던질 수 없어서, 33자 제한 안에서 가장 짧은 형태) | 인터럽트 요청을 조용히 버리는 습관은 좋지 않다. 보통 `Thread.currentThread().interrupt();`로 인터럽트 상태를 되살리거나 작업을 끝낸다. 20편에서 "예외를 삼키지 말라"는 메시지가 없었는지도 함께 점검할 것 | 중간 | `join`, 후속편의 `interrupt()` |
+| **[25편 완료]** 빈 `catch {}` | 람다 안 `catch (InterruptedException e) {}`로 예외를 삼켰다(`Runnable.run()`은 체크 예외를 던질 수 없어서, 33자 제한 안에서 가장 짧은 형태) | 인터럽트 요청을 조용히 버리는 습관은 좋지 않다. 보통 `Thread.currentThread().interrupt();`로 인터럽트 상태를 되살리거나 작업을 끝낸다. 20편에서 "예외를 삼키지 말라"는 메시지가 없었는지도 함께 점검할 것 | 중간 | `join`, 후속편의 `interrupt()` |
 | "동시에 실행되는 것처럼 번갈아" | 나레이션을 이렇게 완화했다(스펙의 용어 결정) | 코어가 여러 개면 정말로 동시에(병렬로) 돈다. GLOSSARY "스레드" 정의에는 괄호로 적혀 있지만 영상에선 말하지 않았다. 동시성(concurrency)과 병렬성(parallelism)의 구분 | 중간 | `hook`, `race`(동시에 돌기 때문에 값이 사라짐) |
 | `main`의 `throws` | 화면 코드에 `main` 선언이 보이지 않는다. `throws InterruptedException`은 메모(`join → main에 throws`)로만 보여 줬다(04 티켓에서 자막 영역 침범 때문에 줄임). 빌드는 `J.MAIN_THROWS`로 실제 붙여 컴파일 | 화면 코드를 그대로 따라 치면 `main`에 `throws`를 직접 붙여야 컴파일된다. `race`·`sync`도 `join` 때문에 같은 처리가 필요 | 낮음 | `join`, `race`, `sync` |
 | 출력 순서 예시 | `민수 85 / main 끝 / 서준 92` 한 가지만 그리고, 순서가 섞이는 모습은 화면으로 보여 주지 않음. 나레이션은 "이번 실행에서는" | 독립 검토 40회 실행에서 다섯 가지 순서가 관찰됨(06 티켓) | 낮음 | `start` |
@@ -95,7 +105,9 @@
 - **다룰 주제**: `Executors.newFixedThreadPool(2)` + `submit` → `Callable`로 점수 돌려받기 + `Future.get()` → try-with-resources로 닫기(21편 연결) → 마지막에 `newVirtualThreadPerTaskExecutor()` 한 줄 비교
 - **이유**: 실무에서 스레드를 쓰는 표준 방법이고, 22편의 `new Thread` + `start` + `join` 세 단계를 한 번에 대체한다. 민수 85·서준 92 데이터를 "출력"이 아니라 "돌려받는" 예제로 바꾸면 22편 `start`·`join`과 자연스럽게 대비된다
 
-### 후보 3: "스레드 멈추기와 끝내기: interrupt · 데몬 스레드 · 데드락"
+### 후보 3 **[25편 완료, 변형]**: "스레드 멈추기와 끝내기: interrupt · 데몬 스레드 · 데드락"
+
+> 25편에서는 데드락을 빼고 멈춤 신호(`volatile`)를 넣었다. 자세한 내용은 [../java-stop-shorts/spec.md](../java-stop-shorts/spec.md).
 
 - **다룰 주제**: `interrupt()`와 `InterruptedException`(22편의 빈 `catch {}` 바로잡기, `Thread.currentThread().interrupt()`) → 데몬 스레드(`main`이 끝나도 프로그램이 계속된 이유) → 잠금 두 개로 만드는 데드락과 잠금 순서 맞추기
 - **이유**: 22편에서 넘어간 "멈춤·종료" 쪽 질문을 모은다. 다만 데드락은 일부러 멈추는 예제라 빌드 검증(`jmulti`가 실행을 끝내야 함)에 시간 제한·탐지 방식을 새로 만들어야 할 수 있어 제작 부담이 가장 크다. 후보 1·2 뒤에 두는 것을 권한다

@@ -145,12 +145,13 @@ def compile_(src, fname="Main.java"):
         return d, re.search(r"error: (.*)", c.stderr).group(1)
     return d, None
 
-def exec_(d):
+def exec_(d, timeout=None):
     """(stdout, first line of the runtime error or None) of the program compiled in `d`; that folder's
-    scores.txt ends up in LAST["file"]."""
+    scores.txt ends up in LAST["file"]. With `timeout` (seconds) a program still running then is killed
+    and subprocess.TimeoutExpired is raised; the default None waits for it however long it takes."""
     LAST["file"] = None
     r = subprocess.run(["java", "-Duser.language=en", "-Dfile.encoding=UTF-8", "-cp", ".", "Main"], cwd=d,
-                       capture_output=True, text=True)
+                       capture_output=True, text=True, timeout=timeout)
     p = os.path.join(d, FILE) if FILE else None
     if p and os.path.exists(p):
         LAST["file"] = open(p, encoding="utf-8").read()
@@ -241,6 +242,36 @@ def jmulti(sid, lines, shown_out, each=None, all_=None, runs=20, label="실행 �
     LAST["out"], LAST["label"] = shown_out, label
     EXAMPLES.append((sid, "Main.java", src, shown_out, None, None,
                      note or f"출력 예시 ({runs}회 실행해 확인 · 실행할 때마다 순서·값이 다를 수 있음):"))
+    return code(shown(lines, top, members, show_top, show_members), mark, sm)
+
+def jhang(sid, lines, secs=3, each=None, mark=(), hidden=(), pre=(), sm=False, top=(), members=(),
+          show_top=False, show_members=False):
+    """Code block for a program the narration says never ends (a thread that keeps running): compiled
+    once and run for `secs` seconds. Still running then → killed, and the claim holds; ending (with
+    or without an error) within `secs` stops the build. `each(out)` must hold for everything it printed
+    in those seconds (e.g. it kept working well past the moment it was asked to stop), so a program
+    stuck for some other reason does not pass. Nothing to draw in a console box; examples.txt keeps
+    the first lines it printed meanwhile. Call it without using the result to check unseen code."""
+    src = wrap(list(pre) + list(lines) + list(hidden), top, members)
+    d, ce = compile_(src)
+    if ce is not None:
+        raise ValueError(f"{sid}: does not compile: {ce}")
+    try:
+        out, rt = exec_(d, timeout=secs)
+    except subprocess.TimeoutExpired as e:
+        got = e.stdout or ""
+        got = got.decode("utf-8", "replace") if isinstance(got, bytes) else got
+        if each and not each(got):
+            raise ValueError(f"{sid}: kept running for {secs}s, but what it printed fails the script's check: {got[:200]!r}")
+        head_ = got.split("\n")[:3]
+        out = "\n".join(head_ + (["…"] if got.count("\n") > 3 else [])) + "\n" if got.strip() else "(출력 없음)\n"
+    else:
+        raise ValueError(f"{sid}: the script says it never ends, but it ended within {secs}s "
+                         f"({rt or 'no error'}) after printing {out!r}")
+    # LAST is left as it was: no console box belongs to this run, so a term() after it still draws the
+    # example before it
+    EXAMPLES.append((sid, "Main.java", src, out, None, None,
+                     f"{secs}초 안에 끝나지 않음 (의도 · 빌드가 강제로 종료) · 그 사이 출력 처음 몇 줄:"))
     return code(shown(lines, top, members, show_top, show_members), mark, sm)
 
 def jscode(sid, lines, expect, mark=(), hidden=(), pre=(), sm=False):
